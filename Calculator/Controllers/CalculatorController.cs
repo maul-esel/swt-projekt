@@ -11,8 +11,7 @@ namespace Calculator.Controllers
 	[RoutePrefix("api/calculator")]
     public class CalculatorController : ApiController
     {
-	    [Route("add/{n1}/{n2}")]
-		[HttpGet]
+	    [Route("add/{n1}/{n2}"), HttpGet]
 	    public int Add(int n1, int n2 )
 	    {
 		    return n1 + n2;
