@@ -22,6 +22,7 @@ namespace Calculator.Controllers
 		[HttpGet]
 		public int Multiply(int n1, int n2)
 	    {
+			// 
 		    return n1 * n2;
 	    }
     }
