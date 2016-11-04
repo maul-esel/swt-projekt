@@ -18,8 +18,7 @@ namespace Calculator.Controllers
 		    return n1 + n2;
 	    }
 
-	    [Route("multiply/{n1}/{n2}")]
-		[HttpGet]
+	    [Route("multiply/{n1}/{n2}"), HttpGet]
 		public int Multiply(int n1, int n2)
 	    {
 		    return n1 * n2;
