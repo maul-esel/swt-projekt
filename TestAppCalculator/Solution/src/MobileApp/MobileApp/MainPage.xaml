@@ -4,4 +4,28 @@
              xmlns:local="clr-namespace:MobileApp"
              x:Class="MobileApp.MainPage">
 
+    <Entry
+      x:Name="firstEntry"
+      Entry.Placeholder="Erste Ganzzahl"
+    />   
+  
+   <Entry
+      x:Name="secondEntry"
+      Entry.Placeholder="Zweite Ganzzahl"
+    />
+    <Button
+      HorizontalOptions="Left"
+      x:Name="buttonAdd"
+      Text="+"
+      />
+    <Button
+      HorizontalOptions="Right"
+      x:Name="buttonMult"
+      Text="*"
+      />
+  <Entry
+      x:Name="resultEntry"
+      Entry.Placeholder="Ergebnis"
+    />
+
 </ContentPage>
