@@ -37,12 +37,12 @@ matrix:
 # ${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
 
 install:
-  - if [[ "$DOTNETCORE" == "1" ]]; nuget restore TestAppCalculator/Solution/TestAppCalculator.sln
-  - if [[ "$DOTNETCORE" == "1" ]]; nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+  - if [[ "$DOTNETCORE" == "1" ]]; nuget restore TestAppCalculator/Solution/TestAppCalculator.sln ; fi
+  - if [[ "$DOTNETCORE" == "1" ]]; nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner ; fi
 
 script:
-  - if [[ "$DOTNETCORE" == "1" ]]; cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
-  - if [[ "$XAMARIN" == "1" ]]; cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
+  - if [[ "$DOTNETCORE" == "1" ]]; cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release ; fi
+  - if [[ "$XAMARIN" == "1" ]]; cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release ; fi
 #  - cd ../MobileApp.iOS && xbuild /p:Configuration=Release
 
 # deploy:
