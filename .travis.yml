@@ -1,6 +1,8 @@
 language: csharp
 
-export EnableNuGetPackageRestore=true
+env:
+ global:
+  - EnableNuGetPackageRestore=true 
 
 solution: TestAppCalculator/Solution/TestAppCalculator.sln
 
