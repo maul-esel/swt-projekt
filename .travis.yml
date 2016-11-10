@@ -19,13 +19,13 @@ branches:
 
 matrix:
   include:
-    - os: linux 
-      mono: latest # none
+    - os: linux
       dotnet: 1.0.0-preview2-003131
       env: DOTNETCORE=1
-#    - os: osx
-#      osx_image: xcode7.2
-#      mono: latest
+    - os: osx
+      osx_image: xcode8
+      mono: latest
+      env: XAMARIN=1
 
 
 # before_install:
@@ -35,12 +35,12 @@ matrix:
 # ${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
 
 install:
-  - nuget restore TestAppCalculator/Solution/TestAppCalculator.sln
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+  - if [[ "$DOTNETCORE" == "1" ]] nuget restore TestAppCalculator/Solution/TestAppCalculator.sln
+  - if [[ "$DOTNETCORE" == "1" ]] nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
-  - cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
-  - cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
+  - if [[ "$DOTNETCORE" == "1" ]] cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
+  - if [[ "$XAMARIN" == "1" ]] cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
 #  - cd ../MobileApp.iOS && xbuild /p:Configuration=Release
 
 # deploy:
