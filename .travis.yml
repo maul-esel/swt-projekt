@@ -36,9 +36,9 @@ matrix:
 #  - sudo installer -pkg "MonoFramework-MDK-
 # ${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
 
-install:
-  - if [[ "$DOTNETCORE" == "1" ]]; then nuget restore TestAppCalculator/Solution/TestAppCalculator.sln ; fi
-  - if [[ "$DOTNETCORE" == "1" ]]; then nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner ; fi
+#install:
+  #- if [[ "$DOTNETCORE" == "1" ]]; then nuget restore TestAppCalculator/Solution/TestAppCalculator.sln ; fi
+  #- if [[ "$DOTNETCORE" == "1" ]]; then nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner ; fi
 
 script:
   - if [[ "$DOTNETCORE" == "1" ]]; then cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release ; fi
