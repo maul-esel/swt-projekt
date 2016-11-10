@@ -13,9 +13,9 @@ branches:
   only:
     - master
 
-# os:  
-#  - linux
-#  - osx
+os:
+  - linux
+  - osx
 
 matrix:
   include:
@@ -42,7 +42,7 @@ matrix:
 
 script:
   - if [[ "$DOTNETCORE" == "1" ]]; then cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release ; fi
-  - if [[ "$XAMARIN" == "1" ]]; then cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release ; fi
+  - if [[ "$XAMARIN" == "1" ]]; then cd TestAppCalculator/Solution/src/MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release ; fi
 #  - cd ../MobileApp.iOS && xbuild /p:Configuration=Release
 
 # deploy:
