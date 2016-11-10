@@ -1,8 +1,45 @@
 language: csharp
+
+export EnableNuGetPackageRestore=true
+
 solution: TestAppCalculator/Solution/TestAppCalculator.sln
-mono: none
+
 dist: trusty
 sudo: required
-dotnet: 1.0.0-preview2-003131
+
+branches:  
+  only:
+    - master
+
+os:  
+  - linux
+  - osx
+
+matrix:
+  include:
+    - os: linux 
+      mono: none
+      dotnet: 1.0.0-preview2-003131
+      env: DOTNETCORE=1
+    - os: osx
+      osx_image: xcode8.0
+      mono: latest
+
+
+before_install:
+ - wget "http://download.mono-project.com/archive/${MONO_VERSION}/macos-10-x86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
+ - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
+
+install:
+  - nuget restore TestAppCalculator/Solution/TestAppCalculator.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+
 script:
-  - cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build
+  - cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
+  - cd TestAppCalculator/Solution/src/MobileApp && xbuild
+# deploy:
+#   provider: azure_web_apps
+#   username:
+#   password:
+#   site:
+#   slot:
