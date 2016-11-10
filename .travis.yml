@@ -41,7 +41,7 @@ install:
 script:
   - cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
   - cd ../MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
-#  - cd ../MobileApp/MobileApp.iOS && xbuild /p:Configuration=Release
+#  - cd ../MobileApp.iOS && xbuild /p:Configuration=Release
 
 # deploy:
 #   provider: azure_web_apps
