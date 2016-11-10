@@ -13,14 +13,14 @@ branches:
   only:
     - master
 
-os:  
-  - linux
-  - osx
+# os:  
+#  - linux
+#  - osx
 
 matrix:
   include:
     - os: linux 
-      mono: none
+      mono: latest # none
       dotnet: 1.0.0-preview2-003131
       env: DOTNETCORE=1
 #    - os: osx
@@ -39,9 +39,9 @@ install:
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
 script:
-  - cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
-  - cd TestAppCalculator/Solution/src/MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
-  - cd TestAppCalculator/Solution/src/MobileApp/MobileApp.iOS && xbuild /p:Configuration=Release
+  - cd /TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release
+  - cd /TestAppCalculator/Solution/src/MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release
+  - cd /TestAppCalculator/Solution/src/MobileApp/MobileApp.iOS && xbuild /p:Configuration=Release
 
 # deploy:
 #   provider: azure_web_apps
