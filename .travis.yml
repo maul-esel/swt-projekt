@@ -1,0 +1,8 @@
+language: csharp
+solution: TestAppCalculator/Solution/TestAppCalculator.sln
+mono: none
+dotnet: 1.0.0-preview2-003131
+script:
+    - cd TestAppCalculator/Solution
+    - dotnet restore
+    - dotnet build
