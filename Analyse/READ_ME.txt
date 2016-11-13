@@ -15,8 +15,7 @@ Aktuelle Gesamtliste der Use Cases:
 •	Schüler hört & spricht Seite  => DONE
 •	Schüler hört aufgenommene Seite an => DONE
 •	Schüler löscht Schülerspur => DONE
-•	Schüler sieht sich angebotene Audios an
-•	Schüler lädt neue Audios runter
+•	Schüler lädt neue Audios runter => DONE
 •	Schüler löscht Audiodatei
 
 •	Sprachlehrer spricht Beispielsatz auf Schülerhandy
