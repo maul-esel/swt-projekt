@@ -1,4 +1,4 @@
-#####################################
+﻿#####################################
 		READ ME ZU USE CASES
 #####################################
 
@@ -23,8 +23,8 @@ Aktuelle Gesamtliste der Use Cases:
 •	Schüler löscht Lerherspur => DONE
 
 •	Redakteur nimmt neue Seite auf (Alternative: vorhandene Datei hochladen) => DONE
-•	Redakteur löscht vorhandene Seite
-•	Redakteur checkt vorhandene Audios
+•	Redakteur löscht vorhandene Seite => DONE
+•	Redakteur benennt vorhandene Seite um => DONE
 
 ################################################
 Glossar (später evetntuell in separate Datei)
