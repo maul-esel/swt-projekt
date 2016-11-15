@@ -22,9 +22,8 @@ Aktuelle Gesamtliste der Use Cases:
 •	Schüler hört Lehrerspur an => DONE
 •	Schüler löscht Lerherspur => DONE
 
-•	Redakteur nimmt neue Seite auf (Alternative: vorhandene Datei hochladen) => DONE
+•	Redakteur nimmt neue Seite auf (Alternative: vorhandene Datei hochladen) => 	DONE
 •	Redakteur löscht vorhandene Seite
-•	Redakteur checkt vorhandene Audios
 
 ################################################
 Glossar (später evetntuell in separate Datei)
