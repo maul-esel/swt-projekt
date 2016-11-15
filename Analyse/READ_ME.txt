@@ -18,10 +18,11 @@ Aktuelle Gesamtliste der Use Cases:
 •	Schüler lädt neue Audios runter => DONE
 •	Schüler löscht Audiodatei => DONE
 
-•	Sprachlehrer spricht Beispielsatz auf Schülerhandy
-•	Schüler hört Lehrerspur an
+•	Sprachlehrer spricht Beispielsatz auf Schülerhandy => DONE
+•	Schüler hört Lehrerspur an => DONE
+•	Schüler löscht Lerherspur => DONE
 
-•	Redakteur nimmt neue Seite auf (Alternative: vorhandene Datei hochladen)
+•	Redakteur nimmt neue Seite auf (Alternative: vorhandene Datei hochladen) => DONE
 •	Redakteur löscht vorhandene Seite
 •	Redakteur checkt vorhandene Audios
 
@@ -30,3 +31,5 @@ Glossar (später evetntuell in separate Datei)
 ################################################
 
 Lehrerspur: Audiodatei, die ein Redakteur erstellt hat und eine Seite in einem Arbeitsheft entspricht
+eingesprochene Lehrerspur: Audiodatei, die ein Lehrer im Unterricht auf ein Schülergerät gesprochen hat
+-> macht das Sinn???
