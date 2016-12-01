@@ -1,0 +1,82 @@
+title Anhören einer aufgenommenen Seite
+
+"" --> +":User":
+
+":User" -> +":System" : playPage(s)
+
+":System" -> +":Player" : play(s.teacher, s.pupil)
+
+":Player" --> ":System":
+
+":System" --> -":User":
+
+opt
+   
+ ":User" -> +":System": seekBack()
+ 
+  ":System" -> ":Player": seekBack()
+    
+":Player" --> ":System":
+    
+":System" --> -":User":
+    
+
+end
+
+opt 
+    
+":User" -> +":System": pause()
+    
+":System" -> ":Player": pause()
+    
+":Player" --> ":System":
+    
+":System" --> -":User":
+    
+    
+opt 
+        
+":User" -> +":System": resume()
+        
+":System" -> ":Player": resume()
+        
+":Player" --> ":System":
+        
+":System" --> -":User":
+    
+end
+
+end
+
+alt
+":Player" -> +":System": <<event>> over
+
+alt nächste Seite s_next heruntergeladen
+    
+alt nächste Seite hat Schülerspur
+        
+note over ":System", ":Player": continue with use case 2 sequence for s_next
+    
+else
+        
+note over ":System", ":Player": continue with use case 7 sequence for s_next
+    
+end
+
+else
+    
+":System" --> -":User":
+
+end
+
+else
+
+ ":User" -> +":System": stop()
+      
+  ":System" -> ":Player": stop()
+       
+ ":Player" --> -":System":
+        
+":System" --> -":User":
+
+end
