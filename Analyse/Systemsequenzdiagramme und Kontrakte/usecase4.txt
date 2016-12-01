@@ -12,7 +12,7 @@ opt
 
 loop
 ":Student" ->+ ":System": downloadSinglePage(pageNumber) 
-":System" ->- ":Student": page
+":System" -->- ":Student": page
 end
 end
 
