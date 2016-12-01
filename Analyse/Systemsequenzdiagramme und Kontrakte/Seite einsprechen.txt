@@ -1,0 +1,25 @@
+title Seite einsprechen
+
+":Redakteur" ->+ ":System": getWorkbooks()
+":System" -->- ":Redakteur": workbooks
+
+opt Arbeitsheft existiert nicht
+  ":Redakteur" ->+ ":System": createWorkbook(name)
+  ":System" -->- ":Redakteur": workbook
+end
+
+":Redakteur" ->+ ":System": createNewPage(workbook)
+":System" -->- ":Redakteur": page
+
+loop
+  alt Neue Aufnahme
+    ":Redakteur" ->+ ":System": beginRecording(workbook, pageNr)
+    ":System" -->- ":Redakteur": recording
+    ":Redakteur" -> ":System": endRecording()
+  else Aufnahme importieren
+    ":Redakteur" ->+ ":System": importRecording(fileName)
+    ":System" -->- ":Redakteur": recording
+  end
+end
+
+":Redakteur" -> ":System": savePage(page, recording)
