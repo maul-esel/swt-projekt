@@ -1,0 +1,20 @@
+title Download verfügbarer Lehrerspuren
+
+":Student" ->+ ":System": getWorkbookTitles()
+":System" -->- ":Student": workbookTitles
+
+opt
+":Student" ->+ ":System": downloadWorkbook(workbookTitle)
+":System" -->- ":Student": workbook
+end
+opt
+
+
+loop
+":Student" ->+ ":System": downloadSinglePage(pageNumber) 
+":System" ->- ":Student": page
+end
+end
+
+
+
