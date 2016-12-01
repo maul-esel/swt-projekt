@@ -1,0 +1,7 @@
+title Seite Auswählen
+
+":Student" ->+ ":System": getWorkbooks()
+":System" -->- ":Student": workbooks
+":Student" ->+ ":System": getPages(workbook)
+":System" -->- ":Student": pages
+":Student" -> ":System": selectPage(page)

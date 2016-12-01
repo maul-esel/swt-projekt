@@ -1,0 +1,8 @@
+title Schülerspur Löschen
+
+":Student" ->+ ":System": requestStudentRecordingDeletion(page)
+":System" -->- ":Student": warning
+
+opt Student bestätigt
+    ":Student" -> ":System": deleteStudentRecording(page)
+end
