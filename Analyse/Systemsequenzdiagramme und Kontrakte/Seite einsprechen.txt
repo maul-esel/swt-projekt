@@ -8,12 +8,12 @@ opt Arbeitsheft existiert nicht
   ":System" -->- ":Redakteur": workbook
 end
 
-":Redakteur" ->+ ":System": createNewPage(workbook)
+":Redakteur" ->+ ":System": createNewPage(workbook, pageNr)
 ":System" -->- ":Redakteur": page
 
 loop
   alt Neue Aufnahme
-    ":Redakteur" ->+ ":System": beginRecording(workbook, pageNr)
+    ":Redakteur" ->+ ":System": beginRecording()
     ":System" -->- ":Redakteur": recording
     ":Redakteur" -> ":System": endRecording()
   else Aufnahme importieren
