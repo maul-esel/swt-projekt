@@ -1,0 +1,12 @@
+title Umbenennen einer Seite durch den Redakteur
+
+":User"->+":System": editPage(s)
+":System" --> ":User":
+":User" -> ":System": setName(s,newName)
+loop Es existiert bereits eine Seite mit "newName"
+":System" --> ":User": conflictMessage
+":User" -> ":System": setName(s,alternativeName)
+end
+":System" --> ":User":
+":User" -> ":System": saveChanges(s)
+":System" --> ":User":
