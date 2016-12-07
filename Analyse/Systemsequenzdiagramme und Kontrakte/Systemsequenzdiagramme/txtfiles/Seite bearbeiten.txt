@@ -1,0 +1,31 @@
+
+":Schüler"->":System": workOn(page)
+
+
+opt Schülerspur zu page exisitiert bereits
+":System"->":Schüler": warnOverwriting()
+":Schüler"-->":System": ok
+end
+
+":System"->":Player": play(page)
+":System"->":Recorder": startRecording()
+
+opt 
+":Schüler"->":System": pause()
+":System"->":Player": pausePlaying()
+":System"->":Recorder": pauseRecording()
+":Schüler"->":System": continue()
+":System"->":Player": continuePlaying()
+":System"->":Recorder": continueRecording()
+end
+
+opt
+":Schüler"->":System": goBack(time)
+":System"->":Player": goBack(time)
+":System"->":Recorder": goBack(time)
+end
+
+":Player"-->":System": end
+":System"->":Recorder": endRecording()
+":Recorder"-->":System": recordFile
+":System"->":System": saveStudentRecording(page, recording)
