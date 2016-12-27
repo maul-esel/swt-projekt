@@ -72,7 +72,7 @@ echo Handling ASP.NET Core Web Application deployment.
 :: IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build and publish
-call :ExecuteCmd dotnet publish "Lingvo\Solution\src\Backend" --output "%DEPLOYMENT_TEMP%" --configuration Release
+call :ExecuteCmd dotnet publish "Lingvo\Solution\src\Backend\Backend.csproj" --output "%DEPLOYMENT_TEMP%" --configuration Release
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. KuduSync
