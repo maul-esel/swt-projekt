@@ -39,6 +39,6 @@ deploy:
   site: lingvo
   verbose: true
   on:
-    branch: travis-setup
+    branch: solution-setup
     # TODO: deploy on master !
     condition: $DOTNETCORE = 1
