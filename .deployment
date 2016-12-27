@@ -1,2 +1,2 @@
 [config]
-project = Lingvo/Solution/src/Backend/Backend.csproj
+command = cd Lingvo\Solution\src\Backend && dotnet restore && dotnet build -c Release
