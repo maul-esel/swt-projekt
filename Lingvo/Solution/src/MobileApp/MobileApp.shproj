@@ -3,6 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>0001e584-0bee-4d0c-9466-9ea2f1487a9f</ProjectGuid>
   </PropertyGroup>
+  <PropertyGroup>
+    <Platform Condition=" '$(Platform)' == 'iPhone'">AnyCPU</Platform>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
