@@ -1,2 +1,2 @@
 [config]
-command = cd Lingvo\Solution\src\Backend && dotnet restore && dotnet build -c Release
+command = deploy.cmd
