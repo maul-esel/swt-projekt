@@ -5,7 +5,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace MobileApp
+namespace Lingvo.MobileApp
 {
 	public partial class App : Application
 	{

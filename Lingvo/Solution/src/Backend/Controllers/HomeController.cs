@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Controllers
+namespace Lingvo.Backend.Controllers
 {
     public class HomeController : Controller
     {
