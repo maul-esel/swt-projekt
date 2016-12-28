@@ -8,7 +8,8 @@ matrix:
   include:
     - os: linux
       mono: none
-      dotnet: 1.0.0-preview3-004056
+      dotnet: 1.0.0-preview5-004275
+      #1.0.0-preview3-004056
       env: DOTNETCORE=1
     - os: osx
       osx_image: xcode8.1
