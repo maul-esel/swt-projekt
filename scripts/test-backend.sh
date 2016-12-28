@@ -6,7 +6,7 @@ if [[ "$DOTNETCORE" != "1" ]]; then
 fi
 
 set -e
-XUNIT_RUNNER="${TRAVIS_BUILD_DIR}/testrunner/xunit.runner.console.2.1.0/tools/xunit.console"
+XUNIT_RUNNER="${HOME}/.nuget/packages/xunit.runner.console/2.1.0/tools/xunit.console"
 
 echo "======= Testing Common   ======="
 cd "${TRAVIS_BUILD_DIR}/Lingvo/Solution/tests/Common.Tests/bin/Debug/netcoreapp1.0"
