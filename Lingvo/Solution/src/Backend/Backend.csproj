@@ -3,6 +3,7 @@
   <PropertyGroup Label="Configuration">
     <AssemblyName>Lingvo.Backend</AssemblyName>
     <RootNamespace>Lingvo.Backend</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>

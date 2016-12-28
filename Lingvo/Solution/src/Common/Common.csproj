@@ -3,6 +3,7 @@
   <PropertyGroup Label="Configuration">
     <AssemblyName>Lingvo.Common</AssemblyName>
     <RootNamespace>Lingvo.Common</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>

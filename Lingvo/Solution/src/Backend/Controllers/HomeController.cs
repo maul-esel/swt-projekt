@@ -31,5 +31,10 @@ namespace Lingvo.Backend.Controllers
         {
             return View();
         }
+
+		internal bool DummyTestMethod()
+		{
+			return true;
+		}
     }
 }
