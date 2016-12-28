@@ -10,8 +10,8 @@ XUNIT_RUNNER="${HOME}/.nuget/packages/xunit.runner.console/2.1.0/tools/xunit.con
 
 echo "======= Testing Common   ======="
 cd "${TRAVIS_BUILD_DIR}/Lingvo/Solution/tests/Common.Tests/bin/Debug/netcoreapp1.0"
-mono "${XUNIT_RUNNER}" Lingvo.Common.Tests.dll
+dotnet "${XUNIT_RUNNER}" Lingvo.Common.Tests.dll
 
 echo "======= Testing Backend  ======="
 cd "${TRAVIS_BUILD_DIR}/Lingvo/Solution/tests/Backend.Tests/bin/Debug/netcoreapp1.0"
-mono "${XUNIT_RUNNER}" Lingvo.Backend.Tests.dll
+dotnet "${XUNIT_RUNNER}" Lingvo.Backend.Tests.dll
