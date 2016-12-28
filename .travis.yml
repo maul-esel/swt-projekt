@@ -19,11 +19,13 @@ matrix:
         - ANDROID_HOME=/usr/local/opt/android-sdk
 
 install:
+  - nuget install xunit.runner.console -Version 2.1.0 -OutputDirectory testrunner
   - ./scripts/install-xamarin.sh
 
 script:
   - ./scripts/build-backend.sh
   - ./scripts/build-xamarin.sh
+  - ./scripts/test-backend.sh
 
 env:
   global:
