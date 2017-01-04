@@ -28,7 +28,7 @@ namespace Lingvo.MobileApp.Droid
             {
                 progressView = new AndroidLingvoProgressView(Context);
                 labelType = e.NewElement.LabelType;
-                SetNativeControl(progressView.View);
+                SetNativeControl(progressView);
             }
 
             if (e.OldElement != null && e.NewElement == null)
@@ -45,26 +45,28 @@ namespace Lingvo.MobileApp.Droid
         {
             LingvoProgressView element = (LingvoProgressView)sender;
 
+            if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
+                progressView.InnerProgressEnabled = element.InnerProgressEnabled;
             if (progressView.Size != element.Size)
                 progressView.Size = element.Size;
-            if (!progressView.TeacherColor.Equals(element.TeacherTrackColor.ToAndroid()))
-                progressView.TeacherColor = element.TeacherTrackColor.ToAndroid();
-            if (!progressView.StudentColor.Equals(element.StudentTrackColor.ToAndroid()))
-                progressView.StudentColor = element.StudentTrackColor.ToAndroid();
+            if (!progressView.OuterProgressColor.Equals(element.OuterProgressColor.ToAndroid()))
+                progressView.OuterProgressColor = element.OuterProgressColor.ToAndroid();
+            if (!progressView.InnerProgressColor.Equals(element.InnerProgressColor.ToAndroid()))
+                progressView.InnerProgressColor = element.InnerProgressColor.ToAndroid();
             if (progressView.Max != element.MaxProgress)
                 progressView.Max = element.MaxProgress;
-            if (progressView.StudentProgress != element.StudentTrackProgress)
-                progressView.StudentProgress = element.StudentTrackProgress;
+            if (progressView.InnerProgress != element.InnerProgress)
+                progressView.InnerProgress = element.InnerProgress;
 
-            if (progressView.TeacherProgress != element.TeacherTrackProgress || !labelType.Equals(element.LabelType))
+            if (progressView.OuterProgress != element.OuterProgress || !labelType.Equals(element.LabelType))
             {
-                progressView.TeacherProgress = element.TeacherTrackProgress;
-
+                if (progressView.OuterProgress != element.OuterProgress)
+                    progressView.OuterProgress = element.OuterProgress;
                 switch (element.LabelType)
                 {
-                    case LingvoProgressView.LabelTypeValue.NOfM: progressView.Label = element.TeacherTrackProgress + " / " + element.MaxProgress; break;
-                    case LingvoProgressView.LabelTypeValue.Time: progressView.Label = element.TeacherTrackProgress / 60 + ":" + element.TeacherTrackProgress % 60; break;
-                    default: progressView.Label = (int)(100 * ((double)element.TeacherTrackProgress) / element.MaxProgress) + " %"; break;
+                    case LingvoProgressView.LabelTypeValue.NOfM: progressView.Text = element.OuterProgress + " / " + element.MaxProgress; break;
+                    case LingvoProgressView.LabelTypeValue.Time: progressView.Text = (element.OuterProgress / 60 < 10 ? "0" : "") + element.OuterProgress / 60 + ":" + (element.OuterProgress % 60 < 10 ? "0" : "") + element.OuterProgress % 60; break;
+                    default: progressView.Text = (int)(100 * ((double)element.OuterProgress) / element.MaxProgress) + " %"; break;
                 }
                 labelType = element.LabelType;
             }

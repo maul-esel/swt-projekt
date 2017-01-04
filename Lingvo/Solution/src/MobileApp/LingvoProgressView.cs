@@ -7,14 +7,14 @@ namespace Lingvo.MobileApp
 {
     public class LingvoProgressView : View
     {
-        public static readonly BindableProperty StudentTrackProgressProperty = BindableProperty.Create(
-            propertyName: "StudentTrackProgress",
+        public static readonly BindableProperty InnerProgressProperty = BindableProperty.Create(
+            propertyName: "InnerProgress",
             returnType: typeof(int),
             declaringType: typeof(LingvoProgressView),
             defaultValue: 0);
 
-        public static readonly BindableProperty TeacherTrackProgressProperty = BindableProperty.Create(
-            propertyName: "TeacherTrackProgress",
+        public static readonly BindableProperty OuterProgressProperty = BindableProperty.Create(
+            propertyName: "OuterProgress",
             returnType: typeof(int),
             declaringType: typeof(LingvoProgressView),
             defaultValue: 0);
@@ -25,23 +25,23 @@ namespace Lingvo.MobileApp
             declaringType: typeof(LingvoProgressView),
             defaultValue: 100);
 
-        public static readonly BindableProperty StudentTrackColorProperty = BindableProperty.Create(
-            propertyName: "StudentTrackColor",
-            returnType: typeof(Color),
-            declaringType: typeof(LingvoProgressView),
-            defaultValue: Color.Orange);
-
-        public static readonly BindableProperty TeacherTrackColorProperty = BindableProperty.Create(
-            propertyName: "TeacherTrackColor",
+        public static readonly BindableProperty InnerProgressColorProperty = BindableProperty.Create(
+            propertyName: "InnerProgressColor",
             returnType: typeof(Color),
             declaringType: typeof(LingvoProgressView),
             defaultValue: Color.Aqua);
+
+        public static readonly BindableProperty OuterProgressColorProperty = BindableProperty.Create(
+            propertyName: "OuterProgressColor",
+            returnType: typeof(Color),
+            declaringType: typeof(LingvoProgressView),
+            defaultValue: Color.Teal);
 
         public static readonly BindableProperty SizeProperty = BindableProperty.Create(
            propertyName: "Size",
            returnType: typeof(int),
            declaringType: typeof(LingvoProgressView),
-           defaultValue: 40);
+           defaultValue: 0);
 
         public static readonly BindableProperty LabelTypeProperty = BindableProperty.Create(
           propertyName: "LabelType",
@@ -49,16 +49,28 @@ namespace Lingvo.MobileApp
           declaringType: typeof(LingvoProgressView),
           defaultValue: LabelTypeValue.Percentual);
 
-        public int StudentTrackProgress
+        public static readonly BindableProperty InnerProgressEnabledProperty = BindableProperty.Create(
+           propertyName: "InnerProgressEnabled",
+           returnType: typeof(bool),
+           declaringType: typeof(LingvoProgressView),
+           defaultValue: true);
+
+        public bool InnerProgressEnabled
         {
-            get { return (int)GetValue(StudentTrackProgressProperty); }
-            set { SetValue(StudentTrackProgressProperty, value); }
+            get { return (bool)GetValue(InnerProgressEnabledProperty); }
+            set { SetValue(InnerProgressEnabledProperty, value); }
         }
 
-        public int TeacherTrackProgress
+        public int InnerProgress
         {
-            get { return (int)GetValue(TeacherTrackProgressProperty); }
-            set { SetValue(TeacherTrackProgressProperty, value); }
+            get { return (int)GetValue(InnerProgressProperty); }
+            set { SetValue(InnerProgressProperty, value); }
+        }
+
+        public int OuterProgress
+        {
+            get { return (int)GetValue(OuterProgressProperty); }
+            set { SetValue(OuterProgressProperty, value); }
         }
 
         public int MaxProgress
@@ -67,16 +79,16 @@ namespace Lingvo.MobileApp
             set { SetValue(MaxProgressProperty, value); }
         }
 
-        public Color StudentTrackColor
+        public Color InnerProgressColor
         {
-            get { return (Color)GetValue(StudentTrackColorProperty); }
-            set { SetValue(StudentTrackColorProperty, value); }
+            get { return (Color)GetValue(InnerProgressColorProperty); }
+            set { SetValue(InnerProgressColorProperty, value); }
         }
 
-        public Color TeacherTrackColor
+        public Color OuterProgressColor
         {
-            get { return (Color)GetValue(TeacherTrackColorProperty); }
-            set { SetValue(TeacherTrackColorProperty, value); }
+            get { return (Color)GetValue(OuterProgressColorProperty); }
+            set { SetValue(OuterProgressColorProperty, value); }
         }
 
         public int Size

@@ -13,16 +13,10 @@
     <attr name="cpb_text_size" format="dimension"/>
     <attr name="cpb_text_color" format="color"/>
 
-    <attr name="cpb_prefix_text" format="string"/>
-    <attr name="cpb_suffix_text" format="string"/>
     <attr name="cpb_text" format="string"/>
 
     <attr name="cpb_background_color" format="color"/>
-
-    <attr name="cpb_inner_bottom_text" format="string"/>
-    <attr name="cpb_inner_bottom_text_size" format="dimension"/>
-    <attr name="cpb_inner_bottom_text_color" format="color"/>
-
+    
     <attr name="cpb_circle_starting_degree" format="integer" />
     <attr name="cpb_show_text" format="boolean"/>
     <attr name="cpb_inner_drawable" format="reference"/>
