@@ -37,6 +37,18 @@ namespace Lingvo.MobileApp
             declaringType: typeof(LingvoProgressView),
             defaultValue: Color.Aqua);
 
+        public static readonly BindableProperty SizeProperty = BindableProperty.Create(
+           propertyName: "Size",
+           returnType: typeof(int),
+           declaringType: typeof(LingvoProgressView),
+           defaultValue: 40);
+
+        public static readonly BindableProperty LabelTypeProperty = BindableProperty.Create(
+          propertyName: "LabelType",
+          returnType: typeof(LabelTypeValue),
+          declaringType: typeof(LingvoProgressView),
+          defaultValue: LabelTypeValue.Percentual);
+
         public int StudentTrackProgress
         {
             get { return (int)GetValue(StudentTrackProgressProperty); }
@@ -65,6 +77,23 @@ namespace Lingvo.MobileApp
         {
             get { return (Color)GetValue(TeacherTrackColorProperty); }
             set { SetValue(TeacherTrackColorProperty, value); }
+        }
+
+        public int Size
+        {
+            get { return (int)GetValue(SizeProperty); }
+            set { SetValue(SizeProperty, value); }
+        }
+
+        public LabelTypeValue LabelType
+        {
+            get { return (LabelTypeValue)GetValue(LabelTypeProperty); }
+            set { SetValue(LabelTypeProperty, value); }
+        }
+
+        public enum LabelTypeValue
+        {
+            NOfM, Percentual, Time 
         }
     }
 }

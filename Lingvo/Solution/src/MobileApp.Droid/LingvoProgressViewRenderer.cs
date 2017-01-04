@@ -15,9 +15,10 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoProgressView), typeof(Lingvo.MobileApp.Droid.LingvoProgressViewRenderer))]
 namespace Lingvo.MobileApp.Droid
 {
-    class LingvoProgressViewRenderer : ViewRenderer<LingvoProgressView, AndroidLingvoProgressView>
+    class LingvoProgressViewRenderer : ViewRenderer<LingvoProgressView, Android.Views.View>
     {
         AndroidLingvoProgressView progressView;
+        private LingvoProgressView.LabelTypeValue labelType;
 
         protected override void OnElementChanged(ElementChangedEventArgs<LingvoProgressView> e)
         {
@@ -26,25 +27,48 @@ namespace Lingvo.MobileApp.Droid
             if (Control == null)
             {
                 progressView = new AndroidLingvoProgressView(Context);
-                SetNativeControl(progressView);
+                labelType = e.NewElement.LabelType;
+                SetNativeControl(progressView.View);
             }
 
-            if (e.OldElement != null)
+            if (e.OldElement != null && e.NewElement == null)
             {
-                progressView.TeacherColor = e.OldElement.TeacherTrackColor.ToAndroid();
-                progressView.StudentColor = e.OldElement.StudentTrackColor.ToAndroid();
-                progressView.TeacherProgress = e.OldElement.TeacherTrackProgress;
-                progressView.StudentProgress = e.OldElement.StudentTrackProgress;
-                progressView.Max = e.OldElement.MaxProgress;
+                e.OldElement.PropertyChanged -= updateView;
             }
-            if (e.NewElement != null)
+            else if (e.NewElement != null)
             {
-                progressView.TeacherColor = e.NewElement.TeacherTrackColor.ToAndroid();
-                progressView.StudentColor = e.NewElement.StudentTrackColor.ToAndroid();
-                progressView.TeacherProgress = e.NewElement.TeacherTrackProgress;
-                progressView.StudentProgress = e.NewElement.StudentTrackProgress;
-                progressView.Max = e.NewElement.MaxProgress;
+                e.NewElement.PropertyChanged += updateView;
             }
+        }
+
+        private void updateView(object sender, EventArgs e)
+        {
+            LingvoProgressView element = (LingvoProgressView)sender;
+
+            if (progressView.Size != element.Size)
+                progressView.Size = element.Size;
+            if (!progressView.TeacherColor.Equals(element.TeacherTrackColor.ToAndroid()))
+                progressView.TeacherColor = element.TeacherTrackColor.ToAndroid();
+            if (!progressView.StudentColor.Equals(element.StudentTrackColor.ToAndroid()))
+                progressView.StudentColor = element.StudentTrackColor.ToAndroid();
+            if (progressView.Max != element.MaxProgress)
+                progressView.Max = element.MaxProgress;
+            if (progressView.StudentProgress != element.StudentTrackProgress)
+                progressView.StudentProgress = element.StudentTrackProgress;
+
+            if (progressView.TeacherProgress != element.TeacherTrackProgress || !labelType.Equals(element.LabelType))
+            {
+                progressView.TeacherProgress = element.TeacherTrackProgress;
+
+                switch (element.LabelType)
+                {
+                    case LingvoProgressView.LabelTypeValue.NOfM: progressView.Label = element.TeacherTrackProgress + " / " + element.MaxProgress; break;
+                    case LingvoProgressView.LabelTypeValue.Time: progressView.Label = element.TeacherTrackProgress / 60 + ":" + element.TeacherTrackProgress % 60; break;
+                    default: progressView.Label = (int)(100 * ((double)element.TeacherTrackProgress) / element.MaxProgress) + " %"; break;
+                }
+                labelType = element.LabelType;
+            }
+
         }
     }
 }

@@ -9,26 +9,41 @@ using Android.OS;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
+using Android.Graphics.Drawables;
 
 namespace Lingvo.MobileApp.Droid
 {
-    class AndroidLingvoProgressView : View
+    class AndroidLingvoProgressView
     {
-        private ProgressBar studentProgressBar;
-        private ProgressBar teacherProgressBar;
-        private Color studentColor, teacherColor;
-        public TextView label { get; set; }
+        private CircleProgressBar studentProgressBar;
+        private CircleProgressBar teacherProgressBar;
+        
+        private View view;
+        public View View
+        {
+            get { return view; }
+        }
+
+        public string Label
+        {
+            get { return studentProgressBar.Text; }
+            set { studentProgressBar.Text = value; }
+        }
 
         public int StudentProgress
         {
-            get { return studentProgressBar.Progress; }
-            set { studentProgressBar.Progress = value; }
+            get { return (int)studentProgressBar.Progress; }
+            set {
+                studentProgressBar.Progress = value;
+            }
         }
 
         public int TeacherProgress
         {
-            get { return teacherProgressBar.Progress; }
-            set { teacherProgressBar.Progress = value; }
+            get { return (int)teacherProgressBar.Progress; }
+            set {
+                teacherProgressBar.Progress = value;
+            }
         }
 
         public int Max
@@ -40,52 +55,56 @@ namespace Lingvo.MobileApp.Droid
 
         public Color StudentColor
         {
-            get { return studentColor; }
+            get { return studentProgressBar.FinishedStrokeColor; }
             set {
-                studentColor = value;
-                studentProgressBar.ProgressTintList = Android.Content.Res.ColorStateList.ValueOf(value); }
+                studentProgressBar.FinishedStrokeColor = value;
+                studentProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
+            }
         }
 
         public Color TeacherColor
         {
-            get { return teacherColor; }
+            get { return teacherProgressBar.FinishedStrokeColor; }
             set
             {
-                teacherColor = value;
-                teacherProgressBar.ProgressTintList = Android.Content.Res.ColorStateList.ValueOf(value);
+                teacherProgressBar.FinishedStrokeColor = value;
+                teacherProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
             }
         }
 
-        public AndroidLingvoProgressView(Context context) : base(context)
+        public int Size
         {
-            studentProgressBar = new ProgressBar(context);
-            teacherProgressBar = new ProgressBar(context);
-            label = new TextView(context);
-            this.LayoutParameters = new ViewGroup.LayoutParams(-1, -1);
-            studentProgressBar.ProgressDrawable = Resources.GetDrawable(Resource.Drawable.lingvo_progress_view_drawable);
-            teacherProgressBar.ProgressDrawable = Resources.GetDrawable(Resource.Drawable.lingvo_progress_view_drawable);
+            get {
+                return teacherProgressBar.LayoutParameters.Width;
+            }
+            set
+            {
+                studentProgressBar.FinishedStrokeWidth = value * 0.05f;
+                teacherProgressBar.FinishedStrokeWidth = value * 0.05f;
+                studentProgressBar.UnfinishedStrokeWidth = value * 0.05f;
+                teacherProgressBar.UnfinishedStrokeWidth = value * 0.05f;
 
-            
+                teacherProgressBar.LayoutParameters.Width = teacherProgressBar.LayoutParameters.Height = value;
+                studentProgressBar.LayoutParameters.Width = studentProgressBar.LayoutParameters.Height = value - (int)(2.0 * teacherProgressBar.FinishedStrokeWidth);
+
+                studentProgressBar.TextSize = value * 0.25f;
+
+                teacherProgressBar.RequestLayout();
+                studentProgressBar.RequestLayout();
+            }
         }
 
-        public override void OnDrawForeground(Canvas canvas)
+        public AndroidLingvoProgressView(Context context)
         {
-            base.OnDrawForeground(canvas);
-            teacherProgressBar.OnDrawForeground(canvas);
-            studentProgressBar.OnDrawForeground(canvas);
-            label.OnDrawForeground(canvas);
-        }
+            this.view = View.Inflate(context, Resource.Layout.android_lingvo_progress_view, null);
+            this.studentProgressBar = view.FindViewById<CircleProgressBar>(Resource.Id.studentProgressBar);
+            this.teacherProgressBar = view.FindViewById<CircleProgressBar>(Resource.Id.teacherProgressBar);
 
-        protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        {
-            base.OnLayout(changed, l, t, r, b);
-            int PROGRESSBAR_WIDTH = (int)Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 5, Resources.DisplayMetrics);
-            teacherProgressBar.Layout(l, t, r, b);
-            studentProgressBar.Layout(l + PROGRESSBAR_WIDTH, t + PROGRESSBAR_WIDTH, r - 2 * PROGRESSBAR_WIDTH, b - 2 * PROGRESSBAR_WIDTH);
-            label.Left = 2 * PROGRESSBAR_WIDTH;
-            label.Top = 2 * PROGRESSBAR_WIDTH;
-            label.LayoutParameters = new ViewGroup.LayoutParams(r - l - 4 * PROGRESSBAR_WIDTH, b - t - 4 * PROGRESSBAR_WIDTH);
-            label.RequestLayout();
+            teacherProgressBar.ShowText = false;
+            studentProgressBar.TextColor = Color.Black;
+
+            teacherProgressBar.StartingDegree = -90;
+            studentProgressBar.StartingDegree = -90;
         }
     }
 }
