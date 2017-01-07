@@ -17,6 +17,11 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Proxies\PageProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Proxies\CloudLibraryProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controller\TeacherMemoController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controller\StudentPageController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
@@ -30,5 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Controller\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
   </ItemGroup>
 </Project>

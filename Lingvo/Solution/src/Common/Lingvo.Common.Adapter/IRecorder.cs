@@ -6,6 +6,7 @@ namespace Lingvo.Common
 		void Start();
 		Recording Stop();
 		void Pause();
+		void Continue();
 		void SeekTo(TimeSpan seek);
 	}
 }
