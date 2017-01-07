@@ -12,8 +12,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)DummyTestClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LingvoProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LingvoSingleProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LingvoAudioProgressView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

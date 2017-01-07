@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using Android.Graphics.Drawables;
+using System;
 
 namespace Lingvo.MobileApp.Droid
 {
-    class AndroidLingvoProgressView : RelativeLayout
+    class AndroidLingvoAudioProgressView : RelativeLayout
     {
         private CircleProgressBar studentProgressBar;
         private CircleProgressBar teacherProgressBar;
@@ -21,25 +14,24 @@ namespace Lingvo.MobileApp.Droid
         public string Text
         {
             get { return studentProgressBar.Text; }
-            set { studentProgressBar.Text = value;
-                Invalidate();
-            }
         }
 
-        public int InnerProgress
-        {
-            get { return (int)studentProgressBar.Progress; }
-            set {
-                studentProgressBar.Progress = value;
-                Invalidate();
-            }
-        }
-
-        public int OuterProgress
+        public int Progress
         {
             get { return (int)teacherProgressBar.Progress; }
-            set {
+            set
+            {
+                if (InnerProgressEnabled)
+                {
+                    studentProgressBar.Progress = value;
+                }
                 teacherProgressBar.Progress = value;
+
+                string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
+                string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
+
+                studentProgressBar.Text = minutes + ":" + seconds;
+
                 Invalidate();
             }
         }
@@ -47,7 +39,9 @@ namespace Lingvo.MobileApp.Droid
         public int Max
         {
             get { return studentProgressBar.Max; }
-            set { studentProgressBar.Max = value;
+            set
+            {
+                studentProgressBar.Max = value;
                 teacherProgressBar.Max = value;
                 Invalidate();
             }
@@ -56,7 +50,8 @@ namespace Lingvo.MobileApp.Droid
         public Color InnerProgressColor
         {
             get { return studentProgressBar.FinishedStrokeColor; }
-            set {
+            set
+            {
                 studentProgressBar.FinishedStrokeColor = value;
                 studentProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
                 Invalidate();
@@ -77,7 +72,8 @@ namespace Lingvo.MobileApp.Droid
 
         public int Size
         {
-            get {
+            get
+            {
                 return LayoutParameters.Width;
             }
             set
@@ -90,13 +86,14 @@ namespace Lingvo.MobileApp.Droid
         public bool InnerProgressEnabled
         {
             get { return studentProgressBar.DrawStroke; }
-            set {
+            set
+            {
                 studentProgressBar.DrawStroke = value;
                 Invalidate();
             }
         }
 
-        public AndroidLingvoProgressView(Context context) : base(context)
+        public AndroidLingvoAudioProgressView(Context context) : base(context)
         {
             this.LayoutParameters = new ViewGroup.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
@@ -108,6 +105,8 @@ namespace Lingvo.MobileApp.Droid
 
             teacherProgressBar.StartingDegree = studentProgressBar.StartingDegree = -90;
             teacherProgressBar.Text = "";
+
+            Progress = 0;
 
             AddView(teacherProgressBar, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             AddView(studentProgressBar, 1, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));

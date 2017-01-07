@@ -17,7 +17,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
@@ -118,9 +118,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidLingvoProgressView.cs" />
+    <Compile Include="AndroidLingvoSingleProgressView.cs" />
+    <Compile Include="AndroidLingvoAudioProgressView.cs" />
     <Compile Include="CircleProgressBar.cs" />
-    <Compile Include="LingvoProgressViewRenderer.cs" />
+    <Compile Include="LingvoSingleProgressViewRenderer.cs" />
+    <Compile Include="LingvoAudioProgressViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
