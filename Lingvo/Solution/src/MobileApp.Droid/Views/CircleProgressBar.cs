@@ -42,6 +42,7 @@ namespace Lingvo.MobileApp.Droid
         private Color innerBackgroundColor;
         private string text = "0 %";
         private bool drawStroke = true;
+        private bool centerText = true;
 
         private float default_stroke_width;
         private int default_finished_color = Color.Rgb(66, 145, 241);
@@ -54,6 +55,7 @@ namespace Lingvo.MobileApp.Droid
         private int min_size;
 
         private static readonly string INSTANCE_STATE = "saved_instance";
+        private static readonly string INSTANCE_CENTER_TEXT = "center_text";
         private static readonly string INSTANCE_TEXT_COLOR = "text_color";
         private static readonly string INSTANCE_TEXT_SIZE = "text_size";
         private static readonly string INSTANCE_TEXT = "text";
@@ -302,6 +304,16 @@ namespace Lingvo.MobileApp.Droid
             }
         }
 
+        public bool CenterText
+        {
+            get { return centerText; }
+            set
+            {
+                centerText = value;
+                Invalidate();
+            }
+        }
+
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             SetMeasuredDimension(measure(widthMeasureSpec), measure(heightMeasureSpec));
@@ -356,9 +368,16 @@ namespace Lingvo.MobileApp.Droid
                 {
                     float offset = !drawStroke ? 2 * FinishedStrokeWidth : 5 * FinishedStrokeWidth;
                     textPaint.TextSize = textSize;
-                    textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
-                    float textHeight = textPaint.Descent() + textPaint.Ascent();
-                    canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, (Width - textHeight) / 2.0f, textPaint);
+                    if (centerText)
+                    {
+                        textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
+                        float textHeight = textPaint.Descent() + textPaint.Ascent();
+                        canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, (Width - textHeight) / 2.0f, textPaint);
+                    } else
+                    {
+                        textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - textPaint.Descent() - offset);
+                        canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, Width / 2.0f - textPaint.Descent() / 2.0f, textPaint);
+                    }
                 }
             }
 
@@ -386,6 +405,7 @@ namespace Lingvo.MobileApp.Droid
             bundle.PutInt(INSTANCE_BACKGROUND_COLOR, InnerBackgroundColor);
             bundle.PutInt(INSTANCE_INNER_DRAWABLE, AttributeResourceId);
             bundle.PutBoolean(INSTANCE_DRAW_STROKE, drawStroke);
+            bundle.PutBoolean(INSTANCE_CENTER_TEXT, centerText);
 
             return bundle;
         }
@@ -413,6 +433,7 @@ namespace Lingvo.MobileApp.Droid
                 Progress = bundle.GetFloat(INSTANCE_PROGRESS);
                 text = bundle.GetString(INSTANCE_TEXT);
                 drawStroke = bundle.GetBoolean(INSTANCE_DRAW_STROKE);
+                centerText = bundle.GetBoolean(INSTANCE_CENTER_TEXT);
                 base.OnRestoreInstanceState((IParcelable)bundle.GetParcelable(INSTANCE_STATE));
                 return;
             }

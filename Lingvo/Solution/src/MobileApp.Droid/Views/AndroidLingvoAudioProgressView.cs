@@ -1,8 +1,12 @@
 using Android.Content;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Views;
+using Android.Support.Graphics.Drawable;
+using Android.Support.V4.View.Animation;
 using Android.Widget;
 using System;
+using Android.Util;
 
 namespace Lingvo.MobileApp.Droid
 {
@@ -10,6 +14,12 @@ namespace Lingvo.MobileApp.Droid
     {
         private CircleProgressBar studentProgressBar;
         private CircleProgressBar teacherProgressBar;
+        private ImageButton studentMuteButton;
+        private ImageButton teacherMuteButton;
+        private bool studentMuted, teacherMuted;
+
+        private static readonly int INSTANCE_STUDENT_MUTED = "student_muted".GetHashCode();
+        private static readonly int INSTANCE_TEACHER_MUTED = "teacher_muted".GetHashCode();
 
         public string Text
         {
@@ -54,6 +64,7 @@ namespace Lingvo.MobileApp.Droid
             {
                 studentProgressBar.FinishedStrokeColor = value;
                 studentProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
+                studentMuteButton.SetColorFilter(value, PorterDuff.Mode.SrcIn);
                 Invalidate();
             }
         }
@@ -66,6 +77,7 @@ namespace Lingvo.MobileApp.Droid
                 teacherProgressBar.FinishedStrokeColor = value;
                 teacherProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
                 studentProgressBar.TextColor = value;
+                teacherMuteButton.SetColorFilter(value, PorterDuff.Mode.SrcIn);
                 Invalidate();
             }
         }
@@ -78,8 +90,10 @@ namespace Lingvo.MobileApp.Droid
             }
             set
             {
+
                 LayoutParameters.Width = LayoutParameters.Height = value;
                 RequestLayout();
+
             }
         }
 
@@ -93,9 +107,35 @@ namespace Lingvo.MobileApp.Droid
             }
         }
 
+        public bool InnerMuteButtonVisible
+        {
+            get { return studentMuteButton.Visibility == ViewStates.Visible; }
+            set
+            {
+                studentMuteButton.Visibility = value ? ViewStates.Visible : ViewStates.Gone;
+            }
+        }
+
+        public bool OuterMuteButtonVisible
+        {
+            get { return teacherMuteButton.Visibility == ViewStates.Visible; }
+            set
+            {
+                teacherMuteButton.Visibility = value ? ViewStates.Visible : ViewStates.Gone;
+            }
+        }
+
+        public delegate void StudentTrackMutedEventHandler(bool muted);
+        public delegate void TeacherTrackMutedEventHandler(bool muted);
+
+        public event StudentTrackMutedEventHandler StudentTrackMuted;
+        public event TeacherTrackMutedEventHandler TeacherTrackMuted;
+
         public AndroidLingvoAudioProgressView(Context context) : base(context)
         {
             this.LayoutParameters = new ViewGroup.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+
+            //ProgressBars
 
             this.studentProgressBar = new CircleProgressBar(context);
             this.teacherProgressBar = new CircleProgressBar(context);
@@ -106,20 +146,66 @@ namespace Lingvo.MobileApp.Droid
             teacherProgressBar.StartingDegree = studentProgressBar.StartingDegree = -90;
             teacherProgressBar.Text = "";
 
+            studentProgressBar.CenterText = false;
+
             Progress = 0;
 
             AddView(teacherProgressBar, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             AddView(studentProgressBar, 1, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
+
+            //Mute Buttons
+
+            studentMuted = teacherMuted = false;
+
+            studentMuteButton = new ImageButton(context);
+            teacherMuteButton = new ImageButton(context);
+
+            studentMuteButton.Background = null;
+            teacherMuteButton.Background = null;
+
+            studentMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
+            teacherMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
+
+            setButtonResource(studentMuteButton, studentMuted);
+            setButtonResource(teacherMuteButton, teacherMuted);
+
+            studentMuteButton.Click += (o, e) =>
+            {
+                studentMuted = !studentMuted;
+                StudentTrackMuted?.Invoke(studentMuted);
+                setButtonResource(studentMuteButton, studentMuted);
+            };
+            teacherMuteButton.Click += (o, e) =>
+            {
+                teacherMuted = !teacherMuted;
+                TeacherTrackMuted?.Invoke(teacherMuted);
+                setButtonResource(teacherMuteButton, teacherMuted);
+            };
+
+            AddView(studentMuteButton, 2, new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent));
+            AddView(teacherMuteButton, 3, new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent));
+        }
+
+        private void setButtonResource(ImageButton button, bool isEnabled)
+        {
+            int resourceId = isEnabled ? Resource.Drawable.ic_volume_off_black_24px : Resource.Drawable.ic_volume_up_black_24px;
+            button.SetImageDrawable(VectorDrawableCompat.Create(Resources, resourceId, Resources.NewTheme()));
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
+            MeasureChild(studentMuteButton, widthMeasureSpec, heightMeasureSpec);
+
             int width = LayoutParameters.Width <= 0 ? Math.Max(0, MeasuredWidth
                             - PaddingLeft - PaddingRight) : LayoutParameters.Width;
             int height = LayoutParameters.Height <= 0 ? Math.Max(0, MeasuredHeight
                             - PaddingTop - PaddingBottom) : LayoutParameters.Height;
+
+            width = Math.Max(width, studentMuteButton.MeasuredWidth * 4);
+            height = Math.Max(height, studentMuteButton.MeasuredHeight * 4);
+
             int childWidthMeasureSpec = MeasureSpec.MakeMeasureSpec(
                    width, MeasureSpecMode.Exactly);
             int childHeightMeasureSpec = MeasureSpec.MakeMeasureSpec(
@@ -133,7 +219,7 @@ namespace Lingvo.MobileApp.Droid
             teacherProgressBar.FinishedStrokeWidth = size * 0.05f;
             studentProgressBar.UnfinishedStrokeWidth = size * 0.05f;
             teacherProgressBar.UnfinishedStrokeWidth = size * 0.05f;
-            studentProgressBar.TextSize = size * 0.25f;
+            studentProgressBar.TextSize = size * 0.2f;
 
             int studentWidth = width - (int)(2.0 * teacherProgressBar.FinishedStrokeWidth);
             int studentHeight = height - (int)(2.0 * teacherProgressBar.FinishedStrokeWidth);
@@ -143,6 +229,15 @@ namespace Lingvo.MobileApp.Droid
                     studentHeight, MeasureSpecMode.Exactly);
 
             studentProgressBar.Measure(studentChildWidthMeasureSpec, studentChildHeightMeasureSpec);
+
+            int buttonWidth = Math.Max((int)(0.2f * size), studentMuteButton.MeasuredWidth);
+            int buttonHeight = Math.Max((int)(0.2f * size), studentMuteButton.MeasuredHeight);
+            int muteWidthMeasureSpec = MeasureSpec.MakeMeasureSpec(
+                    buttonWidth, MeasureSpecMode.Exactly);
+            int muteHeightMeasureSpec = MeasureSpec.MakeMeasureSpec(
+                    buttonHeight, MeasureSpecMode.Exactly);
+            studentMuteButton.Measure(muteWidthMeasureSpec, muteHeightMeasureSpec);
+            teacherMuteButton.Measure(muteWidthMeasureSpec, muteHeightMeasureSpec);
         }
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
@@ -164,6 +259,27 @@ namespace Lingvo.MobileApp.Droid
             int studentRight = childLeft + size - (int)(teacherProgressBar.FinishedStrokeWidth);
             int studentBottom = childTop + size - (int)(teacherProgressBar.FinishedStrokeWidth);
             studentProgressBar.Layout(studentLeft, studentTop, studentRight, studentBottom);
+
+            bool bothButtonsVisible = studentMuteButton.Visibility == ViewStates.Visible && teacherMuteButton.Visibility == ViewStates.Visible;
+            int leftButtonOffset = (bothButtonsVisible ? 1 : 2) * studentMuteButton.MeasuredWidth;
+            studentMuteButton.Layout(childLeft + size / 2 - studentMuteButton.MeasuredWidth, childTop + size / 2 + (int)(0.05f * size), childLeft + size / 2, (int)(childTop + size / 2 + studentMuteButton.MeasuredHeight + (int)(0.05f * size)));
+            if (bothButtonsVisible)
+                leftButtonOffset *= 2;
+            teacherMuteButton.Layout(childLeft + size / 2, childTop + size / 2 + (int)(0.05f * size), childLeft + size / 2 + teacherMuteButton.MeasuredWidth, (int)(childTop + size / 2 + teacherMuteButton.MeasuredHeight + (int)(0.05f * size)));
+        }
+
+        public override void SaveHierarchyState(SparseArray container)
+        {
+            base.SaveHierarchyState(container);
+            container.Append(INSTANCE_STUDENT_MUTED, studentMuted);
+            container.Append(INSTANCE_TEACHER_MUTED, teacherMuted);
+        }
+
+        public override void RestoreHierarchyState(SparseArray container)
+        {
+            base.RestoreHierarchyState(container);
+            studentMuted = (bool)container.Get(INSTANCE_STUDENT_MUTED);
+            teacherMuted = (bool)container.Get(INSTANCE_TEACHER_MUTED);
         }
     }
 }

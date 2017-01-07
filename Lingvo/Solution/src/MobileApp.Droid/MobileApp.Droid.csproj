@@ -118,11 +118,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidLingvoSingleProgressView.cs" />
-    <Compile Include="AndroidLingvoAudioProgressView.cs" />
-    <Compile Include="CircleProgressBar.cs" />
-    <Compile Include="LingvoSingleProgressViewRenderer.cs" />
-    <Compile Include="LingvoAudioProgressViewRenderer.cs" />
+    <Compile Include="Views\AndroidLingvoSingleProgressView.cs" />
+    <Compile Include="Views\AndroidLingvoAudioProgressView.cs" />
+    <Compile Include="Views\CircleProgressBar.cs" />
+    <Compile Include="Renderers\LingvoSingleProgressViewRenderer.cs" />
+    <Compile Include="Renderers\LingvoAudioProgressViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,6 +146,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\attrs.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\ic_volume_off_black_24px.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\ic_volume_up_black_24px.xml" />
   </ItemGroup>
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

@@ -18,8 +18,11 @@ namespace Lingvo.MobileApp
             lingvoAudioProgressView = new LingvoAudioProgressView
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                VerticalOptions = LayoutOptions.FillAndExpand,
             };
+
+            lingvoAudioProgressView.StudentTrackMuted += (b) => { Console.WriteLine("StudentTrack mute state changed"); };
+            lingvoAudioProgressView.TeacherTrackMuted += (b) => { Console.WriteLine("TeacherTrack mute state changed"); };
 
             lingvoSingleProgressView = new LingvoSingleProgressView
             {

@@ -40,6 +40,12 @@ namespace Lingvo.MobileApp
            declaringType: typeof(LingvoAudioProgressView),
            defaultValue: true);
 
+        public delegate void StudentTrackMutedEventHandler(bool muted);
+        public delegate void TeacherTrackMutedEventHandler(bool muted);
+
+        public event StudentTrackMutedEventHandler StudentTrackMuted;
+        public event TeacherTrackMutedEventHandler TeacherTrackMuted;
+
         public bool InnerProgressEnabled
         {
             get { return (bool)GetValue(InnerProgressEnabledProperty); }
@@ -74,6 +80,16 @@ namespace Lingvo.MobileApp
         {
             get { return (int)GetValue(SizeProperty); }
             set { SetValue(SizeProperty, value); }
+        }
+
+        public void OnTeacherTrackMuted(bool muted)
+        {
+            StudentTrackMuted?.Invoke(muted);
+        }
+
+        public void OnStudentTrackMuted(bool muted)
+        {
+            TeacherTrackMuted?.Invoke(muted);
         }
     }
 }

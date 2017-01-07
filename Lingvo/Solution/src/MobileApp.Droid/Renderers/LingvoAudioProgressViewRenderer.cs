@@ -16,16 +16,20 @@ namespace Lingvo.MobileApp.Droid
             if (Control == null)
             {
                 progressView = new AndroidLingvoAudioProgressView(Context);
-                SetNativeControl(progressView);
+                SetNativeControl(progressView); 
             }
 
             if (e.OldElement != null && e.NewElement == null)
             {
                 e.OldElement.PropertyChanged -= updateView;
+                progressView.TeacherTrackMuted -= e.OldElement.OnTeacherTrackMuted;
+                progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
             }
             else if (e.NewElement != null)
             {
                 e.NewElement.PropertyChanged += updateView;
+                progressView.TeacherTrackMuted += e.NewElement.OnTeacherTrackMuted;
+                progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
             }
         }
 
@@ -45,6 +49,8 @@ namespace Lingvo.MobileApp.Droid
                 progressView.Max = element.MaxProgress;
             if (progressView.Progress != element.Progress)
                 progressView.Progress = element.Progress;
+            if (progressView.InnerMuteButtonVisible != element.InnerProgressEnabled)
+                progressView.InnerMuteButtonVisible = element.InnerProgressEnabled;
         }
     }
 }
