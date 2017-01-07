@@ -1,7 +1,6 @@
-﻿<Project ToolsVersion="4.0"  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup Label="Configuration">
-		<ProjectGuid>{786C830F-07A1-408B-BD7F-6EE04809D6DB}</ProjectGuid>
     <AssemblyName>Lingvo.Common</AssemblyName>
     <RootNamespace>Lingvo.Common</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -26,6 +25,9 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
+    <Compile Remove="Page.cs" />
+    <Compile Remove="Recording.cs" />
+    <Compile Remove="Class1.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">
@@ -35,6 +37,9 @@
       <Version>1.0.0-alpha-20161104-2</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lingvo.Common.Entities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
