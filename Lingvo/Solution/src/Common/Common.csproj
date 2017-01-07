@@ -28,6 +28,7 @@
     <Compile Remove="Page.cs" />
     <Compile Remove="Recording.cs" />
     <Compile Remove="Class1.cs" />
+    <Compile Remove="Workbook.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">
