@@ -21,7 +21,6 @@ namespace Lingvo.MobileApp.iOS
 		nfloat duration = 15.0f;
 		nfloat rewindStep = 1.0f;
 
-		NSTimer timer = null;
 		double offset = 0.0;
 
 		NSDate startDate;
@@ -135,7 +134,6 @@ namespace Lingvo.MobileApp.iOS
 				return;
 			}
 			this.duration = duration;
-			startTimer();
 			outerStrokeLayer = startStroking(duration, radius, innerCircleStrokeColor);
 
 
@@ -147,7 +145,6 @@ namespace Lingvo.MobileApp.iOS
 				return;
 			}
 			this.duration = duration;
-			startTimer();
 			innerStrokeLayer = startStroking(duration, radius, innerCircleStrokeColor);
 		}
 		void animateInnerOuterCircle(nfloat duration)
@@ -157,7 +154,6 @@ namespace Lingvo.MobileApp.iOS
 				return;
 			}
 			this.duration = duration;
-			startTimer();
 			animateOuterCircle(duration);
 			animateInnerCircle(duration);
 		}
@@ -237,17 +233,5 @@ namespace Lingvo.MobileApp.iOS
 			rewind(outerStrokeLayer);
 		}
 		#endregion
-		private void startTimer()
-		{
-			timer = NSTimer.CreateScheduledTimer(0.1, this, new ObjCRuntime.Selector("updateTimer"), null, true);
-			startDate = new NSDate();
-		}
-		void updateTimer(NSTimer timer)
-		{
-		}
-
-
-
-
 	}
 }
