@@ -28,6 +28,7 @@
     <Compile Remove="Page.cs" />
     <Compile Remove="Recording.cs" />
     <Compile Remove="Class1.cs" />
+    <Compile Remove="Lingvo.Common.Adapter\RecorderAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Lingvo.Common.Entities\" />
+    <Folder Include="Lingvo.Common.Adapter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

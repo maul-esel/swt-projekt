@@ -7,5 +7,6 @@ namespace Lingvo.Common
 		void Stop();
 		void Pause();
 		void SeekTo(TimeSpan seek);
+
 	}
 }
