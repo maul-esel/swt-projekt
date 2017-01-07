@@ -6,7 +6,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>Lingvo.Common</AssemblyName>
   </PropertyGroup>
@@ -32,6 +32,7 @@
     <Compile Remove="Workbook.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="linq2db.Core" Version="1.7.5" />
     <PackageReference Include="NETStandard.Library">
       <Version>1.6.1</Version>
     </PackageReference>
