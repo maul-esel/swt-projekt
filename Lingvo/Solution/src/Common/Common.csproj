@@ -1,4 +1,4 @@
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup Label="Configuration">
     <AssemblyName>Lingvo.Common</AssemblyName>
@@ -28,7 +28,7 @@
     <Compile Remove="Page.cs" />
     <Compile Remove="Recording.cs" />
     <Compile Remove="Class1.cs" />
-    <Compile Remove="Lingvo.Common.Adapter\RecorderAdapter.cs" />
+    <Compile Remove="Adapters\RecorderAdapter.cs" />
     <Compile Remove="Workbook.cs" />
     <Compile Remove="EmptyClass.cs" />
   </ItemGroup>
@@ -42,8 +42,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Lingvo.Common.Entities\" />
-    <Folder Include="Lingvo.Common.Adapter\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Adapters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

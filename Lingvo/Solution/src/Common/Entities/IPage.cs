@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Lingvo.Common
+namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// A page of a workbook.

@@ -1,6 +1,8 @@
 ﻿using System;
 using Lingvo.Common;
-namespace MobileApp
+using Lingvo.Common.Entities;
+
+namespace MobileApp.Proxies
 {
 	/// <summary>
 	/// Cloud library proxy.
@@ -17,7 +19,7 @@ namespace MobileApp
 		/// Gets the instance of cloud library proxy (singleton pattern).
 		/// </summary>
 		/// <returns>The instance.</returns>
-		public static CloudLibraryProxy getInstance()
+		public static CloudLibraryProxy GetInstance()
 		{
 			if (instance == null)
 			{

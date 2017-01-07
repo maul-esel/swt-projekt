@@ -1,5 +1,6 @@
-﻿using System;
-namespace Lingvo.Common
+﻿using Lingvo.Common.Entities;
+using System;
+namespace Lingvo.Common.Adapters
 {
 	public interface IPlayer
 	{

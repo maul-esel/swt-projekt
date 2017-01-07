@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lingvo.Common
+namespace Lingvo.Common.Entities
 {
 	public class Workbook
 	{
@@ -137,7 +137,7 @@ namespace Lingvo.Common
 		/// Deletes a page from the workbook's collection.
 		/// </summary>
 		/// <param name="p">Page to be deleted</param>
-		public void deletePage(Page p)
+		public void DeletePage(Page p)
 		{
 			pages.Remove(p);
 		}
@@ -147,7 +147,7 @@ namespace Lingvo.Common
 		/// Saves the page.
 		/// </summary>
 		/// <param name="p">P.</param>
-		public void savePage(Page p)
+		public void SavePage(Page p)
 		{
 			pages.Add(p);
 		}

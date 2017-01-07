@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Lingvo.Common.Entities;
+using System;
 using System.Collections.Generic;
-using Lingvo.Common;
 
-namespace MobileApp
+namespace MobileApp.Entities
 {
-	public class LocalCollection
+    public class LocalCollection
 	{
 		private static LocalCollection instance;
 
@@ -65,7 +65,7 @@ namespace MobileApp
 		/// Gets the instance of local collection (singleton pattern).
 		/// </summary>
 		/// <returns>The instance.</returns>
-		public static LocalCollection getInstance()
+		public static LocalCollection GetInstance()
 		{
 			if (instance == null)
 			{

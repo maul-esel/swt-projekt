@@ -1,12 +1,13 @@
-﻿using System;
-using Lingvo.Common;
+﻿using Lingvo.Common.Adapters;
+using Lingvo.Common.Entities;
+using System;
 
-namespace MobileApp
+namespace MobileApp.Controllers
 {
-	/// <summary>
-	/// Controller for working on pages
-	/// </summary>
-	public class StudentPageController
+    /// <summary>
+    /// Controller for working on pages
+    /// </summary>
+    public class StudentPageController
 	{
 		private IPlayer player;
 		private IRecorder recorder;

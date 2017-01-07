@@ -1,12 +1,12 @@
-﻿using System;
-using Lingvo.Common;
+﻿using Lingvo.Common.Entities;
+using System;
 
-namespace MobileApp
+namespace MobileApp.Entities
 {
-	/// <summary>
-	/// Teacher memo: teacher can record a scentence or word the student cant pronounce easily.
-	/// </summary>
-	public class TeacherMemo : Recording
+    /// <summary>
+    /// Teacher memo: teacher can record a scentence or word the student cant pronounce easily.
+    /// </summary>
+    public class TeacherMemo : Recording
 	{
 		/// <summary>
 		/// Gets or sets the name.

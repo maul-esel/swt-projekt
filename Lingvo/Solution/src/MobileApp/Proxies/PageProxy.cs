@@ -1,7 +1,8 @@
 ﻿using System;
 using Lingvo.Common;
+using Lingvo.Common.Entities;
 
-namespace MobileApp
+namespace MobileApp.Proxies
 {
 	public class PageProxy : IPage
 	{

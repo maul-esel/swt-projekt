@@ -1,17 +1,16 @@
-﻿using System;
-using Lingvo.Common;
+﻿using Lingvo.Common.Adapters;
+using MobileApp.Entities;
+using System;
 
-namespace MobileApp
+namespace MobileApp.Controllers
 {
-	/// <summary>
-	/// Controller for handling teacher memos.
-	/// </summary>
-	public class TeacherMemoController
+    /// <summary>
+    /// Controller for handling teacher memos.
+    /// </summary>
+    public class TeacherMemoController
 	{
 		private IPlayer player;
 		private IRecorder recorder;
-
-		private LocalCollection localCollection;
 
 		public TeacherMemoController()
 		{
@@ -51,7 +50,7 @@ namespace MobileApp
 		public void SaveTeacherMemo(String name, TeacherMemo recordFile)
 		{
 			recordFile.Name = name;
-			localCollection.AddTeacherMemo(recordFile);
+			LocalCollection.GetInstance().AddTeacherMemo(recordFile);
 
 		}
 
