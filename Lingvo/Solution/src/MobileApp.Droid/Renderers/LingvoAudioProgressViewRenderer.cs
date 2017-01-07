@@ -22,13 +22,11 @@ namespace Lingvo.MobileApp.Droid
             if (e.OldElement != null && e.NewElement == null)
             {
                 e.OldElement.PropertyChanged -= updateView;
-                progressView.TeacherTrackMuted -= e.OldElement.OnTeacherTrackMuted;
                 progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
             }
             else if (e.NewElement != null)
             {
                 e.NewElement.PropertyChanged += updateView;
-                progressView.TeacherTrackMuted += e.NewElement.OnTeacherTrackMuted;
                 progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
             }
         }

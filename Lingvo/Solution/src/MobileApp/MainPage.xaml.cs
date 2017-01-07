@@ -22,8 +22,7 @@ namespace Lingvo.MobileApp
             };
 
             lingvoAudioProgressView.StudentTrackMuted += (b) => { Console.WriteLine("StudentTrack mute state changed"); };
-            lingvoAudioProgressView.TeacherTrackMuted += (b) => { Console.WriteLine("TeacherTrack mute state changed"); };
-
+            
             lingvoSingleProgressView = new LingvoSingleProgressView
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,

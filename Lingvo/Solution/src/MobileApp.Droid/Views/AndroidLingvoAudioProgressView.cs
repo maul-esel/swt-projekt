@@ -15,11 +15,9 @@ namespace Lingvo.MobileApp.Droid
         private CircleProgressBar studentProgressBar;
         private CircleProgressBar teacherProgressBar;
         private ImageButton studentMuteButton;
-        private ImageButton teacherMuteButton;
-        private bool studentMuted, teacherMuted;
+        private bool studentMuted;
 
         private static readonly int INSTANCE_STUDENT_MUTED = "student_muted".GetHashCode();
-        private static readonly int INSTANCE_TEACHER_MUTED = "teacher_muted".GetHashCode();
 
         public string Text
         {
@@ -77,7 +75,6 @@ namespace Lingvo.MobileApp.Droid
                 teacherProgressBar.FinishedStrokeColor = value;
                 teacherProgressBar.UnfinishedStrokeColor = Color.Argb(64, value.R, value.G, value.B);
                 studentProgressBar.TextColor = value;
-                teacherMuteButton.SetColorFilter(value, PorterDuff.Mode.SrcIn);
                 Invalidate();
             }
         }
@@ -116,21 +113,10 @@ namespace Lingvo.MobileApp.Droid
             }
         }
 
-        public bool OuterMuteButtonVisible
-        {
-            get { return teacherMuteButton.Visibility == ViewStates.Visible; }
-            set
-            {
-                teacherMuteButton.Visibility = value ? ViewStates.Visible : ViewStates.Gone;
-            }
-        }
-
         public delegate void StudentTrackMutedEventHandler(bool muted);
-        public delegate void TeacherTrackMutedEventHandler(bool muted);
-
+        
         public event StudentTrackMutedEventHandler StudentTrackMuted;
-        public event TeacherTrackMutedEventHandler TeacherTrackMuted;
-
+        
         public AndroidLingvoAudioProgressView(Context context) : base(context)
         {
             this.LayoutParameters = new ViewGroup.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
@@ -155,38 +141,28 @@ namespace Lingvo.MobileApp.Droid
 
             //Mute Buttons
 
-            studentMuted = teacherMuted = false;
+            studentMuted = false;
 
-            studentMuteButton = new ImageButton(context);
-            teacherMuteButton = new ImageButton(context);
-
-            studentMuteButton.Background = null;
-            teacherMuteButton.Background = null;
+            studentMuteButton = new ImageButton(context)
+            {
+                Background = null
+            };
 
             studentMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
-            teacherMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
 
-            setButtonResource(studentMuteButton, studentMuted);
-            setButtonResource(teacherMuteButton, teacherMuted);
+            SetButtonResource(studentMuteButton, studentMuted);
 
             studentMuteButton.Click += (o, e) =>
             {
                 studentMuted = !studentMuted;
                 StudentTrackMuted?.Invoke(studentMuted);
-                setButtonResource(studentMuteButton, studentMuted);
-            };
-            teacherMuteButton.Click += (o, e) =>
-            {
-                teacherMuted = !teacherMuted;
-                TeacherTrackMuted?.Invoke(teacherMuted);
-                setButtonResource(teacherMuteButton, teacherMuted);
+                SetButtonResource(studentMuteButton, studentMuted);
             };
 
             AddView(studentMuteButton, 2, new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent));
-            AddView(teacherMuteButton, 3, new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent));
         }
 
-        private void setButtonResource(ImageButton button, bool isEnabled)
+        private void SetButtonResource(ImageButton button, bool isEnabled)
         {
             int resourceId = isEnabled ? Resource.Drawable.ic_volume_off_black_24px : Resource.Drawable.ic_volume_up_black_24px;
             button.SetImageDrawable(VectorDrawableCompat.Create(Resources, resourceId, Resources.NewTheme()));
@@ -237,7 +213,6 @@ namespace Lingvo.MobileApp.Droid
             int muteHeightMeasureSpec = MeasureSpec.MakeMeasureSpec(
                     buttonHeight, MeasureSpecMode.Exactly);
             studentMuteButton.Measure(muteWidthMeasureSpec, muteHeightMeasureSpec);
-            teacherMuteButton.Measure(muteWidthMeasureSpec, muteHeightMeasureSpec);
         }
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
@@ -260,26 +235,19 @@ namespace Lingvo.MobileApp.Droid
             int studentBottom = childTop + size - (int)(teacherProgressBar.FinishedStrokeWidth);
             studentProgressBar.Layout(studentLeft, studentTop, studentRight, studentBottom);
 
-            bool bothButtonsVisible = studentMuteButton.Visibility == ViewStates.Visible && teacherMuteButton.Visibility == ViewStates.Visible;
-            int leftButtonOffset = (bothButtonsVisible ? 1 : 2) * studentMuteButton.MeasuredWidth;
-            studentMuteButton.Layout(childLeft + size / 2 - studentMuteButton.MeasuredWidth, childTop + size / 2 + (int)(0.05f * size), childLeft + size / 2, (int)(childTop + size / 2 + studentMuteButton.MeasuredHeight + (int)(0.05f * size)));
-            if (bothButtonsVisible)
-                leftButtonOffset *= 2;
-            teacherMuteButton.Layout(childLeft + size / 2, childTop + size / 2 + (int)(0.05f * size), childLeft + size / 2 + teacherMuteButton.MeasuredWidth, (int)(childTop + size / 2 + teacherMuteButton.MeasuredHeight + (int)(0.05f * size)));
+            studentMuteButton.Layout(childLeft + size / 2 - studentMuteButton.MeasuredWidth / 2, childTop + size / 2 + (int)(0.05f * size), childLeft + size / 2 + studentMuteButton.MeasuredWidth / 2, childTop + size / 2 + studentMuteButton.MeasuredHeight + (int)(0.05f * size));
         }
 
         public override void SaveHierarchyState(SparseArray container)
         {
             base.SaveHierarchyState(container);
             container.Append(INSTANCE_STUDENT_MUTED, studentMuted);
-            container.Append(INSTANCE_TEACHER_MUTED, teacherMuted);
         }
 
         public override void RestoreHierarchyState(SparseArray container)
         {
             base.RestoreHierarchyState(container);
             studentMuted = (bool)container.Get(INSTANCE_STUDENT_MUTED);
-            teacherMuted = (bool)container.Get(INSTANCE_TEACHER_MUTED);
         }
     }
 }
