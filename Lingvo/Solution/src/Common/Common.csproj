@@ -30,6 +30,7 @@
     <Compile Remove="Class1.cs" />
     <Compile Remove="Lingvo.Common.Adapter\RecorderAdapter.cs" />
     <Compile Remove="Workbook.cs" />
+    <Compile Remove="EmptyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">

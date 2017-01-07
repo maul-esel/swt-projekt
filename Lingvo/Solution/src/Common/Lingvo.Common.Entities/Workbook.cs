@@ -13,7 +13,10 @@ namespace Lingvo.Common
 		private DateTime lastModified;
 		private List<Page> pages;
 
-
+		/// <summary>
+		/// Gets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
 		public int Id
 		{
 			get
@@ -22,7 +25,10 @@ namespace Lingvo.Common
 			}
 		}
 
-
+		/// <summary>
+		/// Gets or sets the title.
+		/// </summary>
+		/// <value>The title.</value>
 		public string Title
 		{
 			get
@@ -37,6 +43,10 @@ namespace Lingvo.Common
 				
 		}
 
+		/// <summary>
+		/// Gets or sets the subtitle.
+		/// </summary>
+		/// <value>The subtitle.</value>
 		public string Subtitle
 		{
 			get
@@ -51,6 +61,10 @@ namespace Lingvo.Common
 
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="T:Lingvo.Common.Workbook"/> is published.
+		/// </summary>
+		/// <value><c>true</c> if is published; otherwise, <c>false</c>.</value>
 		public bool IsPublished
 		{
 			get
@@ -63,6 +77,10 @@ namespace Lingvo.Common
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the date on which this workbook was modified the last time.
+		/// </summary>
+		/// <value>The last modified.</value>
 		public DateTime LastModified
 		{
 			get
@@ -77,7 +95,10 @@ namespace Lingvo.Common
 				
 		}
 
-
+		/// <summary>
+		/// Gets the total number of pages belonging to this workbook.
+		/// </summary>
+		/// <value>The total pages.</value>
 		public int TotalPages
 		{
 			get
@@ -86,10 +107,16 @@ namespace Lingvo.Common
 			}
 		}
 
+
+		/// <summary>
+		/// Gets or sets all the pages of .
+		/// </summary>
+		/// <value>The pages.</value>
 		public List<Page> Pages
 		{
 			get
 			{
+				//Nullpointer avoidance
 				if (pages == null)
 				{
 					pages = new List<Page>();
@@ -106,22 +133,37 @@ namespace Lingvo.Common
 				
 		}
 
+		/// <summary>
+		/// Deletes a page from the workbook's collection.
+		/// </summary>
+		/// <param name="p">Page to be deleted</param>
 		public void deletePage(Page p)
 		{
 			pages.Remove(p);
 		}
 
+
+		/// <summary>
+		/// Saves the page.
+		/// </summary>
+		/// <param name="p">P.</param>
 		public void savePage(Page p)
 		{
 			pages.Add(p);
 		}
 
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Workbook"/> class.
+		/// </summary>
+		/// <param name="id">Unique id</param>
 		public Workbook(int id)
 		{
 			this.id = id;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Workbook"/> class.
+		/// </summary>
 		public Workbook()
 		{
 		}
