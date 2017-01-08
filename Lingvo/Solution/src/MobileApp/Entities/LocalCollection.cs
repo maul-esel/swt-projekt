@@ -59,7 +59,7 @@ namespace MobileApp.Entities
 
 		private LocalCollection()
 		{
-		}
+        }
 
 		/// <summary>
 		/// Gets the instance of local collection (singleton pattern).

@@ -2,9 +2,11 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Lingvo.MobileApp.App">
-	<Application.Resources>
-
-		<!-- Application resource dictionary -->
-
-	</Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="primaryColor">#4890e2</Color>
+            <Color x:Key="secondaryColor">#3db664</Color>
+            <Color x:Key="primaryDarkColor">#32649E</Color>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
