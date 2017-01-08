@@ -1,7 +1,7 @@
 ﻿using System;
 using LinqToDB.Mapping;
 
-namespace Lingvo.Common
+namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// Objects from this class represent audio files.

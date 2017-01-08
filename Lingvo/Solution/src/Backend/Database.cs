@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.DataProvider.MySql;
 
 namespace Lingvo.Backend
 {
-	using Common;
+	using Common.Entities;
 
     public static class Database
     {

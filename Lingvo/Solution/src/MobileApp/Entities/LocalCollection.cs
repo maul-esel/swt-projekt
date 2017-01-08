@@ -1,6 +1,6 @@
-﻿using Lingvo.Common.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Lingvo.Common.Entities;
 
 namespace MobileApp.Entities
 {

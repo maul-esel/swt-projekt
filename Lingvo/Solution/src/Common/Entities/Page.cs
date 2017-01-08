@@ -1,7 +1,7 @@
 ﻿using System;
 using LinqToDB.Mapping;
 
-namespace Lingvo.Common
+namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// A real page.
@@ -38,7 +38,7 @@ namespace Lingvo.Common
 		/// <value><c>true</c> if edited; otherwise, <c>false</c>.</value>
 		public bool Edited => StudentTrack != null;
 
-		[Association(ThisKey = nameof(workbookId), OtherKey = nameof(Common.Workbook.Id), CanBeNull = false)]
+		[Association(ThisKey = nameof(workbookId), OtherKey = nameof(Entities.Workbook.Id), CanBeNull = false)]
 		public Workbook Workbook { get; set; }
 
 		/// <summary>

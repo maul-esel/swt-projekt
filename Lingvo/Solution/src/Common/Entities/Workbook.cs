@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LinqToDB.Mapping;
 
-namespace Lingvo.Common
+namespace Lingvo.Common.Entities
 {
 	[Table("Workbooks")]
 	public class Workbook
