@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+using Lingvo.MobileApp;
+
 namespace Lingvo.MobileApp.Droid
 {
 	[Activity (Label = "MobileApp", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -18,6 +20,9 @@ namespace Lingvo.MobileApp.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new MobileApp.App ());
+
+			APIService service = new APIService();
+			service.FetchWorkbooks();
 		}
 	}
 }

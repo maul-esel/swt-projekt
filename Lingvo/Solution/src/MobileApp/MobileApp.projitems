@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
@@ -37,5 +38,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
     <Folder Include="$(MSBuildThisFileDirectory)Controllers\" />
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Services\" />
   </ItemGroup>
 </Project>
