@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using LinqToDB.Mapping;
 
+using Newtonsoft.Json;
+
 namespace Lingvo.Common.Entities
 {
 	[Table("Workbooks")]
@@ -47,7 +49,7 @@ namespace Lingvo.Common.Entities
 		/// </summary>
 		/// <value>The pages.</value>
 		[Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId))]
-		public List<Page> Pages { get; set; }
+		public List<IPage> Pages { get; set; }
 
 		/// <summary>
 		/// Gets the total number of pages belonging to this workbook.
@@ -79,6 +81,7 @@ namespace Lingvo.Common.Entities
 		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Workbook"/> class.
 		/// </summary>
 		/// <param name="id">Unique id</param>
+		[JsonConstructor]
 		public Workbook(int id)
 		{
 			Id = id;
