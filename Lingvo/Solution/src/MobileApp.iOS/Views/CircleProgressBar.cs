@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using UIKit;
 using System.ComponentModel;
 using CoreGraphics;
@@ -168,7 +167,7 @@ namespace Lingvo.MobileApp.iOS
 			setupViews();
 		}
 
-		private void setupViews()
+		protected virtual void setupViews()
 		{
 			drawCircle(unfinishedCircleColor, -100);
 		}
@@ -236,7 +235,7 @@ namespace Lingvo.MobileApp.iOS
 		{
 			return angle - (float)(Math.PI / 2.0);
 		}
-		private void runOnMainThread(Action action)
+		protected void runOnMainThread(Action action)
 		{
 			//updates on UI only work on the main thread
 			DispatchQueue.MainQueue.DispatchAsync(action);
