@@ -1,26 +1,30 @@
 ﻿using System;
+using LinqToDB.Mapping;
+
 namespace Lingvo.Common
 {
+	[Table("Recordings")]
 	public class Recording
 	{
-		private TimeSpan length;
-		private DateTime creationTime;
+		private Recording() { } // used by Linq2DB
 
-		public TimeSpan Length
+		public Recording(int id, TimeSpan length, string localPath)
 		{
-			get
-			{
-				return length;
-			}
-			set
-			{
-				length = value;
-			}
+			Id = id;
+			Length = length;
+			LocalPath = localPath;
 		}
 
-		public Recording()
-		{
-			creationTime = DateTime.Now;
-		}
+		[Column, PrimaryKey]
+		public int Id { get; private set; }
+
+		[Column, NotNull]
+		public DateTime CreationTime { get; private set; }
+
+		[Column, NotNull]
+		public TimeSpan Length { get; private set; }
+
+		[Column, NotNull]
+		public string LocalPath { get; private set; }
 	}
 }

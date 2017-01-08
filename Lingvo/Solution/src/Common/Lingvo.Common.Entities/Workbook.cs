@@ -1,90 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using LinqToDB.Mapping;
 
 namespace Lingvo.Common
 {
+	[Table("Workbooks")]
 	public class Workbook
 	{
-
-		private int id;
-		private string title;
-		private string subtitle;
-		private bool isPublished;
-		private DateTime lastModified;
 		private List<Page> pages;
 
+		[Column, PrimaryKey]
+		public int Id { get; private set; }
 
-		public int Id
-		{
-			get
-			{
-				return id;
-			}
-		}
+		[Column, NotNull]
+		public string Title { get; set; }
 
+		[Column, NotNull]
+		public string Subtitle { get; set; }
 
-		public string Title
-		{
-			get
-			{
-				return title;
-			}
+		[Column, NotNull]
+		public bool IsPublished { get; set; }
 
-			set
-			{
-				title = value;
-			}
-				
-		}
+		[Column, NotNull]
+		public DateTime LastModified { get; set; }
 
-		public string Subtitle
-		{
-			get
-			{
-				return subtitle;
-			}
-
-			set
-			{
-				subtitle = value;
-			}
-
-		}
-
-		public bool IsPublished
-		{
-			get
-			{
-				return isPublished;
-			}
-			set
-			{
-				isPublished = value;
-			}
-		}
-
-		public DateTime LastModified
-		{
-			get
-			{
-				return lastModified;
-			}
-
-			set
-			{
-				lastModified = value;
-			}
-				
-		}
-
-
-		public int TotalPages
-		{
-			get
-			{
-				return pages.Count;
-			}
-		}
+		public int TotalPages => pages.Count;
 
 		public List<Page> Pages
 		{
@@ -94,32 +34,27 @@ namespace Lingvo.Common
 				{
 					pages = new List<Page>();
 				}
-
 				return pages;
 			}
-
 			set
 			{
 				pages = value;
 			}
-
-				
 		}
 
-		public void deletePage(Page p)
+		public void DeletePage(Page p)
 		{
 			pages.Remove(p);
 		}
 
-		public void savePage(Page p)
+		public void SavePage(Page p)
 		{
 			pages.Add(p);
 		}
 
-
 		public Workbook(int id)
 		{
-			this.id = id;
+			Id = id;
 		}
 
 		public Workbook()

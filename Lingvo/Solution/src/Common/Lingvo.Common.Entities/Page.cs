@@ -1,78 +1,31 @@
 ﻿using System;
+using LinqToDB.Mapping;
+
 namespace Lingvo.Common
 {
+	[Table("Pages")]
 	public class Page
 	{
-		private int number;
-		private String description;
+		[Column, NotNull]
+		public int Number { get; set; }
 
-		private Recording teacherTrack;
-		private Recording studentTrack;
+		[Column, NotNull]
+		public String Description { get; set; }
 
-		public int Number
-		{
-			get
-			{
-				return number;
-			}
-			set
-			{
-				number = value;
-			}
-		}
+		public bool Edited => StudentTrack != null;
 
-		public String Description
-		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				description = value;
-			}
-		}
+		[Association(ThisKey = nameof(Workbook), OtherKey = nameof(Common.Workbook.Id), CanBeNull = false)]
+		public Workbook Workbook { get; set; }
 
-		public bool Edited
-		{
-			get
-			{
-				return studentTrack != null;
-			}
-		}
+		[Association(ThisKey = nameof(TeacherTrack), OtherKey = nameof(Recording.Id), CanBeNull = false)]
+		public Recording TeacherTrack { get; set; }
 
-		public Recording TeacherTrack
-		{
-			get
-			{
-				return teacherTrack;
-			}
-			set
-			{
-				teacherTrack = value;
-			}
-		}
-
-		public Recording StudentTrack
-		{
-			get
-			{
-				return studentTrack;
-			}
-			set
-			{
-				studentTrack = value;
-			}
-		}
-
-
-		public Page()
-		{
-		}
+		[Association(ThisKey = nameof(StudentTrack), OtherKey = nameof(Recording.Id), CanBeNull = true)]
+		public Recording StudentTrack { get; set; }
 
 		public void DeleteStudentRecording()
 		{
-			studentTrack = null;
+			StudentTrack = null;
 		}
 	}
 }
