@@ -30,7 +30,7 @@ namespace Lingvo.Backend
 			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 			if (string.IsNullOrEmpty(password))
 				password = "password"; // dummy default value for development
-			Database.ConnectionString = $"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf-8;";
+			Database.ConnectionString = $"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;";
 
 			var host = new WebHostBuilder()
                 .UseKestrel()
