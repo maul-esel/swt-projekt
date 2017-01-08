@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 using LinqToDB;
 using LinqToDB.Mapping;
@@ -16,9 +17,22 @@ namespace Lingvo.Backend
 
     public class Program
     {
+		static public IConfigurationRoot Configuration { get; set; }
+
         public static void Main(string[] args)
         {
-			using (var conn = MySqlTools.CreateDataConnection("Server=127.0.0.1;Port=3306;Database=lingvo;Uid=root;Pwd=password;charset=utf8;"))
+			var builder = new ConfigurationBuilder()
+				 .SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile("appsettings.json");
+
+			Configuration = builder.Build();
+
+			if (System.Environment.GetEnvironmentVariable("db-password") == null)
+			{
+				System.Environment.SetEnvironmentVariable("db-password", "password");
+			}
+
+			using (var conn = MySqlTools.CreateDataConnection("Server=" + Configuration["host"] + ";Port=" + Configuration["port"] + ";Database=" + Configuration["db"] + ";Uid=" + Configuration["user"] + ";Pwd=" + System.Environment.GetEnvironmentVariable("db-password") + ";charset=utf8;"))
 			{
 				conn.MappingSchema.SetConverter<int, TimeSpan>(ms => TimeSpan.FromMilliseconds(ms));
 
