@@ -4,7 +4,7 @@ CREATE TABLE Workbooks (
   id INT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
-  lastModified TIMESTAMP NOT NULL, -- see trigger below
+  lastModified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- see trigger below
   published BOOLEAN NOT NULL
 );
 
