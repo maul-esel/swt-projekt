@@ -53,7 +53,8 @@ namespace Lingvo.Common.Entities
 		/// Gets the total number of pages belonging to this workbook.
 		/// </summary>
 		/// <value>The total pages.</value>
-		public int TotalPages => Pages.Count;
+		[Column, NotNull]
+		public int TotalPages { get; set; }
 
 		/// <summary>
 		/// Deletes a page from the workbook's collection.
@@ -61,7 +62,6 @@ namespace Lingvo.Common.Entities
 		/// <param name="p">Page to be deleted</param>
 		public void DeletePage(Page p)
 		{
-			// TODO: delete page from db?
 			Pages.Remove(p);
 		}
 
@@ -71,7 +71,6 @@ namespace Lingvo.Common.Entities
 		/// <param name="p">P.</param>
 		public void SavePage(Page p)
 		{
-			// TODO: save page in db?
 			Pages.Add(p);
 		}
 
