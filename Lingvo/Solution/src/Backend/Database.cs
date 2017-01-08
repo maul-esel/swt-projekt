@@ -20,6 +20,7 @@ namespace Lingvo.Backend
 			{
 				if (_connection == null)
 				{
+					LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
 					_connection = MySqlTools.CreateDataConnection(ConnectionString);
 					_connection.MappingSchema.SetConverter<int, TimeSpan>(ms => TimeSpan.FromMilliseconds(ms));
 				}
