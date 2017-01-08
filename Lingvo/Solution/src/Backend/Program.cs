@@ -27,23 +27,10 @@ namespace Lingvo.Backend
 
 			Configuration = builder.Build();
 
-			if (System.Environment.GetEnvironmentVariable("db-password") == null)
-			{
-				System.Environment.SetEnvironmentVariable("db-password", "password");
-			}
-
-			using (var conn = MySqlTools.CreateDataConnection("Server=" + Configuration["host"] + ";Port=" + Configuration["port"] + ";Database=" + Configuration["db"] + ";Uid=" + Configuration["user"] + ";Pwd=" + System.Environment.GetEnvironmentVariable("db-password") + ";charset=utf8;"))
-			{
-				conn.MappingSchema.SetConverter<int, TimeSpan>(ms => TimeSpan.FromMilliseconds(ms));
-
-				var nonEmpty = from r in conn.GetTable<Recording>()
-							   select r;
-				foreach (var r in nonEmpty) Console.WriteLine(r.LocalPath +" "+ r.Length.Milliseconds +" "+ r.CreationTime);
-				Console.WriteLine();
-
-				var pages = conn.GetTable<Page>();
-				foreach (var p in pages) Console.WriteLine(p.Number + " " + p.Description + " " + " " + p.Workbook?.Id + " "+ p.TeacherTrack?.LocalPath);
-			}
+			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+			if (string.IsNullOrEmpty(password))
+				password = "password"; // dummy default value for development
+			Database.ConnectionString = $"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf-8;";
 
 			var host = new WebHostBuilder()
                 .UseKestrel()
