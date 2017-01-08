@@ -18,11 +18,14 @@ namespace Lingvo.Common
 		[Column, NotNull]
 		public string Subtitle { get; set; }
 
-		[Column, NotNull]
+		[Column("published"), NotNull]
 		public bool IsPublished { get; set; }
 
 		[Column, NotNull]
 		public DateTime LastModified { get; set; }
+
+		[Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId))]
+		public List<Page> Pages2 { get; set; }
 
 		public int TotalPages => pages.Count;
 
