@@ -7,7 +7,7 @@ namespace Lingvo.Common.Entities
 	/// A real page.
 	/// </summary>
 	[Table("Pages")]
-	public class Page
+	public class Page : IPage
 	{
 		[Column("teacherTrack"), NotNull]
 		public int teacherTrackId;

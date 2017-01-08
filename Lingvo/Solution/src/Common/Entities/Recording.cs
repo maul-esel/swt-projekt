@@ -17,9 +17,8 @@ namespace Lingvo.Common.Entities
 		private Recording() { } // used by Linq2DB
 
 
-		public Recording(int id, TimeSpan length, string localPath)
+		public Recording(TimeSpan length, string localPath)
 		{
-			Id = id;
 			Length = length;
 			LocalPath = localPath;
 		}
