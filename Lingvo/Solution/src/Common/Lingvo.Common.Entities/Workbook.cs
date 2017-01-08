@@ -7,8 +7,6 @@ namespace Lingvo.Common
 	[Table("Workbooks")]
 	public class Workbook
 	{
-		private List<Page> pages;
-
 		[Column, PrimaryKey]
 		public int Id { get; private set; }
 
@@ -25,34 +23,20 @@ namespace Lingvo.Common
 		public DateTime LastModified { get; set; }
 
 		[Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId))]
-		public List<Page> Pages2 { get; set; }
+		public List<Page> Pages { get; set; }
 
-		public int TotalPages => pages.Count;
-
-		public List<Page> Pages
-		{
-			get
-			{
-				if (pages == null)
-				{
-					pages = new List<Page>();
-				}
-				return pages;
-			}
-			set
-			{
-				pages = value;
-			}
-		}
+		public int TotalPages => Pages.Count;
 
 		public void DeletePage(Page p)
 		{
-			pages.Remove(p);
+			// TODO: delete page from db?
+			Pages.Remove(p);
 		}
 
 		public void SavePage(Page p)
 		{
-			pages.Add(p);
+			// TODO: save page in db?
+			Pages.Add(p);
 		}
 
 		public Workbook(int id)
