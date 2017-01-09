@@ -159,6 +159,14 @@ namespace Lingvo.MobileApp.iOS
 			{
 				return (float)(Math.Min(Frame.Width, Frame.Height));
 			}
+			set
+			{
+				runOnMainThread(new Action(() =>
+				{
+					Frame = new CGRect(0, 0, value, value);
+					SetNeedsDisplay();
+				}));
+			}
 		}
 
 		private float radius

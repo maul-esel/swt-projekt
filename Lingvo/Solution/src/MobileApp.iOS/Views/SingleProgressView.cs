@@ -11,7 +11,7 @@ namespace Lingvo.MobileApp.iOS
 
 		UILabel label;
 		private string labelText = "100%";
-		public string LabelText
+		public string Text
 		{
 			get
 			{
