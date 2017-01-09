@@ -124,6 +124,7 @@
     <Compile Include="Views\CircleProgressBar.cs" />
     <Compile Include="Views\SingleProgressView.cs" />
     <Compile Include="Views\AudioProgressView.cs" />
+    <Compile Include="Renderers\AudioProgressViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
+    <Folder Include="Renderers\" />
   </ItemGroup>
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
