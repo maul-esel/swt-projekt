@@ -123,6 +123,7 @@
     <Compile Include="Views\ProgressView.cs" />
     <Compile Include="Views\CircleProgressBar.cs" />
     <Compile Include="Views\SingleProgressView.cs" />
+    <Compile Include="Views\AudioProgressView.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
