@@ -41,6 +41,22 @@ namespace Lingvo.MobileApp.iOS
 			}
 		}
 
+		public float LineWidth
+		{
+			get
+			{
+				return lineWidth;
+			}
+			set
+			{
+				if (value >= 0)
+				{
+					lineWidth = value;
+				}
+
+			}
+		}
+
 		public UIColor UnfinishedCircleColor
 		{
 			get
@@ -87,7 +103,7 @@ namespace Lingvo.MobileApp.iOS
 				{
 					runOnMainThread(new Action(() =>
 					{
-						strokeLayer.RemoveFromSuperLayer();
+						strokeLayer?.RemoveFromSuperLayer();
 					}));
 					return;
 				}
@@ -99,7 +115,7 @@ namespace Lingvo.MobileApp.iOS
 				//updates on UI only work on the main thread
 				runOnMainThread(new Action(() =>
 				{
-					strokeLayer.RemoveFromSuperLayer();
+					strokeLayer?.RemoveFromSuperLayer();
 					strokeLayer = drawArc(ProgressColor, 0.0f, endAngle, 2);
 				}));
 			}
