@@ -8,7 +8,7 @@ using Android.Widget;
 using System;
 using Android.Util;
 
-namespace Lingvo.MobileApp.Droid
+namespace Lingvo.MobileApp.Droid.Views
 {
     class AndroidLingvoAudioProgressView : RelativeLayout
     {

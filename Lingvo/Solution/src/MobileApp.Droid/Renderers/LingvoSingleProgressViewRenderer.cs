@@ -1,9 +1,10 @@
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Lingvo.MobileApp.Droid.Views;
 
-[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoSingleProgressView), typeof(Lingvo.MobileApp.Droid.LingvoSingleProgressViewRenderer))]
-namespace Lingvo.MobileApp.Droid
+[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoSingleProgressView), typeof(Lingvo.MobileApp.Droid.Renderers.LingvoSingleProgressViewRenderer))]
+namespace Lingvo.MobileApp.Droid.Renderers
 {
     class LingvoSingleProgressViewRenderer : ViewRenderer<LingvoSingleProgressView, Android.Views.View>
     {

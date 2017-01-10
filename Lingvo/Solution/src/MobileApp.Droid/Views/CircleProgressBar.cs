@@ -14,7 +14,7 @@ using Android.Graphics;
 using Android.Content.Res;
 using Android.Text;
 
-namespace Lingvo.MobileApp.Droid
+namespace Lingvo.MobileApp.Droid.Views
 {
     [Register("lingvo.mobileapp.droid.CircleProgressBar")]
     public class CircleProgressBar : View
@@ -93,27 +93,35 @@ namespace Lingvo.MobileApp.Droid
         {
             if (showText)
             {
-                textPaint = new TextPaint();
-                textPaint.Color = textColor;
-                textPaint.TextSize = textSize;
-                textPaint.AntiAlias = true;
+                textPaint = new TextPaint()
+                {
+                    Color = textColor,
+                    TextSize = textSize,
+                    AntiAlias = true
+                };
             }
 
-            finishedPaint = new Paint();
-            finishedPaint.Color = finishedStrokeColor;
+            finishedPaint = new Paint()
+            {
+                Color = finishedStrokeColor
+            };
             finishedPaint.SetStyle(Paint.Style.Stroke);
             finishedPaint.AntiAlias = true;
             finishedPaint.StrokeWidth = finishedStrokeWidth;
 
-            unfinishedPaint = new Paint();
-            unfinishedPaint.Color = unfinishedStrokeColor;
+            unfinishedPaint = new Paint()
+            {
+                Color = unfinishedStrokeColor
+            };
             unfinishedPaint.SetStyle(Paint.Style.Stroke);
             unfinishedPaint.AntiAlias = true;
             unfinishedPaint.StrokeWidth = unfinishedStrokeWidth;
 
-            innerCirclePaint = new Paint();
-            innerCirclePaint.Color = innerBackgroundColor;
-            innerCirclePaint.AntiAlias = true;
+            innerCirclePaint = new Paint()
+            {
+                Color = innerBackgroundColor,
+                AntiAlias = true
+            };
         }
 
         protected void initByAttributes(TypedArray attributes)
@@ -412,9 +420,8 @@ namespace Lingvo.MobileApp.Droid
 
         protected override void OnRestoreInstanceState(IParcelable state)
         {
-            if (state is Bundle)
+            if (state is Bundle bundle)
             {
-                Bundle bundle = (Bundle)state;
                 int colorValue = bundle.GetInt(INSTANCE_TEXT_COLOR);
                 textColor = Color.Argb(Color.GetAlphaComponent(colorValue), Color.GetRedComponent(colorValue), Color.GetGreenComponent(colorValue), Color.GetBlueComponent(colorValue));
                 textSize = bundle.GetFloat(INSTANCE_TEXT_SIZE);

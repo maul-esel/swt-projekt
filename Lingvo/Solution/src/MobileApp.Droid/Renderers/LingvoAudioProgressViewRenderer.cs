@@ -1,9 +1,10 @@
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Lingvo.MobileApp.Droid.Views;
 
-[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.Droid.LingvoAudioProgressViewRenderer))]
-namespace Lingvo.MobileApp.Droid
+[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.Droid.Renderers.LingvoAudioProgressViewRenderer))]
+namespace Lingvo.MobileApp.Droid.Renderers
 {
     class LingvoAudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, Android.Views.View>
     {

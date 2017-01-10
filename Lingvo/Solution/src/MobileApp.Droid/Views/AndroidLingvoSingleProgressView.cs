@@ -4,7 +4,7 @@ using Android.Views;
 using Android.Widget;
 using System;
 
-namespace Lingvo.MobileApp.Droid
+namespace Lingvo.MobileApp.Droid.Views
 {
     class AndroidLingvoSingleProgressView : RelativeLayout
     {
