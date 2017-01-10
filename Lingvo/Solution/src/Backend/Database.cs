@@ -39,5 +39,15 @@ namespace Lingvo.Backend
 		{
 			return pages.FirstOrDefault(page => page.workbookId == workbookId && page.Number == pageNumber);
 		}
+
+		public static Workbook Find(this ITable<Workbook> workbooks, int workbookId)
+		{
+			return workbooks.FirstOrDefault(workbook => workbook.Id == workbookId);
+		}
+
+		public static Recording Find(this ITable<Recording> recordings, int recordingId)
+		{
+			return recordings.FirstOrDefault(recording => recording.Id == recordingId);
+		}
     }
 }
