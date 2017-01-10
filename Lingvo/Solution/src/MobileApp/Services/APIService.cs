@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using Lingvo.Common.Entities;
@@ -14,69 +15,51 @@ namespace Lingvo.MobileApp
 	{
 		private const string URL = "http://localhost:5000/api/app/";
 
-		private List<Workbook> Workbooks { get; set; }
-
 		public APIService()
 		{
 		}
 
-		public List<Workbook> FetchWorkbooks()
+		private async Task<T> FetchFromURL<T>(string url, Func<Stream, T> convert)
 		{
-			string url = URL + "workbooks";
-
-			WebRequest request = WebRequest.Create(url);
-			WebResponse response = request.GetResponse();
-			Stream dataStream = response.GetResponseStream();
-			StreamReader reader = new StreamReader(dataStream);
-			string responseFromServer = reader.ReadToEnd();
-			Console.WriteLine(responseFromServer);
-
-			List<Workbook> workbooks = JsonConvert.DeserializeObject<List<Workbook>>(responseFromServer);
-
-			reader.Close();
-			response.Close();
-
-			return workbooks;
+			using (var response = await WebRequest.Create(url).GetResponseAsync())
+				using (var dataStream = response.GetResponseStream())
+					return convert(dataStream);
 		}
 
-		public void FetchPages(Workbook workbook)
+		private async Task<string> FetchTextFromURL(string url)
 		{
-			string url = URL + "workbooks/" + workbook.Id + "/pages";
-
-			WebRequest request = WebRequest.Create(url);
-			WebResponse response = request.GetResponse();
-			Stream dataStream = response.GetResponseStream();
-			StreamReader reader = new StreamReader(dataStream);
-			string responseFromServer = reader.ReadToEnd();
-			Console.WriteLine(responseFromServer);
-
-			var pages = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer).Cast<IPage>().ToList();
-			workbook.Pages = pages;
-
-			reader.Close();
-			response.Close();
-		}
-
-		public Recording FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
-		{
-			string url = URL + "workbooks/" + workbook.Id + "/pages/" + page.Number;
-
-			WebRequest request = WebRequest.Create(url);
-			WebResponse response = request.GetResponse();
-			Stream dataStream = response.GetResponseStream();
-
-			using (var fileStream = File.Create(localPath))
+			return await await FetchFromURL(url, stream =>
 			{
-				//dataStream.Seek(0, SeekOrigin.Begin);
-				dataStream.CopyTo(fileStream);
+				using (var reader = new StreamReader(stream))
+					return reader.ReadToEndAsync();
+			});
+		}
 
-			}
+		public async Task<Workbook[]> FetchWorkbooks()
+		{
+			var responseFromServer = await FetchTextFromURL(URL + "workbooks");
+			Console.WriteLine(responseFromServer);
+			return JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
+		}
 
-			Recording recording = new Recording(new TimeSpan(), localPath);
+		public async Task FetchPages(Workbook workbook)
+		{
+			var responseFromServer = await FetchTextFromURL($"{URL}workbooks/{workbook.Id}/pages");
+			Console.WriteLine(responseFromServer);
+			workbook.Pages = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer).Cast<IPage>().ToList();
+		}
 
-			response.Close();
-
-			return recording;
+		public async Task<Recording> FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
+		{
+			return await FetchFromURL($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", dataStream =>
+			{
+				using (var fileStream = File.Create(localPath))
+				{
+					//dataStream.Seek(0, SeekOrigin.Begin);
+					dataStream.CopyTo(fileStream);
+				}
+				return new Recording(new TimeSpan(), localPath); // TODO: read length from file
+			});
 		}
 	}
 }
