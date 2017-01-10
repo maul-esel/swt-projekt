@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
 
-namespace MobileApp.Proxies
+namespace Lingvo.MobileApp.Proxies
 {
 	/// <summary>
 	/// Cloud library proxy.

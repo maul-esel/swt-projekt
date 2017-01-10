@@ -36,6 +36,7 @@ namespace Lingvo.MobileApp.Pages
                     HorizontalOptions=LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     IsVisible=LocalCollection.GetInstance().Workbooks.Count == 0,
+                    HorizontalTextAlignment = TextAlignment.Center,
                     LineBreakMode = LineBreakMode.WordWrap
                 }
                 }

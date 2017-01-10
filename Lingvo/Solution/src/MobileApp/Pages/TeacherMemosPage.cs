@@ -50,6 +50,7 @@ namespace Lingvo.MobileApp.Pages
                     HorizontalOptions=LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     LineBreakMode = LineBreakMode.WordWrap,
+                    HorizontalTextAlignment = TextAlignment.Center,
                     IsVisible=LocalCollection.GetInstance().TeacherMemos.Count == 0
 
                 }

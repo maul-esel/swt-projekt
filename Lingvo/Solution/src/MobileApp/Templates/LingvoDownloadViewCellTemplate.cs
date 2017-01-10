@@ -6,8 +6,8 @@ namespace Lingvo.MobileApp.Templates
     class LingvoDownloadViewCellTemplate : DataTemplate
     {
 
-        public LingvoDownloadViewCellTemplate(string textBindingPath, string subtextBindingPath, string commandParamBindingPath, Action<object> action) :this(textBindingPath, subtextBindingPath, commandParamBindingPath, action, null, null) { }
-        public LingvoDownloadViewCellTemplate(string textBindingPath, string subtextBindingPath, string commandParamBindingPath, Action<object> action, string textFormat, string subtextFormat) : base(() =>
+        public LingvoDownloadViewCellTemplate(string textBindingPath, string subtextBindingPath, string commandParamBindingPath, Command action) :this(textBindingPath, subtextBindingPath, commandParamBindingPath, action, null, null) { }
+        public LingvoDownloadViewCellTemplate(string textBindingPath, string subtextBindingPath, string commandParamBindingPath, Command action, string textFormat, string subtextFormat) : base(() =>
                 {
                     Label titleLabel = new Label()
                     {
@@ -32,7 +32,7 @@ namespace Lingvo.MobileApp.Templates
                     Button downloadButton = new Button()
                     {
                         Image = (FileImageSource)ImageSource.FromFile("Icon.png"),
-                        Command = new Command(action),
+                        Command = action,
                         HorizontalOptions = LayoutOptions.End,
                         VerticalOptions = LayoutOptions.Center
                     };

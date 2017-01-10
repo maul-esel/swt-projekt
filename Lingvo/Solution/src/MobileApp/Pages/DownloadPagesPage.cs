@@ -1,4 +1,5 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Templates;
 using System;
 using Xamarin.Forms;
@@ -7,11 +8,20 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class DownloadPagesPage : ContentPage
     {
-        private Action<object> downloadAction = new Action<object>((o) => { Console.WriteLine(o); });
+        private Workbook workbook;
+
+        private Command downloadAction;
 
         public DownloadPagesPage(Workbook workbook)
         {
+            this.workbook = workbook;
             Title = workbook.Title;
+
+            downloadAction = new Command(async (param) =>
+            {
+                PageProxy page = (PageProxy)workbook.Pages.Find((p) => p.Number == (int)param);
+                await page?.Resolve();
+            });
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
@@ -37,6 +47,7 @@ namespace Lingvo.MobileApp.Pages
                     HorizontalOptions=LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     LineBreakMode = LineBreakMode.WordWrap,
+                    HorizontalTextAlignment = TextAlignment.Center,
                     IsVisible = workbook.Pages.Count == 0
                 }
                 }
@@ -47,7 +58,7 @@ namespace Lingvo.MobileApp.Pages
         {
             if (e.SelectedItem == null)
                 return;
-            downloadAction.Invoke(((IPage)e.SelectedItem).Number);
+            downloadAction.Execute(((IPage)e.SelectedItem).Number);
             Handle_ItemEvent(sender, e);
         }
 

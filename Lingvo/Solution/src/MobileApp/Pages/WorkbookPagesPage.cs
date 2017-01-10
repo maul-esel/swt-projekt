@@ -35,6 +35,7 @@ namespace Lingvo.MobileApp.Pages
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     HorizontalOptions=LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
+                    HorizontalTextAlignment = TextAlignment.Center,
                     LineBreakMode = LineBreakMode.WordWrap,
                     IsVisible=workbook.Pages.Count == 0
 
