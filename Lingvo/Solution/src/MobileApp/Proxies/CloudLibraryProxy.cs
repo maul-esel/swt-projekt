@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
 
@@ -19,23 +20,14 @@ namespace MobileApp.Proxies
 		/// Gets the instance of cloud library proxy (singleton pattern).
 		/// </summary>
 		/// <returns>The instance.</returns>
-		public static CloudLibraryProxy GetInstance()
-		{
-			if (instance == null)
-			{
-				instance = new CloudLibraryProxy();
-			}
-
-			return instance;
-		}
+		public static CloudLibraryProxy Instance => instance ?? (instance = new CloudLibraryProxy());
 
 		/// <summary>
 		/// Downloads a single page.
 		/// </summary>
 		/// <returns>The page.</returns>
-		/// <param name="workbookID">Workbook identifier.</param>
-		/// <param name="pageNumber">Page number.</param>
-		public Page DownloadSinglePage(String workbookID, int pageNumber)
+		/// <param name="proxy">A proxy for the page that is downloaded</param>
+		internal async Task<Page> DownloadSinglePage(PageProxy proxy)
 		{
 			// to do: get correspondent page from server
 			return null;
@@ -46,9 +38,15 @@ namespace MobileApp.Proxies
 		/// </summary>
 		/// <returns>The workbook.</returns>
 		/// <param name="workbookID">Workbook identifier.</param>
-		public Workbook DownloadWorkbook(String workbookID)
+		public async Task<Workbook> DownloadWorkbook(int workbookID)
 		{
 			// to do: get correspondent workbook from server
+			return null;
+		}
+
+		public async Task<Workbook[]> FetchAllWorkbooks()
+		{
+			// TODO
 			return null;
 		}
 	}

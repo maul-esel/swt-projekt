@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
 
@@ -91,6 +92,10 @@ namespace MobileApp.Proxies
 
 
 		public PageProxy()
+		{
+		}
+
+		public async Task Resolve()
 		{
 		}
 
