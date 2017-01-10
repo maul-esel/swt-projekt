@@ -20,9 +20,6 @@ namespace Lingvo.MobileApp.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new MobileApp.App ());
-
-			APIService service = new APIService();
-			service.FetchWorkbooks();
 		}
 	}
 }

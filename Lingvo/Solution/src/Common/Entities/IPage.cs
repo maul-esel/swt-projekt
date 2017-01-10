@@ -26,6 +26,11 @@ namespace Lingvo.Common.Entities
 			set;
 		}
 
+
+		Workbook Workbook { get; set; }
+
+		int workbookId { get; set; }
+
 		/// <summary>
 		/// Gets or sets the teacher track.
 		/// </summary>

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
 
+using Lingvo.MobileApp;
+
 namespace MobileApp.Proxies
 {
 	public class PageProxy : IPage
@@ -11,6 +13,10 @@ namespace MobileApp.Proxies
 		private String description;
 
 		private Page original;
+
+		public Workbook Workbook { get; set; }
+
+		public int workbookId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the page number.
@@ -97,6 +103,13 @@ namespace MobileApp.Proxies
 
 		public async Task Resolve()
 		{
+
+			if (original == null)
+			{
+				var service = new APIService();
+				var page = await service.FetchPage(this);
+				original = page;
+			}
 		}
 
 		/// <summary>

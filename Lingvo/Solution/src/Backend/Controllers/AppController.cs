@@ -17,6 +17,18 @@ namespace Lingvo.Backend.Controllers
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
 
+		[Route("workbooks/{workbookId}")]
+		public IActionResult GetWorkbook(int workbookId)
+		{
+
+			return Json(from workbook in Database.Workbooks
+						where workbook.IsPublished 
+			            && workbook.Id == workbookId
+			            select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages/*, pages =  from p in Database.Pages
+																																		  where p.workbookId == workbookId
+																																		  select new { p.workbookId, p.Number, p.Description }*/});
+		}
+
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages(int workbookId)
 		{
