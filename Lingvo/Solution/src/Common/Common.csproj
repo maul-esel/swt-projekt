@@ -25,6 +25,12 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
+    <Compile Remove="Page.cs" />
+    <Compile Remove="Recording.cs" />
+    <Compile Remove="Class1.cs" />
+    <Compile Remove="Adapters\RecorderAdapter.cs" />
+    <Compile Remove="Workbook.cs" />
+    <Compile Remove="EmptyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">
@@ -34,6 +40,10 @@
       <Version>1.0.0-alpha-20161104-2</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Adapters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
