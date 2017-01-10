@@ -24,7 +24,7 @@ CREATE TABLE Pages (
   studentTrack INT, /* always NULL on server */
   
   PRIMARY KEY (workbookID, number),
-  FOREIGN KEY wbid(workbookID) REFERENCES Recordings(id),
+  FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id),
   FOREIGN KEY ttfk(teacherTrack) REFERENCES Recordings(id),
   FOREIGN KEY stfk(studentTrack) REFERENCES Recordings(id)
 );
