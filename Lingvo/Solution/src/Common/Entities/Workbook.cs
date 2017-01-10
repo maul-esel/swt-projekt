@@ -11,7 +11,7 @@ namespace Lingvo.Common.Entities
 		private string subtitle;
 		private bool isPublished;
 		private DateTime lastModified;
-		private List<Page> pages;
+		private List<IPage> pages;
 
 		/// <summary>
 		/// Gets the identifier.
@@ -112,14 +112,14 @@ namespace Lingvo.Common.Entities
 		/// Gets or sets all the pages of .
 		/// </summary>
 		/// <value>The pages.</value>
-		public List<Page> Pages
+		public List<IPage> Pages
 		{
 			get
 			{
 				//Nullpointer avoidance
 				if (pages == null)
 				{
-					pages = new List<Page>();
+					pages = new List<IPage>();
 				}
 
 				return pages;
@@ -137,7 +137,7 @@ namespace Lingvo.Common.Entities
 		/// Deletes a page from the workbook's collection.
 		/// </summary>
 		/// <param name="p">Page to be deleted</param>
-		public void DeletePage(Page p)
+		public void DeletePage(IPage p)
 		{
 			pages.Remove(p);
 		}
@@ -147,7 +147,7 @@ namespace Lingvo.Common.Entities
 		/// Saves the page.
 		/// </summary>
 		/// <param name="p">P.</param>
-		public void SavePage(Page p)
+		public void SavePage(IPage p)
 		{
 			pages.Add(p);
 		}
