@@ -26,6 +26,13 @@ namespace Lingvo.MobileApp
 		{
 		}
 
+		/// <summary>
+		/// Fetchs Data from URL.
+		/// </summary>
+		/// <returns>The from URL.</returns>
+		/// <param name="url">URL.</param>
+		/// <param name="convert">Function for data conversion</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		private async Task<T> FetchFromURL<T>(string url, Func<Stream, WebResponse, T> convert)
 		{
 			using (var response = await WebRequest.Create(url).GetResponseAsync())
@@ -37,6 +44,11 @@ namespace Lingvo.MobileApp
 			}
 		}
 
+		/// <summary>
+		/// Fetchs data from the URL as text.
+		/// </summary>
+		/// <returns>The text from URL.</returns>
+		/// <param name="url">URL.</param>
 		private async Task<string> FetchTextFromURL(string url)
 		{
 			return await await FetchFromURL(url, (stream, response) =>
@@ -99,6 +111,11 @@ namespace Lingvo.MobileApp
 
 		}
 
+		/// <summary>
+		/// Fetchs the pages for a workbook.
+		/// </summary>
+		/// <returns>Nothing, the pages are attached to the given workbook object</returns>
+		/// <param name="workbook">Workbook.</param>
 		public async Task FetchPages(Workbook workbook)
 		{
 			var responseFromServer = await FetchTextFromURL($"{URL}workbooks/{workbook.Id}/pages");

@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
 
-using Lingvo.MobileApp;
-
 namespace MobileApp.Proxies
 {
 	public class PageProxy : IPage
@@ -106,9 +104,11 @@ namespace MobileApp.Proxies
 
 			if (original == null)
 			{
-				var service = APIService.Instance;
-				var page = await service.FetchPage(this);
+				var service = CloudLibraryProxy.Instance;
+				var page = await service.DownloadSinglePage(this);
 				original = page;
+
+				// TODO: Database access
 			}
 		}
 

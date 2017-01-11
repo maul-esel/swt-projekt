@@ -40,33 +40,43 @@ namespace MobileApp.Proxies
 		}
 
 		/// <summary>
-		/// Downloads a workbook.
+		/// Downloads a workbook and adds it to the local collection
 		/// </summary>
 		/// <returns>The workbook.</returns>
 		/// <param name="workbookID">Workbook identifier.</param>
 		public async Task<Workbook> DownloadWorkbook(int workbookID)
 		{
 			var workbook = await service.FetchWorkbook(workbookID);
-			var downloadedPages = new List<IPage>();
 
 			foreach (var page in workbook.Pages)
 			{
-				var downloadedPage = await DownloadSinglePage((PageProxy) page);
-				downloadedPages.Add(downloadedPage);
+				await ((PageProxy) page).Resolve();
 			}
 
-			workbook.Pages = downloadedPages;
+			//This is not necessary as workbooks is always read from the database
 
-			var collection = LocalCollection.GetInstance();
+			//var collection = LocalCollection.GetInstance();
 
-			collection.AddWorkbook(workbook);
+			//collection.AddWorkbook(workbook);
 
 			return workbook;
 		}
 
-		public Task<Workbook[]> FetchAllWorkbooks()
+		/// <summary>
+		/// Returns a list of all workbooks, with page proxy objects for all existing pages on server
+		/// </summary>
+		/// <returns>The all workbooks.</returns>
+		public async Task<Workbook[]> FetchAllWorkbooks()
 		{
-			return service.FetchWorkbooks();
+			var workbooks =  await service.FetchWorkbooks();
+
+			foreach (var w in workbooks)
+			{
+				await service.FetchPages(w);
+				w.IsPublished = true;
+			}
+
+			return workbooks;
 		}
 	}
 }
