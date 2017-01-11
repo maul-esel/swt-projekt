@@ -34,7 +34,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// <returns>The teacher memo.</returns>
 		public TeacherMemo EndTeacherMemo()
 		{
-			return (TeacherMemo) recorder.Stop();
+			return new TeacherMemo() { Recording = recorder.Stop() };
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// <param name="memo">Memo.</param>
 		public void PlayTeacherMemo(TeacherMemo memo)
 		{
-			player.Play(memo);
+			player.Play(memo.Recording);
 		}
 	}
 }
