@@ -12,6 +12,10 @@ namespace MobileApp.Proxies
 
 		private Page original;
 
+		public Workbook Workbook { get; set; }
+
+		public int workbookId { get; set; }
+
 		/// <summary>
 		/// Gets or sets the page number.
 		/// </summary>
