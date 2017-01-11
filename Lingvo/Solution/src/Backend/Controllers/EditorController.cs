@@ -1,5 +1,5 @@
 ﻿using System;
-using Lingvo.Common;
+using Lingvo.Common.Entities;
 namespace Lingvo.Backend
 {
 	 /// <summary>

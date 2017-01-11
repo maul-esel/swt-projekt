@@ -46,6 +46,10 @@ namespace Lingvo.Common.Entities
 			set;
 		}
 
+		Workbook Workbook { get; set; }
+
+		int workbookId { get; set; }
+
 		/// <summary>
 		/// Deletes the student recording that is currently attached to this page.
 		/// </summary>

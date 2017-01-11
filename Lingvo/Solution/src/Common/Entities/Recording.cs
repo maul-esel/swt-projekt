@@ -24,7 +24,7 @@ namespace Lingvo.Common.Entities
 		/// </summary>
 		public Recording()
 		{
-			creationTime = DateTime.Now;
+			CreationTime = DateTime.Now;
 		}
 
 		public Recording(int id, TimeSpan length, string localPath, DateTime creationTime)
