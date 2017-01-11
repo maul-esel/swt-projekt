@@ -9,7 +9,7 @@ using ObjCRuntime;
 
 namespace Lingvo.MobileApp.iOS
 {
-	public class AudioProgressView : UIView
+	/*public class AudioProgressView : UIView
 	{
 		CircleProgressBar studentProgressBar;
 		CircleProgressBar teacherProgressBar;
@@ -75,6 +75,8 @@ namespace Lingvo.MobileApp.iOS
 
 					teacherProgressBar?.clear();
 					studentProgressBar?.clear();
+
+
 
 					teacherProgressBar = null;
 					studentProgressBar = null;
@@ -189,7 +191,7 @@ namespace Lingvo.MobileApp.iOS
 				if (studentMuted)
 				{
 					/*studentProgressBar.removeStroke();
-					studentProgressBar*/
+					studentProgressBar
 					studentProgressBar.Muted = studentMuted;
 				}
 			}
@@ -260,9 +262,9 @@ namespace Lingvo.MobileApp.iOS
 
 
 
-			/*var teacherFrameLineWidth = teacherProgressBar.LineWidth;
+			var teacherFrameLineWidth = teacherProgressBar.LineWidth;
 			var studentFrameInset = teacherProgressBar.LineWidth / 2 - margin;
-			var studentFrame = new CGRect(studentFrameInset, studentFrameInset, teacherFrame.Width - 2 * teacherFrameLineWidth, teacherFrame.Height - 2 * teacherFrameLineWidth);*/
+			var studentFrame = new CGRect(studentFrameInset, studentFrameInset, teacherFrame.Width - 2 * teacherFrameLineWidth, teacherFrame.Height - 2 * teacherFrameLineWidth);
 
 
 			studentProgressBar = new CircleProgressBar(new CGRect());
@@ -331,5 +333,5 @@ namespace Lingvo.MobileApp.iOS
 			DispatchQueue.MainQueue.DispatchAsync(action);
 		}
 
-	}
+	}*/
 }

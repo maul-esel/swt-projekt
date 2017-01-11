@@ -8,47 +8,62 @@ namespace Lingvo.MobileApp.iOS
 {
 	public class SingleProgressView : CircleProgressBar
 	{
-
 		UILabel label;
-		private string labelText = "100%";
+		private string text = "100%";
 		public string Text
 		{
 			get
 			{
-				return labelText;
+				return text;
 			}
 			set
 			{
-				labelText = value;
-				label.Text = labelText;
+				text = value;
 			}
 		}
+	
+		public override int Size
+		{
+			get
+			{
+				return base.Size;
+			}
+			set
+			{
+				base.Size = value;
+				Frame = new CGRect(Frame.X, Frame.Y, value, value);
+				backgroundLayer.RemoveFromSuperLayer();
+				strokeLayer.RemoveFromSuperLayer();
+				label.RemoveFromSuperview();
 
+				BackgroundColor = UIColor.LightGray;
+				backgroundLayer = drawCircle(unfinishedCircleColor, -100);
+				strokeLayer = drawCircle(unfinishedCircleColor, -100);
 
+				Console.WriteLine(Frame);
+				setupLabel();
+				label.SetNeedsDisplay();
+				drawStroke(angle);
+			}
+		}
 		public SingleProgressView(CGRect frame) : base(frame)
 		{
-			setupViews();
+			setupLabel();
 		}
-
-
-
-		protected override void setupViews()
+		private void setupLabel()
 		{
-			base.setupViews();
-
 			label = new UILabel(new CGRect(0, 0, Frame.Width / 4, 40))
 			{
-				Text = "100%",
+				Text = text,
 				TextAlignment = UITextAlignment.Center,
-				Font = UIFont.SystemFontOfSize(28)
+				Font = UIFont.SystemFontOfSize(21)
 			};
+			label.TranslatesAutoresizingMaskIntoConstraints = false;
+			AddSubview(label);
 
-			runOnMainThread(new Action(() =>
-			{
-				CenterView = label;
-			}));
-
-
+			label.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
+			label.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
 		}
+
 	}
 }

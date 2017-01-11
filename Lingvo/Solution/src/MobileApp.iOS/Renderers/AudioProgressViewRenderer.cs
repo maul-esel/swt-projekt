@@ -8,10 +8,11 @@ using CoreAnimation;
 using CoreFoundation;
 using UIKit;
 
-[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.iOS.AudioProgressViewRenderer))]
+
+//[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.iOS.AudioProgressViewRenderer))]
 namespace Lingvo.MobileApp.iOS
 {
-	class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
+	/*class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
 	{
 		AudioProgressView progressView;
 
@@ -99,5 +100,5 @@ namespace Lingvo.MobileApp.iOS
 			base.LayoutSubviews();
 
 		}
-	}
+	}*/
 }
