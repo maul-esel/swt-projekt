@@ -5,10 +5,13 @@ using CoreGraphics;
 using Foundation;
 using CoreAnimation;
 using CoreFoundation;
+
 namespace Lingvo.MobileApp.iOS
 {
 	public class CircleProgressBar : UIView
 	{
+
+
 		private CAShapeLayer strokeLayer;
 		private float maxProgress = 100.0f;
 		private float lineWidth = 10.0f;
@@ -17,11 +20,42 @@ namespace Lingvo.MobileApp.iOS
 		private UIColor unfinishedCircleColor = new UIColor(234.0f / 255.0f, 234.0f / 255.0f, 234.0f / 255.0f, 1.0f); //grayish color
 		private UIView centerView;
 		private float progress;
+		private int nestingLevel = 0;
+		CALayer backgroundLayer;
+		private bool muted;
+
 
 
 		private readonly string animationName = "drawCircleAnim";
 		private double animationStartTime;
 
+		public bool Muted
+		{
+			get
+			{
+				return muted;
+			}
+			set
+			{
+				muted = value;
+				redrawStroke();
+				/*runOnMainThread(new Action(() => {
+					strokeLayer.RemoveFromSuperLayer();
+				}));*/
+
+			}
+		}
+		public int NestingLevel
+		{
+			get
+			{
+				return nestingLevel;
+			}
+			set
+			{
+				nestingLevel = value >= 0 ? value : 0;
+			}
+		}
 		public UIView CenterView
 		{
 			get
@@ -52,6 +86,10 @@ namespace Lingvo.MobileApp.iOS
 				if (value >= 0)
 				{
 					lineWidth = value;
+					clear();
+					redrawStroke();
+
+
 				}
 
 			}
@@ -78,7 +116,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				progressColor = value;
-				SetNeedsDisplay();
+				redrawStroke();
 			}
 		}
 
@@ -99,26 +137,37 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				if (value <= 0.0f)
-				{
-					runOnMainThread(new Action(() =>
-					{
-						strokeLayer?.RemoveFromSuperLayer();
-					}));
-					return;
-				}
-
-				progress = value;
-				var percentage = value / maxProgress;
-				var endAngle = percentage * (float)(2 * Math.PI);
-
-				//updates on UI only work on the main thread
-				runOnMainThread(new Action(() =>
-				{
-					strokeLayer?.RemoveFromSuperLayer();
-					strokeLayer = drawArc(ProgressColor, 0.0f, endAngle, 2);
-				}));
+				progress = value > 0 ? value : 0.0f;
+				redrawStroke();
 			}
+		}
+		private void redrawStroke()
+		{
+			if (progress < 0.0f)
+			{
+				return;
+			}
+			/*if (muted)
+			{
+				runOnMainThread(new Action(() => {
+					strokeLayer?.RemoveFromSuperLayer();
+					strokeLayer = null;
+				}));
+
+			}*/
+			var percentage = progress / maxProgress;
+			var endAngle = percentage * (float)(2 * Math.PI);
+
+			//updates on UI only work on the main thread
+			runOnMainThread(new Action(() =>
+			{
+				strokeLayer?.RemoveFromSuperLayer();
+				if (!muted)
+				{
+					strokeLayer = drawArc(ProgressColor, 0.0f, endAngle, 2);
+					Layer.AddSublayer(strokeLayer);
+				}
+			}));
 		}
 
 
@@ -133,7 +182,8 @@ namespace Lingvo.MobileApp.iOS
 				if (value >= 0)
 				{
 					margin = value;
-					SetNeedsDisplay();
+					clear();
+					redrawStroke();
 				}
 			}
 		}
@@ -149,7 +199,7 @@ namespace Lingvo.MobileApp.iOS
 				if (value > 0.0)
 				{
 					maxProgress = value;
-					SetNeedsDisplay();
+					redrawStroke();
 				}
 			}
 		}
@@ -159,22 +209,14 @@ namespace Lingvo.MobileApp.iOS
 			{
 				return (float)(Math.Min(Frame.Width, Frame.Height));
 			}
-			set
-			{
-				runOnMainThread(new Action(() =>
-				{
-					Frame = new CGRect(0, 0, value, value);
-					SetNeedsDisplay();
-				}));
-			}
 		}
 
 		private float radius
 		{
 			get
 			{
-				var outerWidthRadius = Frame.Width / 2 - lineWidth / 2 - 2 * margin;
-				var outerHeightRadius = Frame.Height / 2 - lineWidth / 2 - 2 * margin;
+				var outerWidthRadius = Frame.Width / 2 - lineWidth / 2 - 2 * (margin + nestingLevel * lineWidth / 2);
+				var outerHeightRadius = Frame.Height / 2 - lineWidth / 2 - 2 * (margin + nestingLevel * lineWidth / 2);
 
 				return (float)Math.Min(outerWidthRadius, outerHeightRadius);
 			}
@@ -183,17 +225,21 @@ namespace Lingvo.MobileApp.iOS
 
 		public CircleProgressBar()
 		{
-			setupViews();
+			//setupViews();
 		}
 
 		public CircleProgressBar(CGRect frame) : base(frame)
 		{
+			//setupViews();
+		}
+		public override void LayoutSubviews()
+		{
+			base.LayoutSubviews();
 			setupViews();
 		}
-
 		protected virtual void setupViews()
 		{
-			drawCircle(unfinishedCircleColor, -100);
+			backgroundLayer = drawCircle(unfinishedCircleColor, -100);
 		}
 
 		private CALayer drawCircle(UIColor fillColor, int zPosition)
@@ -215,7 +261,6 @@ namespace Lingvo.MobileApp.iOS
 			var path = new UIBezierPath();
 			path.AddArc(Center, radius, adjustedStartAngle, adjustedEndAngle, true);
 			circleLayer.Path = path.CGPath;
-
 			Layer.AddSublayer(circleLayer);
 			return circleLayer;
 		}
@@ -263,6 +308,30 @@ namespace Lingvo.MobileApp.iOS
 		{
 			//updates on UI only work on the main thread
 			DispatchQueue.MainQueue.DispatchAsync(action);
+		}
+		public void clear()
+		{
+			runOnMainThread(new Action(() =>
+			{
+				Console.WriteLine("background layer was nil = " + backgroundLayer);
+				backgroundLayer?.RemoveFromSuperLayer();
+				strokeLayer?.RemoveFromSuperLayer();
+
+			}));
+
+		}
+		public override void LayoutSublayersOfLayer(CALayer layer)
+		{
+			base.LayoutSublayersOfLayer(layer);
+			if (layer == Layer)
+			{
+				if (strokeLayer != null)
+					strokeLayer.Frame = layer.Bounds;
+				if (backgroundLayer != null)
+					backgroundLayer.Frame = layer.Bounds;
+
+				//backgroundLayer.Frame = layer.Bounds;
+			}
 		}
 	}
 }

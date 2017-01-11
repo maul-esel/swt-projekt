@@ -162,6 +162,9 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.3.3.180\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Lingvo.Common">
+      <HintPath>..\Common\bin\Debug\netstandard1.4\Lingvo.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />

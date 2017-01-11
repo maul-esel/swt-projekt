@@ -36,7 +36,7 @@ namespace Lingvo.MobileApp.iOS
 		{
 			LingvoSingleProgressView element = (LingvoSingleProgressView)sender;
 
-			if (progressView.Size != element.Size)
+			/*if (progressView.Size != element.Size)
 				progressView.Size = element.Size;
 			if (!progressView.ProgressColor.Equals(element.ProgressColor.ToUIColor()))
 				progressView.ProgressColor = element.ProgressColor.ToUIColor();
@@ -55,7 +55,7 @@ namespace Lingvo.MobileApp.iOS
 				}
 
 				labelType = element.LabelType;
-			}
+			}*/
 		}
 	}
 }

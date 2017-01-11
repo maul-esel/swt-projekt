@@ -5,6 +5,7 @@ using CoreGraphics;
 using Foundation;
 using CoreAnimation;
 using CoreFoundation;
+using ObjCRuntime;
 
 namespace Lingvo.MobileApp.iOS
 {
@@ -14,35 +15,93 @@ namespace Lingvo.MobileApp.iOS
 		CircleProgressBar teacherProgressBar;
 		private float lineWidth = 10.0f;
 		private float margin = 0.0f;
-
 		private bool studentMuted = false;
+		private int progress = 0;
+
 
 		public delegate void StudentTrackMutedEventHandler(bool muted);
 
 		public event StudentTrackMutedEventHandler StudentTrackMuted;
 
+
+	
+
 		public int Progress
 		{
 			get
 			{
-				return (int)teacherProgressBar.Progress;
+				return progress;
 			}
 			set
 			{
 				if (value > 0)
 				{
-					var correctedProgressValue = value % MaxProgress;
-					teacherProgressBar.Progress = correctedProgressValue;
-					if (!studentMuted)
+					progress = value;
+					runOnMainThread(new Action(() =>
 					{
-						studentProgressBar.Progress = correctedProgressValue;
-					}
+						var correctedProgressValue = value % MaxProgress;
+						teacherProgressBar.Progress = correctedProgressValue;
+						if (!studentMuted)
+						{
+							studentProgressBar.Progress = correctedProgressValue;
+						}
 
-					string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
-					string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
+						string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
+						string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
 
-					timeLabel.Text = minutes + ":" + seconds;
+						timeLabel.Text = minutes + ":" + seconds;
+
+					}));
+
 				}
+			}
+		}
+
+		public override CGRect Frame
+		{
+			get
+			{
+				return base.Frame;
+			}
+			set
+			{
+				base.Frame = value;
+
+				runOnMainThread(new Action(() =>
+				{
+					teacherProgressBar?.RemoveFromSuperview();
+					studentProgressBar?.RemoveFromSuperview();
+
+
+					teacherProgressBar?.clear();
+					studentProgressBar?.clear();
+
+					teacherProgressBar = null;
+					studentProgressBar = null;
+					setupViews();
+
+				}));
+
+
+			}
+		}
+		public override CGRect Bounds
+		{
+			get
+			{
+				return base.Bounds;
+			}
+			set
+			{
+				base.Bounds = value;
+				runOnMainThread(new Action(() =>
+				{
+					teacherProgressBar?.RemoveFromSuperview();
+					studentProgressBar?.RemoveFromSuperview();
+					teacherProgressBar?.clear();
+					studentProgressBar?.clear();
+					setupViews();
+				}));
 			}
 		}
 		public int MaxProgress
@@ -65,6 +124,8 @@ namespace Lingvo.MobileApp.iOS
 				if (value >= 0)
 				{
 					margin = value;
+					studentProgressBar.Margin = value;
+					teacherProgressBar.Margin = value;
 				}
 			}
 		}
@@ -76,16 +137,21 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				if (lineWidth > 0.0f)
+				lineWidth = value;
+
+
+				runOnMainThread(new Action(() =>
 				{
-					lineWidth = value;
-				}
+					teacherProgressBar.LineWidth = value;
+					studentProgressBar.LineWidth = value;
+
+				}));
 			}
 		}
 
 		public UIColor InnerProgressColor
 		{
-			get { return studentProgressBar.ProgressColor; }
+			get { return studentProgressBar?.ProgressColor; }
 			set
 			{
 				studentProgressBar.ProgressColor = value;
@@ -94,12 +160,13 @@ namespace Lingvo.MobileApp.iOS
 
 		public UIColor OuterProgressColor
 		{
-			get { return teacherProgressBar.ProgressColor; }
+			get { return teacherProgressBar?.ProgressColor; }
 			set
 			{
 				teacherProgressBar.ProgressColor = value;
 			}
 		}
+		//we need this because of the interface definition
 		public int Size
 		{
 			get
@@ -108,11 +175,8 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				runOnMainThread(new Action(() =>
-				{
-					Frame = new CGRect(0, 0, value, value);
-					SetNeedsDisplay();
-				}));
+				Frame = new CGRect(Frame.X, Frame.Y, value, value);
+
 			}
 		}
 
@@ -122,6 +186,12 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				studentMuted = !value;
+				if (studentMuted)
+				{
+					/*studentProgressBar.removeStroke();
+					studentProgressBar*/
+					studentProgressBar.Muted = studentMuted;
+				}
 			}
 		}
 
@@ -172,23 +242,64 @@ namespace Lingvo.MobileApp.iOS
 		{
 			setupViews();
 		}
+		public override void AwakeFromNib()
+		{
+			setupViews();
+			base.AwakeFromNib();
+		}
 
 		private void setupViews()
 		{
 			var teacherFrame = Frame;
-			teacherProgressBar = new CircleProgressBar(teacherFrame);
+			teacherProgressBar = new CircleProgressBar(new CGRect());
+			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
+			teacherProgressBar.LineWidth = LineWidth;
+			teacherProgressBar.Progress = progress;
 			AddSubview(teacherProgressBar);
 
-			var teacherFrameLineWidth = teacherProgressBar.LineWidth;
+
+
+
+			/*var teacherFrameLineWidth = teacherProgressBar.LineWidth;
 			var studentFrameInset = teacherProgressBar.LineWidth / 2 - margin;
+			var studentFrame = new CGRect(studentFrameInset, studentFrameInset, teacherFrame.Width - 2 * teacherFrameLineWidth, teacherFrame.Height - 2 * teacherFrameLineWidth);*/
 
 
-			var studentFrame = new CGRect(studentFrameInset, studentFrameInset, teacherFrame.Width - 2 * teacherFrameLineWidth, teacherFrame.Height - 2 * teacherFrameLineWidth);
-			studentProgressBar = new CircleProgressBar(studentFrame);
-
+			studentProgressBar = new CircleProgressBar(new CGRect());
+			studentProgressBar.LineWidth = LineWidth;
+			studentProgressBar.Progress = progress;
+			studentProgressBar.NestingLevel = 1; //this calculates the margin so that this bar is displayed as the inner circle
+			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
 			AddSubview(studentProgressBar);
-			studentProgressBar.ProgressColor = UIColor.Red;
-			studentProgressBar.UnfinishedCircleColor = UIColor.Green;
+
+
+
+			//teacherProgressBar.BackgroundColor = UIColor.Yellow;
+			//studentProgressBar.BackgroundColor = new UIColor(0, 0, 1, (nfloat)0.2);
+			//teacherProgressBar.BackgroundColor = new UIColor(0, (nfloat)1.0, (nfloat)0.0, (nfloat)1.0);
+			//studentProgressBar.ProgressColor = UIColor.Red;
+			//studentProgressBar.BackgroundColor = new UIColor(0, 0, (nfloat)1.0, (nfloat)1.0);
+			//studentProgressBar.UnfinishedCircleColor = UIColor.Green;
+
+
+			//Autolayout
+			var viewNames = NSDictionary.FromObjectsAndKeys(new NSObject[] {
+				teacherProgressBar,
+				studentProgressBar
+			}, new NSObject[] {
+				new NSString("teacher_bar"),
+				new NSString("student_bar")
+			});
+			var emptyDict = new NSDictionary();
+
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-0-[teacher_bar]-0-|", 0, emptyDict, viewNames));
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-0-[teacher_bar]-0-|", 0, emptyDict, viewNames));
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[student_bar]|", 0, emptyDict, viewNames));
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[student_bar]|", 0, emptyDict, viewNames));
+			studentProgressBar.CenterXAnchor.ConstraintEqualTo(teacherProgressBar.CenterXAnchor).Active = true;
+			studentProgressBar.CenterYAnchor.ConstraintEqualTo(teacherProgressBar.CenterYAnchor).Active = true;
+
+
 			var stackView = new UIStackView()
 			{
 				Axis = UILayoutConstraintAxis.Vertical,
@@ -213,6 +324,7 @@ namespace Lingvo.MobileApp.iOS
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
 
 		}
+
 		protected void runOnMainThread(Action action)
 		{
 			//updates on UI only work on the main thread
