@@ -6,56 +6,48 @@ using Newtonsoft.Json;
 
 namespace Lingvo.Common.Entities
 {
-	[Table("Workbooks")]
 	public class Workbook
 	{
 		/// <summary>
 		/// Gets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		[Column, PrimaryKey]
 		public int Id { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the title.
 		/// </summary>
 		/// <value>The title.</value>
-		[Column, NotNull]
 		public string Title { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subtitle.
 		/// </summary>
 		/// <value>The subtitle.</value>
-		[Column, NotNull]
 		public string Subtitle { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="T:Lingvo.Common.Workbook"/> is published.
 		/// </summary>
 		/// <value><c>true</c> if is published; otherwise, <c>false</c>.</value>
-		[Column("published"), NotNull]
 		public bool IsPublished { get; set; }
 
 		/// <summary>
 		/// Gets or sets the date on which this workbook was modified the last time.
 		/// </summary>
 		/// <value>The last modified.</value>
-		[Column, NotNull]
 		public DateTime LastModified { get; set; }
 
 		/// <summary>
 		/// Gets or sets all the pages of .
 		/// </summary>
 		/// <value>The pages.</value>
-		[Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId))]
 		public List<IPage> Pages { get; set; }
 
 		/// <summary>
 		/// Gets the total number of pages belonging to this workbook.
 		/// </summary>
 		/// <value>The total pages.</value>
-		[Column, NotNull]
 		public int TotalPages { get; set; }
 
 		/// <summary>

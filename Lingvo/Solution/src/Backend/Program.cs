@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-using LinqToDB;
-using LinqToDB.Mapping;
-using LinqToDB.Data;
-using LinqToDB.DataProvider.MySql;
-
 namespace Lingvo.Backend
 {
-	using Common.Services;
-
     public class Program
     {
 		static public IConfigurationRoot Configuration { get; set; }
@@ -32,9 +22,13 @@ namespace Lingvo.Backend
 			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 			if (string.IsNullOrEmpty(password))
 				password = "password"; // dummy default value for development
-			Database = DatabaseService.Connect<MySqlDataProvider>(
+			Database = new DatabaseService(
 				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
 			);
+
+			Database.Insert(new Common.Entities.Recording(-1, TimeSpan.FromMilliseconds(12), "a.b"));
+			foreach (var rec in Database.Recordings)
+				Console.WriteLine(rec);
 
 			var host = new WebHostBuilder()
                 .UseKestrel()

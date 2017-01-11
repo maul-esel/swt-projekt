@@ -23,6 +23,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DatabaseService.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\..\..\SQL\client.sql" CopyToOutputDirectory="Always">
+      <Link>SQL\client.sql</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
@@ -38,5 +42,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
     <Folder Include="$(MSBuildThisFileDirectory)Controllers\" />
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
+    <Folder Include="$(MSBuildThisFileDirectory)SQL\" />
   </ItemGroup>
 </Project>
