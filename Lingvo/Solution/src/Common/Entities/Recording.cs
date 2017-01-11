@@ -6,25 +6,17 @@ namespace Lingvo.Common.Entities
 	/// </summary>
 	public class Recording
 	{
-		private TimeSpan length;
-		private DateTime creationTime;
-		// to do: save the mp3 file
+		public int Id { get; private set; }
+
+		public DateTime CreationTime { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the length.
 		/// </summary>
 		/// <value>The length.</value>
-		public TimeSpan Length
-		{
-			get
-			{
-				return length;
-			}
-			set
-			{
-				length = value;
-			}
-		}
+		public TimeSpan Length { get; private set; }
+
+		public string LocalPath { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class, the creation time is set
@@ -34,5 +26,14 @@ namespace Lingvo.Common.Entities
 		{
 			creationTime = DateTime.Now;
 		}
+
+		public Recording(int id, TimeSpan length, string localPath, DateTime creationTime)
+		{
+			Id = id;
+			Length = length;
+			LocalPath = localPath;
+			CreationTime = creationTime;
+		}
+
 	}
 }
