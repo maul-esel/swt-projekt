@@ -1,8 +1,9 @@
 ﻿using Lingvo.Common.Adapters;
 using MobileApp.Entities;
 using System;
+using Xamarin.Forms;
 
-namespace MobileApp.Controllers
+namespace Lingvo.MobileApp.Controllers
 {
     /// <summary>
     /// Controller for handling teacher memos.
@@ -14,7 +15,9 @@ namespace MobileApp.Controllers
 
 		public TeacherMemoController()
 		{
-			// to do: initialize player & recorder
+			player = DependencyService.Get<IPlayer>();
+
+			// to do: recorder
 		}
 
 		/// <summary>
