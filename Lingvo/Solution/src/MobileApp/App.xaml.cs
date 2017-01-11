@@ -4,13 +4,26 @@ using System.Linq;
 using System.Text;
 
 using Xamarin.Forms;
+using LinqToDB.DataProvider.SQLite;
 
 namespace Lingvo.MobileApp
 {
+	using Common.Services;
+
 	public partial class App : Application
 	{
+		const string databasePath = "db.sqlite";
+		public static DatabaseService Database { get; private set; }
+
+		private static void SetupDatabaseConnection()
+		{
+			if (Database == null)
+				Database = DatabaseService.Connect<SQLiteDataProvider>($"Data Source=${databasePath}");
+		}
+
 		public App ()
 		{
+			SetupDatabaseConnection();
 			InitializeComponent();
 
 			MainPage = new MobileApp.MainPage();

@@ -38,6 +38,5 @@
     <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
     <Folder Include="$(MSBuildThisFileDirectory)Controllers\" />
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Services\" />
   </ItemGroup>
 </Project>

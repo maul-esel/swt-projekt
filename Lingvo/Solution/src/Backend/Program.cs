@@ -13,11 +13,13 @@ using LinqToDB.DataProvider.MySql;
 
 namespace Lingvo.Backend
 {
-	using Common;
+	using Common.Services;
 
     public class Program
     {
 		static public IConfigurationRoot Configuration { get; set; }
+
+		static public DatabaseService Database { get; private set; }
 
         public static void Main(string[] args)
         {
@@ -30,7 +32,9 @@ namespace Lingvo.Backend
 			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 			if (string.IsNullOrEmpty(password))
 				password = "password"; // dummy default value for development
-			Database.ConnectionString = $"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;";
+			Database = DatabaseService.Connect<MySqlDataProvider>(
+				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
+			);
 
 			var host = new WebHostBuilder()
                 .UseKestrel()

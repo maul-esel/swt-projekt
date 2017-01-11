@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lingvo.Backend.Controllers
 {
-	using Common;
+	using Common.Services;
 
 	[Route("api/app")]
 	public class AppController : Controller
     {
+		private DatabaseService Database => Program.Database;
+
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks()
 		{
