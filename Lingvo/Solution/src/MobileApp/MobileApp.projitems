@@ -13,6 +13,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoFloatingActionButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoRoundImageButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\AudioPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPagesPage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -35,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoAudioPageTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadViewCellTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoViewCellTemplate.cs" />
   </ItemGroup>

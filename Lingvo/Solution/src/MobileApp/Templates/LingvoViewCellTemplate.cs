@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp.Templates
                     FontAttributes = FontAttributes.Bold,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
-                titleLabel.SetBinding(Label.TextProperty, textBindingPath);
+                titleLabel.SetBinding(Label.TextProperty, textBindingPath, BindingMode.Default, null, textFormat);
 
                 Label subtitleLabel = new Label()
                 {
@@ -26,7 +26,7 @@ namespace Lingvo.MobileApp.Templates
                 };
 
                 if (subtextBindingPath != null)
-                    subtitleLabel.SetBinding(Label.TextProperty, subtextBindingPath);
+                    subtitleLabel.SetBinding(Label.TextProperty, subtextBindingPath, BindingMode.Default, null, subtextFormat);
 
                 BoxView progressView = new BoxView()
                 {

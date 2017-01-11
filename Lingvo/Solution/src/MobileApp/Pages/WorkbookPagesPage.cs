@@ -7,8 +7,11 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class WorkbookPagesPage : ContentPage
     {
+        private Workbook workbook;
         public WorkbookPagesPage(Workbook workbook)
         {
+            this.workbook = workbook;
+
             Title = workbook.Title;
             Icon = (FileImageSource)ImageSource.FromFile("Icon.png");
 
@@ -52,7 +55,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await DisplayAlert("Selected", ""+((IPage)e.SelectedItem).Number, "OK");
+            await App.Current.MainPage.Navigation.PushAsync(new AudioPage(workbook, (IPage)e.SelectedItem));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

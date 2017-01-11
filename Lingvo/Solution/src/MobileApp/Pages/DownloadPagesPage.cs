@@ -35,23 +35,33 @@ namespace Lingvo.MobileApp.Pages
             listView.ItemTapped += Handle_ItemEvent;
             listView.ItemSelected += ListView_ItemSelected;
 
-            Content = new StackLayout
+            Label errorLabel = new Label
             {
-                Children = {
-                listView,
-                new Label
-                {
-                    Text = ((Span)App.Current.Resources["label_sync_error"]).Text,
-                    TextColor = (Color)App.Current.Resources["primaryColor"],
-                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                    HorizontalOptions=LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
-                    LineBreakMode = LineBreakMode.WordWrap,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    IsVisible = workbook.Pages.Count == 0
-                }
-                }
+                Text = ((Span)App.Current.Resources["label_sync_error"]).Text,
+                TextColor = (Color)App.Current.Resources["primaryColor"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.WordWrap,
+                HorizontalTextAlignment = TextAlignment.Center,
+                IsVisible = workbook.Pages.Count == 0
             };
+
+            RelativeLayout contentLayout = new RelativeLayout();
+
+            contentLayout.Children.Add(new StackLayout() { Children = { errorLabel } },
+                            Constraint.RelativeToParent((p) => { return p.X; }),
+                            Constraint.RelativeToParent((p) => { return p.Y; }),
+                            Constraint.RelativeToParent((p) => { return p.Width; }),
+                            Constraint.RelativeToParent((p) => { return p.Height; }));
+
+            contentLayout.Children.Add(listView, 
+                           Constraint.RelativeToParent((p) => { return p.X; }),
+                           Constraint.RelativeToParent((p) => { return p.Y; }),
+                           Constraint.RelativeToParent((p) => { return p.Width; }),
+                           Constraint.RelativeToParent((p) => { return p.Height; }));
+
+            Content = contentLayout;
         }
 
         private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)

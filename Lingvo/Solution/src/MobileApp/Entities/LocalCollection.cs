@@ -59,7 +59,9 @@ namespace MobileApp.Entities
 
 		private LocalCollection()
 		{
-            Workbooks.Add(new Workbook() { Title = "Thannhauser", Subtitle = "Lloret Ipsum" });
+            Workbooks.Add(new Workbook() { Title = "Thannhauser", Subtitle = "Lloret Ipsum",
+                Pages = { new Page() { Number = 1 }, new Page() { Number = 2 } }
+            });
         }
 
 		/// <summary>
