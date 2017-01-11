@@ -106,7 +106,7 @@ namespace MobileApp.Proxies
 
 			if (original == null)
 			{
-				var service = new APIService();
+				var service = APIService.Instance;
 				var page = await service.FetchPage(this);
 				original = page;
 			}

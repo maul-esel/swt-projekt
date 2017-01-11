@@ -23,12 +23,10 @@ namespace Lingvo.Backend.Controllers
 		public IActionResult GetWorkbook(int workbookId)
 		{
 
-			return Json(from workbook in Database.Workbooks
+			return Json((from workbook in Database.Workbooks
 						where workbook.IsPublished 
 			            && workbook.Id == workbookId
-			            select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages/*, pages =  from p in Database.Pages
-																																		  where p.workbookId == workbookId
-																																		  select new { p.workbookId, p.Number, p.Description }*/});
+			             select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages}).Single());
 		}
 
 		[Route("workbooks/{workbookId}/pages")]
@@ -45,6 +43,10 @@ namespace Lingvo.Backend.Controllers
 			var page = Database.Pages.Find(workbookId, pageNumber);
 			if (page == null)
 				return NotFound();
+			
+			Response.Headers["X-Audio-Length"] = page.TeacherTrack.Length.ToString();
+			Response.Headers["X-Recording-Id"] = page.TeacherTrack.Id.ToString();
+			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString();
 
 			// TODO: page.LocalPath might be relative
 			return new FileContentResult(System.IO.File.ReadAllBytes(page.TeacherTrack.LocalPath), "audio/mpeg3")

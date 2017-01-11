@@ -18,22 +18,31 @@ namespace Lingvo.MobileApp
 	{
 		private const string URL = "http://localhost:5000/api/app/";
 
-		public APIService()
+		private static APIService instance;
+
+		public static APIService Instance => instance ?? (instance = new APIService());
+
+		private APIService()
 		{
 		}
 
-		private async Task<T> FetchFromURL<T>(string url, Func<Stream, T> convert)
+		private async Task<T> FetchFromURL<T>(string url, Func<Stream, WebResponse, T> convert)
 		{
 			using (var response = await WebRequest.Create(url).GetResponseAsync())
+			{
 				using (var dataStream = response.GetResponseStream())
-					return convert(dataStream);
+				{
+					return convert(dataStream, response);
+				}
+			}
 		}
 
 		private async Task<string> FetchTextFromURL(string url)
 		{
-			return await await FetchFromURL(url, stream =>
+			return await await FetchFromURL(url, (stream, response) =>
 			{
-				using (var reader = new StreamReader(stream))
+				/*using (*/
+				var reader = new StreamReader(stream);//)
 					return reader.ReadToEndAsync();
 			});
 		}
@@ -76,8 +85,8 @@ namespace Lingvo.MobileApp
 		public async Task<Page> FetchPage(PageProxy proxy)
 		{
 			var recording = await FetchTeacherTrack(proxy.Workbook, proxy, 
-			                                  Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + 
-			                                  "/lingvo/" + proxy.Workbook.Id + "/" + proxy.Number + ".mp3");
+			                                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+			                                                     "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3"));
 			Page page = new Page();
 			page.Description = proxy.Description;
 			page.Number = proxy.Number;
@@ -94,6 +103,11 @@ namespace Lingvo.MobileApp
 		{
 			var responseFromServer = await FetchTextFromURL($"{URL}workbooks/{workbook.Id}/pages");
 			workbook.Pages = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer).Cast<IPage>().ToList();
+
+			foreach (var page in workbook.Pages)
+			{
+				page.Workbook = workbook;
+			}
 		}
 
 		/// <summary>
@@ -105,14 +119,19 @@ namespace Lingvo.MobileApp
 		/// <param name="localPath">Local path.</param>
 		public async Task<Recording> FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
 		{
-			return await FetchFromURL($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", dataStream =>
+			return await FetchFromURL($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", (dataStream, response) =>
 			{
 				using (var fileStream = File.Create(localPath))
 				{
 					//dataStream.Seek(0, SeekOrigin.Begin);
 					dataStream.CopyTo(fileStream);
+
 				}
-				return new Recording(new TimeSpan(), localPath); // TODO: read length from file
+
+				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
+				                     TimeSpan.Parse(response.Headers["X-Audio-Length"]), 
+				                     localPath,
+				                     DateTime.Parse(response.Headers["X-Recording-Creation-Time"]));
 			});
 		}
 	}

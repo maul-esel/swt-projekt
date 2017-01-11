@@ -20,7 +20,7 @@ namespace MobileApp.Proxies
 
 		private CloudLibraryProxy()
 		{
-			service = new APIService();
+			service = APIService.Instance;
 		}
 
 		/// <summary>

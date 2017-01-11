@@ -17,10 +17,12 @@ namespace Lingvo.Common.Entities
 		private Recording() { } // used by Linq2DB
 
 
-		public Recording(TimeSpan length, string localPath)
+		public Recording(int id, TimeSpan length, string localPath, DateTime creationTime)
 		{
+			Id = id;
 			Length = length;
 			LocalPath = localPath;
+			CreationTime = creationTime;
 		}
 
 		[Column, PrimaryKey]
