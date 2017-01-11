@@ -1,6 +1,6 @@
 -- SQLite database on client --
 
-CREATE TABLE Workbooks (
+CREATE TABLE IF NOT EXISTS Workbooks (
   id INT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
@@ -9,14 +9,14 @@ CREATE TABLE Workbooks (
   published BOOLEAN NOT NULL
 );
 
-CREATE TABLE Recordings (
+CREATE TABLE IF NOT EXISTS Recordings (
   id INT PRIMARY KEY,
   creationTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   length INT NOT NULL,
   localPath TEXT NOT NULL
-)
+);
 
-CREATE TABLE Pages (
+CREATE TABLE IF NOT EXISTS Pages (
   workbookID INT REFERENCES Workbooks,
   number INT,
   description TEXT NOT NULL,
@@ -27,13 +27,13 @@ CREATE TABLE Pages (
 );
 
 -- only on client --
-CREATE TABLE TeacherMemos (
+CREATE TABLE IF NOT EXISTS TeacherMemos (
   id INT PRIMARY KEY,
   name TEXT NOT NULL,
   recording INT NOT NULL REFERENCES Recordings
 );
 
-CREATE TRIGGER [UpdateLastModified]
+CREATE TRIGGER IF NOT EXISTS [UpdateLastModified]
   AFTER UPDATE
   ON Workbooks
   FOR EACH ROW
