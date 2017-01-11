@@ -1,16 +1,25 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Lingvo.Backend.Controllers
 {
 	using Common.Services;
 
+	/// <summary>
+	/// Controller for App accessing the server
+	/// </summary>
 	[Route("api/app")]
 	public class AppController : Controller
     {
 		private DatabaseService Database => Program.Database;
 
+		/// <summary>
+		/// Gets all workbooks without pages.
+		/// </summary>
+		/// <returns>The workbooks.</returns>
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks()
 		{
@@ -19,6 +28,11 @@ namespace Lingvo.Backend.Controllers
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
 
+		/// <summary>
+		/// Gets a workbook without pages.
+		/// </summary>
+		/// <returns>The workbook.</returns>
+		/// <param name="workbookId">Workbook identifier.</param>
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook(int workbookId)
 		{
@@ -29,6 +43,11 @@ namespace Lingvo.Backend.Controllers
 			             select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages}).Single());
 		}
 
+		/// <summary>
+		/// Gets the pages as proxies for the workbook with the given id.
+		/// </summary>
+		/// <returns>The pages.</returns>
+		/// <param name="workbookId">Workbook identifier.</param>
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages(int workbookId)
 		{
@@ -37,6 +56,12 @@ namespace Lingvo.Backend.Controllers
 						select new { p.workbookId, p.Number, p.Description });
 		}
 
+		/// <summary>
+		/// Gets the teacher track from the workbook with the page number.
+		/// </summary>
+		/// <returns>The teacher track.</returns>
+		/// <param name="workbookId">Workbook identifier.</param>
+		/// <param name="pageNumber">Page number.</param>
 		[Route("workbooks/{workbookId}/pages/{pageNumber}")]
 		public IActionResult GetTeacherTrack(int workbookId, int pageNumber)
 		{
@@ -48,11 +73,23 @@ namespace Lingvo.Backend.Controllers
 			Response.Headers["X-Recording-Id"] = page.TeacherTrack.Id.ToString();
 			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString();
 
-			// TODO: page.LocalPath might be relative
-			return new FileContentResult(System.IO.File.ReadAllBytes(page.TeacherTrack.LocalPath), "audio/mpeg3")
+			//relative and absolute paths supported
+			string path = null;
+			if (Path.IsPathRooted(page.TeacherTrack.LocalPath))
+			{
+				path = page.TeacherTrack.LocalPath;
+			}
+			else
+			{
+				path = Path.Combine(Directory.GetCurrentDirectory(), page.TeacherTrack.LocalPath);
+			}
+
+
+			return new FileContentResult(System.IO.File.ReadAllBytes(path), "audio/mpeg3")
 			{
 				FileDownloadName = $"w{workbookId}s{pageNumber}.mp3"
 			};
 		}
+
     }
 }
