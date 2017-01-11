@@ -2,14 +2,14 @@
 using Lingvo.Common.Entities;
 using System;
 
-namespace MobileApp.Controllers
+namespace Lingvo.MobileApp.Controllers
 {
     /// <summary>
     /// Controller for working on pages
     /// </summary>
     public class StudentPageController
 	{
-		private IPlayer player;
+		private IPlayer teacherTrackPlayer;
 		private IRecorder recorder;
 
 		private IPage selectedPage;
@@ -39,7 +39,7 @@ namespace MobileApp.Controllers
 		/// </summary>
 		public void PlayPage()
 		{
-			player.Play(selectedPage.TeacherTrack);
+			teacherTrackPlayer.Play(selectedPage.TeacherTrack);
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace MobileApp.Controllers
 		public void Pause()
 		{
 			recorder.Pause();
-			player.Pause();
+			teacherTrackPlayer.Pause();
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace MobileApp.Controllers
 		public void Continue()
 		{
 			recorder.Continue();
-			player.Continue();
+			teacherTrackPlayer.Continue();
 		}
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace MobileApp.Controllers
 		/// </summary>
 		public void Stop()
 		{
-			player.Stop();
+			teacherTrackPlayer.Stop();
 			Recording recording = recorder.Stop();
 			selectedPage.StudentTrack = recording;
 		}
@@ -85,7 +85,7 @@ namespace MobileApp.Controllers
 		public void SeekTo(TimeSpan seek)
 		{
 			recorder.SeekTo(seek);
-			player.SeekTo(seek);
+			teacherTrackPlayer.SeekTo(seek);
 		}
 	}
 }
