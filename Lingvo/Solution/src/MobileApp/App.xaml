@@ -7,7 +7,7 @@
             <Color x:Key="primaryColor">#4890e2</Color>
             <Color x:Key="secondaryColor">#3db664</Color>
             <Color x:Key="primaryDarkColor">#32649E</Color>
-            <Span x:Key="page_title_localCollection">Meine Arbeitshefte</Span>
+            <Span x:Key="page_title_localCollection">Arbeitshefte</Span>
             <Span x:Key="page_title_download">Download</Span>
             <Span x:Key="label_no_local_workbooks">Noch keine Arbeitshefte heruntergeladen!</Span>
             <Span x:Key="page_title_teacherMemo">Lehrerspuren</Span>
@@ -15,6 +15,7 @@
             <Span x:Key="label_no_teacher_memos">Noch keine Lehrerspuren aufgenommen!</Span>
             <Span x:Key="page_title_pagesDownload">Seiten Download</Span>
             <Span x:Key="label_no_local_pages">Für dieses Arbeitsheft sind lokal keine Seiten verfügbar!</Span>
+            <Span x:Key="text_seite">Seite</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

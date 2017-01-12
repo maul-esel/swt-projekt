@@ -39,7 +39,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
         public void updateView(object sender, PropertyChangedEventArgs e)
         {
-            if(Control == null)
+            if (Control == null)
             {
                 return;
             }
@@ -101,6 +101,10 @@ namespace Lingvo.MobileApp.Droid.Renderers
                             customPaddingRight = textHeight;
                             button.SetPadding(button.PaddingLeft, button.PaddingTop, button.PaddingRight + textHeight, button.PaddingEnd + textHeight);
                             button.TextAlignment = Android.Views.TextAlignment.Gravity;
+                            break;
+                        case Xamarin.Forms.TextAlignment.Center:
+                            button.Gravity = Android.Views.GravityFlags.Center;
+                            button.TextAlignment = Android.Views.TextAlignment.Center;
                             break;
                     }
 

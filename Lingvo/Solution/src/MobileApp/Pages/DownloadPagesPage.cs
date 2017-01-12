@@ -23,10 +23,12 @@ namespace Lingvo.MobileApp.Pages
                 await page?.Resolve();
             });
 
+            string seite = (string)App.Current.Resources["text_seite"];
+
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = workbook.Pages,
-                ItemTemplate = new LingvoDownloadViewCellTemplate("Number", "Description", "Number", downloadAction, "Seite {0}", null),
+                ItemTemplate = new LingvoDownloadViewCellTemplate("Number", "Description", "Number", downloadAction, seite + " {0}", null),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
                 IsVisible = workbook.Pages.Count > 0

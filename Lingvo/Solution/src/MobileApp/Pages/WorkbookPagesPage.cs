@@ -13,12 +13,13 @@ namespace Lingvo.MobileApp.Pages
             this.workbook = workbook;
 
             Title = workbook.Title;
-            Icon = (FileImageSource)ImageSource.FromFile("Icon.png");
+            
+            string seite = (string)App.Current.Resources["text_seite"];
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = workbook.Pages,
-                ItemTemplate = new LingvoViewCellTemplate("Number", "Description", "Seite {0}", null),
+                ItemTemplate = new LingvoViewCellTemplate("Number", "Description", seite + " {0}", null),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
                 IsVisible = workbook.Pages.Count > 0
@@ -55,7 +56,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await App.Current.MainPage.Navigation.PushAsync(new AudioPage(workbook, (IPage)e.SelectedItem));
+            await App.Current.MainPage.Navigation.PushAsync(new AudioCarouselPage(workbook, (IPage)e.SelectedItem));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;
