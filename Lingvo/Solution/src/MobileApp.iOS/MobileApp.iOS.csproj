@@ -144,6 +144,22 @@
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\ic_action_add.png" />
+    <BundleResource Include="Resources\ic_action_book.png" />
+    <BundleResource Include="Resources\ic_action_cancel.png" />
+    <BundleResource Include="Resources\ic_action_download.png" />
+    <BundleResource Include="Resources\ic_action_mic.png" />
+    <BundleResource Include="Resources\ic_action_save.png" />
+    <BundleResource Include="Resources\ic_action_tick.png" />
+    <BundleResource Include="Resources\ic_fiber_manual_record.png" />
+    <BundleResource Include="Resources\ic_forward.png" />
+    <BundleResource Include="Resources\ic_launcher.png" />
+    <BundleResource Include="Resources\ic_pause.png" />
+    <BundleResource Include="Resources\ic_play_arrow.png" />
+    <BundleResource Include="Resources\ic_rewind.png" />
+    <BundleResource Include="Resources\ic_stop.png" />
+    <BundleResource Include="Resources\ic_volume_off.png" />
+    <BundleResource Include="Resources\ic_volume_up.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
