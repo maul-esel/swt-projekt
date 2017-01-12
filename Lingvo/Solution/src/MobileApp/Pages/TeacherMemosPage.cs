@@ -89,11 +89,11 @@ namespace Lingvo.MobileApp.Pages
         {
             if (!isActive)
             {
-                App.Current.MainPage.ToolbarItems.Remove(item);
+                ToolbarItems.Remove(item);
             }
             else
             {
-                App.Current.MainPage.ToolbarItems.Add(item);
+                ToolbarItems.Add(item);
             }
         }
 
