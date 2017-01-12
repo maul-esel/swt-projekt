@@ -39,6 +39,9 @@
 	</PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Adapters\" />
   </ItemGroup>
