@@ -69,7 +69,8 @@ echo Handling ASP.NET Core Web Application deployment.
 :: Note: use "dotnet restore" for nuget package restoration (dominik)
 :: 1. Restore nuget packages
 :: call :ExecuteCmd nuget.exe restore -packagesavemode nuspec
-call :ExecuteCmd dotnet restore "Lingvo\Solution\"
+call :ExecuteCmd dotnet restore "Lingvo\Solution\src\Common\Common.csproj"
+call :ExecuteCmd dotnet restore "Lingvo\Solution\src\Backend\Backend.csproj"
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build and publish
