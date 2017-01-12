@@ -12,7 +12,7 @@ namespace Lingvo.Common.Services
 
     public abstract class AbstractDatabaseService
     {
-		private readonly DataConnection connection;
+		protected readonly DataConnection connection;
 
 		static AbstractDatabaseService() {
 			LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
@@ -93,7 +93,7 @@ namespace Lingvo.Common.Services
 				.Property(w => w.TotalPages).IsNullable(false)
 
 				.Property(w => w.Pages)
-					.HasAttribute(new AssociationAttribute() { ThisKey = nameof(Workbook.Id), OtherKey = nameof(Page.workbookId), ConcreteType = typeof(List<Page>) });
+					.HasAttribute(new AssociationAttribute() { ThisKey = nameof(Workbook.Id), OtherKey = nameof(Page.workbookId) });
 		}
 
 		public ITable<Recording> Recordings => connection.GetTable<Recording>();
@@ -111,25 +111,6 @@ namespace Lingvo.Common.Services
 			connection.Execute(sql);
 		}
 
-		public void Insert(Recording recording)
-		{
-			connection.Insert(recording);
-		}
-
-		public void Save(Recording recording)
-		{
-			connection.InsertOrReplace(recording);
-		}
-
-		public void Save(Page page)
-		{
-			connection.InsertOrReplace(page);
-		}
-
-		public void Save(Workbook workbook)
-		{
-			connection.InsertOrReplace(workbook);
-		}
 	}
 
 	public static class DatabaseExtensions

@@ -26,7 +26,7 @@ namespace Lingvo.Backend
 				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
 			);
 
-			Database.Insert(new Common.Entities.Recording(-1, TimeSpan.FromMilliseconds(12), "a.b"));
+			Database.Save(new Common.Entities.Recording(-1, TimeSpan.FromMilliseconds(12), "a.b", DateTime.Now));
 			foreach (var rec in Database.Recordings)
 				Console.WriteLine(rec);
 
