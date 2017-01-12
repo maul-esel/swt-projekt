@@ -42,6 +42,22 @@ namespace Lingvo.MobileApp.iOS
 				drawStroke(angle);
 			}
 		}
+		public float LineWidth
+		{
+			get
+			{
+				return lineWidth;
+			}
+			set
+			{
+				lineWidth = value;
+				backgroundLayer.RemoveFromSuperLayer();
+				strokeLayer.RemoveFromSuperLayer();
+				backgroundLayer = drawCircle(unfinishedCircleColor, -100);
+				strokeLayer = drawCircle(unfinishedCircleColor, -100);
+				drawStroke(angle);
+			}
+		}
 		public UIColor ProgressColor
 		{
 			get
@@ -52,7 +68,9 @@ namespace Lingvo.MobileApp.iOS
 			{
 				progressColor = value;
 				strokeLayer.StrokeColor = value.CGColor;
-				strokeLayer.SetNeedsDisplay();
+				//strokeLayer.setNeedsDisplay()
+				drawStroke(angle);
+
 			}
 		}
 		public bool Muted
@@ -68,6 +86,10 @@ namespace Lingvo.MobileApp.iOS
 				{
 					progress = 0;
 					drawStroke(0);
+				}
+				else
+				{
+					drawStroke(angle);
 				}
 			}
 		}
@@ -145,7 +167,7 @@ namespace Lingvo.MobileApp.iOS
 			var circleFragment = new UIBezierPath();
 
 			circleFragment.AddArc(Center, radius, startAngle, end, true);
-			strokeLayer.StrokeColor = UIColor.Yellow.CGColor;
+			strokeLayer.StrokeColor = progressColor.CGColor;
 			strokeLayer.Path = circleFragment.CGPath;
 			strokeLayer.SetNeedsDisplay();
 
@@ -161,8 +183,12 @@ namespace Lingvo.MobileApp.iOS
 		{
 			backgroundLayer?.RemoveFromSuperLayer();
 			strokeLayer.RemoveFromSuperLayer();
+
 			backgroundLayer = drawCircle(unfinishedCircleColor, -100);
 			strokeLayer = drawCircle(unfinishedCircleColor, -100);
+			backgroundLayer.SetNeedsDisplay();
+			strokeLayer.SetNeedsDisplay();
+			drawStroke(angle);
 		}
 
 		protected CAShapeLayer drawCircle(UIColor fillColor, int zPosition)
@@ -179,7 +205,8 @@ namespace Lingvo.MobileApp.iOS
 				LineWidth = (nfloat)lineWidth,
 				FillColor = UIColor.Clear.CGColor,
 				StrokeColor = fillColor.CGColor,
-				ZPosition = zPosition
+				ZPosition = zPosition,
+				Frame = Bounds
 			};
 			var path = new UIBezierPath();
 			path.AddArc(Center, radius, adjustedStartAngle, adjustedEndAngle, true);
@@ -194,6 +221,7 @@ namespace Lingvo.MobileApp.iOS
 		public void animate()
 		{
 			Size = 100;
+			LineWidth = 20;
 			Progress = 20;
 			/*ProgressColor = UIColor.Green;
 			MaxProgress = 200;*/
@@ -224,12 +252,21 @@ namespace Lingvo.MobileApp.iOS
 			{
 				backgroundLayer.Frame = Bounds;
 				strokeLayer.Frame = Bounds;
+				foreach (var l in layer.Sublayers)
+				{
+					l.Frame = Bounds;
+				}
 			}
 
 		}
 
 
+
 	}
+
+
+
+}
 
 	/*public class CircleProgressBar : UIView
 	{
@@ -561,5 +598,6 @@ namespace Lingvo.MobileApp.iOS
 			}
 
 		}
+	}
 	}*/
-}
+

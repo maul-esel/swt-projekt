@@ -9,221 +9,19 @@ using ObjCRuntime;
 
 namespace Lingvo.MobileApp.iOS
 {
-	/*public class AudioProgressView : UIView
+	public class AudioProgressView : UIView
 	{
-		CircleProgressBar studentProgressBar;
-		CircleProgressBar teacherProgressBar;
+		public CircleProgressBar teacherProgressBar;
+		public CircleProgressBar studentProgressBar;
+
 		private float lineWidth = 10.0f;
-		private float margin = 0.0f;
 		private bool studentMuted = false;
 		private int progress = 0;
+		private int maxProgress = 100;
 
 
 		public delegate void StudentTrackMutedEventHandler(bool muted);
-
 		public event StudentTrackMutedEventHandler StudentTrackMuted;
-
-
-	
-
-		public int Progress
-		{
-			get
-			{
-				return progress;
-			}
-			set
-			{
-				if (value > 0)
-				{
-					progress = value;
-					runOnMainThread(new Action(() =>
-					{
-						var correctedProgressValue = value % MaxProgress;
-						teacherProgressBar.Progress = correctedProgressValue;
-						if (!studentMuted)
-						{
-							studentProgressBar.Progress = correctedProgressValue;
-						}
-
-						string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
-						string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
-
-						timeLabel.Text = minutes + ":" + seconds;
-
-					}));
-
-				}
-			}
-		}
-
-		public override CGRect Frame
-		{
-			get
-			{
-				return base.Frame;
-			}
-			set
-			{
-				base.Frame = value;
-
-				runOnMainThread(new Action(() =>
-				{
-					teacherProgressBar?.RemoveFromSuperview();
-					studentProgressBar?.RemoveFromSuperview();
-
-
-					teacherProgressBar?.clear();
-					studentProgressBar?.clear();
-
-
-
-					teacherProgressBar = null;
-					studentProgressBar = null;
-					setupViews();
-
-				}));
-
-
-			}
-		}
-		public override CGRect Bounds
-		{
-			get
-			{
-				return base.Bounds;
-			}
-			set
-			{
-				base.Bounds = value;
-				runOnMainThread(new Action(() =>
-				{
-					teacherProgressBar?.RemoveFromSuperview();
-					studentProgressBar?.RemoveFromSuperview();
-					teacherProgressBar?.clear();
-					studentProgressBar?.clear();
-					setupViews();
-				}));
-			}
-		}
-		public int MaxProgress
-		{
-			get { return (int)studentProgressBar.MaxProgress; }
-			set
-			{
-				studentProgressBar.MaxProgress = value;
-				teacherProgressBar.MaxProgress = value;
-			}
-		}
-		public float Margin
-		{
-			get
-			{
-				return margin;
-			}
-			set
-			{
-				if (value >= 0)
-				{
-					margin = value;
-					studentProgressBar.Margin = value;
-					teacherProgressBar.Margin = value;
-				}
-			}
-		}
-		public float LineWidth
-		{
-			get
-			{
-				return lineWidth;
-			}
-			set
-			{
-				lineWidth = value;
-
-
-				runOnMainThread(new Action(() =>
-				{
-					teacherProgressBar.LineWidth = value;
-					studentProgressBar.LineWidth = value;
-
-				}));
-			}
-		}
-
-		public UIColor InnerProgressColor
-		{
-			get { return studentProgressBar?.ProgressColor; }
-			set
-			{
-				studentProgressBar.ProgressColor = value;
-			}
-		}
-
-		public UIColor OuterProgressColor
-		{
-			get { return teacherProgressBar?.ProgressColor; }
-			set
-			{
-				teacherProgressBar.ProgressColor = value;
-			}
-		}
-		//we need this because of the interface definition
-		public int Size
-		{
-			get
-			{
-				return (int)Frame.Width;
-			}
-			set
-			{
-				Frame = new CGRect(Frame.X, Frame.Y, value, value);
-
-			}
-		}
-
-		public bool InnerProgressEnabled
-		{
-			get { return !studentMuted; }
-			set
-			{
-				studentMuted = !value;
-				if (studentMuted)
-				{
-					/*studentProgressBar.removeStroke();
-					studentProgressBar
-					studentProgressBar.Muted = studentMuted;
-				}
-			}
-		}
-
-		public bool InnerMuteButtonVisible
-		{
-			get { return muteBtn.Hidden; }
-			set
-			{
-				runOnMainThread(new Action(() => muteBtn.Hidden = value));
-
-			}
-		}
-		float teacherRadius
-		{
-			get
-			{
-				var outerWidthRadius = Frame.Width / 2 - lineWidth / 2 - 2 * margin;
-				var outerHeightRadius = Frame.Height / 2 - lineWidth / 2 - 2 * margin;
-
-				return (float)Math.Min(outerWidthRadius, outerHeightRadius);
-			}
-		}
-		float studentRadius
-		{
-			get
-			{
-				return teacherRadius - lineWidth;
-
-			}
-		}
 
 		UIButton muteBtn = new Func<UIButton>(() =>
 		{
@@ -238,51 +36,23 @@ namespace Lingvo.MobileApp.iOS
 			Font = UIFont.SystemFontOfSize(28)
 		};
 
-
-
 		public AudioProgressView(CGRect frame) : base(frame)
 		{
 			setupViews();
 		}
-		public override void AwakeFromNib()
-		{
-			setupViews();
-			base.AwakeFromNib();
-		}
 
-		private void setupViews()
+
+		public void setupViews()
 		{
-			var teacherFrame = Frame;
-			teacherProgressBar = new CircleProgressBar(new CGRect());
+			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			teacherProgressBar.LineWidth = LineWidth;
-			teacherProgressBar.Progress = progress;
 			AddSubview(teacherProgressBar);
 
-
-
-
-			var teacherFrameLineWidth = teacherProgressBar.LineWidth;
-			var studentFrameInset = teacherProgressBar.LineWidth / 2 - margin;
-			var studentFrame = new CGRect(studentFrameInset, studentFrameInset, teacherFrame.Width - 2 * teacherFrameLineWidth, teacherFrame.Height - 2 * teacherFrameLineWidth);
-
-
-			studentProgressBar = new CircleProgressBar(new CGRect());
-			studentProgressBar.LineWidth = LineWidth;
-			studentProgressBar.Progress = progress;
-			studentProgressBar.NestingLevel = 1; //this calculates the margin so that this bar is displayed as the inner circle
+			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
+			studentProgressBar.NestingLevel = 1;
+			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
-
-
-
-			//teacherProgressBar.BackgroundColor = UIColor.Yellow;
-			//studentProgressBar.BackgroundColor = new UIColor(0, 0, 1, (nfloat)0.2);
-			//teacherProgressBar.BackgroundColor = new UIColor(0, (nfloat)1.0, (nfloat)0.0, (nfloat)1.0);
-			//studentProgressBar.ProgressColor = UIColor.Red;
-			//studentProgressBar.BackgroundColor = new UIColor(0, 0, (nfloat)1.0, (nfloat)1.0);
-			//studentProgressBar.UnfinishedCircleColor = UIColor.Green;
-
 
 			//Autolayout
 			var viewNames = NSDictionary.FromObjectsAndKeys(new NSObject[] {
@@ -294,8 +64,8 @@ namespace Lingvo.MobileApp.iOS
 			});
 			var emptyDict = new NSDictionary();
 
-			AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-0-[teacher_bar]-0-|", 0, emptyDict, viewNames));
-			AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-0-[teacher_bar]-0-|", 0, emptyDict, viewNames));
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[teacher_bar]|", 0, emptyDict, viewNames));
+			AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[teacher_bar]|", 0, emptyDict, viewNames));
 			AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[student_bar]|", 0, emptyDict, viewNames));
 			AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[student_bar]|", 0, emptyDict, viewNames));
 			studentProgressBar.CenterXAnchor.ConstraintEqualTo(teacherProgressBar.CenterXAnchor).Active = true;
@@ -320,18 +90,166 @@ namespace Lingvo.MobileApp.iOS
 
 			}, UIControlEvent.TouchUpInside);
 
-
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
-
 		}
 
+		public int Progress
+		{
+			get
+			{
+				return progress;
+			}
+			set
+			{
+
+				var modValue = value % maxProgress;
+				progress = modValue;
+				teacherProgressBar.Progress = modValue;
+
+				if (!studentMuted)
+				{
+					studentProgressBar.Progress = modValue;
+					studentProgressBar.strokeLayer.SetNeedsDisplay();
+					studentProgressBar.SetNeedsDisplay();
+
+				}
+
+
+
+				string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
+				string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
+
+				timeLabel.Text = minutes + ":" + seconds;
+
+
+
+
+			}
+		}
 		protected void runOnMainThread(Action action)
 		{
 			//updates on UI only work on the main thread
 			DispatchQueue.MainQueue.DispatchAsync(action);
 		}
 
-	}*/
+		public int MaxProgress
+		{
+			get
+			{
+				return maxProgress;
+			}
+			set
+			{
+				studentProgressBar.MaxProgress = value;
+				teacherProgressBar.MaxProgress = value;
+			}
+		}
+		public float LineWidth
+		{
+			get
+			{
+				return lineWidth;
+			}
+			set
+			{
+				lineWidth = value;
+
+
+				teacherProgressBar.LineWidth = value;
+				studentProgressBar.LineWidth = value;
+			}
+		}
+		public bool InnerProgressEnabled
+		{
+			get
+			{
+				return !studentMuted;
+			}
+			set
+			{
+				studentMuted = !value;
+				studentProgressBar.Muted = true;
+			}
+		}
+
+		public int Size
+		{
+			get
+			{
+				return (int)Frame.Width;
+			}
+			set
+			{
+				Frame = new CGRect(Frame.X, Frame.Y, value, value);
+				studentProgressBar.Size = value;
+				studentProgressBar.Size = value;
+			}
+		}
+
+		public UIColor InnerProgressColor
+		{
+			get
+			{
+				return studentProgressBar.ProgressColor;
+			}
+			set
+			{
+				studentProgressBar.ProgressColor = value;
+			}
+		}
+		public UIColor OuterProgressColor
+		{
+			get { return teacherProgressBar?.ProgressColor; }
+			set
+			{
+				teacherProgressBar.ProgressColor = value;
+			}
+		}
+		public void animate()
+		{
+			Size = 100;
+			Progress = 40;
+			Progress = 50;
+			InnerProgressColor = UIColor.Blue;
+			/*LineWidth = 20;
+			Progress = 20;*/
+			/*ProgressColor = UIColor.Green;
+			MaxProgress = 200;*/
+		}
+
+		public override void LayoutSublayersOfLayer(CALayer layer)
+		{
+			base.LayoutSublayersOfLayer(layer);
+			if (layer == Layer)
+			{
+
+				if (studentProgressBar != null)
+				{
+					studentProgressBar.Frame = Frame;
+					studentProgressBar.renderBackground();
+					studentProgressBar.SetNeedsDisplay();
+				}
+
+				if (teacherProgressBar != null)
+				{
+					teacherProgressBar.Frame = Frame;
+					teacherProgressBar.renderBackground();
+				}
+
+
+				//backgroundLayer.Frame = layer.Bounds;
+			}
+
+		}
+		public void render()
+		{
+			teacherProgressBar?.RemoveFromSuperview();
+			studentProgressBar?.RemoveFromSuperview();
+
+			setupViews();
+		}
+
+	}
 }

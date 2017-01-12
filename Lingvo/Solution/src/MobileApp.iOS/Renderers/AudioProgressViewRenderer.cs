@@ -9,10 +9,10 @@ using CoreFoundation;
 using UIKit;
 
 
-//[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.iOS.AudioProgressViewRenderer))]
+[assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.iOS.AudioProgressViewRenderer))]
 namespace Lingvo.MobileApp.iOS
 {
-	/*class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
+	class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
 	{
 		AudioProgressView progressView;
 
@@ -63,8 +63,7 @@ namespace Lingvo.MobileApp.iOS
 				progressView.MaxProgress = element.MaxProgress;
 			if (progressView.Progress != element.Progress)
 				progressView.Progress = element.Progress;
-			if (progressView.InnerMuteButtonVisible != element.InnerProgressEnabled)
-				progressView.InnerMuteButtonVisible = element.InnerProgressEnabled;
+			
 
 			Console.WriteLine("current frame = " + Frame);
 		}
@@ -77,6 +76,8 @@ namespace Lingvo.MobileApp.iOS
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
 				Console.WriteLine("frame to be set = " + frame);
 				progressView.Frame = frame;
+				progressView.render();
+
 			}
 			else
 			{
@@ -91,8 +92,13 @@ namespace Lingvo.MobileApp.iOS
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
+			Console.WriteLine(progressView.teacherProgressBar.strokeLayer.Frame);
+
 			progressView.Frame = layer.Bounds;
-			Console.WriteLine("LayoutSublayersOfLayer measures = " + layer.Frame);
+			progressView.teacherProgressBar.Frame = layer.Bounds;
+			progressView.studentProgressBar.Frame = layer.Bounds;
+			progressView.teacherProgressBar.renderBackground();
+			progressView.studentProgressBar.renderBackground();
 
 		}
 		public override void LayoutSubviews()
@@ -100,5 +106,5 @@ namespace Lingvo.MobileApp.iOS
 			base.LayoutSubviews();
 
 		}
-	}*/
+	}
 }
