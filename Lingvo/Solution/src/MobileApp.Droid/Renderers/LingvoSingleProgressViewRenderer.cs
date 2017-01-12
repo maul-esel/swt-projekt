@@ -22,7 +22,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
                 labelType = e.NewElement.LabelType;
             }
 
-            if (e.OldElement != null && e.NewElement == null)
+            if (e.OldElement != null)
             {
                 e.OldElement.PropertyChanged -= updateView;
             }
@@ -34,6 +34,10 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
         private void updateView(object sender, EventArgs e)
         {
+			if (Control == null)
+			{
+				return;
+			}
             LingvoSingleProgressView element = (LingvoSingleProgressView)sender;
          
             if (progressView.Size != element.Size)

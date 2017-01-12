@@ -26,7 +26,7 @@ namespace Lingvo.MobileApp.iOS
 				SetNativeControl(progressView);
 			}
 
-			if (e.OldElement != null && e.NewElement == null)
+			if (e.OldElement != null)
 			{
 				e.OldElement.PropertyChanged -= updateView;
 				progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
@@ -43,12 +43,12 @@ namespace Lingvo.MobileApp.iOS
 
 		private void updateView(object sender, EventArgs e)
 		{
-			LingvoAudioProgressView element = (LingvoAudioProgressView)sender;
-			if (element == null)
+			if (Control == null)
 			{
 				return;
 			}
-
+			LingvoAudioProgressView element = (LingvoAudioProgressView)sender;
+		
 			Console.WriteLine("element x = " + element.X + "y = " + element.Y + "element.width = " + element.Width + "element.height = " + element.Height);
 
 			if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
