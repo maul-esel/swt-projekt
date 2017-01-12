@@ -19,6 +19,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				text = value;
+				label.Text = value;
 			}
 		}
 	
