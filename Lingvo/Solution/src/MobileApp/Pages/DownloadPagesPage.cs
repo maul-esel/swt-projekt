@@ -23,7 +23,7 @@ namespace Lingvo.MobileApp.Pages
                 await page?.Resolve();
             });
 
-            string seite = (string)App.Current.Resources["text_seite"];
+            string seite = ((Span)App.Current.Resources["text_seite"]).Text;
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {

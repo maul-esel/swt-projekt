@@ -21,7 +21,7 @@ namespace Lingvo.MobileApp.Pages
         {
             Title = workbook.Title;
 
-            workbook.Pages.ForEach((p) => Children.Add(new AudioPage(workbook.Pages.Count) { Page = p, Recorder = this.Recorder, Player = this.Player }));
+            workbook.Pages.ForEach((p) => Children.Add(new AudioPage(p, workbook.Pages.Count) { Recorder = this.Recorder, Player = this.Player }));
 
             SelectedItem = selectedPage;
         }

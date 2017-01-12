@@ -1,6 +1,5 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Templates;
-using MobileApp.Entities;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -14,7 +13,7 @@ namespace Lingvo.MobileApp.Pages
 
             Title = workbook.Title;
             
-            string seite = (string)App.Current.Resources["text_seite"];
+            string seite = ((Span)App.Current.Resources["text_seite"]).Text;
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {

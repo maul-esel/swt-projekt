@@ -13,7 +13,7 @@ namespace Lingvo.MobileApp.Pages
 
         public IPage Page
         {
-            get; set;
+            get; internal set;
         }
 
         public IPlayer Player
@@ -46,8 +46,10 @@ namespace Lingvo.MobileApp.Pages
             get; set;
         }
 
-        public AudioPage(int numberOfWorkbookPages)
+        public AudioPage(IPage page, int numberOfWorkbookPages)
         {
+            Page = page;
+
             Grid buttonGrid = new Grid()
             {
                 ColumnDefinitions = new ColumnDefinitionCollection()
@@ -132,10 +134,9 @@ namespace Lingvo.MobileApp.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.Start,
-                BindingContext = this
+                BindingContext = this,
+                Text = ((Span)App.Current.Resources["text_seite"]).Text + " " + Page.Number + " / " + numberOfWorkbookPages
             };
-            string seite = (string)App.Current.Resources["text_seite"];
-            pageLabel.SetBinding(Label.TextProperty, "Page.Number", BindingMode.Default, null, seite + " {0} / " + numberOfWorkbookPages);
 
             Content = new StackLayout()
             {
