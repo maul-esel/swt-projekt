@@ -104,7 +104,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 
-				var modValue = value % maxProgress;
+				var modValue = Math.Min(maxProgress, value);
 				progress = modValue;
 				teacherProgressBar.Progress = modValue;
 

@@ -138,7 +138,7 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				progress = value % maxProgress;
+				progress = Math.Min(value, maxProgress);
 				drawStroke(angle);
 			}
 		}
@@ -146,6 +146,10 @@ namespace Lingvo.MobileApp.iOS
 		{
 			get
 			{
+				if (progress == maxProgress)
+				{
+					return (float)(2 * Math.PI);
+				}
 				var modValue = progress % maxProgress;
 				float percentage = (float)modValue / (float)maxProgress;
 				return (float)(percentage * (2 * Math.PI));
