@@ -34,7 +34,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView = new LingvoSingleProgressView()
             {
-                Size = Device.OnPlatform(iOS: 100, Android: 100, WinPhone: 200),
+                Size = Device.OnPlatform(iOS: 120, Android: 120, WinPhone: 240),
                 LabelType = LingvoSingleProgressView.LabelTypeValue.None
             };
 
@@ -70,7 +70,7 @@ namespace Lingvo.MobileApp.Templates
             string color = page.StudentTrack != null ? "secondaryColor" : "primaryColor";
             ProgressView.ProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 1;
-            ProgressView.Progress = page.StudentTrack != null ? 1 : 0;
+            ProgressView.Progress = 1;
             ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.None;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;

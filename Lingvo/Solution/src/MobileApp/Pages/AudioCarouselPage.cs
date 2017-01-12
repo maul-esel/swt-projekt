@@ -1,29 +1,27 @@
-﻿using Lingvo.Common.Adapters;
-using Lingvo.Common.Entities;
-
+﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Controllers;
+using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
     public class AudioCarouselPage : CarouselPage
     {
-        internal IRecorder Recorder
-        {
-            get; set;
-        }
-
-        internal IPlayer Player
-        {
-            get; set;
-        }
-
         public AudioCarouselPage(Workbook workbook, IPage selectedPage)
         {
             Title = workbook.Title;
 
-            workbook.Pages.ForEach((p) => Children.Add(new AudioPage(p, workbook.Pages.Count) { Recorder = this.Recorder, Player = this.Player }));
+            workbook.Pages.ForEach((p) => Children.Add(new AudioPage(p, workbook.Pages.Count)));
+            
+            SelectedItem = new List<ContentPage>(Children).Find((p) => ((AudioPage)p).Page.Equals(selectedPage));
 
-            SelectedItem = selectedPage;
+            CurrentPageChanged += AudioCarouselPage_CurrentPageChanged;
+        }
+
+        private void AudioCarouselPage_CurrentPageChanged(object sender, System.EventArgs e)
+        {
+            //StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
         }
     }
 }

@@ -40,10 +40,16 @@ namespace Lingvo.MobileApp
            declaringType: typeof(LingvoAudioProgressView),
            defaultValue: true);
 
+        public static readonly BindableProperty MuteEnabledProperty = BindableProperty.Create(
+           propertyName: "MuteEnabled",
+           returnType: typeof(bool),
+           declaringType: typeof(LingvoAudioProgressView),
+           defaultValue: true);
+
         public delegate void StudentTrackMutedEventHandler(bool muted);
-        
+
         public event StudentTrackMutedEventHandler StudentTrackMuted;
-        
+
         public bool InnerProgressEnabled
         {
             get { return (bool)GetValue(InnerProgressEnabledProperty); }
@@ -78,6 +84,12 @@ namespace Lingvo.MobileApp
         {
             get { return (int)GetValue(SizeProperty); }
             set { SetValue(SizeProperty, value); }
+        }
+
+        public bool MuteEnabled
+        {
+            get { return (bool)GetValue(MuteEnabledProperty); }
+            set { SetValue(MuteEnabledProperty, value); }
         }
 
         public void OnStudentTrackMuted(bool muted)

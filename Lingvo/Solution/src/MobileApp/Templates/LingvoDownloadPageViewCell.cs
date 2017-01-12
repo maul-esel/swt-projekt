@@ -1,75 +1,28 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
 using System;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
-    class LingvoDownloadPageViewCell : ViewCell
+    class LingvoDownloadPageViewCell : LingvoPageViewCell
     {
-        internal LingvoSingleProgressView ProgressView
+        public delegate void OnDownloadClickedHandler(IPage page);
+
+        public LingvoDownloadPageViewCell(OnDownloadClickedHandler handler) : base()
         {
-            get; private set;
-        }
-
-        private Label subtitleLabel;
-
-        public LingvoDownloadPageViewCell(Command action) : base()
-        {
-            Label titleLabel = new Label()
-            {
-                FontAttributes = FontAttributes.Bold,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-            };
-
-            string seite = ((Span)App.Current.Resources["text_seite"]).Text;
-            titleLabel.SetBinding(Label.TextProperty, "Number", BindingMode.Default, null, seite + " {0}");
-
-            subtitleLabel = new Label()
-            {
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                IsVisible = false
-            };
-                subtitleLabel.SetBinding(Label.TextProperty, "Description");
-
-            ProgressView = new LingvoSingleProgressView()
-            {
-                Size = Device.OnPlatform(iOS: 100, Android: 100, WinPhone: 200),
-                LabelType = LingvoSingleProgressView.LabelTypeValue.Percentual
-            };
-            
-            Button downloadButton = new Button()
+            LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
             {
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
-                Command = action,
                 HorizontalOptions = LayoutOptions.End,
+                Color = (Color)App.Current.Resources["primaryColor"],
                 VerticalOptions = LayoutOptions.Center
             };
 
-            downloadButton.SetBinding(Button.CommandParameterProperty, "Number");
+            downloadButton.OnClicked += (o, e) => handler((IPage)BindingContext);
 
-
-            View = new StackLayout
-            {
-                Padding = new Thickness(5, 5),
-                Orientation = StackOrientation.Horizontal,
-                Children =
-                                {
-                                    ProgressView,
-                                    new StackLayout
-                                    {
-                                        HorizontalOptions = LayoutOptions.StartAndExpand,
-                                        VerticalOptions = LayoutOptions.Center,
-                                        Spacing = 0,
-                                        Children =
-                                        {
-                                            titleLabel,
-                                            subtitleLabel
-    }
-},
-                                    downloadButton
-                                }
-            };
+            ((StackLayout)View).Children.Add(downloadButton);            
         }
 
         protected override void OnBindingContextChanged()
@@ -83,8 +36,6 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = 100;
             ProgressView.Progress = page.TeacherTrack != null ? 100 : 0;
             ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.Percentual;
-            
-            subtitleLabel.IsVisible = page.Description?.Length > 0;
         }
     }
 }

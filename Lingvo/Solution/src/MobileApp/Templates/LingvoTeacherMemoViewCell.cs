@@ -6,11 +6,6 @@ namespace Lingvo.MobileApp.Templates
 {
     class LingvoTeacherMemoViewCell : ViewCell
     {
-        internal LingvoSingleProgressView ProgressView
-        {
-            get; private set;
-        }
-
         public LingvoTeacherMemoViewCell() :
             base()
         {
@@ -20,18 +15,12 @@ namespace Lingvo.MobileApp.Templates
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
-            string seite = ((Span)App.Current.Resources["text_seite"]).Text;
             titleLabel.SetBinding(Label.TextProperty, "Name");
-
-            ProgressView = new LingvoSingleProgressView()
-            {
-                Size = 72,
-                LabelType = LingvoSingleProgressView.LabelTypeValue.NOfM
-            };
 
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
+                HeightRequest = Device.OnPlatform(iOS: 120, Android: 120, WinPhone: 240),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {

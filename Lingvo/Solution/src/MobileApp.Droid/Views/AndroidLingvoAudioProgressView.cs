@@ -100,6 +100,7 @@ namespace Lingvo.MobileApp.Droid.Views
             set
             {
                 studentProgressBar.DrawStroke = value;
+                InnerMuteButtonVisible = value;
                 Invalidate();
             }
         }
@@ -109,14 +110,15 @@ namespace Lingvo.MobileApp.Droid.Views
             get { return studentMuteButton.Visibility == ViewStates.Visible; }
             set
             {
-                studentMuteButton.Visibility = value ? ViewStates.Visible : ViewStates.Gone;
+                bool newVal = InnerProgressEnabled && value;
+                studentMuteButton.Visibility = newVal ? ViewStates.Visible : ViewStates.Gone;
             }
         }
 
         public delegate void StudentTrackMutedEventHandler(bool muted);
-        
+
         public event StudentTrackMutedEventHandler StudentTrackMuted;
-        
+
         public AndroidLingvoAudioProgressView(Context context) : base(context)
         {
             this.LayoutParameters = new ViewGroup.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
@@ -164,7 +166,7 @@ namespace Lingvo.MobileApp.Droid.Views
 
         private void SetButtonResource(ImageButton button, bool isEnabled)
         {
-            int resourceId = isEnabled ? Resource.Drawable.ic_volume_off_black_24px : Resource.Drawable.ic_volume_up_black_24px;
+            int resourceId = isEnabled ? Resource.Drawable.ic_volume_off : Resource.Drawable.ic_volume_up;
             button.SetImageDrawable(VectorDrawableCompat.Create(Resources, resourceId, Resources.NewTheme()));
         }
 

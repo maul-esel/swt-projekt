@@ -31,7 +31,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView = new LingvoSingleProgressView()
             {
-                Size = Device.OnPlatform(iOS: 100, Android: 100, WinPhone: 200),
+                Size = Device.OnPlatform(iOS: 120, Android: 120, WinPhone: 240),
                 LabelType = LingvoSingleProgressView.LabelTypeValue.NOfM
             };
 

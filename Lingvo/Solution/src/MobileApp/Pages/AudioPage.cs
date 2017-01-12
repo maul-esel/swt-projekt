@@ -1,5 +1,6 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Controllers;
 using Lingvo.MobileApp.Forms;
 using System;
 using Xamarin.Forms;
@@ -11,19 +12,11 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int SeekButtonSize = 66;
         private static readonly int ControlButtonSize = 86;
 
+        private static readonly int SeekTimeStep = 15;
+
         public IPage Page
         {
             get; internal set;
-        }
-
-        public IPlayer Player
-        {
-            get; set;
-        }
-
-        public IRecorder Recorder
-        {
-            get; set;
         }
 
         internal LingvoRoundImageButton RewindButton
@@ -79,10 +72,11 @@ namespace Lingvo.MobileApp.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
                 InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
-                InnerProgressEnabled = page.StudentTrack != null
+                InnerProgressEnabled = page.StudentTrack != null,
+                MuteEnabled = page.StudentTrack != null
             };
 
-            if(page.TeacherTrack != null)
+            if (page.TeacherTrack != null)
             {
                 ProgressView.MaxProgress = page.TeacherTrack.Length.Seconds;
             }
@@ -92,7 +86,7 @@ namespace Lingvo.MobileApp.Pages
             RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
-                Text = "15",
+                Text = "" + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
@@ -104,7 +98,7 @@ namespace Lingvo.MobileApp.Pages
             ForwardButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.ForwardImage,
-                Text = "15",
+                Text = "" + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
@@ -167,16 +161,39 @@ namespace Lingvo.MobileApp.Pages
 
         private void ProgressView_StudentTrackMuted(bool muted)
         {
-            throw new NotImplementedException();
+            //StudentPageController.Instance.IsMuted = muted;
         }
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
+            ForwardButton.IsEnabled = RewindButton.IsEnabled = PlayPauseButton.Toggled = false;
             if (RecordStopButton.Image.Equals(LingvoRoundImageButton.StopImage))
             {
+                //StudentPageController.Instance.Stop();
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
-                ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
                 RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
+
+                if (/*StudentPageController.Instance.SelectedPage.StudentTrack != null*/ false)
+                {
+                    ProgressView.MuteEnabled = true;
+                }
+                else
+                {
+                    ProgressView.InnerProgressEnabled = false;
+                    ProgressView.MuteEnabled = false;
+                }
+            }
+            else
+            {
+                if (/*StudentPageController.Instance.SelectedPage.StudentTrack != null*/ false)
+                {
+                    //Dialog
+                }
+                //StudentPageController.Instance.StartStudentRecording();
+                ProgressView.InnerProgressEnabled = true;
+                PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
+                RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+                ProgressView.MuteEnabled = false;
             }
         }
 
@@ -184,24 +201,47 @@ namespace Lingvo.MobileApp.Pages
         {
             if (PlayPauseButton.Image.Equals(LingvoRoundImageButton.PlayImage))
             {
+                if (/*StudentPageController.Instance.IsPaused()*/ false)
+                {
+                    //StudentPageController.Instance.Continue();
+                }
+                else
+                {
+                    //StudentPageController.Instance.PlayPage();
+                    ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
+                }
+
                 PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
                 RecordStopButton.Image = LingvoRoundImageButton.StopImage;
-                ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
             }
             else
             {
-                PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+                PlayPauseButton.Toggled = !PlayPauseButton.Toggled;
+                if (PlayPauseButton.Toggled)
+                {
+                    //StudentPageController.Instance.Pause();
+                }
+                else
+                {
+                    //StudentPageController.Instance.Continue();
+                }
             }
         }
 
         private void ForwardButton_OnClicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (/*StudentPageController.Instance.IsPlaying()*/ false)
+            {
+                //StudentPageController.Instance.SeekTo(TimeSpan.FromSeconds(/*StudentPageController.Instance.CurrentPosition*/ +15));
+            }
         }
 
         private void RewindButton_OnClicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (/*StudentPageController.Instance.IsPlaying()*/ false)
+            {
+                //StudentPageController.Instance.SeekTo(TimeSpan.FromSeconds(/*StudentPageController.Instance.CurrentPosition*/ -15));
+            }
         }
     }
 }

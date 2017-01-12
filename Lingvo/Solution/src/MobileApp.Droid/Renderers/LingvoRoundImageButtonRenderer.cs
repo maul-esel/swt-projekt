@@ -53,20 +53,35 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             if (element.Border)
             {
-                Drawable[] layers = new Drawable[2];
-                layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_border);
-                layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
-                layers[1] = Resources.GetDrawable(resourceId);
-                layers[1].SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                LayerDrawable layerDrawable = new LayerDrawable(layers);
-
-                button.Background = layerDrawable;
+                int offset = element.Toggled ? 1 : 0;
+                Drawable[] layers = new Drawable[2 + offset];
+                layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
+                layers[0 + offset].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                layers[1 + offset] = Resources.GetDrawable(resourceId);
+                layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
+                if(element.Toggled)
+                {
+                    layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
+                    layers[0].Alpha = 96;
+                }
+                button.Background = new LayerDrawable(layers);
             }
             else
             {
                 Drawable image = Resources.GetDrawable(resourceId);
                 image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                button.Background = image;
+                if (element.Toggled)
+                {
+                    Drawable[] layers = new Drawable[2];
+                    layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
+                    layers[0].Alpha = 96;
+                    layers[1] = image;
+                    button.Background = new LayerDrawable(layers);
+                }
+                else
+                {
+                    button.Background = image;
+                }
             }
 
             if (element.Text?.Length > 0)

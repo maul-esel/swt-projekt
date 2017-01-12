@@ -1,3 +1,5 @@
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Support.Design.Widget;
 using Lingvo.MobileApp.Droid.Renderers;
 using Xamarin.Forms;
@@ -15,15 +17,17 @@ namespace Lingvo.MobileApp.Droid.Renderers
             if (Control == null)
             {
                 fab = new FloatingActionButton(Context);
-                fab.SetImageResource(Resource.Drawable.ic_content_add_white_24dp);
+                Drawable image = Resources.GetDrawable(Resource.Drawable.ic_action_add, Resources.NewTheme());
+                image.SetColorFilter(Android.Graphics.Color.White, PorterDuff.Mode.SrcIn);
+                fab.SetImageDrawable(image);
                 fab.Show();
                 SetNativeControl(fab);
             }
-            if(e.OldElement != null)
+            if (e.OldElement != null)
             {
                 fab.Click -= e.OldElement.OnFabClicked;
             }
-            if(e.NewElement != null)
+            if (e.NewElement != null)
             {
                 fab.Click += e.NewElement.OnFabClicked;
             }
