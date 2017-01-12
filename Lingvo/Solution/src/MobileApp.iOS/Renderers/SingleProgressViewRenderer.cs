@@ -48,15 +48,10 @@ namespace Lingvo.MobileApp.iOS
 			if (audioProgressView != null)
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
-				Console.WriteLine("frame to be set = " + frame);
 				progressView.Frame = frame;
 				progressView.backgroundLayer.Frame = Bounds;
 				progressView.backgroundLayer.SetNeedsDisplay();
 			
-			}
-			else
-			{
-				Console.WriteLine("cast failed");
 			}
 		}
 
@@ -80,9 +75,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 				if (progressView.Progress != element.Progress)
 					progressView.Progress = element.Progress;
-
-				Console.WriteLine("singleProgressView:X "+ progressView.Progress);
-
+				
 				switch (element.LabelType)
 				{
 					case LingvoSingleProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;

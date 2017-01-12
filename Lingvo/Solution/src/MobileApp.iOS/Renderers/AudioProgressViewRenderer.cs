@@ -49,8 +49,6 @@ namespace Lingvo.MobileApp.iOS
 			}
 			LingvoAudioProgressView element = (LingvoAudioProgressView)sender;
 		
-			Console.WriteLine("element x = " + element.X + "y = " + element.Y + "element.width = " + element.Width + "element.height = " + element.Height);
-
 			if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
 				progressView.InnerProgressEnabled = element.InnerProgressEnabled;
 			if (progressView.Size != element.Size)
@@ -64,8 +62,6 @@ namespace Lingvo.MobileApp.iOS
 			if (progressView.Progress != element.Progress)
 				progressView.Progress = element.Progress;
 			
-
-			Console.WriteLine("current frame = " + Frame);
 		}
 		private void NewElementOnSizeChanged(object sender, EventArgs eventArgs)
 		{
@@ -74,7 +70,6 @@ namespace Lingvo.MobileApp.iOS
 			if (audioProgressView != null)
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
-				Console.WriteLine("frame to be set = " + frame);
 				progressView.Frame = frame;
 				progressView.render();
 
@@ -83,7 +78,6 @@ namespace Lingvo.MobileApp.iOS
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
-			Console.WriteLine(progressView.teacherProgressBar.strokeLayer.Frame);
 
 			progressView.Frame = layer.Bounds;
 			progressView.teacherProgressBar.Frame = layer.Bounds;

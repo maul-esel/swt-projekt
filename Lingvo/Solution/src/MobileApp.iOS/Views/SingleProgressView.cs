@@ -60,7 +60,6 @@ namespace Lingvo.MobileApp.iOS
 				backgroundLayer = drawCircle(backgroundLayerColor, -100);
 				strokeLayer = drawCircle(backgroundLayerColor, -100);
 
-				Console.WriteLine(Frame);
 				setupLabel();
 				label.SetNeedsDisplay();
 				drawStroke(angle);

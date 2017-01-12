@@ -175,7 +175,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				studentMuted = !value;
-				studentProgressBar.Muted = true;
+				studentProgressBar.Muted = studentMuted;
 			}
 		}
 
