@@ -66,10 +66,11 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 
 echo Handling ASP.NET Core Web Application deployment.
 
-:: Note: disable nuget package restoration (dominik)
+:: Note: use "dotnet restore" for nuget package restoration (dominik)
 :: 1. Restore nuget packages
 :: call :ExecuteCmd nuget.exe restore -packagesavemode nuspec
-:: IF !ERRORLEVEL! NEQ 0 goto error
+call :ExecuteCmd dotnet restore "Lingvo\Solution\"
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build and publish
 call :ExecuteCmd dotnet publish "Lingvo\Solution\src\Backend\Backend.csproj" --output "%DEPLOYMENT_TEMP%" --configuration Release
