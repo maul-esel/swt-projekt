@@ -18,12 +18,31 @@ namespace Lingvo.MobileApp.Pages
         {
             Title = workbook.Title;
 
-            LingvoAudioPageTemplate.ButtonCommandsHolder commandsHolder = new LingvoAudioPageTemplate.ButtonCommandsHolder
+            LingvoAudioPageTemplate.ButtonClickedEventHandlerHolder commandsHolder = new LingvoAudioPageTemplate.ButtonClickedEventHandlerHolder
             {
-                ForwardCommand = new Command<IPage>((b) => Console.WriteLine("Forward" + b.Number)),
-                RewindCommand = new Command<IPage>((b) => Console.WriteLine("Rewind" + b.Number)),
-                PlayPauseCommand = new Command<IPage>((b) => Console.WriteLine("PlayPause" + b.Number)),
-                RecordStopCommand = new Command<IPage>((b) => Console.WriteLine("RecordStop" + b.Number))
+                ForwardHandler = (buttons, page, progress) => { },
+                RewindHandler = (buttons, page, progress) => { },
+                PlayPauseHandler = (buttons, page, progress) =>
+                {
+                    if(buttons.PlayPauseButton.Image.Equals(LingvoRoundImageButton.PlayImage))
+                    {
+                        buttons.PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
+                        buttons.RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+                        buttons.ForwardButton.IsEnabled = buttons.RewindButton.IsEnabled = true;
+                    } else
+                    {
+                        buttons.PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+                    }
+                },
+                RecordStopHandler = (buttons, page, progress) =>
+                {
+                    if(buttons.RecordStopButton.Image.Equals(LingvoRoundImageButton.StopImage))
+                    {
+                        buttons.PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+                        buttons.ForwardButton.IsEnabled = buttons.RewindButton.IsEnabled = false;
+                        buttons.RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
+                    }
+                }
             };
 
             ItemsSource = workbook.Pages;

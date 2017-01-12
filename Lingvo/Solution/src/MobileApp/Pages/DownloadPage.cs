@@ -15,7 +15,7 @@ namespace Lingvo.MobileApp.Pages
         public DownloadPage()
         {
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
-            Icon = (FileImageSource)ImageSource.FromFile("Icon.png");
+            Icon = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
 
             Command downloadCommand = new Command(async (param) =>
             {

@@ -16,12 +16,12 @@ namespace Lingvo.MobileApp.Pages
         public TeacherMemosPage(Xamarin.Forms.Page parentPage)
         {
             Title = ((Span)App.Current.Resources["page_title_teacherMemo"]).Text;
-            Icon = (FileImageSource)ImageSource.FromFile("Icon.png");
+            Icon = (FileImageSource)ImageSource.FromFile("ic_action_mic.png");
 
             item = new ToolbarItem
             {
                 Text = "New..",
-                Icon = "Icon.png",
+                Icon = "ic_action_add.png",
                 Command = addNewCommand
             };
 

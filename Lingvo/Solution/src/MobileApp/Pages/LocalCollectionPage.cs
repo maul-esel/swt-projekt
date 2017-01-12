@@ -10,7 +10,7 @@ namespace Lingvo.MobileApp.Pages
         public LocalCollectionPage()
         {
             Title = ((Span)App.Current.Resources["page_title_localCollection"]).Text;
-            Icon = (FileImageSource)ImageSource.FromFile("Icon.png");
+            Icon = (FileImageSource)ImageSource.FromFile("ic_action_book.png");
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
