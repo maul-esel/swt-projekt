@@ -22,6 +22,25 @@ namespace Lingvo.MobileApp.iOS
 				label.Text = value;
 			}
 		}
+		public override UIColor ProgressColor
+		{
+			get
+			{
+				return progressColor;
+			}
+			set
+			{
+				progressColor = value;
+				strokeLayer.StrokeColor = value.CGColor;
+
+				//strokeLayer.setNeedsDisplay()
+				drawStroke(angle);
+				drawBackground();
+				renderBackground();
+				label.TextColor = value;
+
+			}
+		}
 	
 		public override int Size
 		{
@@ -38,8 +57,8 @@ namespace Lingvo.MobileApp.iOS
 				label.RemoveFromSuperview();
 
 				BackgroundColor = UIColor.LightGray;
-				backgroundLayer = drawCircle(unfinishedCircleColor, -100);
-				strokeLayer = drawCircle(unfinishedCircleColor, -100);
+				backgroundLayer = drawCircle(backgroundLayerColor, -100);
+				strokeLayer = drawCircle(backgroundLayerColor, -100);
 
 				Console.WriteLine(Frame);
 				setupLabel();

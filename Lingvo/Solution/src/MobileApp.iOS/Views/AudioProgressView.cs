@@ -46,10 +46,12 @@ namespace Lingvo.MobileApp.iOS
 		{
 			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
+			teacherProgressBar.ProgressColor = new UIColor(0, 0.5f, 0.5f, 1.0f);
 			AddSubview(teacherProgressBar);
 
 			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
+			studentProgressBar.ProgressColor = new UIColor(0, 1.0f, 1.0f, 1.0f);
 			studentProgressBar.NestingLevel = 1;
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
@@ -197,6 +199,9 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				studentProgressBar.ProgressColor = value;
+				studentProgressBar?.drawBackground();
+				SetNeedsDisplay();
+
 			}
 		}
 		public UIColor OuterProgressColor
@@ -205,6 +210,10 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				teacherProgressBar.ProgressColor = value;
+				teacherProgressBar.drawBackground();
+				SetNeedsDisplay();
+				timeLabel.TextColor = value;
+				muteBtn.SetTitleColor(value, UIControlState.Normal);
 			}
 		}
 		public void animate()
@@ -236,6 +245,7 @@ namespace Lingvo.MobileApp.iOS
 				{
 					teacherProgressBar.Frame = Frame;
 					teacherProgressBar.renderBackground();
+
 				}
 
 

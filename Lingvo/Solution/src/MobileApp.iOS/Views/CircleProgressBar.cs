@@ -11,13 +11,13 @@ namespace Lingvo.MobileApp.iOS
 
 	public class CircleProgressBar : UIView
 	{
-		public CALayer backgroundLayer;
+		public CAShapeLayer backgroundLayer;
 		public CAShapeLayer strokeLayer;
 		protected float lineWidth = 10.0f;
 		protected float margin = 0.0f;
 		protected int nestingLevel = 0;
 		//protected UIColor unfinishedCircleColor = new UIColor(234.0f / 255.0f, 234.0f / 255.0f, 234.0f / 255.0f, 1.0f); //grayish color
-		protected UIColor unfinishedCircleColor = UIColor.Brown;
+		//protected UIColor unfinishedCircleColor = UIColor.Brown;
 		protected int progress = 0;
 		protected readonly string animationName = "drawCircleAnim";
 		protected int maxProgress = 100;
@@ -37,9 +37,21 @@ namespace Lingvo.MobileApp.iOS
 				Frame = new CGRect(Frame.X, Frame.Y, value, value);
 				backgroundLayer.RemoveFromSuperLayer();
 				strokeLayer.RemoveFromSuperLayer();
-				backgroundLayer = drawCircle(unfinishedCircleColor, -100);
-				strokeLayer = drawCircle(unfinishedCircleColor, -100);
+				backgroundLayer = drawCircle(backgroundLayerColor, -100);
+				strokeLayer = drawCircle(backgroundLayerColor, -100);
 				drawStroke(angle);
+			}
+		}
+		protected UIColor backgroundLayerColor
+		{
+			get
+			{
+				nfloat red = 0.0f;
+				nfloat green = 0.0f;
+				nfloat blue = 0.0f;
+				nfloat backgroundAlpha = 0.0f;
+				progressColor.GetRGBA(out red, out green, out blue, out backgroundAlpha);
+				return new UIColor(red, green, blue, 0.25f);
 			}
 		}
 		public float LineWidth
@@ -53,12 +65,12 @@ namespace Lingvo.MobileApp.iOS
 				lineWidth = value;
 				backgroundLayer.RemoveFromSuperLayer();
 				strokeLayer.RemoveFromSuperLayer();
-				backgroundLayer = drawCircle(unfinishedCircleColor, -100);
-				strokeLayer = drawCircle(unfinishedCircleColor, -100);
+				backgroundLayer = drawCircle(backgroundLayerColor, -100);
+				strokeLayer = drawCircle(backgroundLayerColor, -100);
 				drawStroke(angle);
 			}
 		}
-		public UIColor ProgressColor
+		public virtual UIColor ProgressColor
 		{
 			get
 			{
@@ -68,8 +80,11 @@ namespace Lingvo.MobileApp.iOS
 			{
 				progressColor = value;
 				strokeLayer.StrokeColor = value.CGColor;
+		
 				//strokeLayer.setNeedsDisplay()
 				drawStroke(angle);
+				drawBackground();
+				renderBackground();
 
 			}
 		}
@@ -140,6 +155,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 				progress = Math.Min(value, maxProgress);
 				drawStroke(angle);
+			
 			}
 		}
 		protected float angle
@@ -176,11 +192,34 @@ namespace Lingvo.MobileApp.iOS
 			strokeLayer.SetNeedsDisplay();
 
 		}
+		public void drawBackground()
+		{
+			backgroundLayer.Bounds = Bounds;
+			var backgroundPath = new UIBezierPath();
+			backgroundPath.LineWidth = LineWidth;
+			backgroundPath.AddArc(Center, radius, correctAngle(0.0f), correctAngle((float)(2 * Math.PI)), true);
 
+			nfloat red = 0.0f;
+			nfloat green = 0.0f;
+			nfloat blue = 0.0f;
+			nfloat backgroundAlpha = 0.0f;
+			progressColor.GetRGBA(out red, out green, out blue, out backgroundAlpha);
+			backgroundAlpha = 64.0f;
+			var opaqueColor = new UIColor(1, 0, 0, 1.0f);
+
+			backgroundLayer.StrokeColor = opaqueColor.CGColor;
+			backgroundLayer.Path = backgroundPath.CGPath;
+			//backgroundLayer.SetNeedsDisplay();
+			backgroundPath.Stroke();
+			backgroundLayer.SetNeedsDisplay();
+
+			//backgroundLayer.RemoveFromSuperLayer();
+			//backgroundLayer = drawCircle(progressColor, -2);
+		}
 		public CircleProgressBar(CGRect frame) : base(frame)
 		{
-			backgroundLayer = drawCircle(unfinishedCircleColor, -100);
-			strokeLayer = drawCircle(unfinishedCircleColor, -100);
+			backgroundLayer = drawCircle(backgroundLayerColor, -100);
+			strokeLayer = drawCircle(backgroundLayerColor, -100);
 		}
 
 		public void renderBackground()
@@ -188,8 +227,8 @@ namespace Lingvo.MobileApp.iOS
 			backgroundLayer?.RemoveFromSuperLayer();
 			strokeLayer.RemoveFromSuperLayer();
 
-			backgroundLayer = drawCircle(unfinishedCircleColor, -100);
-			strokeLayer = drawCircle(unfinishedCircleColor, -100);
+			backgroundLayer = drawCircle(backgroundLayerColor, -100);
+			strokeLayer = drawCircle(backgroundLayerColor, -100);
 			backgroundLayer.SetNeedsDisplay();
 			strokeLayer.SetNeedsDisplay();
 			drawStroke(angle);
