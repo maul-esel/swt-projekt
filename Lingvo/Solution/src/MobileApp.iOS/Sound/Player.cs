@@ -11,7 +11,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 {
 	public class Player : IPlayer
 	{
-		private AVAudioPlayer track;
+		private AVAudioPlayer teacherTrack;
+		private AVAudioPlayer studentTrack;
 
 
 		public Player()
@@ -19,50 +20,84 @@ namespace Lingvo.MobileApp.iOS.Sound
 			//Initialize audio session
 			ActivateAudioSession();
 		}
-	#region Public properties
+		#region Public properties
 
-		public bool IsMuted { get; set; } = false;
-		public float Volume { get; set; } = 1.0f;
+		public bool IsStudentTrackMuted
+		{
+			get
+			{
+				return (studentTrack.Volume.Equals(0.0f));
+			}
 
-	#endregion
+			set
+			{
+				studentTrack.Volume = value ? 0.0f : 1.0f;   
+			}
+		}
 
-	#region Controls presented by interface
+
+		#endregion
+
+		#region Controls presented by interface
+
+		public void Play()
+		{
+			teacherTrack.Play();
+			if (studentTrack != null)
+			{
+				studentTrack.Play();
+			}
+		}
+
+
 		public void Continue()
 		{
-			throw new NotImplementedException();
+			Play();
 		}
 
 		public void Pause()
 		{
-			track.Pause();
-
-		}
-
-		public void Play(Recording recording)
-		{
-			if (track == null)
+			teacherTrack.Pause();
+			if (studentTrack != null)
 			{
-				NSUrl url = NSUrl.FromString(recording.LocalPath);
-				track = AVAudioPlayer.FromUrl(url);
+				studentTrack.Pause();
 			}
 
-			track.Play();
 		}
 
-		public void SeekTo(TimeSpan seek)
+		public void SeekTo(TimeSpan timeCode)
 		{
-			//TODO: Scrobbling
+			teacherTrack.CurrentTime += (double)timeCode.Seconds;
 		}
 
 		public void Stop()
 		{
-			track.Stop();
+			teacherTrack.Stop();
+			if (studentTrack != null)
+			{
+				studentTrack.Stop();
+			}
 		}
-	#endregion
 
-	//The following methods manage the correct behaviour for 
-	//the audio playback when the app enters the background 
-	#region Session managing sessions
+		public void PrepareTeacherTrack(Recording recording)
+		{
+			NSUrl url = NSUrl.FromString(recording.LocalPath);
+			teacherTrack = AVAudioPlayer.FromUrl(url);
+			teacherTrack.PrepareToPlay();
+		}
+
+		public void PrepareStudentTrack(Recording recording)
+		{
+			NSUrl url = NSUrl.FromString(recording.LocalPath);
+			studentTrack = AVAudioPlayer.FromUrl(url);
+			studentTrack.PrepareToPlay();
+		}
+
+		#endregion
+
+		//The following methods manage the correct behaviour for 
+		//the audio playback when the app enters the background 
+		#region Session managing sessions
 
 		public void ActivateAudioSession()
 		{
@@ -82,7 +117,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 			var session = AVAudioSession.SharedInstance();
 			session.SetActive(true);
 		}
-	#endregion
-	
+
+		#endregion
+
 	}
 }

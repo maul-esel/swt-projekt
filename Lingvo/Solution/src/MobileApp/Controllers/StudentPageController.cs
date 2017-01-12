@@ -1,6 +1,7 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
 using System;
+using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Controllers
 {
@@ -9,7 +10,9 @@ namespace Lingvo.MobileApp.Controllers
     /// </summary>
     public class StudentPageController
 	{
-		private IPlayer teacherTrackPlayer;
+		private static StudentPageController instance;
+
+		private IPlayer audioPlayer;
 		private IRecorder recorder;
 
 		private IPage selectedPage;
@@ -18,20 +21,56 @@ namespace Lingvo.MobileApp.Controllers
 		/// Gets or sets the selected page.
 		/// </summary>
 		/// <value>The selected page.</value>
-		public IPage SelectedPage
-		{
+		public IPage SelectedPage 
+		{ 
 			get
 			{
 				return selectedPage;
 			}
+
 			set
 			{
 				selectedPage = value;
+				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+				if (selectedPage.StudentTrack != null)
+				{
+					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
+				}
 			}
+
 		}
 
-		public StudentPageController()
+		/// <summary>
+		/// Gets or sets a value indicating whether the 
+		/// <see cref="T:Lingvo.MobileApp.Controllers.StudentPageController"/>'s studentTrack is muted.
+		/// </summary>
+		/// <value><c>true</c> if is muted; otherwise, <c>false</c>.</value>
+		public bool IsMuted
 		{
+			get
+			{
+				return audioPlayer.IsStudentTrackMuted;
+			}
+
+			set
+			{
+				audioPlayer.IsStudentTrackMuted = value;
+			}
+				
+				
+		}
+
+
+		/// <summary>
+		/// Gets the instance of StudentPageController (Singleton Pattern)
+		/// </summary>
+		/// <returns>The instance.</returns>
+		public static StudentPageController Instance => instance ?? (instance = new StudentPageController());
+
+		private StudentPageController()
+		{
+			audioPlayer = DependencyService.Get<IPlayer>();
+			//recorder = DependencyService.Get<IRecorder>();
 		}
 
 		/// <summary>
@@ -39,7 +78,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void PlayPage()
 		{
-			teacherTrackPlayer.Play(selectedPage.TeacherTrack);
+			audioPlayer.Play();
 		}
 
 		/// <summary>
@@ -57,7 +96,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void Pause()
 		{
 			recorder.Pause();
-			teacherTrackPlayer.Pause();
+			audioPlayer.Pause();
 		}
 
 		/// <summary>
@@ -66,7 +105,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void Continue()
 		{
 			recorder.Continue();
-			teacherTrackPlayer.Continue();
+			audioPlayer.Continue();
 		}
 
 		/// <summary>
@@ -74,18 +113,18 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Stop()
 		{
-			teacherTrackPlayer.Stop();
+			audioPlayer.Stop();
 			Recording recording = recorder.Stop();
-			selectedPage.StudentTrack = recording;
+			SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
 		/// Seeks the recording and/or playing to the given time.
 		/// </summary>
-		public void SeekTo(TimeSpan seek)
+		public void SeekTo(TimeSpan timeCode)
 		{
-			recorder.SeekTo(seek);
-			teacherTrackPlayer.SeekTo(seek);
+			recorder.SeekTo(timeCode);
+			audioPlayer.SeekTo(timeCode);
 		}
 	}
 }

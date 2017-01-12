@@ -10,14 +10,21 @@ namespace Lingvo.MobileApp.Controllers
     /// </summary>
     public class TeacherMemoController
 	{
+		private static TeacherMemoController instance;
 		private IPlayer player;
 		private IRecorder recorder;
 
-		public TeacherMemoController()
+		/// <summary>
+		/// Gets the instance of the teacherMemoController (Singleton Pattern)
+		/// </summary>
+		/// <value>The instance.</value>
+		public static TeacherMemoController Instance => instance ?? (instance = new TeacherMemoController());
+
+		private TeacherMemoController()
 		{
 			player = DependencyService.Get<IPlayer>();
+			//TODO: recorder = DependencyController.Get<IRecorder>();
 
-			// to do: recorder
 		}
 
 		/// <summary>
@@ -25,7 +32,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void StartTeacherMemo()
 		{
-			recorder.Start();
+			//TODO: recorder.Start();
 		}
 
 		/// <summary>
@@ -42,7 +49,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void RestartTeacherMemo()
 		{
-			recorder.Start();
+			//TODO: recorder.Start();
 		}
 
 		/// <summary>
@@ -63,7 +70,8 @@ namespace Lingvo.MobileApp.Controllers
 		/// <param name="memo">Memo.</param>
 		public void PlayTeacherMemo(TeacherMemo memo)
 		{
-			player.Play(memo.Recording);
+			player.PrepareTeacherTrack(memo.Recording);
+			player.Play();
 		}
 	}
 }
