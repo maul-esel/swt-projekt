@@ -27,7 +27,7 @@ namespace MobileApp.Proxies
 		/// </summary>
 		/// <returns>The page.</returns>
 		/// <param name="proxy">A proxy for the page that is downloaded</param>
-		internal async Task<Page> DownloadSinglePage(PageProxy proxy)
+		internal Task<Page> DownloadSinglePage(PageProxy proxy)
 		{
 			// to do: get correspondent page from server
 			return null;
