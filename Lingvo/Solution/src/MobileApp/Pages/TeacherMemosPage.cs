@@ -28,7 +28,7 @@ namespace Lingvo.MobileApp.Pages
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = LocalCollection.GetInstance().TeacherMemos,
-                ItemTemplate = new LingvoViewCellTemplate("Name"),
+                ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
                 IsVisible = LocalCollection.GetInstance().TeacherMemos.Count > 0

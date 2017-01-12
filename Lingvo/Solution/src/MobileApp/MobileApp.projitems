@@ -19,8 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPagesPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)LingvoSingleProgressView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LingvoAudioProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoSingleProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoAudioProgressView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,8 +40,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadViewCellTemplate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoViewCellTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoTeacherMemoViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoWorkbookViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoPageViewCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">

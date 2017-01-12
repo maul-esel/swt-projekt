@@ -46,6 +46,11 @@ namespace Lingvo.MobileApp.Pages
             get; set;
         }
 
+        internal LingvoAudioProgressView ProgressView
+        {
+            get; private set;
+        }
+
         public AudioPage(IPage page, int numberOfWorkbookPages)
         {
             Page = page;
@@ -68,12 +73,21 @@ namespace Lingvo.MobileApp.Pages
                 ColumnSpacing = 10
             };
 
-            BoxView progressView = new BoxView()
+            ProgressView = new LingvoAudioProgressView()
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                Color = (Color)App.Current.Resources["primaryColor"]
+                OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
+                InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
+                InnerProgressEnabled = page.StudentTrack != null
             };
+
+            if(page.TeacherTrack != null)
+            {
+                ProgressView.MaxProgress = page.TeacherTrack.Length.Seconds;
+            }
+
+            ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
 
             RewindButton = new LingvoRoundImageButton()
             {
@@ -145,13 +159,16 @@ namespace Lingvo.MobileApp.Pages
                 Padding = new Thickness(15, 25),
                 Children = {
                         pageLabel,
-                        progressView,
+                        ProgressView,
                         buttonGrid
                 }
             };
         }
 
-
+        private void ProgressView_StudentTrackMuted(bool muted)
+        {
+            throw new NotImplementedException();
+        }
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
         {

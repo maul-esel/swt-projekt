@@ -25,7 +25,7 @@ namespace Lingvo.MobileApp.Pages
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = workbooks,
-                ItemTemplate = new LingvoDownloadViewCellTemplate("Title", "Subtitle", "Id", downloadCommand),
+                ItemTemplate = new DataTemplate(typeof(LingvoDownloadWorkbookViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true
             };

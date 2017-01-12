@@ -66,7 +66,7 @@ namespace Lingvo.MobileApp
 
         public enum LabelTypeValue
         {
-            NOfM, Percentual
+            NOfM, Percentual, None
         }
     }
 }
