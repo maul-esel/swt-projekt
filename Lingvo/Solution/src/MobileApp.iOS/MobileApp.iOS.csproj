@@ -119,7 +119,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork@2x" />
+    <Compile Include="Views\CircleProgressBar.cs" />
+    <Compile Include="Views\SingleProgressView.cs" />
+    <Compile Include="Views\AudioProgressView.cs" />
+    <Compile Include="Renderers\AudioProgressViewRenderer.cs" />
+    <Compile Include="Renderers\SingleProgressViewRenderer.cs" />
     <None Include="packages.config" />
+    <Compile Include="Sound\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -160,12 +166,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Lingvo.Common">
+      <HintPath>..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{70e7e6e7-7da9-479c-aa2d-fa0dd6a4b9c6}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
+    <Folder Include="Sound\" />
   </ItemGroup>
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

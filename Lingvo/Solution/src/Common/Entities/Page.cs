@@ -12,6 +12,12 @@ namespace Lingvo.Common.Entities
 		private Recording teacherTrack;
 		private Recording studentTrack;
 
+		public int studentTrackId;
+		public int teacherTrackId;
+
+		public int workbookId { get; set; }
+		public Workbook Workbook { get; set; }
+
 		/// <summary>
 		/// Gets or sets the page number.
 		/// </summary>
