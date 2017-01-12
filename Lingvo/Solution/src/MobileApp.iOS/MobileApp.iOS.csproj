@@ -160,6 +160,7 @@
     <BundleResource Include="Resources\ic_stop.png" />
     <BundleResource Include="Resources\ic_volume_off.png" />
     <BundleResource Include="Resources\ic_volume_up.png" />
+    <BundleResource Include="Resources\startup.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
