@@ -19,7 +19,7 @@ matrix:
         - ANDROID_HOME=/usr/local/opt/android-sdk
 
 install:
-  - ./script/install-dotnetcore.sh
+  - ./scripts/install-dotnetcore.sh
   - ./scripts/install-xamarin.sh
 
 script:
