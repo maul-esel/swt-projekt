@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lingvo.Common.Entities
 {
-	public class Workbook
+	public class Workbook : IDownloadable
 	{
 
 		private int id;
