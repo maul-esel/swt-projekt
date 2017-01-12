@@ -4,7 +4,7 @@ namespace Lingvo.Common.Entities
 	/// <summary>
 	/// A page of a workbook.
 	/// </summary>
-	public interface IPage
+	public interface IPage : IDownloadable
 	{
 		/// <summary>
 		/// Gets or sets the page number.
