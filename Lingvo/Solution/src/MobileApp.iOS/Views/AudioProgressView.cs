@@ -14,6 +14,9 @@ namespace Lingvo.MobileApp.iOS
 		public CircleProgressBar teacherProgressBar;
 		public CircleProgressBar studentProgressBar;
 
+		private static UIColor studentGreen = new UIColor(61.0f / 255.0f, 182.0f / 255.0f, 128.0f / 255.0f, 1.0f);
+		private static UIColor teacherBlue = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
+
 		private float lineWidth = 10.0f;
 		private bool studentMuted = false;
 		private int progress = 0;
@@ -26,13 +29,14 @@ namespace Lingvo.MobileApp.iOS
 		UIButton muteBtn = new Func<UIButton>(() =>
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
-			btn.SetTitleColor(UIColor.Black, UIControlState.Normal);
+			btn.SetTitleColor(teacherBlue, UIControlState.Normal);
 			btn.SetTitle("Mute", UIControlState.Normal);
 			return btn;
 		})();
 		UILabel timeLabel = new UILabel()
 		{
 			Text = "00:00",
+			TextColor = teacherBlue,
 			Font = UIFont.SystemFontOfSize(28)
 		};
 
@@ -46,12 +50,12 @@ namespace Lingvo.MobileApp.iOS
 		{
 			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			teacherProgressBar.ProgressColor = new UIColor(0, 0.5f, 0.5f, 1.0f);
+			teacherProgressBar.ProgressColor = teacherBlue;
 			AddSubview(teacherProgressBar);
 
 			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			studentProgressBar.ProgressColor = new UIColor(0, 1.0f, 1.0f, 1.0f);
+			studentProgressBar.ProgressColor = studentGreen;
 			studentProgressBar.NestingLevel = 1;
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
