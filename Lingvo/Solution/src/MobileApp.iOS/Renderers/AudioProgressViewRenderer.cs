@@ -79,15 +79,6 @@ namespace Lingvo.MobileApp.iOS
 				progressView.render();
 
 			}
-			else
-			{
-				Console.WriteLine("cast failed");
-			}
-		}
-		protected void runOnMainThread(Action action)
-		{
-			//updates on UI only work on the main thread
-			DispatchQueue.MainQueue.DispatchAsync(action);
 		}
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{

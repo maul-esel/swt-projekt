@@ -90,18 +90,8 @@ namespace Lingvo.MobileApp.iOS
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
+			//since we are using sublayers, we have to layout them manually
 			progressView.render();
-			/*progressView.Frame = layer.Bounds;
-			progressView.backgroundLayer.Frame = Bounds;
-			if (progressView.strokeLayer != null)
-				progressView.strokeLayer.Frame = Bounds;*/
-			Console.WriteLine("LayoutSublayersOfLayer measures = " + layer.Frame);
-
-		}
-		protected void runOnMainThread(Action action)
-		{
-			//updates on UI only work on the main thread
-			DispatchQueue.MainQueue.DispatchAsync(action);
 		}
 	}
 }

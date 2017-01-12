@@ -224,9 +224,11 @@ namespace Lingvo.MobileApp.iOS
 			Layer.AddSublayer(circleLayer);
 			return circleLayer;
 		}
-		private float correctAngle(float angle)
+		//CoreGraphics starts its rendering at 3 o'clock.
+		//In order to start at 12 o'clock we always have to subtract PI/2
+		private float correctAngle(float oldAngle)
 		{
-			return angle - (float)(Math.PI / 2.0);
+			return oldAngle - (float)(Math.PI / 2.0);
 		}
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
