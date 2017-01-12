@@ -97,8 +97,8 @@ namespace Lingvo.MobileApp.iOS
 			progressView.Frame = layer.Bounds;
 			progressView.teacherProgressBar.Frame = layer.Bounds;
 			progressView.studentProgressBar.Frame = layer.Bounds;
-			progressView.teacherProgressBar.renderBackground();
-			progressView.studentProgressBar.renderBackground();
+			progressView.teacherProgressBar.render();
+			progressView.studentProgressBar.render();
 
 		}
 		public override void LayoutSubviews()

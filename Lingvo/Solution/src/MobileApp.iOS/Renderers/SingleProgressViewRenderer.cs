@@ -90,7 +90,7 @@ namespace Lingvo.MobileApp.iOS
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
-			progressView.renderBackground();
+			progressView.render();
 			/*progressView.Frame = layer.Bounds;
 			progressView.backgroundLayer.Frame = Bounds;
 			if (progressView.strokeLayer != null)

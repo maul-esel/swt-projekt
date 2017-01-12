@@ -35,8 +35,8 @@ namespace Lingvo.MobileApp.iOS
 
 				//strokeLayer.setNeedsDisplay()
 				drawStroke(angle);
-				drawBackground();
-				renderBackground();
+				//drawBackground();
+				render();
 				label.TextColor = value;
 
 			}

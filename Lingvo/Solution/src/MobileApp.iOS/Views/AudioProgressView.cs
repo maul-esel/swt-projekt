@@ -56,7 +56,8 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
 
-			//Autolayout
+			//layout views programatically
+			//create Autolayout constraints
 			var viewNames = NSDictionary.FromObjectsAndKeys(new NSObject[] {
 				teacherProgressBar,
 				studentProgressBar
@@ -74,6 +75,7 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.CenterYAnchor.ConstraintEqualTo(teacherProgressBar.CenterYAnchor).Active = true;
 
 
+			//Wrap label in vertical stack view to avoid repositioning the label programatically
 			var stackView = new UIStackView()
 			{
 				Axis = UILayoutConstraintAxis.Vertical,
@@ -83,7 +85,7 @@ namespace Lingvo.MobileApp.iOS
 			stackView.AddArrangedSubview(timeLabel);
 			stackView.AddArrangedSubview(muteBtn);
 
-
+			//subscribe to click events of button in the middle
 			muteBtn.AddTarget((object sender, EventArgs e) =>
 			{
 				studentMuted = !studentMuted;
@@ -92,6 +94,7 @@ namespace Lingvo.MobileApp.iOS
 
 			}, UIControlEvent.TouchUpInside);
 
+			//layout stack view using Autolayout
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
@@ -119,15 +122,11 @@ namespace Lingvo.MobileApp.iOS
 				}
 
 
-
+				//update the progress time label text
 				string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
 				string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
 
 				timeLabel.Text = minutes + ":" + seconds;
-
-
-
-
 			}
 		}
 		protected void runOnMainThread(Action action)
@@ -199,9 +198,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				studentProgressBar.ProgressColor = value;
-				studentProgressBar?.drawBackground();
 				SetNeedsDisplay();
-
 			}
 		}
 		public UIColor OuterProgressColor
@@ -210,22 +207,10 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				teacherProgressBar.ProgressColor = value;
-				teacherProgressBar.drawBackground();
 				SetNeedsDisplay();
 				timeLabel.TextColor = value;
 				muteBtn.SetTitleColor(value, UIControlState.Normal);
 			}
-		}
-		public void animate()
-		{
-			Size = 100;
-			Progress = 40;
-			Progress = 50;
-			InnerProgressColor = UIColor.Blue;
-			/*LineWidth = 20;
-			Progress = 20;*/
-			/*ProgressColor = UIColor.Green;
-			MaxProgress = 200;*/
 		}
 
 		public override void LayoutSublayersOfLayer(CALayer layer)
@@ -237,21 +222,17 @@ namespace Lingvo.MobileApp.iOS
 				if (studentProgressBar != null)
 				{
 					studentProgressBar.Frame = Frame;
-					studentProgressBar.renderBackground();
+					studentProgressBar.render();
 					studentProgressBar.SetNeedsDisplay();
 				}
 
 				if (teacherProgressBar != null)
 				{
 					teacherProgressBar.Frame = Frame;
-					teacherProgressBar.renderBackground();
+					teacherProgressBar.render();
 
 				}
-
-
-				//backgroundLayer.Frame = layer.Bounds;
 			}
-
 		}
 		public void render()
 		{
