@@ -212,11 +212,8 @@ Global
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|Any CPU.Build.0 = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|iPhone.ActiveCfg = Debug|Any CPU
-		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|iPhone.Build.0 = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.CI-Xamarin|iPhoneSimulator.Build.0 = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCECBC19-6ED1-4ECE-8284-2F5ABA5E7F04}.Debug|iPhone.ActiveCfg = Debug|Any CPU
