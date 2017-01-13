@@ -7,7 +7,7 @@ namespace Lingvo.Backend.Tests
         [Fact]
         public void Test1()
         {
-			Assert.True(new Controllers.HomeController().DummyTestMethod()); // dummy test
+			Assert.True(false); //new Controllers.HomeController().DummyTestMethod()); // dummy test
         }
     }
 }
