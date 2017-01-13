@@ -41,6 +41,5 @@ deploy:
   site: lingvo
   verbose: true
   on:
-    branch: solution-setup
-    # TODO: deploy on master !
+    branch: master
     condition: $DOTNETCORE = 1
