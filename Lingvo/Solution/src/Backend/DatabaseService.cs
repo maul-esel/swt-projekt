@@ -8,7 +8,7 @@ namespace Lingvo.Backend
 {
 	using Common.Entities;
 
-    public class DatabaseService : Common.Services.AbstractDatabaseService
+    public class DatabaseService : Common.Services.DatabaseService
     {
 		public DatabaseService(string connectionString)
 			: base(new MySqlDataProvider(), connectionString)

@@ -5,7 +5,7 @@ using Lingvo.Common.Services;
 
 namespace Lingvo.MobileApp.Services
 {
-	public class DatabaseService : Common.Services.AbstractDatabaseService
+	public class DatabaseService : Common.Services.DatabaseService
 	{
 		public DatabaseService(string connectionString)
 			: base(new SQLiteDataProvider(), connectionString) { }

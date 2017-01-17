@@ -8,15 +8,15 @@ namespace Lingvo.Common.Services
 {
 	using Entities;
 
-    public abstract class AbstractDatabaseService
+    public class DatabaseService
     {
 		protected readonly DataConnection connection;
 
-		static AbstractDatabaseService() {
+		static DatabaseService() {
 			LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
 		}
 
-		public AbstractDatabaseService(IDataProvider provider, string connectionString)
+		public DatabaseService(IDataProvider provider, string connectionString)
 		{
 			connection = new DataConnection(provider, connectionString);
 			connection.MappingSchema.SetConverter<int, TimeSpan>(ms => TimeSpan.FromMilliseconds(ms));
