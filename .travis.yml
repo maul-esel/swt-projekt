@@ -1,49 +1,45 @@
 language: csharp
-
-env:
- global:
-  - EnableNuGetPackageRestore=true 
-
-solution: TestAppCalculator/Solution/TestAppCalculator.sln
+solution: Lingvo/Solution/Lingvo.sln
 
 dist: trusty
 sudo: required
-
-branches:  
-  only:
-    - master
 
 matrix:
   include:
     - os: linux
       mono: none
-      dotnet: 1.0.0-preview2-003131
+      dotnet: 1.0.0-preview2-1-003177
       env: DOTNETCORE=1
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.1
       mono: latest
       dotnet: none
-      env: XAMARIN=1
+      env:
+        - XAMARIN=1
+        - ANDROID_HOME=/usr/local/opt/android-sdk
 
-
-# before_install:
-#  - wget "http://download.mono-project.com/archive/${MONO_VERSION}/macos-10-
-# x86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
-#  - sudo installer -pkg "MonoFramework-MDK-
-# ${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
-
-#install:
-  #- if [[ "$DOTNETCORE" == "1" ]]; then nuget restore TestAppCalculator/Solution/TestAppCalculator.sln ; fi
-  #- if [[ "$DOTNETCORE" == "1" ]]; then nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner ; fi
+install:
+  - ./scripts/install-dotnetcore.sh
+  - ./scripts/install-xamarin.sh
 
 script:
-  - if [[ "$DOTNETCORE" == "1" ]]; then cd TestAppCalculator/Solution/src/Calculator && dotnet restore && dotnet build -c Release ; fi
-  - if [[ "$XAMARIN" == "1" ]]; then cd TestAppCalculator/Solution/src/MobileApp/MobileApp.Droid && xbuild /p:Configuration=Release ; fi
-#  - cd ../MobileApp.iOS && xbuild /p:Configuration=Release
+  - ./scripts/build-backend.sh
+  - ./scripts/build-xamarin.sh
+  - ./scripts/test-backend.sh
 
-# deploy:
-#   provider: azure_web_apps
-#   username:
-#   password:
-#   site:
-#   slot:
+env:
+  global:
+    # AZURE_WA_USERNAME:
+    - secure: c/gWD6pN7CVD15ApDpQfk8VnIn11vhmW8X3FcVssLTXTPlArEmBHtNJOpXICBKq/LLplgdQlZt8ZS/NmRLVfpewhZ1XoAloYQhdHXHejf2t7Urem5uHJfDYoxwz9rfTI9EJLqk3QdfRtmMFBHApt9dUlBRvF5B+eQE+44su/mA+VvmJiKBfiPzdtKnOE1XBx2rHbafb2gOF7KAO9X110KgWjLNr7PjJTexEAAIYtg4VyQQ1aS2ehafAUDQaPPjKNOzJPGVX/EuQX7JXrJ6JLnTqDdKhNZv8meFxro9nWqyrQGkmAjI4ndn8ILCoYspEPpnx6XOEXxm/w31ZAOMfRd0rvM0sEo0i8nbh/YFK7JFVeAE2P1slvSKmcX9Hw8r1qjmPUxuqkXooRAGNYG1GEYVuLJ6oabA37YWGebslteTIKe5qIqp/Wi+u5yxe2UgY9T2rT3C8U15aBGckhItecgSI8N8ieI7drTt1rD7MxPUAP9lXg4rsqpSRhCRL3PuoiJn41k0amLFtEhyH6tMG+if4WeGe7JzNGGsTJJyC4w9TDS5OuMQJxUjBn+IT/VvcwkkQIsJjHL9DLZIJwLIf+4lmzebwP1lHjoOrnNENxLF/gGaUiaqTK7IvKo2UtGhU+fnQEOm5MPdd/lNtX1j0pC8ZmvUTDfVQwt+P7P3iXppc=
+    # AZURE_WA_PASSWORD:
+    - secure: "lkso0pdeQUhOFOA5bp141W7C4bHuW36VZxdZlx9JZCn4Z6fSnPpqGyVJBAcyHt9dQGV0VjqwZKdegu/cHcnUeQa6XGaG+wt1TA0+FsCEheMcVsvdMrr/I2y/GcXjc4N6BofDXWTpu+IwqJK2ylDSWcXlREebTZzrhJNgHLIwzZzlTCJmOp6oIasLQEsf0kOeNHWEnLE0ubShEZckWNmgVEGCW8HVij7yT/lIZg5pzqdSQH0OwwiyPOtRFrZpBPooCeDk5G4XHr/MYTxEzvZ+cAEJqy6usFdVYv69uv0/DGza6zhEtSb+EuMDFiGZn1bMT+FAmY9RQcDECiVDrbdyK2YPwFCJh/E1XJ0aQ7Da9zgQc1KJp8Ht5JMD4XUP4x6K0B5CYZyQnCpY5qfP44YqFot2Z7o0sPyCqn9bfJBfayRLO1Wd6GA2HEhOMH7+uY6uLuUORfXLGW08PI7YuwS0gzHh2yVje43bEscmDAjHk/C5XhiY0joMDQG9lPMkBCDflFDyQ0qzmX32PK01gpEM3fA7zqnQOK/+j1UrfyQ1jztC0nPrdYg51ovynQpPOZUfs73SKeETc3Xp9lhFPWfVCeQwhggk/E1kCQhABkFcIFsumIY1CThNOs3a5fd7o4AAQLkIjKbSucZ/EnbGm494hFe8Xgv6q9eXxZQS29jBzBg="
+
+before_deploy: git fetch --unshallow
+
+deploy:
+  provider: azure_web_apps
+  site: lingvo
+  verbose: true
+  on:
+    branch: master
+    condition: $DOTNETCORE = 1
