@@ -1,10 +1,12 @@
 ﻿using System;
+using LinqToDB.Mapping;
 
 namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// Objects from this class represent audio files.
 	/// </summary>
+	[Table("Recordings")]
 	public class Recording
 	{
 		// to do: save the mp3 file
@@ -22,17 +24,20 @@ namespace Lingvo.Common.Entities
 			CreationTime = creationTime;
 		}
 
+		[Column, PrimaryKey, NotNull]
 		public int Id { get; private set; }
 
+		[Column, NotNull]
 		public DateTime CreationTime { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the length.
 		/// </summary>
 		/// <value>The length.</value>
+		[Column, NotNull, DataType(LinqToDB.DataType.Int32)]
 		public TimeSpan Length { get; set; }
 
-
+		[Column, NotNull]
 		public string LocalPath { get; set; }
 	}
 }
