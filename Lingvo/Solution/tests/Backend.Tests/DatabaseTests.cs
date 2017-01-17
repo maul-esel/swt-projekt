@@ -5,15 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
+using System.Reflection;
+using MySql.Data.MySqlClient.Framework.NetCore10;
+using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend.Tests
 {
-    public class DatabaseTests
-    {
-
-		private DatabaseService Database;
-
-		public DatabaseTests()
+	public class TestsFixture : IDisposable
+	{
+		public TestsFixture()
 		{
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetCurrentDirectory())
@@ -24,9 +24,32 @@ namespace Lingvo.Backend.Tests
 			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 			if (string.IsNullOrEmpty(password))
 				password = "password"; // dummy default value for development
-			Database = new DatabaseService(
+			DatabaseTests.Database = new DatabaseService(
 				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
 			);
+
+			DatabaseTests.Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "Server.sql")));
+		
+		}
+
+		public void Dispose()
+		{
+		}
+	}
+
+    public class DatabaseTests : IClassFixture<TestsFixture>
+    {
+
+		public static DatabaseService Database;
+
+		public DatabaseTests()
+		{
+			
+			Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
+		}
+
+		public void SetFixture(TestsFixture data)
+		{
 		}
 
         [Fact]
@@ -65,19 +88,49 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveWorkbook()
 		{
-			//TODO
+			var testWorkbook = new Workbook()
+			{
+				Title = "Test",
+				Subtitle = "Test"
+			};
+
+			Database.Save(testWorkbook);
+			Assert.Equal(3, Database.Workbooks.Count());
+			Assert.NotNull(Database.Workbooks.Find(testWorkbook.Id));
 		}
 
 		[Fact]
 		public void TestSavePage()
 		{
-			//TODO
+			var testPage = new Page()
+			{
+				Number = 5,
+				workbookId = 1,
+				Workbook = Database.Workbooks.Find(1),
+				Description = "Test",
+				TeacherTrack = Database.Recordings.Find(1),
+				teacherTrackId = 1					
+			};
+
+			Console.WriteLine(testPage.StudentTrack);
+			Console.WriteLine(testPage.studentTrackId);
+			Database.Save(testPage);
+			Assert.Equal(5, Database.Pages.Count());
+			Assert.NotNull(Database.Pages.Find(1, 5));
 		}
 
 		[Fact]
-		public void TestSaverecording()
+		public void TestSaveRecording()
 		{
-			//TODO
+			var testRecording = new Recording()
+			{
+				Length = TimeSpan.FromMilliseconds(12),
+				LocalPath = "test"
+			};
+
+			Database.Save(testRecording);
+			Assert.Equal(5, Database.Recordings.Count());
+			Assert.NotNull(Database.Recordings.Find(testRecording.Id));
 		}
     }
 }

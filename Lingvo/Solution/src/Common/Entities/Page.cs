@@ -9,11 +9,11 @@ namespace Lingvo.Common.Entities
 	[Table("Pages")]
 	public class Page : IPage
 	{
-		[Column, NotNull]
+		[Column("teacherTrack"), NotNull]
 		public int teacherTrackId;
 
-		[Column]
-		public int studentTrackId;
+		[Column("studentTrack")]
+		public int? studentTrackId;
 
 		[Column, NotNull]
 		public int workbookId { get; set; }

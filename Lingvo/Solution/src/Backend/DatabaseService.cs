@@ -3,6 +3,7 @@ using LinqToDB.Mapping;
 using LinqToDB.DataProvider.MySql;
 using LinqToDB;
 using Lingvo.Common.Services;
+using System;
 
 namespace Lingvo.Backend
 {
@@ -24,6 +25,7 @@ namespace Lingvo.Backend
 				.Property(r => r.CreationTime)
 					.HasSkipOnInsert(true)
 					.HasSkipOnUpdate(true)
+
 			.Entity<Workbook>()
 				.Property(w => w.Id).IsIdentity()
 				.Property(w => w.LastModified)
@@ -43,7 +45,8 @@ namespace Lingvo.Backend
 			}
 			else
 			{
-				connection.InsertWithIdentity(recording);
+				int id = Convert.ToInt32((UInt64)connection.InsertWithIdentity(recording));
+				recording.Id = id;
 			}
 		}
 
@@ -77,7 +80,8 @@ namespace Lingvo.Backend
 			}
 			else
 			{
-				connection.InsertWithIdentity(workbook);
+				int id = Convert.ToInt32((UInt64) connection.InsertWithIdentity(workbook));
+				workbook.Id = id;
 			}
 		}
     }

@@ -14,7 +14,7 @@ namespace Lingvo.Common.Entities
 		/// </summary>
 		/// <value>The identifier.</value>
 		[Column, PrimaryKey, NotNull]
-		public int Id { get; private set; }
+		public int Id { get;  set; }
 
 		/// <summary>
 		/// Gets or sets the title.
