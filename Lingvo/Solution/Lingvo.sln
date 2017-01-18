@@ -1,14 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+VisualStudioVersion = 15.0.25920.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MobileApp", "src\MobileApp\MobileApp.shproj", "{0001E584-0BEE-4D0C-9466-9EA2F1487A9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileApp.Droid", "src\MobileApp.Droid\MobileApp.Droid.csproj", "{EF1ADC10-D19F-4256-8C68-0F07329AE4C3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{70E7E6E7-7DA9-479C-AA2D-FA0DD6A4B9C6} = {70E7E6E7-7DA9-479C-AA2D-FA0DD6A4B9C6}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileApp.iOS", "src\MobileApp.iOS\MobileApp.iOS.csproj", "{80B9EAEF-F8FC-4351-A078-17B64FC856DE}"
 EndProject
