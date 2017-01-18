@@ -1,6 +1,6 @@
 -- MySQL database on server --
 
-CREATE TABLE Workbooks (
+CREATE TABLE IF NOT EXISTS Workbooks (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
@@ -9,14 +9,14 @@ CREATE TABLE Workbooks (
   published BOOLEAN NOT NULL
 );
 
-CREATE TABLE Recordings (
+CREATE TABLE IF NOT EXISTS Recordings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   creationTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   length INT NOT NULL,
   localPath TEXT NOT NULL
 );
 
-CREATE TABLE Pages (
+CREATE TABLE IF NOT EXISTS Pages (
   workbookID INT,
   number INT,
   description TEXT NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE Pages (
 
 -- only on server --
 
-CREATE TRIGGER updateTotalPages
+CREATE TRIGGER IF NOT EXISTS updateTotalPages
 AFTER INSERT ON Pages FOR EACH ROW
 BEGIN
   UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
