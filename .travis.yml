@@ -4,6 +4,12 @@ solution: Lingvo/Solution/Lingvo.sln
 dist: trusty
 sudo: required
 
+services:
+  - mysql
+
+env:
+  - ASPNETCORE_ENVIRONMENT=travis-ci
+
 matrix:
   include:
     - os: linux
@@ -17,6 +23,9 @@ matrix:
       env:
         - XAMARIN=1
         - ANDROID_HOME=/usr/local/opt/android-sdk
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS lingvo'
 
 install:
   - ./scripts/install-dotnetcore.sh
