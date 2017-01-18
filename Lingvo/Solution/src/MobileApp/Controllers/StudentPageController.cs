@@ -2,6 +2,7 @@
 using Lingvo.Common.Entities;
 using System;
 using Xamarin.Forms;
+using System.IO;
 
 namespace Lingvo.MobileApp.Controllers
 {
@@ -31,7 +32,13 @@ namespace Lingvo.MobileApp.Controllers
 			set
 			{
 				selectedPage = value;
+
+				/*var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				var filePath = Path.Combine(documentsDirPath, "1.mp3");
+				var recording = new Recording(id: 99, length: TimeSpan.FromSeconds(231), localPath: filePath, creationTime: new DateTime());
+				audioPlayer.PrepareTeacherTrack(recording);*/
 				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+
 				if (selectedPage.StudentTrack != null)
 				{
 					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
@@ -87,7 +94,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void StartStudentRecording()
 		{
 			PlayPage();
-			recorder.Start();
+			recorder?.Start();
 		}
 
 		/// <summary>
@@ -95,7 +102,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Pause()
 		{
-			recorder.Pause();
+			recorder?.Pause();
 			audioPlayer.Pause();
 		}
 
@@ -114,7 +121,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			Recording recording = recorder.Stop();
+			Recording recording = recorder?.Stop();
 			SelectedPage.StudentTrack = recording;
 		}
 

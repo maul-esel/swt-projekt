@@ -17,11 +17,12 @@ namespace Lingvo.MobileApp.Pages
             SelectedItem = new List<ContentPage>(Children).Find((p) => ((AudioPage)p).Page.Equals(selectedPage));
 
             CurrentPageChanged += AudioCarouselPage_CurrentPageChanged;
+			StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
         }
 
         private void AudioCarouselPage_CurrentPageChanged(object sender, System.EventArgs e)
         {
-            //StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
+            StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
         }
     }
 }
