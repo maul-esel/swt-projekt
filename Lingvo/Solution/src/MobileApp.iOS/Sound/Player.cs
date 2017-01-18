@@ -5,6 +5,7 @@ using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
 using Lingvo.MobileApp.iOS.Sound;
 using Xamarin.Forms;
+using System.Timers;
 
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.iOS.Sound
@@ -13,10 +14,19 @@ namespace Lingvo.MobileApp.iOS.Sound
 	{
 		private AVAudioPlayer teacherTrack;
 		private AVAudioPlayer studentTrack;
+		private Timer timer;
+		private double elapsedTimeOnLastUpdate;
 
+		public event Action<int> Update;
 
 		public Player()
 		{
+			timer = new Timer(100);
+			timer.AutoReset = true;
+			timer.Enabled = true;
+			timer.Elapsed += (sender, e) => OnUpdate();
+			elapsedTimeOnLastUpdate = 0;
+
 			//Initialize audio session
 			ActivateAudioSession();
 		}
@@ -35,6 +45,30 @@ namespace Lingvo.MobileApp.iOS.Sound
 			}
 		}
 
+		public double TotalLengthOfTrack
+		{
+			get
+			{
+				if (teacherTrack != null)
+				{
+					return teacherTrack.Duration;
+				}
+				return 0;
+			}
+		}
+
+		public double CurrentProgress
+		{
+			get
+			{
+				if (teacherTrack != null)
+				{
+					return teacherTrack.CurrentTime;
+				}
+				return 0;
+			}
+		}
+
 
 		#endregion
 
@@ -47,13 +81,9 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				studentTrack.Play();
 			}
+			timer.Start();
 		}
 
-
-		public void Continue()
-		{
-			Play();
-		}
 
 		public void Pause()
 		{
@@ -62,6 +92,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				studentTrack.Pause();
 			}
+			timer.Stop();
 
 		}
 
@@ -78,6 +109,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				studentTrack.Stop();
 			}
+			timer.Stop();
 		}
 
 		public void PrepareTeacherTrack(Recording recording)
@@ -120,6 +152,17 @@ namespace Lingvo.MobileApp.iOS.Sound
 		}
 
 		#endregion
+
+		/// <summary>
+		/// This method is called via the elapsed timer to create a DrawUpdate for the view
+		/// </summary>
+		private void OnUpdate()
+		{
+			double elapsedTime = teacherTrack.CurrentTime;
+			double delta = elapsedTime - elapsedTimeOnLastUpdate;
+			Update?.Invoke((int)delta);
+			elapsedTimeOnLastUpdate = elapsedTime;
+		}
 
 	}
 }

@@ -10,9 +10,11 @@ namespace Lingvo.Common.Adapters
 		void Play();
 		void Stop();
 		void Pause();
-		void Continue();
 		void SeekTo(TimeSpan seek);
 		bool IsStudentTrackMuted { get; set; }
+		double TotalLengthOfTrack { get; }
+		double CurrentProgress { get; }
+		event Action<int> Update;
 
 	}
 }

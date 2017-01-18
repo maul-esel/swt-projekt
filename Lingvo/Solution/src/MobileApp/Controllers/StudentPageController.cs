@@ -47,6 +47,25 @@ namespace Lingvo.MobileApp.Controllers
 
 		}
 
+
+		/// <summary>
+		/// This method delegates all subscribers to the udpate event of the audioplayer
+		/// It is intented that the audioView subscribes to this event in order to get the current playback progress.
+		/// </summary>
+		public event Action<int> Update
+		{
+			add
+			{
+				audioPlayer.Update += value;
+			}
+
+			remove
+			{
+				audioPlayer.Update -= value;
+			}
+		}
+
+
 		/// <summary>
 		/// Gets or sets a value indicating whether the 
 		/// <see cref="T:Lingvo.MobileApp.Controllers.StudentPageController"/>'s studentTrack is muted.
@@ -111,8 +130,8 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Continue()
 		{
-			recorder.Continue();
-			audioPlayer.Continue();
+			recorder?.Continue();
+			audioPlayer.Play();
 		}
 
 		/// <summary>
@@ -130,7 +149,7 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(TimeSpan timeCode)
 		{
-			recorder.SeekTo(timeCode);
+			recorder?.SeekTo(timeCode);
 			audioPlayer.SeekTo(timeCode);
 		}
 	}

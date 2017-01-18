@@ -82,6 +82,7 @@ namespace Lingvo.MobileApp.Pages
             }
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
+			StudentPageController.Instance.Update += (elapsedTime) => ProgressView.Progress = elapsedTime;
 
             RewindButton = new LingvoRoundImageButton()
             {
