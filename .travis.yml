@@ -22,7 +22,7 @@ matrix:
         - ANDROID_HOME=/usr/local/opt/android-sdk
 
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS lingvo'
+  - if [[ "$DOTNETCORE" != "1" ]] ; then mysql -e 'CREATE DATABASE IF NOT EXISTS lingvo' ; fi
 
 install:
   - ./scripts/install-dotnetcore.sh
