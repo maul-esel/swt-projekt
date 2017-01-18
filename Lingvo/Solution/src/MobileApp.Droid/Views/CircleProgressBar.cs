@@ -420,8 +420,9 @@ namespace Lingvo.MobileApp.Droid.Views
 
         protected override void OnRestoreInstanceState(IParcelable state)
         {
-            if (state is Bundle bundle)
+            if (state is Bundle)
             {
+				var bundle = state as Bundle;
                 int colorValue = bundle.GetInt(INSTANCE_TEXT_COLOR);
                 textColor = Color.Argb(Color.GetAlphaComponent(colorValue), Color.GetRedComponent(colorValue), Color.GetGreenComponent(colorValue), Color.GetBlueComponent(colorValue));
                 textSize = bundle.GetFloat(INSTANCE_TEXT_SIZE);
