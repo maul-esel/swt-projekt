@@ -73,6 +73,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public void Stop()
 		{
 			teacherTrack.Stop();
+			teacherTrack.CurrentTime = 0;
 			if (studentTrack != null)
 			{
 				studentTrack.Stop();

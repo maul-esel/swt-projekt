@@ -166,14 +166,30 @@ namespace Lingvo.MobileApp.Pages
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
-            ForwardButton.IsEnabled = RewindButton.IsEnabled = PlayPauseButton.Toggled = false;
+
+			if (RecordStopButton.Image.Equals(LingvoRoundImageButton.RecordImage))
+			{
+
+				StudentPageController.Instance.StartStudentRecording();
+				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+				PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
+		
+			}
+			else
+			{
+				StudentPageController.Instance.Stop();
+				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+				RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
+
+			}
+            /*ForwardButton.IsEnabled = RewindButton.IsEnabled = PlayPauseButton.Toggled = false;
             if (RecordStopButton.Image.Equals(LingvoRoundImageButton.StopImage))
             {
                 //StudentPageController.Instance.Stop();
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
                 RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
 
-                if (/*StudentPageController.Instance.SelectedPage.StudentTrack != null*/ false)
+                if (StudentPageController.Instance.SelectedPage.StudentTrack != null false)
                 {
                     ProgressView.MuteEnabled = true;
                 }
@@ -185,7 +201,7 @@ namespace Lingvo.MobileApp.Pages
             }
             else
             {
-                if (/*StudentPageController.Instance.SelectedPage.StudentTrack != null*/ false)
+                if (StudentPageController.Instance.SelectedPage.StudentTrack != null false)
                 {
                     //Dialog
                 }
@@ -194,38 +210,25 @@ namespace Lingvo.MobileApp.Pages
                 PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
                 RecordStopButton.Image = LingvoRoundImageButton.StopImage;
                 ProgressView.MuteEnabled = false;
-            }
+            }*/
         }
 
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)
         {
-            if (PlayPauseButton.Image.Equals(LingvoRoundImageButton.PlayImage))
-            {
-                if (/*StudentPageController.Instance.IsPaused()*/ false)
-                {
-                    //StudentPageController.Instance.Continue();
-                }
-                else
-                {
-                    //StudentPageController.Instance.PlayPage();
-                    ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
-                }
 
-                PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
-                RecordStopButton.Image = LingvoRoundImageButton.StopImage;
-            }
-            else
-            {
-                PlayPauseButton.Toggled = !PlayPauseButton.Toggled;
-                if (PlayPauseButton.Toggled)
-                {
-                    //StudentPageController.Instance.Pause();
-                }
-                else
-                {
-                    //StudentPageController.Instance.Continue();
-                }
-            }
+			if (PlayPauseButton.Image.Equals(LingvoRoundImageButton.PlayImage))
+			{
+				StudentPageController.Instance.PlayPage();
+				ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
+				PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
+				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+			}
+			else //pause player
+			{
+				StudentPageController.Instance.Pause();
+				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+			}
         }
 
         private void ForwardButton_OnClicked(object sender, EventArgs e)
