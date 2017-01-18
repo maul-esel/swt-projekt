@@ -1,20 +1,30 @@
 ﻿using Lingvo.Common.Adapters;
 using MobileApp.Entities;
 using System;
+using Xamarin.Forms;
 
-namespace MobileApp.Controllers
+namespace Lingvo.MobileApp.Controllers
 {
     /// <summary>
     /// Controller for handling teacher memos.
     /// </summary>
     public class TeacherMemoController
 	{
+		private static TeacherMemoController instance;
 		private IPlayer player;
 		private IRecorder recorder;
 
-		public TeacherMemoController()
+		/// <summary>
+		/// Gets the instance of the teacherMemoController (Singleton Pattern)
+		/// </summary>
+		/// <value>The instance.</value>
+		public static TeacherMemoController Instance => instance ?? (instance = new TeacherMemoController());
+
+		private TeacherMemoController()
 		{
-			// to do: initialize player & recorder
+			player = DependencyService.Get<IPlayer>();
+			//TODO: recorder = DependencyController.Get<IRecorder>();
+
 		}
 
 		/// <summary>
@@ -22,7 +32,7 @@ namespace MobileApp.Controllers
 		/// </summary>
 		public void StartTeacherMemo()
 		{
-			recorder.Start();
+			//TODO: recorder.Start();
 		}
 
 		/// <summary>
@@ -39,7 +49,7 @@ namespace MobileApp.Controllers
 		/// </summary>
 		public void RestartTeacherMemo()
 		{
-			recorder.Start();
+			//TODO: recorder.Start();
 		}
 
 		/// <summary>
@@ -60,7 +70,8 @@ namespace MobileApp.Controllers
 		/// <param name="memo">Memo.</param>
 		public void PlayTeacherMemo(TeacherMemo memo)
 		{
-			player.Play(memo.Recording);
+			player.PrepareTeacherTrack(memo.Recording);
+			player.Play();
 		}
 	}
 }

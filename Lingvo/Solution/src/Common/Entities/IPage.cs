@@ -4,7 +4,7 @@ namespace Lingvo.Common.Entities
 	/// <summary>
 	/// A page of a workbook.
 	/// </summary>
-	public interface IPage
+	public interface IPage : IDownloadable
 	{
 		/// <summary>
 		/// Gets or sets the page number.
@@ -26,11 +26,6 @@ namespace Lingvo.Common.Entities
 			set;
 		}
 
-
-		Workbook Workbook { get; set; }
-
-		int workbookId { get; set; }
-
 		/// <summary>
 		/// Gets or sets the teacher track.
 		/// </summary>
@@ -50,6 +45,10 @@ namespace Lingvo.Common.Entities
 			get;
 			set;
 		}
+
+		Workbook Workbook { get; set; }
+
+		int workbookId { get; set; }
 
 		/// <summary>
 		/// Deletes the student recording that is currently attached to this page.

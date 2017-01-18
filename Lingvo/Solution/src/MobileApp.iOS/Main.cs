@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Lingvo.Common.Entities;
 using UIKit;
 
 namespace Lingvo.MobileApp.iOS

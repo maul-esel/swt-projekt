@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Lingvo.Common.Entities
 {
 	[Table("Workbooks")]
-	public class Workbook
+	public class Workbook : IDownloadable
 	{
 		/// <summary>
 		/// Gets the identifier.
@@ -62,7 +62,7 @@ namespace Lingvo.Common.Entities
 		/// Deletes a page from the workbook's collection.
 		/// </summary>
 		/// <param name="p">Page to be deleted</param>
-		public void DeletePage(Page p)
+		public void DeletePage(IPage p)
 		{
 			Pages.Remove(p);
 		}
@@ -71,7 +71,7 @@ namespace Lingvo.Common.Entities
 		/// Saves the page.
 		/// </summary>
 		/// <param name="p">P.</param>
-		public void SavePage(Page p)
+		public void SavePage(IPage p)
 		{
 			Pages.Add(p);
 		}

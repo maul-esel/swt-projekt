@@ -23,6 +23,15 @@ namespace MobileApp.Proxies
 			service = APIService.Instance;
 		}
 
+        internal Task Download(IDownloadable downloadable)
+        {
+            if(downloadable is PageProxy)
+            {
+                return DownloadSinglePage((PageProxy)downloadable);
+            }
+            return DownloadWorkbook(((Workbook)downloadable).Id);
+        }
+
 		/// <summary>
 		/// Gets the instance of cloud library proxy (singleton pattern).
 		/// </summary>

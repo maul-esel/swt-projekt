@@ -9,8 +9,6 @@ namespace Lingvo.Common.Entities
 	[Table("Recordings")]
 	public class Recording
 	{
-		// to do: save the mp3 file
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class
 		/// </summary>

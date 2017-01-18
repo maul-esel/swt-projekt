@@ -1,6 +1,6 @@
 ﻿using System;
-using Lingvo.Common.Entities;
 using Lingvo.Common.Adapters;
+using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend
 {

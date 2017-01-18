@@ -32,7 +32,6 @@
     <Compile Remove="Workbook.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="linq2db.Core" Version="1.7.5" />
     <PackageReference Include="NETStandard.Library">
       <Version>1.6.1</Version>
     </PackageReference>
@@ -40,10 +39,17 @@
       <Version>1.0.0-alpha-20161104-2</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="linq2db.Core">
+      <Version>1.7.5</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Adapters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
