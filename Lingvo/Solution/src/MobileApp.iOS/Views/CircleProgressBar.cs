@@ -191,6 +191,7 @@ namespace Lingvo.MobileApp.iOS
 
 		public void render()
 		{
+			BackgroundColor = UIColor.Clear;
 			backgroundLayer?.RemoveFromSuperLayer();
 			strokeLayer.RemoveFromSuperLayer();
 
