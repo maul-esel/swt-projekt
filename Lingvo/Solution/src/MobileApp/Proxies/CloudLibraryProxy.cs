@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Lingvo.Common.Entities;
 using System.Threading.Tasks;
-using Lingvo.Common;
-using Lingvo.Common.Entities;
 
-namespace MobileApp.Proxies
+namespace Lingvo.MobileApp.Proxies
 {
-	/// <summary>
-	/// Cloud library proxy.
-	/// </summary>
-	public class CloudLibraryProxy
+    /// <summary>
+    /// Cloud library proxy.
+    /// </summary>
+    public class CloudLibraryProxy
 	{
 		private static CloudLibraryProxy instance;
 

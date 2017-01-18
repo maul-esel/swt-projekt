@@ -9,7 +9,6 @@ namespace Lingvo.MobileApp.Droid.Renderers
     class LingvoSingleProgressViewRenderer : ViewRenderer<LingvoSingleProgressView, Android.Views.View>
     {
         AndroidLingvoSingleProgressView progressView;
-        LingvoSingleProgressView.LabelTypeValue labelType;
 
         protected override void OnElementChanged(ElementChangedEventArgs<LingvoSingleProgressView> e)
         {
@@ -19,7 +18,6 @@ namespace Lingvo.MobileApp.Droid.Renderers
             {
                 progressView = new AndroidLingvoSingleProgressView(Context);
                 SetNativeControl(progressView);
-                labelType = e.NewElement.LabelType;
             }
 
             if (e.OldElement != null)
@@ -34,12 +32,12 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
         private void updateView(object sender, EventArgs e)
         {
-			if (Control == null)
-			{
-				return;
-			}
+            if (Control == null)
+            {
+                return;
+            }
             LingvoSingleProgressView element = (LingvoSingleProgressView)sender;
-         
+
             if (progressView.Size != element.Size)
                 progressView.Size = element.Size;
             if (!progressView.ProgressColor.Equals(element.ProgressColor.ToAndroid()))
@@ -47,18 +45,15 @@ namespace Lingvo.MobileApp.Droid.Renderers
             if (progressView.Max != element.MaxProgress)
                 progressView.Max = element.MaxProgress;
 
-            if (progressView.Progress != element.Progress || !labelType.Equals(element.LabelType))
+
+            if (progressView.Progress != element.Progress)
+                progressView.Progress = element.Progress;
+
+            switch (element.LabelType)
             {
-                if (progressView.Progress != element.Progress)
-                    progressView.Progress = element.Progress;
-
-                switch (element.LabelType)
-                {
-                    case LingvoSingleProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
-                    case LingvoSingleProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
-                }
-
-                labelType = element.LabelType;
+                case LingvoSingleProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
+                case LingvoSingleProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
+                case LingvoSingleProgressView.LabelTypeValue.None: progressView.Text = ""; break;
             }
         }
     }

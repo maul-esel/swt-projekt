@@ -59,7 +59,13 @@ namespace MobileApp.Entities
 
 		private LocalCollection()
 		{
-		}
+            Workbooks.Add(new Workbook() { Title = "Thannhauser", Subtitle = "Lloret Ipsum",
+                Pages = { new Page() { Number = 1 }, new Page() { Number = 2 },
+                new Page() { Number = 3 }, new Page() { Number = 4 }, new Page() { Number = 5 }
+                ,new Page() { Number = 6 }, new Page() { Number = 7 }, new Page() { Number = 8 },
+                new Page() { Number = 9 }, new Page() { Number = 10 }, new Page() { Number = 11 }}
+            });
+        }
 
 		/// <summary>
 		/// Gets the instance of local collection (singleton pattern).

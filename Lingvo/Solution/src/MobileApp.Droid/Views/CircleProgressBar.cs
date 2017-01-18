@@ -378,12 +378,12 @@ namespace Lingvo.MobileApp.Droid.Views
                     textPaint.TextSize = textSize;
                     if (centerText)
                     {
-                        textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
+                        //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
                         float textHeight = textPaint.Descent() + textPaint.Ascent();
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, (Width - textHeight) / 2.0f, textPaint);
                     } else
                     {
-                        textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - textPaint.Descent() - offset);
+                        //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - textPaint.Descent() - offset);
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, Width / 2.0f - textPaint.Descent() / 2.0f, textPaint);
                     }
                 }
