@@ -161,6 +161,9 @@
       <HintPath>..\..\packages\linq2db.Core.1.7.5\lib\netstandard1.6\linq2db.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+	<Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Sqlite, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Data.Sqlite.1.1.0\lib\netstandard1.3\Microsoft.Data.Sqlite.dll</HintPath>
     </Reference>
