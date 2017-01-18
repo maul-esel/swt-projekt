@@ -42,6 +42,8 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
                 progressView.InnerProgressEnabled = element.InnerProgressEnabled;
+            if (progressView.InnerMuteButtonVisible != element.MuteEnabled)
+                progressView.InnerMuteButtonVisible = element.MuteEnabled;
             if (progressView.Size != element.Size)
                 progressView.Size = element.Size;
             if (!progressView.OuterProgressColor.Equals(element.OuterProgressColor.ToAndroid()))
@@ -52,8 +54,6 @@ namespace Lingvo.MobileApp.Droid.Renderers
                 progressView.Max = element.MaxProgress;
             if (progressView.Progress != element.Progress)
                 progressView.Progress = element.Progress;
-            if (progressView.InnerMuteButtonVisible != element.InnerProgressEnabled)
-                progressView.InnerMuteButtonVisible = element.InnerProgressEnabled;
         }
     }
 }

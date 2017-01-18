@@ -25,11 +25,6 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
-    <Compile Remove="Page.cs" />
-    <Compile Remove="Recording.cs" />
-    <Compile Remove="Class1.cs" />
-    <Compile Remove="Adapters\RecorderAdapter.cs" />
-    <Compile Remove="Workbook.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library">

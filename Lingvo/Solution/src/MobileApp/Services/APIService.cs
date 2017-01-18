@@ -4,10 +4,11 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Newtonsoft.Json;
 
 using Lingvo.Common.Entities;
-using MobileApp.Proxies;
+using Lingvo.MobileApp.Proxies;
 
 namespace Lingvo.MobileApp
 {
