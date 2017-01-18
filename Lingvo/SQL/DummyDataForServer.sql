@@ -1,5 +1,5 @@
-DELETE FROM Workbooks;
 DELETE FROM Pages;
+DELETE FROM Workbooks;
 DELETE FROM Recordings;
 
 INSERT INTO Workbooks(id, title, subtitle, totalPages, published) VALUES
