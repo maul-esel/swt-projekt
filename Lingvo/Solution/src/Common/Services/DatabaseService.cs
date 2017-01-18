@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LinqToDB;
 using LinqToDB.Data;
@@ -24,7 +25,8 @@ namespace Lingvo.Common.Services
 			{
 				if (sqlType == LinqToDB.SqlQuery.SqlDataType.Int32)
 					sql.Append(((TimeSpan)value).Milliseconds);
-				throw new NotSupportedException();
+				else
+					throw new NotSupportedException();
 			});
 		}
 
@@ -34,8 +36,17 @@ namespace Lingvo.Common.Services
 			.LoadWith(p => p.Workbook)
 			.LoadWith(p => p.TeacherTrack);
 
-		public ITable<Workbook> Workbooks => connection.GetTable<Workbook>()
+		public IEnumerable<Workbook> Workbooks => connection.GetTable<Workbook>()
+			/*****************************************
+			 * HACK: linq2db polymorphism workaround *
+			 * for details, see Workbook.cs          *
+			******************************************/
 			// .LoadWith(w => w.Pages) // TODO: association type currently unsupported
+			.AsEnumerable().Select(w =>
+			{
+				w.SetDatabaseService(this);
+				return w;
+			})
 			;
 
 		public void Execute(string sql)
@@ -47,17 +58,17 @@ namespace Lingvo.Common.Services
 
 	public static class DatabaseExtensions
 	{
-		public static Page Find(this ITable<Page> pages, int workbookId, int pageNumber)
+		public static Page Find(this IEnumerable<Page> pages, int workbookId, int pageNumber)
 		{
 			return pages.FirstOrDefault(page => page.workbookId == workbookId && page.Number == pageNumber);
 		}
 
-		public static Workbook Find(this ITable<Workbook> workbooks, int workbookId)
+		public static Workbook Find(this IEnumerable<Workbook> workbooks, int workbookId)
 		{
 			return workbooks.FirstOrDefault(workbook => workbook.Id == workbookId);
 		}
 
-		public static Recording Find(this ITable<Recording> recordings, int recordingId)
+		public static Recording Find(this IEnumerable<Recording> recordings, int recordingId)
 		{
 			return recordings.FirstOrDefault(recording => recording.Id == recordingId);
 		}

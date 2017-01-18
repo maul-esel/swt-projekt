@@ -85,6 +85,20 @@ namespace Lingvo.Backend.Tests
 		}
 
 		[Fact]
+		public void TestWorkbookPages()
+		{
+			var dbWorkbook = Database.Workbooks.Find(1);
+			Assert.Equal(2, dbWorkbook.Pages.Count);
+
+			var newWorkbook = new Workbook(42) { Title = "Irgendein Workbook", Subtitle = "neu erstellt" };
+			Assert.NotNull(newWorkbook.Pages);
+			Assert.Equal(0, newWorkbook.Pages.Count);
+
+			newWorkbook.Pages.Add(new Page() { Description = "eine Seite", Number = 13, Workbook = newWorkbook });
+			Assert.Equal(1, newWorkbook.Pages.Count);
+		}
+
+		[Fact]
 		public void TestSaveWorkbook()
 		{
 			var testWorkbook = new Workbook()

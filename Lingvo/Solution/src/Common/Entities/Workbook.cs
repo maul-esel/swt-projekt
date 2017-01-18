@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LinqToDB.Mapping;
 
 using Newtonsoft.Json;
@@ -48,8 +49,17 @@ namespace Lingvo.Common.Entities
 		/// Gets or sets all the pages of .
 		/// </summary>
 		/// <value>The pages.</value>
-		// TODO: [Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId) /*, TODO: OtherType = typeof(List<Page>) */)]
-		public List<IPage> Pages { get; set; }
+		
+		/******* TODO: Linq2DB polymorphism workaround: ********
+		 * 
+		 * Linq2DB attempts to create instances of IPage and thus fails. It should be possible to specify the concrete type
+		 * (see "OtherType" below). Pending this feature, a workaround is implemented to load the pages on-demand from the DB.
+		 * 
+		 * */
+
+		// TODO: [Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId), TODO: OtherType = typeof(List<Page>))]
+		public List<IPage> Pages // { get; set; }
+			=> LoadPages();
 
 		/// <summary>
 		/// Gets the total number of pages belonging to this workbook.
@@ -92,5 +102,25 @@ namespace Lingvo.Common.Entities
 		public Workbook()
 		{
 		}
+
+		#region Linq2DB polymorphism workaround
+
+		private Services.DatabaseService service;
+
+		internal void SetDatabaseService(Services.DatabaseService service)
+		{
+			this.service = service;
+		}
+
+		private List<IPage> LoadPages()
+		{
+			if (pages == null)
+				pages = service == null ? new List<IPage>() : service.Pages.Where(p => p.workbookId == Id).Cast<IPage>().ToList();
+			return pages;
+		}
+
+		private List<IPage> pages;
+
+		#endregion
 	}
 }
