@@ -61,12 +61,14 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <Reference Include="Lingvo.Common">
-      <HintPath>..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
+      <HintPath Condition="Exists('..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll')">..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
+      <HintPath Condition="Exists('..\Common\bin\Debug\Lingvo.Common.dll')">..\Common\bin\Debug\Lingvo.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Reference Include="Lingvo.Common">
-      <HintPath>..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll</HintPath>
+      <HintPath Condition="Exists('..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll')">..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll</HintPath>
+      <HintPath Condition="Exists('..\Common\bin\Release\Lingvo.Common.dll')">..\Common\bin\Release\Lingvo.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +129,6 @@
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.3.175\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Lingvo.Common">
-      <HintPath>..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
