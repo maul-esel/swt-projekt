@@ -9,8 +9,8 @@ namespace Lingvo.MobileApp.Pages
 {
     class AudioPage : ContentPage
     {
-        private static readonly int SeekButtonSize = 66;
-        private static readonly int ControlButtonSize = 86;
+        private static readonly int SeekButtonSize = 55;
+        private static readonly int ControlButtonSize = 75;
 
         private static readonly int SeekTimeStep = 15;
 
@@ -52,16 +52,16 @@ namespace Lingvo.MobileApp.Pages
             {
                 ColumnDefinitions = new ColumnDefinitionCollection()
                 {
-                    new ColumnDefinition() { Width=new GridLength(SeekButtonSize, GridUnitType.Absolute) },
-                    new ColumnDefinition() { Width=new GridLength(ControlButtonSize, GridUnitType.Absolute) },
-                    new ColumnDefinition() { Width=new GridLength(ControlButtonSize, GridUnitType.Absolute) },
-                    new ColumnDefinition() { Width=new GridLength(SeekButtonSize, GridUnitType.Absolute) }
+					new ColumnDefinition() { Width=new GridLength(SeekButtonSize, GridUnitType.Absolute) },
+					new ColumnDefinition() { Width=new GridLength(ControlButtonSize, GridUnitType.Absolute) },
+					new ColumnDefinition() { Width=new GridLength(ControlButtonSize, GridUnitType.Absolute) },
+					new ColumnDefinition() { Width=new GridLength(SeekButtonSize, GridUnitType.Absolute) }
                 },
                 RowDefinitions = new RowDefinitionCollection()
                 {
                     new RowDefinition() { Height=new GridLength(ControlButtonSize + SeekButtonSize / 2, GridUnitType.Absolute) }
                 },
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
+				HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.End,
                 ColumnSpacing = 10
             };
