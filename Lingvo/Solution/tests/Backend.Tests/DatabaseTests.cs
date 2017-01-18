@@ -28,7 +28,7 @@ namespace Lingvo.Backend.Tests
 				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
 			);
 
-			DatabaseTests.Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "Server.sql")));
+			DatabaseTests.Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
 		
 		}
 

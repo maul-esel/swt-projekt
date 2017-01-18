@@ -14,7 +14,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\..\..\SQL\DummyDataForServer.sql" CopyToOutputDirectory="Always">
       <Link>SQL\DummyDataForServer.sql</Link>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\SQL\Server.sql" CopyToOutputDirectory="Always">
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\SQL\server.sql" CopyToOutputDirectory="Always">
       <Link>SQL\server.sql</Link>
     </None>
   </ItemGroup>
