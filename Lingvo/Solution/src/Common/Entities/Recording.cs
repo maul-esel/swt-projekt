@@ -1,5 +1,6 @@
 ﻿using System;
 using LinqToDB.Mapping;
+using System.ComponentModel;
 
 namespace Lingvo.Common.Entities
 {
@@ -31,9 +32,18 @@ namespace Lingvo.Common.Entities
 		/// <summary>
 		/// Gets or sets the length.
 		/// </summary>
-		/// <value>The length.</value>
-		[Column, NotNull, DataType(LinqToDB.DataType.Int32)]
-		public TimeSpan Length { get; set; }
+		public TimeSpan Length
+		{
+			get { return TimeSpan.FromMilliseconds(LengthInMilliseconds); }
+			set { LengthInMilliseconds = value.Milliseconds; }
+		}
+
+		/// <summary>
+		/// Workaround: due to a bug in linq2db, <see cref="TimeSpan"/>s cannot be converted to <c>int</c>s (for MySQL).
+		/// Thus this additional property is needed. It should never be used in code.
+		/// </summary>
+		[Column("length"), NotNull, EditorBrowsable(EditorBrowsableState.Never)]
+		public int LengthInMilliseconds { get; set; } // HACK: avoid this workaround if possible
 
 		[Column, NotNull]
 		public string LocalPath { get; set; }

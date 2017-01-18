@@ -1,13 +1,12 @@
-using Xunit;
-using System.Linq;
-using Lingvo.Common.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using System;
-using System.Reflection;
-using MySql.Data.MySqlClient.Framework.NetCore10;
+using System.IO;
+using System.Linq;
+
 using Lingvo.Common.Entities;
+using Lingvo.Common.Services;
+
+using Xunit;
+using Microsoft.Extensions.Configuration;
 
 namespace Lingvo.Backend.Tests
 {
@@ -130,7 +129,10 @@ namespace Lingvo.Backend.Tests
 
 			Database.Save(testRecording);
 			Assert.Equal(5, Database.Recordings.Count());
-			Assert.NotNull(Database.Recordings.Find(testRecording.Id));
+
+			var savedRecording = Database.Recordings.Find(testRecording.Id);
+			Assert.NotNull(savedRecording);
+			Assert.Equal(TimeSpan.FromMilliseconds(12), savedRecording.Length);
 		}
     }
 }
