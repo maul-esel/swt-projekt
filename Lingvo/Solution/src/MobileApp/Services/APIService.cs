@@ -120,7 +120,7 @@ namespace Lingvo.MobileApp
 		public async Task FetchPages(Workbook workbook)
 		{
 			var responseFromServer = await FetchTextFromURL($"{URL}workbooks/{workbook.Id}/pages");
-			workbook.Pages = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer).Cast<IPage>().ToList();
+			workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer));
 
 			foreach (var page in workbook.Pages)
 			{
