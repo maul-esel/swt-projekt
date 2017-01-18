@@ -7,9 +7,6 @@ sudo: required
 services:
   - mysql
 
-env:
-  - ASPNETCORE_ENVIRONMENT=travis-ci
-
 matrix:
   include:
     - os: linux
@@ -38,6 +35,7 @@ script:
 
 env:
   global:
+    - ASPNETCORE_ENVIRONMENT=travis-ci
     # AZURE_WA_USERNAME:
     - secure: c/gWD6pN7CVD15ApDpQfk8VnIn11vhmW8X3FcVssLTXTPlArEmBHtNJOpXICBKq/LLplgdQlZt8ZS/NmRLVfpewhZ1XoAloYQhdHXHejf2t7Urem5uHJfDYoxwz9rfTI9EJLqk3QdfRtmMFBHApt9dUlBRvF5B+eQE+44su/mA+VvmJiKBfiPzdtKnOE1XBx2rHbafb2gOF7KAO9X110KgWjLNr7PjJTexEAAIYtg4VyQQ1aS2ehafAUDQaPPjKNOzJPGVX/EuQX7JXrJ6JLnTqDdKhNZv8meFxro9nWqyrQGkmAjI4ndn8ILCoYspEPpnx6XOEXxm/w31ZAOMfRd0rvM0sEo0i8nbh/YFK7JFVeAE2P1slvSKmcX9Hw8r1qjmPUxuqkXooRAGNYG1GEYVuLJ6oabA37YWGebslteTIKe5qIqp/Wi+u5yxe2UgY9T2rT3C8U15aBGckhItecgSI8N8ieI7drTt1rD7MxPUAP9lXg4rsqpSRhCRL3PuoiJn41k0amLFtEhyH6tMG+if4WeGe7JzNGGsTJJyC4w9TDS5OuMQJxUjBn+IT/VvcwkkQIsJjHL9DLZIJwLIf+4lmzebwP1lHjoOrnNENxLF/gGaUiaqTK7IvKo2UtGhU+fnQEOm5MPdd/lNtX1j0pC8ZmvUTDfVQwt+P7P3iXppc=
     # AZURE_WA_PASSWORD:
