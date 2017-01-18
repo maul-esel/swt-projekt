@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.IO;
-using System.Reflection;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Lingvo.Backend.Controllers
 {
@@ -14,7 +12,7 @@ namespace Lingvo.Backend.Controllers
 	[Route("api/app")]
 	public class AppController : Controller
     {
-		private DatabaseService Database => Program.Database;
+		private DatabaseService Database => Startup.Database;
 
 		/// <summary>
 		/// Gets all workbooks without pages.

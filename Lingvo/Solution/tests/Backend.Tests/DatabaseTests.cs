@@ -14,21 +14,16 @@ namespace Lingvo.Backend.Tests
 	{
 		public TestsFixture()
 		{
+			var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetCurrentDirectory())
-				.AddJsonFile("appsettings.json");
+				.AddJsonFile("appsettings.json")
+				.AddJsonFile($"appsettings.{environmentName}.json", optional: true)
+				.AddEnvironmentVariables("LINGVO_");
+			var config = builder.Build();
 
-			var Configuration = builder.Build();
-
-			var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-			if (string.IsNullOrEmpty(password))
-				password = "password"; // dummy default value for development
-			DatabaseTests.Database = new DatabaseService(
-				$"Server={Configuration["host"]};Port={Configuration["port"]};Database={Configuration["db"]};Uid={Configuration["user"]};Pwd={password};charset=utf8;"
-			);
-
+			DatabaseTests.Database = DatabaseService.Connect(config);
 			DatabaseTests.Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
-		
 		}
 
 		public void Dispose()

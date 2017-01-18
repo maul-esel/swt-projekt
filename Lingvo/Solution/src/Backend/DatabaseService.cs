@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+
 using LinqToDB.Mapping;
 using LinqToDB.DataProvider.MySql;
 using LinqToDB;
+
+using Microsoft.Extensions.Configuration;
+
 using Lingvo.Common.Services;
-using System;
 
 namespace Lingvo.Backend
 {
@@ -15,6 +18,13 @@ namespace Lingvo.Backend
 			: base(new MySqlDataProvider(), connectionString)
 		{
 			AdjustMappingSchema(connection.MappingSchema);
+		}
+
+		public static DatabaseService Connect(IConfiguration config)
+		{
+			return new DatabaseService(
+				$"Server={config["DB_HOST"]};Port={config["DB_PORT"]};Database={config["DB_NAME"]};Uid={config["DB_USER"]};Pwd={config["DB_PASSWORD"]};charset=utf8;"
+			);
 		}
 
 		private void AdjustMappingSchema(MappingSchema schema)
