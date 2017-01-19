@@ -11,10 +11,10 @@ namespace Lingvo.Common.Entities
 		public DateTime CreationTime { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the length.
+		/// Gets or sets the duration of the audio file in milliseconds.
 		/// </summary>
 		/// <value>The length.</value>
-		public TimeSpan Length { get; private set; }
+		public int Duration { get; private set; }
 
 		public string LocalPath { get; private set; }
 
@@ -27,10 +27,10 @@ namespace Lingvo.Common.Entities
 			CreationTime = DateTime.Now;
 		}
 
-		public Recording(int id, TimeSpan length, string localPath, DateTime creationTime)
+		public Recording(int id, int duration, string localPath, DateTime creationTime)
 		{
 			Id = id;
-			Length = length;
+			Duration = duration;
 			LocalPath = localPath;
 			CreationTime = creationTime;
 		}
