@@ -13,11 +13,42 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 15;
+		private bool isActive;
 
         public IPage Page
         {
             get; internal set;
         }
+
+		public bool IsActive
+		{
+			get
+			{
+				return isActive;
+			}
+
+			set
+			{
+				isActive = value;
+				if (isActive)
+				{
+					StudentPageController.Instance.Update += onUpdate;
+				}
+				else
+				{
+					StudentPageController.Instance.Update -= onUpdate;
+				}
+			}
+		}
+
+		private void onUpdate(int elapsedTime)
+		{
+			Console.WriteLine("Progress: " + elapsedTime);
+			Xamarin.Forms.Device.BeginInvokeOnMainThread(new Action(() => { 
+				ProgressView.Progress = elapsedTime;			
+			}));
+
+		}
 
         internal LingvoRoundImageButton RewindButton
         {
@@ -66,14 +97,15 @@ namespace Lingvo.MobileApp.Pages
                 ColumnSpacing = 10
             };
 
-            ProgressView = new LingvoAudioProgressView()
-            {
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
-                InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
-                InnerProgressEnabled = page.StudentTrack != null,
-                MuteEnabled = page.StudentTrack != null
+			ProgressView = new LingvoAudioProgressView()
+			{
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
+				InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
+				InnerProgressEnabled = page.StudentTrack != null,
+				MuteEnabled = page.StudentTrack != null,
+				MaxProgress = 37000
             };
 
             if (page.TeacherTrack != null)
@@ -82,9 +114,10 @@ namespace Lingvo.MobileApp.Pages
             }
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
-			StudentPageController.Instance.Update += (elapsedTime) => ProgressView.Progress = elapsedTime;
 
-            RewindButton = new LingvoRoundImageButton()
+            
+
+			RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
                 Text = "" + SeekTimeStep,

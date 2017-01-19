@@ -32,7 +32,7 @@ namespace Lingvo.MobileApp.iOS
 				progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
 				e.OldElement.SizeChanged -= NewElementOnSizeChanged;
 			}
-			else if (e.NewElement != null)
+			 if (e.NewElement != null)
 			{
 
 				e.NewElement.PropertyChanged += updateView;

@@ -162,8 +162,9 @@ namespace Lingvo.MobileApp.iOS
 				{
 					return (float)(2 * Math.PI);
 				}
-				var modValue = progress % maxProgress;
-				float percentage = (float)modValue / (float)maxProgress;
+				//var modValue = progress % maxProgress;
+				float percentage = (float)progress / (float)maxProgress;
+				Console.WriteLine("Angle:" + (float)(percentage * (2 * Math.PI)));
 				return (float)(percentage * (2 * Math.PI));
 			}
 		}

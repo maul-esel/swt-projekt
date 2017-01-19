@@ -15,7 +15,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		private AVAudioPlayer teacherTrack;
 		private AVAudioPlayer studentTrack;
 		private Timer timer;
-		private double elapsedTimeOnLastUpdate;
+
 
 		public event Action<int> Update;
 
@@ -25,7 +25,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			timer.AutoReset = true;
 			timer.Enabled = true;
 			timer.Elapsed += (sender, e) => OnUpdate();
-			elapsedTimeOnLastUpdate = 0;
+
 
 			//Initialize audio session
 			ActivateAudioSession();
@@ -104,6 +104,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public void Stop()
 		{
 			teacherTrack.Stop();
+
 			teacherTrack.CurrentTime = 0;
 			if (studentTrack != null)
 			{
@@ -155,13 +156,14 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		/// <summary>
 		/// This method is called via the elapsed timer to create a DrawUpdate for the view
+		/// with the current playback progess in milliseconds
 		/// </summary>
 		private void OnUpdate()
 		{
-			double elapsedTime = teacherTrack.CurrentTime;
-			double delta = elapsedTime - elapsedTimeOnLastUpdate;
-			Update?.Invoke((int)delta);
-			elapsedTimeOnLastUpdate = elapsedTime;
+			var milliseconds = teacherTrack.CurrentTime * 1000;
+
+			Update?.Invoke((int)milliseconds);
+
 		}
 
 	}
