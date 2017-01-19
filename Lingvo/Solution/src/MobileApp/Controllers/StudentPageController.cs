@@ -1,5 +1,6 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
 using System;
 using Xamarin.Forms;
 using System.IO;
@@ -37,6 +38,7 @@ namespace Lingvo.MobileApp.Controllers
 				var filePath = Path.Combine(documentsDirPath, "1.mp3");
 				var recording = new Recording(id: 99, duration: 231000, localPath: filePath, creationTime: new DateTime());
 				audioPlayer.PrepareTeacherTrack(recording);
+				//audioPlayer.PrepareStudentTrack(recording);
 				//audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
 
 				if (selectedPage.StudentTrack != null)
@@ -65,6 +67,18 @@ namespace Lingvo.MobileApp.Controllers
 			}
 		}
 
+		public event Action<PlayerState> StateChange
+		{
+			add 
+			{
+				audioPlayer.StateChange += value;
+			}
+			remove 
+			{
+				audioPlayer.StateChange -= value;
+			}
+		}
+
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the 
@@ -86,6 +100,8 @@ namespace Lingvo.MobileApp.Controllers
 				
 		}
 
+		public PlayerState CurrentPlayerState => audioPlayer.State;
+		public RecorderState CurrentRecorderState => recorder.State;
 
 		/// <summary>
 		/// Gets the instance of StudentPageController (Singleton Pattern)
@@ -96,7 +112,7 @@ namespace Lingvo.MobileApp.Controllers
 		private StudentPageController()
 		{
 			audioPlayer = DependencyService.Get<IPlayer>();
-			//recorder = DependencyService.Get<IRecorder>();
+			recorder = DependencyService.Get<IRecorder>();
 		}
 
 		/// <summary>
@@ -112,8 +128,9 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void StartStudentRecording()
 		{
-			PlayPage();
 			recorder?.Start();
+			PlayPage();
+
 		}
 
 		/// <summary>
@@ -121,8 +138,9 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Pause()
 		{
-			recorder?.Pause();
 			audioPlayer.Pause();
+			recorder?.Pause();
+
 		}
 
 		/// <summary>
@@ -141,16 +159,16 @@ namespace Lingvo.MobileApp.Controllers
 		{
 			audioPlayer.Stop();
 			Recording recording = recorder?.Stop();
-			SelectedPage.StudentTrack = recording;
+			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
 		/// Seeks the recording and/or playing to the given time.
 		/// </summary>
-		public void SeekTo(TimeSpan timeCode)
+		public void SeekTo(int seconds)
 		{
-			recorder?.SeekTo(timeCode);
-			audioPlayer.SeekTo(timeCode);
+			recorder?.SeekTo(seconds);
+			audioPlayer.SeekTo(seconds);
 		}
 	}
 }
