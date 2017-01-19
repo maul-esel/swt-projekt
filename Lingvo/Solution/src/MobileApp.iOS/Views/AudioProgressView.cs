@@ -102,6 +102,11 @@ namespace Lingvo.MobileApp.iOS
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
+
+			if (studentMuted)
+			{
+				studentProgressBar.Hidden = true;
+			}
 		}
 
 		public int Progress
@@ -174,6 +179,7 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
+				
 				studentMuted = !value;
 				studentProgressBar.Muted = studentMuted;
 				muteBtn.Hidden = studentMuted;
