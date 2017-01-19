@@ -23,7 +23,6 @@ namespace Lingvo.MobileApp.iOS
 		protected bool muted = false;
 		protected int size;
 
-		private int counter = 0;
 
 		public virtual int Size
 		{
@@ -219,7 +218,6 @@ namespace Lingvo.MobileApp.iOS
 			var path = new UIBezierPath();
 			path.AddArc(Center, radius, adjustedStartAngle, adjustedEndAngle, true);
 			circleLayer.Path = path.CGPath;
-			counter++;
 			Layer.AddSublayer(circleLayer);
 			return circleLayer;
 		}
@@ -247,7 +245,6 @@ namespace Lingvo.MobileApp.iOS
 		{
 			if (!muted) {
 				backgroundLayer?.RemoveFromSuperLayer();
-				counter--;
 				backgroundLayer = drawCircle(backgroundLayerColor, -100);
 			}
 		}
