@@ -34,7 +34,7 @@ namespace Lingvo.MobileApp.Controllers
 				selectedPage = value;
 
 				/*var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				var filePath = Path.Combine(documentsDirPath, "Content/home.mp3");
+				var filePath = Path.Combine(documentsDirPath, "1.mp3");
 				var recording = new Recording(id: 99, length: TimeSpan.FromSeconds(231), localPath: filePath, creationTime: new DateTime());
 				audioPlayer.PrepareTeacherTrack(recording);*/
 				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
