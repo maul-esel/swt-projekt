@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Services;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -108,7 +109,14 @@ namespace Lingvo.MobileApp.Proxies
 				var page = await service.DownloadSinglePage(this);
 				original = page;
 
-				// TODO: Database access
+				var db = App.Database;
+				if (db.Workbooks.Find(this.Workbook.Id) != null)
+				{
+					db.Save(this.Workbook);
+				}
+
+				db.Save(original.TeacherTrack);
+				db.Save(original);
 			}
 		}
 

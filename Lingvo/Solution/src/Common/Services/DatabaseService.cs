@@ -54,6 +54,28 @@ namespace Lingvo.Common.Services
 			connection.Execute(sql);
 		}
 
+		public void Delete(Recording recording)
+		{
+			connection.Delete(recording);
+		}
+
+		public void Delete(Page page)
+		{
+			Delete(page.TeacherTrack);
+
+			if (page.StudentTrack != null)
+			{
+				Delete(page.StudentTrack);
+			}
+
+			connection.Delete(page);
+		}
+
+		public void Delete(Workbook workbook)
+		{
+			connection.Delete(workbook);
+		}
+
 	}
 
 	public static class DatabaseExtensions

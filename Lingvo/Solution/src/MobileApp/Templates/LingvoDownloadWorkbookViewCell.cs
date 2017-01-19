@@ -2,14 +2,13 @@
 using Lingvo.MobileApp.Forms;
 using System;
 using Xamarin.Forms;
+using Lingvo.MobileApp.Proxies;
 
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoDownloadWorkbookViewCell : LingvoWorkbookViewCell
     {
-        public delegate void OnDownloadClickedHandler(Workbook page);
-
-        public LingvoDownloadWorkbookViewCell(OnDownloadClickedHandler handler) : base()
+		public LingvoDownloadWorkbookViewCell() : base()
         {
             LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
             {
@@ -19,7 +18,7 @@ namespace Lingvo.MobileApp.Templates
                 VerticalOptions = LayoutOptions.Center
             };
 
-            downloadButton.OnClicked += (o, e) => handler((Workbook)BindingContext);
+			downloadButton.OnClicked += (o, e) => CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id);
 
             ((StackLayout)View).Children.Add(downloadButton);
         }

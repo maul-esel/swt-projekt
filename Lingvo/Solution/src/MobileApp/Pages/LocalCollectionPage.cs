@@ -1,7 +1,8 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Templates;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -18,7 +19,7 @@ namespace Lingvo.MobileApp.Pages
                 ItemTemplate = new DataTemplate(typeof(LingvoWorkbookViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
-                IsVisible = LocalCollection.GetInstance().Workbooks.Count > 0
+				IsVisible = LocalCollection.GetInstance().Workbooks.Count() > 0
             };
 
             listView.ItemTapped += Handle_ItemTapped;
@@ -35,7 +36,7 @@ namespace Lingvo.MobileApp.Pages
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     HorizontalOptions=LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    IsVisible=LocalCollection.GetInstance().Workbooks.Count == 0,
+						IsVisible=LocalCollection.GetInstance().Workbooks.Count() == 0,
                     HorizontalTextAlignment = TextAlignment.Center,
                     LineBreakMode = LineBreakMode.WordWrap
                 }

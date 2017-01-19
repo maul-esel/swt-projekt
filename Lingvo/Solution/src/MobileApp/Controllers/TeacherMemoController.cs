@@ -1,5 +1,5 @@
 ﻿using Lingvo.Common.Adapters;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using System;
 using Xamarin.Forms;
 

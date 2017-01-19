@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
-		private const string URL = "http://localhost:5000/api/app/";
+		private const string URL = "http://10.0.2.2:5000/api/app/";
 
 		private static APIService instance;
 
@@ -67,7 +67,9 @@ namespace Lingvo.MobileApp
 		public async Task<Workbook[]> FetchWorkbooks()
 		{
 			var responseFromServer = await FetchTextFromURL(URL + "workbooks");
-			return JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
+			var test = 1 + 1;
+			var deserialized =  JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
+			return deserialized;
 		}
 
 		/// <summary>

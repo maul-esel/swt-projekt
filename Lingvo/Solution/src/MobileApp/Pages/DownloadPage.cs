@@ -63,12 +63,14 @@ namespace Lingvo.MobileApp.Pages
             listView.RefreshCommand = new Command(async () =>
             {
                 listView.IsRefreshing = true;
+				listView.BatchBegin();
                 workbooks.Clear();
                 IEnumerable<Workbook> newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
                 if (newWorkbooks != null)
                 {
                     workbooks.AddRange(newWorkbooks);
                 }
+				listView.BatchCommit();
                 listView.IsRefreshing = false;
             });
 

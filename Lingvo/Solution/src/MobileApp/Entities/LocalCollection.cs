@@ -2,69 +2,27 @@
 using System.Collections.Generic;
 using Lingvo.Common.Entities;
 
-namespace MobileApp.Entities
+namespace Lingvo.MobileApp.Entities
 {
     public class LocalCollection
 	{
 		private static LocalCollection instance;
 
-		private List<TeacherMemo> teacherMemos;
-		private List<Workbook> workbooks;
-
 		/// <summary>
-		/// Gets or sets the teacher memos collection, does not return null but an empty list.
+		/// The teacher memos collection, does not return null but an empty list.
 		/// </summary>
 		/// <value>The teacher memos.</value>
-		public List<TeacherMemo> TeacherMemos
-		{
-			get
-			{
-				//Nullpointer avoidance
-				if (teacherMemos == null)
-				{
-					teacherMemos = new List<TeacherMemo>();
-				}
-
-				return teacherMemos;
-			}
-
-			set
-			{
-				teacherMemos = value;
-			}
-		}
+		public IEnumerable<TeacherMemo> TeacherMemos => App.Database.TeacherMemos;
 
 		/// <summary>
-		/// Gets or sets the workbooks, does not return null but an empty list.
+		/// The workbooks, does not return null but an empty list.
 		/// </summary>
 		/// <value>The workbooks.</value>
-		public List<Workbook> Workbooks
-		{
-			get
-			{
-				//Nullpointer avoidance
-				if (workbooks == null)
-				{
-					workbooks = new List<Workbook>();
-				}
-
-				return workbooks;
-			}
-
-			set
-			{
-				workbooks = value;
-			}
-		}
+		public IEnumerable<Workbook> Workbooks => App.Database.Workbooks;
 
 		private LocalCollection()
 		{
-            Workbooks.Add(new Workbook() { Title = "Thannhauser", Subtitle = "Lloret Ipsum",
-                Pages = { new Page() { Number = 1 }, new Page() { Number = 2 },
-                new Page() { Number = 3 }, new Page() { Number = 4 }, new Page() { Number = 5 }
-                ,new Page() { Number = 6 }, new Page() { Number = 7 }, new Page() { Number = 8 },
-                new Page() { Number = 9 }, new Page() { Number = 10 }, new Page() { Number = 11 }}
-            });
+            
         }
 
 		/// <summary>
@@ -87,12 +45,7 @@ namespace MobileApp.Entities
 		/// <param name="memo">Memo.</param>
 		public void AddTeacherMemo(TeacherMemo memo)
 		{
-			if (teacherMemos == null)
-			{
-				teacherMemos = new List<TeacherMemo>();
-			}
-
-			teacherMemos.Add(memo);
+			App.Database.Save(memo);
 		}
 
 		/// <summary>
@@ -101,38 +54,16 @@ namespace MobileApp.Entities
 		/// <param name="workbook">Workbook.</param>
 		public void AddWorkbook(Workbook workbook)
 		{
-			if (workbooks == null)
-			{
-				workbooks = new List<Workbook>();
-			}
-
-			workbooks.Add(workbook);
+			App.Database.Save(workbook);
 		}
 
 		/// <summary>
-		/// Deletes the workbook with the given id.
+		/// Deletes the workbook.
 		/// </summary>
-		/// <param name="workbookID">Workbook identifier.</param>
-		public void DeleteWorkbook(String workbookID)
+		/// <param name="workbook">Workbook.</param>
+		public void DeleteWorkbook(Workbook workbook)
 		{
-			Workbook toBeDeleted = null;
-
-			if (workbooks != null)
-			{
-				foreach (var workbook in workbooks)
-				{
-					if (workbook.Id.Equals(workbookID))
-					{
-						toBeDeleted = workbook;
-						break;
-					}
-				}
-
-				if (toBeDeleted != null)
-				{
-					workbooks.Remove(toBeDeleted);
-				}
-			}
+			App.Database.Delete(workbook);
 		}
 
 		/// <summary>
@@ -141,10 +72,7 @@ namespace MobileApp.Entities
 		/// <param name="memo">Memo.</param>
 		public void DeleteTeacherMemo(TeacherMemo memo)
 		{
-			if (teacherMemos != null)
-			{
-				teacherMemos.Remove(memo);
-			}
+			App.Database.Delete(memo);
 		}
 	}
 }

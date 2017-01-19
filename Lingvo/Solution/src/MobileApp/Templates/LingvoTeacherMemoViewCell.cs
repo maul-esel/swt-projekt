@@ -1,5 +1,5 @@
 ﻿using Lingvo.MobileApp.Proxies;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates

@@ -17,11 +17,11 @@ CREATE TABLE IF NOT EXISTS Recordings (
 );
 
 CREATE TABLE IF NOT EXISTS Pages (
-  workbookID INT REFERENCES Workbooks,
+  workbookID INT REFERENCES Workbooks ON DELETE CASCADE,
   number INT,
   description TEXT NOT NULL,
   teacherTrack INT NOT NULL REFERENCES Recordings,
-  studentTrack INT REFERENCES Recordings, -- always NULL on server
+  studentTrack INT REFERENCES Recordings,
 
   PRIMARY KEY (workbookID, number)
 );

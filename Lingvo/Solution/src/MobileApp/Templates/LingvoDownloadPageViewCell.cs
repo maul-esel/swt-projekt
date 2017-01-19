@@ -7,10 +7,8 @@ using Xamarin.Forms;
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoDownloadPageViewCell : LingvoPageViewCell
-    {
-        public delegate void OnDownloadClickedHandler(IPage page);
-
-        public LingvoDownloadPageViewCell(OnDownloadClickedHandler handler) : base()
+	{
+        public LingvoDownloadPageViewCell() : base()
         {
             LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
             {
@@ -20,7 +18,7 @@ namespace Lingvo.MobileApp.Templates
                 VerticalOptions = LayoutOptions.Center
             };
 
-            downloadButton.OnClicked += (o, e) => handler((IPage)BindingContext);
+			downloadButton.OnClicked += (o, e) => ((PageProxy) BindingContext).Resolve();
 
             ((StackLayout)View).Children.Add(downloadButton);            
         }
