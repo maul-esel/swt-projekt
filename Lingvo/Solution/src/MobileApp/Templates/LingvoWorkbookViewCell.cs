@@ -39,7 +39,7 @@ namespace Lingvo.MobileApp.Templates
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-				HeightRequest = Device.OnPlatform(iOS: 70, Android:130, WinPhone:260),
+				HeightRequest = Device.OnPlatform(iOS: 70, Android:72, WinPhone:260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {

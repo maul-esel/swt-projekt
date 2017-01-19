@@ -19,7 +19,6 @@ namespace Lingvo.MobileApp.Pages
 			{
 				ItemsSource = workbook.Pages,
 				ItemTemplate = new DataTemplate(typeof(LingvoPageViewCell)),
-				IsPullToRefreshEnabled = true,
 				HasUnevenRows = true,
 				IsVisible = workbook.Pages.Count > 0
 			};
