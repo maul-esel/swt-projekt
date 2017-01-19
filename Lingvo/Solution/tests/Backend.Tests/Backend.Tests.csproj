@@ -11,12 +11,12 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\SQL\DummyDataForServer.sql" CopyToOutputDirectory="Always">
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\SQL\DummyDataForServer.sql" CopyToOutputDirectory="Always">
       <Link>SQL\DummyDataForServer.sql</Link>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\SQL\server.sql" CopyToOutputDirectory="Always">
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\SQL\server.sql" CopyToOutputDirectory="Always">
       <Link>SQL\server.sql</Link>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.App">

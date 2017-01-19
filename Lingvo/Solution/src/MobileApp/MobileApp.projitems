@@ -42,7 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DatabaseService.cs" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\..\..\SQL\client.sql" CopyToOutputDirectory="Always">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\..\..\SQL\client.sql">
       <Link>SQL\client.sql</Link>
     </EmbeddedResource>
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
