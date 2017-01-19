@@ -70,6 +70,9 @@ namespace Lingvo.MobileApp.iOS
 			if (audioProgressView != null)
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
+				var squareMeasure = Math.Min(audioProgressView.Width, audioProgressView.Height);
+				var lineWidth = squareMeasure * 0.05;
+				progressView.LineWidth = (float)lineWidth;
 				progressView.Frame = frame;
 				progressView.render();
 

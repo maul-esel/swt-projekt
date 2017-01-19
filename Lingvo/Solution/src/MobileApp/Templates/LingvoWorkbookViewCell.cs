@@ -31,7 +31,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView = new LingvoSingleProgressView()
             {
-                Size = Device.OnPlatform(iOS: 120, Android: 120, WinPhone: 240),
+                Size = Device.OnPlatform(iOS: 80, Android: 120, WinPhone: 240),
                 LabelType = LingvoSingleProgressView.LabelTypeValue.NOfM
             };
 
@@ -39,6 +39,7 @@ namespace Lingvo.MobileApp.Templates
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
+				HeightRequest = Device.OnPlatform(iOS: 70, Android:72, WinPhone:260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {

@@ -22,7 +22,7 @@ namespace Lingvo.MobileApp.Pages
 
         private void AudioCarouselPage_CurrentPageChanged(object sender, System.EventArgs e)
         {
-            StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
+           StudentPageController.Instance.SelectedPage = ((AudioPage)SelectedItem).Page;
         }
     }
 }
