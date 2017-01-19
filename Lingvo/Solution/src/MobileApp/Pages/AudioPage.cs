@@ -78,7 +78,7 @@ namespace Lingvo.MobileApp.Pages
 
             if (page.TeacherTrack != null)
             {
-                ProgressView.MaxProgress = page.TeacherTrack.Length.Seconds;
+				ProgressView.MaxProgress = page.TeacherTrack.Duration;
             }
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
