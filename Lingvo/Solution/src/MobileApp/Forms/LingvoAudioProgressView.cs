@@ -59,7 +59,9 @@ namespace Lingvo.MobileApp
         public int Progress
         {
             get { return (int)GetValue(ProgressProperty); }
-            set { SetValue(ProgressProperty, value); }
+            set { 
+				SetValue(ProgressProperty, value); 
+			}
         }
 
         public int MaxProgress

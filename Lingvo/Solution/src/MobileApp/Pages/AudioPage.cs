@@ -1,5 +1,6 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
 using Lingvo.MobileApp.Forms;
 using System;
@@ -13,11 +14,89 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 15;
+		private bool isActive;
 
         public IPage Page
         {
             get; internal set;
         }
+
+		public bool IsActive
+		{
+			get
+			{
+				return isActive;
+			}
+
+			set
+			{
+				isActive = value;
+				if (isActive)
+				{
+					StudentPageController.Instance.Update += RedrawProgressBar;
+					StudentPageController.Instance.StateChange += SetButtonsAccordingToState;
+				}
+				else
+				{
+					StudentPageController.Instance.Update -= RedrawProgressBar;
+					StudentPageController.Instance.StateChange -= SetButtonsAccordingToState;
+				}
+			}
+		}
+
+		private void RedrawProgressBar(int elapsedTime)
+		{
+			Xamarin.Forms.Device.BeginInvokeOnMainThread(new Action(() => { 
+				ProgressView.Progress = elapsedTime;			
+			}));
+
+		}
+
+		/// <summary>
+		/// Sets the state of the buttons according to.
+		/// </summary>
+		/// <param name="state">State.</param>
+		private void SetButtonsAccordingToState(PlayerState state)
+		{
+			if (state == PlayerState.PLAYING)
+			{
+				PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
+				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+				SetSeekingButtonsAccordingly();
+				return;
+			}
+			if (state == PlayerState.PAUSED)
+			{
+				//TODO: @Phlilip: MAAAYBEE, toggle that pause Button for God's sake :P 
+				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+				SetSeekingButtonsAccordingly();
+				return;
+			}
+			if (state == PlayerState.STOPPED || state == PlayerState.IDLE)
+			{
+				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
+				RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
+				ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+				return;
+			}
+			//no default needed...
+		}
+
+		private void SetSeekingButtonsAccordingly()
+		{ 
+			RecorderState recorderState = StudentPageController.Instance.CurrentRecorderState;
+
+			if (recorderState == RecorderState.RECORDING )
+			{
+				ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+			}
+			else
+			{
+				ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
+			}
+		}
+
 
         internal LingvoRoundImageButton RewindButton
         {
@@ -66,14 +145,15 @@ namespace Lingvo.MobileApp.Pages
                 ColumnSpacing = 10
             };
 
-            ProgressView = new LingvoAudioProgressView()
-            {
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
-                InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
-                InnerProgressEnabled = page.StudentTrack != null,
-                MuteEnabled = page.StudentTrack != null
+			ProgressView = new LingvoAudioProgressView()
+			{
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
+				InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
+				InnerProgressEnabled = page.StudentTrack != null,
+				MuteEnabled = page.StudentTrack != null,
+				MaxProgress = 44000
             };
 
             if (page.TeacherTrack != null)
@@ -83,7 +163,9 @@ namespace Lingvo.MobileApp.Pages
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
 
-            RewindButton = new LingvoRoundImageButton()
+            
+
+			RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
                 Text = "" + SeekTimeStep,
@@ -166,85 +248,52 @@ namespace Lingvo.MobileApp.Pages
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
+			PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
 
-			if (RecordStopButton.Image.Equals(LingvoRoundImageButton.RecordImage))
+			if (currentState == PlayerState.STOPPED)
 			{
-
 				StudentPageController.Instance.StartStudentRecording();
-				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
-				PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
-		
+				return;	
 			}
-			else
+			if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
 			{
 				StudentPageController.Instance.Stop();
-				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
-				RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
-
+				RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
+				return;
 			}
-            /*ForwardButton.IsEnabled = RewindButton.IsEnabled = PlayPauseButton.Toggled = false;
-            if (RecordStopButton.Image.Equals(LingvoRoundImageButton.StopImage))
-            {
-                //StudentPageController.Instance.Stop();
-                PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
-                RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
-
-                if (StudentPageController.Instance.SelectedPage.StudentTrack != null false)
-                {
-                    ProgressView.MuteEnabled = true;
-                }
-                else
-                {
-                    ProgressView.InnerProgressEnabled = false;
-                    ProgressView.MuteEnabled = false;
-                }
-            }
-            else
-            {
-                if (StudentPageController.Instance.SelectedPage.StudentTrack != null false)
-                {
-                    //Dialog
-                }
-                //StudentPageController.Instance.StartStudentRecording();
-                ProgressView.InnerProgressEnabled = true;
-                PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
-                RecordStopButton.Image = LingvoRoundImageButton.StopImage;
-                ProgressView.MuteEnabled = false;
-            }*/
-        }
+		}
 
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)
         {
+			PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
+			RecorderState currentRecorderState = StudentPageController.Instance.CurrentRecorderState;
 
-			if (PlayPauseButton.Image.Equals(LingvoRoundImageButton.PlayImage))
+			if (currentState == PlayerState.PAUSED || currentState == PlayerState.STOPPED)
 			{
+				if (currentRecorderState == RecorderState.PAUSED)
+				{
+					StudentPageController.Instance.Continue();
+					return;
+				}
+					
 				StudentPageController.Instance.PlayPage();
-				ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
-				PlayPauseButton.Image = LingvoRoundImageButton.PauseImage;
-				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+				return;
 			}
-			else //pause player
+			if (currentState == PlayerState.PLAYING)
 			{
 				StudentPageController.Instance.Pause();
-				PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
-				RecordStopButton.Image = LingvoRoundImageButton.StopImage;
+				return;
 			}
         }
 
         private void ForwardButton_OnClicked(object sender, EventArgs e)
         {
-            if (/*StudentPageController.Instance.IsPlaying()*/ false)
-            {
-                //StudentPageController.Instance.SeekTo(TimeSpan.FromSeconds(/*StudentPageController.Instance.CurrentPosition*/ +15));
-            }
+			StudentPageController.Instance.SeekTo(15);
         }
 
         private void RewindButton_OnClicked(object sender, EventArgs e)
         {
-            if (/*StudentPageController.Instance.IsPlaying()*/ false)
-            {
-                //StudentPageController.Instance.SeekTo(TimeSpan.FromSeconds(/*StudentPageController.Instance.CurrentPosition*/ -15));
-            }
+			StudentPageController.Instance.SeekTo(-15);
         }
-    }
+	}
 }

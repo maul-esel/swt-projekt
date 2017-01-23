@@ -1,5 +1,7 @@
-﻿using Lingvo.Common.Entities;
-using System;
+﻿using System;
+using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
+
 namespace Lingvo.Common.Adapters
 {
 	public interface IPlayer
@@ -10,9 +12,12 @@ namespace Lingvo.Common.Adapters
 		void Play();
 		void Stop();
 		void Pause();
-		void Continue();
-		void SeekTo(TimeSpan seek);
+		void SeekTo(int seek);
 		bool IsStudentTrackMuted { get; set; }
-
+		double TotalLengthOfTrack { get; }
+		double CurrentProgress { get; }
+		event Action<int> Update;
+		event Action<PlayerState> StateChange;
+		PlayerState State { get; }
 	}
 }
