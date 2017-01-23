@@ -18,6 +18,7 @@
     <Compile Include="**\*.cs" Exclude="$(GlobalExclude)" />
     <EmbeddedResource Include="**\*.resx" Exclude="$(GlobalExclude)" />
 	<Folder Include="Entities\" />
+	<Content Include="Views\**\*.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.App">
