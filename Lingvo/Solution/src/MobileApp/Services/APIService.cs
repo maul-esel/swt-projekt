@@ -36,15 +36,19 @@ namespace Lingvo.MobileApp
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		private async Task<T> FetchFromURLAsync<T>(string url, Func<WebResponse, Task<T>> convert)
 		{
-			using (var response = await WebRequest.Create(url).GetResponseAsync())
-				return await convert(response);
+			var response = await WebRequest.Create(url).GetResponseAsync();
+			var result = await convert(response);
+			response.Close();
+			return result;
 		}
 
-		private Task<string> ReadTextAsync(WebResponse response)
+		private async Task<string> ReadTextAsync(WebResponse response)
 		{
 			var stream = response.GetResponseStream();
-			using (var reader = new StreamReader(stream))
-				return reader.ReadToEndAsync();
+			var reader = new StreamReader(stream);
+			var text = await reader.ReadToEndAsync();
+			reader.Close();
+			return text;
 		}
 
 		/// <summary>
