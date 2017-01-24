@@ -139,7 +139,7 @@ namespace Lingvo.MobileApp
 					await response.GetResponseStream().CopyToAsync(fileStream);
 
 				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
-				                     TimeSpan.Parse(response.Headers["X-Audio-Length"]), 
+				                     int.Parse(response.Headers["X-Audio-Duration"]), 
 				                     localPath,
 				                     DateTime.Parse(response.Headers["X-Recording-Creation-Time"]));
 			});

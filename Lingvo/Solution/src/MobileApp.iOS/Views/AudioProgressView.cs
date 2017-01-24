@@ -7,6 +7,7 @@ using CoreAnimation;
 using CoreFoundation;
 using ObjCRuntime;
 
+
 namespace Lingvo.MobileApp.iOS
 {
 	public class AudioProgressView : UIView
@@ -20,7 +21,7 @@ namespace Lingvo.MobileApp.iOS
 		private float lineWidth = 10.0f;
 		private bool studentMuted = false;
 		private int progress = 0;
-		private int maxProgress = 100;
+
 
 
 		public delegate void StudentTrackMutedEventHandler(bool muted);
@@ -102,6 +103,11 @@ namespace Lingvo.MobileApp.iOS
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
+
+			if (studentMuted)
+			{
+				studentProgressBar.Hidden = true;
+			}
 		}
 
 		public int Progress
@@ -112,25 +118,25 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
+					var modValue = Math.Min(MaxProgress, value);
+					progress = modValue;
+					teacherProgressBar.Progress = modValue;
 
-				var modValue = Math.Min(maxProgress, value);
-				progress = modValue;
-				teacherProgressBar.Progress = modValue;
+					if (!studentMuted)
+					{
+						studentProgressBar.Progress = modValue;
+						studentProgressBar.strokeLayer.SetNeedsDisplay();
+						studentProgressBar.SetNeedsDisplay();
 
-				if (!studentMuted)
-				{
-					studentProgressBar.Progress = modValue;
-					studentProgressBar.strokeLayer.SetNeedsDisplay();
-					studentProgressBar.SetNeedsDisplay();
-
-				}
+					}
 
 
-				//update the progress time label text
-				string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
-				string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
+					//update the progress time label text
+					string minutes = ((value / 60000 < 10 ? "0" : "") + value / 60000).Substring(0,2);
+					string seconds = (((value % 60000) / 1000 < 10 ? "0" : "") + (value % 60000) / 1000).Substring(0,2);
 
-				timeLabel.Text = minutes + ":" + seconds;
+					timeLabel.Text = minutes + ":" + seconds;
+
 			}
 		}
 		protected void runOnMainThread(Action action)
@@ -143,7 +149,7 @@ namespace Lingvo.MobileApp.iOS
 		{
 			get
 			{
-				return maxProgress;
+				return teacherProgressBar.MaxProgress;
 			}
 			set
 			{
@@ -174,8 +180,10 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
+				
 				studentMuted = !value;
 				studentProgressBar.Muted = studentMuted;
+				muteBtn.Hidden = studentMuted;
 			}
 		}
 

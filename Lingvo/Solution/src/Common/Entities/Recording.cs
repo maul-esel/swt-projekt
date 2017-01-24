@@ -15,10 +15,10 @@ namespace Lingvo.Common.Entities
 		/// </summary>
 		public Recording() { } // used by Linq2DB
 
-		public Recording(int id, TimeSpan length, string localPath, DateTime creationTime)
+		public Recording(int id, int duration, string localPath, DateTime creationTime)
 		{
 			Id = id;
-			Length = length;
+			Duration = duration;
 			LocalPath = localPath;
 			CreationTime = creationTime;
 		}
@@ -30,20 +30,11 @@ namespace Lingvo.Common.Entities
 		public DateTime CreationTime { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the length.
+		/// Gets or sets the duration of the audio file in milliseconds.
 		/// </summary>
-		public TimeSpan Length
-		{
-			get { return TimeSpan.FromMilliseconds(LengthInMilliseconds); }
-			set { LengthInMilliseconds = value.Milliseconds; }
-		}
-
-		/// <summary>
-		/// Workaround: due to a bug in linq2db, <see cref="TimeSpan"/>s cannot be converted to <c>int</c>s (for MySQL).
-		/// Thus this additional property is needed. It should never be used in code.
-		/// </summary>
-		[Column("length"), NotNull, EditorBrowsable(EditorBrowsableState.Never)]
-		public int LengthInMilliseconds { get; set; } // HACK: avoid this workaround if possible
+		/// <value>The length.</value>
+		[Column, NotNull]
+		public int Duration { get; set; }
 
 		[Column, NotNull]
 		public string LocalPath { get; set; }

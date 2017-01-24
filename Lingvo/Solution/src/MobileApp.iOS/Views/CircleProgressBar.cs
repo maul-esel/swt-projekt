@@ -23,6 +23,7 @@ namespace Lingvo.MobileApp.iOS
 		protected bool muted = false;
 		protected int size;
 
+
 		public virtual int Size
 		{
 			get
@@ -32,9 +33,8 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				Frame = new CGRect(Frame.X, Frame.Y, value, value);
-				backgroundLayer.RemoveFromSuperLayer();
 				strokeLayer.RemoveFromSuperLayer();
-				backgroundLayer = drawCircle(backgroundLayerColor, -100);
+				renderBackgroundLayer();
 				strokeLayer = drawCircle(backgroundLayerColor, -100);
 				drawStroke(angle);
 			}
@@ -60,9 +60,8 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				lineWidth = value;
-				backgroundLayer.RemoveFromSuperLayer();
 				strokeLayer.RemoveFromSuperLayer();
-				backgroundLayer = drawCircle(backgroundLayerColor, -100);
+				renderBackgroundLayer();
 				strokeLayer = drawCircle(backgroundLayerColor, -100);
 				drawStroke(angle);
 			}
@@ -163,8 +162,8 @@ namespace Lingvo.MobileApp.iOS
 				{
 					return (float)(2 * Math.PI);
 				}
-				var modValue = progress % maxProgress;
-				float percentage = (float)modValue / (float)maxProgress;
+				//var modValue = progress % maxProgress;
+				float percentage = (float)progress / (float)maxProgress;
 				return (float)(percentage * (2 * Math.PI));
 			}
 		}
@@ -185,20 +184,17 @@ namespace Lingvo.MobileApp.iOS
 
 		public CircleProgressBar(CGRect frame) : base(frame)
 		{
-			backgroundLayer = drawCircle(backgroundLayerColor, -100);
+			renderBackgroundLayer();
 			strokeLayer = drawCircle(backgroundLayerColor, -100);
 		}
 
 		public void render()
 		{
 			BackgroundColor = UIColor.Clear;
-			backgroundLayer?.RemoveFromSuperLayer();
 			strokeLayer.RemoveFromSuperLayer();
 
-			backgroundLayer = drawCircle(backgroundLayerColor, -100);
+			renderBackgroundLayer();
 			strokeLayer = drawCircle(backgroundLayerColor, -100);
-			backgroundLayer.SetNeedsDisplay();
-			strokeLayer.SetNeedsDisplay();
 			drawStroke(angle);
 		}
 
@@ -242,6 +238,14 @@ namespace Lingvo.MobileApp.iOS
 				{
 					l.Frame = Bounds;
 				}
+			}
+		}
+
+		private void renderBackgroundLayer()
+		{
+			if (!muted) {
+				backgroundLayer?.RemoveFromSuperLayer();
+				backgroundLayer = drawCircle(backgroundLayerColor, -100);
 			}
 		}
 	}

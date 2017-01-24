@@ -41,13 +41,15 @@ namespace Lingvo.MobileApp.iOS
 
         private void NewElementOnSizeChanged(object sender, EventArgs eventArgs)
         {
-            var audioProgressView = sender as LingvoAudioProgressView;
+			var audioProgressView = sender as LingvoSingleProgressView;
 
             if (audioProgressView != null)
             {
                 var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
                 progressView.Frame = frame;
                 progressView.backgroundLayer.Frame = Bounds;
+				var lineWidth = audioProgressView.Height * 0.05; //cell.height is always bigger than cell.width
+				progressView.LineWidth = (float)lineWidth;
                 progressView.backgroundLayer.SetNeedsDisplay();
 
             }

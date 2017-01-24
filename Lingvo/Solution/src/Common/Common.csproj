@@ -44,6 +44,7 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Adapters\" />
+    <Folder Include="Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 

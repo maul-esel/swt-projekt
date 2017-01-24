@@ -1,4 +1,5 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
 using System;
 namespace Lingvo.Common.Adapters
 {
@@ -8,6 +9,7 @@ namespace Lingvo.Common.Adapters
 		Recording Stop();
 		void Pause();
 		void Continue();
-		void SeekTo(TimeSpan seek);
+		void SeekTo(int seconds);
+		RecorderState State { get; }
 	}
 }

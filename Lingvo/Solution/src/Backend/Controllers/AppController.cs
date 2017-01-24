@@ -66,8 +66,8 @@ namespace Lingvo.Backend.Controllers
 			var page = Database.Pages.Find(workbookId, pageNumber);
 			if (page == null)
 				return NotFound();
-			
-			Response.Headers["X-Audio-Length"] = page.TeacherTrack.Length.ToString();
+
+			Response.Headers["X-Audio-Duration"] = page.TeacherTrack.Duration.ToString();
 			Response.Headers["X-Recording-Id"] = page.TeacherTrack.Id.ToString();
 			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString();
 

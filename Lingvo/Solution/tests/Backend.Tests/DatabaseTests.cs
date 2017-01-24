@@ -132,7 +132,7 @@ namespace Lingvo.Backend.Tests
 		{
 			var testRecording = new Recording()
 			{
-				Length = TimeSpan.FromMilliseconds(12),
+				Duration = 12 /* milliseconds */,
 				LocalPath = "test"
 			};
 
@@ -141,7 +141,7 @@ namespace Lingvo.Backend.Tests
 
 			var savedRecording = Database.Recordings.Find(testRecording.Id);
 			Assert.NotNull(savedRecording);
-			Assert.Equal(TimeSpan.FromMilliseconds(12), savedRecording.Length);
+			Assert.Equal(12, savedRecording.Duration);
 		}
     }
 }

@@ -32,7 +32,7 @@ namespace Lingvo.MobileApp.iOS
 				progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
 				e.OldElement.SizeChanged -= NewElementOnSizeChanged;
 			}
-			else if (e.NewElement != null)
+			 if (e.NewElement != null)
 			{
 
 				e.NewElement.PropertyChanged += updateView;
@@ -70,6 +70,9 @@ namespace Lingvo.MobileApp.iOS
 			if (audioProgressView != null)
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
+				var squareMeasure = Math.Min(audioProgressView.Width, audioProgressView.Height);
+				var lineWidth = squareMeasure * 0.05;
+				progressView.LineWidth = (float)lineWidth;
 				progressView.Frame = frame;
 				progressView.render();
 

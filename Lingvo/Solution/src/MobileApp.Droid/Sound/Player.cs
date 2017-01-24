@@ -2,6 +2,7 @@
 using Android.Media;
 using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Droid.Sound;
 using Xamarin.Forms;
 
@@ -15,6 +16,10 @@ namespace Lingvo.MobileApp.Droid.Sound
 		private MediaPlayer studentTrack;
 
 		private bool isStudentTrackMuted;
+
+		public event Action<int> Update;
+		public event Action<PlayerState> StateChange;
+
 		public Player()
 		{
 		}
@@ -33,6 +38,30 @@ namespace Lingvo.MobileApp.Droid.Sound
 				float rightVolume = value ? 0.0f : 1.0f;
 
 				studentTrack.SetVolume(leftVolume, rightVolume);
+			}
+		}
+
+		public double TotalLengthOfTrack
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public double CurrentProgress
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public PlayerState State
+		{
+			get
+			{
+				throw new NotImplementedException();
 			}
 		}
 
@@ -97,5 +126,9 @@ namespace Lingvo.MobileApp.Droid.Sound
 			return mediaPlayer;
 		}
 
+		public void SeekTo(int seek)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

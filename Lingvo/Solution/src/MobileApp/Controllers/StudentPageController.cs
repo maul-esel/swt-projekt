@@ -1,7 +1,9 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Enums;
 using System;
 using Xamarin.Forms;
+using System.IO;
 
 namespace Lingvo.MobileApp.Controllers
 {
@@ -31,7 +33,14 @@ namespace Lingvo.MobileApp.Controllers
 			set
 			{
 				selectedPage = value;
-				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+
+				var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				var filePath = Path.Combine(documentsDirPath, "1.mp3");
+				var recording = new Recording(id: 99, duration: 231000, localPath: filePath, creationTime: new DateTime());
+				audioPlayer.PrepareTeacherTrack(recording);
+				//audioPlayer.PrepareStudentTrack(recording);
+				//audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+
 				if (selectedPage.StudentTrack != null)
 				{
 					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
@@ -39,6 +48,37 @@ namespace Lingvo.MobileApp.Controllers
 			}
 
 		}
+
+
+		/// <summary>
+		/// This method delegates all subscribers to the udpate event of the audioplayer
+		/// It is intented that the audioView subscribes to this event in order to get the current playback progress.
+		/// </summary>
+		public event Action<int> Update
+		{
+			add
+			{
+				audioPlayer.Update += value;
+			}
+
+			remove
+			{
+				audioPlayer.Update -= value;
+			}
+		}
+
+		public event Action<PlayerState> StateChange
+		{
+			add 
+			{
+				audioPlayer.StateChange += value;
+			}
+			remove 
+			{
+				audioPlayer.StateChange -= value;
+			}
+		}
+
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the 
@@ -60,6 +100,8 @@ namespace Lingvo.MobileApp.Controllers
 				
 		}
 
+		public PlayerState CurrentPlayerState => audioPlayer.State;
+		public RecorderState CurrentRecorderState => recorder.State;
 
 		/// <summary>
 		/// Gets the instance of StudentPageController (Singleton Pattern)
@@ -70,7 +112,7 @@ namespace Lingvo.MobileApp.Controllers
 		private StudentPageController()
 		{
 			audioPlayer = DependencyService.Get<IPlayer>();
-			//recorder = DependencyService.Get<IRecorder>();
+			recorder = DependencyService.Get<IRecorder>();
 		}
 
 		/// <summary>
@@ -86,8 +128,9 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void StartStudentRecording()
 		{
+			recorder?.Start();
 			PlayPage();
-			recorder.Start();
+
 		}
 
 		/// <summary>
@@ -95,8 +138,9 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Pause()
 		{
-			recorder.Pause();
 			audioPlayer.Pause();
+			recorder?.Pause();
+
 		}
 
 		/// <summary>
@@ -104,8 +148,8 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Continue()
 		{
-			recorder.Continue();
-			audioPlayer.Continue();
+			recorder?.Continue();
+			audioPlayer.Play();
 		}
 
 		/// <summary>
@@ -114,17 +158,17 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			Recording recording = recorder.Stop();
-			SelectedPage.StudentTrack = recording;
+			Recording recording = recorder?.Stop();
+			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
 		/// Seeks the recording and/or playing to the given time.
 		/// </summary>
-		public void SeekTo(TimeSpan timeCode)
+		public void SeekTo(int seconds)
 		{
-			recorder.SeekTo(timeCode);
-			audioPlayer.SeekTo(timeCode);
+			recorder?.SeekTo(seconds);
+			audioPlayer.SeekTo(seconds);
 		}
 	}
 }

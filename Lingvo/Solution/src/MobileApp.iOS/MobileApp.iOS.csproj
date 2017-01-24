@@ -127,6 +127,7 @@
     <None Include="packages.config" />
     <Compile Include="Sound\Player.cs" />
     <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
+    <Compile Include="Sound\Recorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />

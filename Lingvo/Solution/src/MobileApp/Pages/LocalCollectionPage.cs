@@ -17,7 +17,6 @@ namespace Lingvo.MobileApp.Pages
             {
                 ItemsSource = LocalCollection.GetInstance().Workbooks,
                 ItemTemplate = new DataTemplate(typeof(LingvoWorkbookViewCell)),
-                IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
 				IsVisible = LocalCollection.GetInstance().Workbooks.Count() > 0
             };
