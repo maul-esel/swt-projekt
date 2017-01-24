@@ -54,17 +54,6 @@ namespace Lingvo.MobileApp.Proxies
 		{
 			var workbook = await service.FetchWorkbook(workbookID);
 
-			foreach (var page in workbook.Pages)
-			{
-				await ((PageProxy) page).Resolve();
-			}
-
-			//This is not necessary as workbooks is always read from the database
-
-			//var collection = LocalCollection.GetInstance();
-
-			//collection.AddWorkbook(workbook);
-
 			return workbook;
 		}
 
