@@ -1,6 +1,9 @@
 ﻿    
-    body {
+    html, body {
       font-size:20px;
+      width: 100%;
+      padding: 30px 0;
+      height: 100%;
     }
     .navbar-inverse {
       background-color: #4280D0 !important;
