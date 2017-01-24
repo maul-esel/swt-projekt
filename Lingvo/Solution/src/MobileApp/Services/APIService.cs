@@ -34,15 +34,17 @@ namespace Lingvo.MobileApp
 		/// <param name="url">URL.</param>
 		/// <param name="convert">Function for data conversion</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		private async Task<T> FetchFromURL<T>(string url, Func<Stream, WebResponse, T> convert)
+		private async Task<T> FetchFromURLAsync<T>(string url, Func<WebResponse, Task<T>> convert)
 		{
 			using (var response = await WebRequest.Create(url).GetResponseAsync())
-			{
-				using (var dataStream = response.GetResponseStream())
-				{
-					return convert(dataStream, response);
-				}
-			}
+				return await convert(response);
+		}
+
+		private Task<string> ReadTextAsync(WebResponse response)
+		{
+			var stream = response.GetResponseStream();
+			using (var reader = new StreamReader(stream))
+				return reader.ReadToEndAsync();
 		}
 
 		/// <summary>
@@ -50,14 +52,9 @@ namespace Lingvo.MobileApp
 		/// </summary>
 		/// <returns>The text from URL.</returns>
 		/// <param name="url">URL.</param>
-		private async Task<string> FetchTextFromURL(string url)
+		private Task<string> FetchTextFromURLAsync(string url)
 		{
-			return await await FetchFromURL(url, (stream, response) =>
-			{
-				/*using (*/
-				var reader = new StreamReader(stream);//)
-					return reader.ReadToEndAsync();
-			});
+			return FetchFromURLAsync(url, ReadTextAsync);
 		}
 
 		/// <summary>
@@ -66,10 +63,8 @@ namespace Lingvo.MobileApp
 		/// <returns>The workbooks.</returns>
 		public async Task<Workbook[]> FetchWorkbooks()
 		{
-			var responseFromServer = await FetchTextFromURL(URL + "workbooks");
-			var test = 1 + 1;
-			var deserialized =  JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
-			return deserialized;
+			var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks");
+			return JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
 		}
 
 		/// <summary>
@@ -79,14 +74,13 @@ namespace Lingvo.MobileApp
 		/// <param name="workbookID">Workbook identifier.</param>
 		public async Task<Workbook> FetchWorkbook(int workbookID)
 		{
-			var responseFromServer = await FetchTextFromURL(URL + "workbooks/" + workbookID);
+			var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks/" + workbookID);
 			var workbook = JsonConvert.DeserializeObject<Workbook>(responseFromServer);
-			await FetchPages(workbook);
 
-			foreach (var page in workbook.Pages)
-			{
-				await ((PageProxy)page).Resolve();
-			}
+			await FetchPages(workbook);
+			await Task.WhenAll(
+				workbook.Pages.Cast<PageProxy>().Select(page => page.Resolve())
+			);
 
 			return workbook;
 
@@ -121,7 +115,7 @@ namespace Lingvo.MobileApp
 		/// <param name="workbook">Workbook.</param>
 		public async Task FetchPages(Workbook workbook)
 		{
-			var responseFromServer = await FetchTextFromURL($"{URL}workbooks/{workbook.Id}/pages");
+			var responseFromServer = await FetchTextFromURLAsync($"{URL}workbooks/{workbook.Id}/pages");
 			workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer));
 
 			foreach (var page in workbook.Pages)
@@ -137,16 +131,12 @@ namespace Lingvo.MobileApp
 		/// <param name="workbook">Workbook.</param>
 		/// <param name="page">Page.</param>
 		/// <param name="localPath">Local path.</param>
-		public async Task<Recording> FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
+		public Task<Recording> FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
 		{
-			return await FetchFromURL($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", (dataStream, response) =>
+			return FetchFromURLAsync($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", async (response) =>
 			{
 				using (var fileStream = File.Create(localPath))
-				{
-					//dataStream.Seek(0, SeekOrigin.Begin);
-					dataStream.CopyTo(fileStream);
-
-				}
+					await response.GetResponseStream().CopyToAsync(fileStream);
 
 				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
 				                     TimeSpan.Parse(response.Headers["X-Audio-Length"]), 
