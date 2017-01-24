@@ -145,7 +145,7 @@ namespace Lingvo.MobileApp
 				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
 				                     int.Parse(response.Headers["X-Audio-Duration"]), 
 				                     localPath,
-				                     DateTime.Parse(response.Headers["X-Recording-Creation-Time"]));
+				                     DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yy HH:mm:ss", null));
 			});
 		}
 	}
