@@ -1,51 +1,92 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Bootstrap Example</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style>
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
 
-footer {
-background-color: #4280D0;
-color: white;
-padding: 15px;
-}
+		footer {
+			background-color: #4280D0;
+			color: white;
+			padding: 15px;
+		}
 
-#arbeitshefte-header {
-	background-color: #4280D0; 
-	color: white;
-	padding: 15px;
-	border-radius: 5px;
-	font-weight: normal;
-}
-			
-p { margin:0 }
-			
-</style>
+		#workbook-header {
+			background-color: #4280D0; 
+			color: white;
+			padding: 15px;
+			border-radius: 5px;
+			font-weight: normal;
+		}
+		.glyphicon.glyphicon-globe.published {
+			color: #4280D0;
+		}
+		.glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
+			color: gray;
+		}
+	
+		.workbook-title {
+			font-size: 20px;
+			margin: 0px;
+		}
+		.workbook-subtitle {
+			font-size: 14px;
+			color: gray;
+		}
+
+		#workbooks td {
+			vertical-align: middle !important; /*needed to override default bootstrap <td> layout*/
+			font-size: 16px;
+		}
+
+		p { margin:0; }
+
+	
+
+	</style>
 </head>
 <body>
 
-<div class="container container-fluid">
-<h3 id="arbeitshefte-header">Arbeitshefte</h3>
-<table id="arbeitshefte" class="table">
-<tbody>
-<tr>
-<td><p style="font-size: 20px"><a asp-area="" asp-controller="Home" asp-action="Arbeitsheft">Thannhauser</a></p><p style="font-size: 14px; color: gray">Deutschkurs für Flüchtlinge</p></td>
-<td style="vertical-align: middle; font-size: 16px">12 Seiten</td>
-<td style="vertical-align: middle; font-size: 16px">Erstellt: 21.01.17</td>
-<td style="vertical-align: middle; font-size: 16px">Geändert: 21.01.17</td>
-<td style="vertical-align: middle; font-size: 16px"><span class="glyphicon glyphicon-pencil"></span></td>
-<td style="vertical-align: middle; font-size: 16px"><span class="glyphicon glyphicon-trash"></span></td>
-<td style="vertical-align: middle; font-size: 16px"><span class="glyphicon glyphicon-globe"></span></td>
-</tr>
-</tbody>
-</table>
+	<div class="container container-fluid">
+		<h3 id="workbook-header">Arbeitshefte</h3>
+		<table id="workbooks" class="table">
+			<tbody>
+				<tr>
+					<td>
 
-</div>
+						<div>
+							<h3 class="workbook-title"><a asp-area="" asp-controller="Home" asp-action="Arbeitsheft">Thannhauser</a></h3><span class="workbook-subtitle">Deutschkurs für Flüchtlinge</span>
+						</div>
+					</td>
+					<td>12 Seiten</td>
+					<td>Erstellt: 21.01.17</td>
+					<td>Geändert: 21.01.17</td>
+					<td><span class="glyphicon glyphicon-pencil"></span></td>
+					<td><span class="glyphicon glyphicon-trash"></span></td>
+					<td><span class="glyphicon glyphicon-globe unpublished"></span></td>
+				</tr>
+				<tr>
+					<td>
+
+						<div>
+							<h3 class="workbook-title"><a asp-area="" asp-controller="Home" asp-action="Arbeitsheft">Dikate und mehr</a></h3><span class="workbook-subtitle">Spielend Deutsch lenrnen</span>
+						</div>
+					</td>
+					<td>5 Seiten</td>
+					<td>Erstellt: 31.01.17</td>
+					<td>Geändert: 02.02.17</td>
+					<td><span class="glyphicon glyphicon-pencil"></span></td>
+					<td><span class="glyphicon glyphicon-trash"></span></td>
+					<td><span class="glyphicon glyphicon-globe published"></span></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
 
 </body>
 </html>
