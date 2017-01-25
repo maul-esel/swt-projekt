@@ -71,6 +71,11 @@
 
     p { margin:0; }
 
+    .glyphicon-button {
+      border: 0;
+      background: white;
+    }
+
     /*Fab button CSS*/
     .fab {
       background: #4280D0;
