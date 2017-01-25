@@ -8,6 +8,8 @@ namespace Lingvo.MobileApp.Templates
 {
     class LingvoDownloadPageViewCell : LingvoPageViewCell
 	{
+        private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
+
         public LingvoDownloadPageViewCell() : base()
         {
             LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
@@ -15,12 +17,19 @@ namespace Lingvo.MobileApp.Templates
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 HorizontalOptions = LayoutOptions.End,
                 Color = (Color)App.Current.Resources["primaryColor"],
+                WidthRequest = DownloadButtonSize,
+                HeightRequest = DownloadButtonSize,
                 VerticalOptions = LayoutOptions.Center
             };
 
-			downloadButton.OnClicked += (o, e) => ((PageProxy) BindingContext).Resolve();
+            downloadButton.OnClicked += (o, e) => DownloadPage();
 
             ((StackLayout)View).Children.Add(downloadButton);            
+        }
+
+        private async void DownloadPage()
+        {
+            await ((PageProxy)BindingContext).Resolve();
         }
 
         protected override void OnBindingContextChanged()
