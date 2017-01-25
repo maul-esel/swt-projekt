@@ -128,6 +128,7 @@
     <Compile Include="Sound\Player.cs" />
     <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
     <Compile Include="Sound\Recorder.cs" />
+    <None Include="Content\page1.mp3" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sound\" />
+    <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <Reference Include="Lingvo.Common">
