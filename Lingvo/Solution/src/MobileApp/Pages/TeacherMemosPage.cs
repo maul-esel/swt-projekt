@@ -9,8 +9,6 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class TeacherMemosPage : ContentPage
     {
-        private Command addNewCommand = new Command(new Action(() => { Console.WriteLine("New teachermemo"); }));
-
         private ToolbarItem item;
 
         public TeacherMemosPage(Xamarin.Forms.Page parentPage)
@@ -21,9 +19,10 @@ namespace Lingvo.MobileApp.Pages
             item = new ToolbarItem
             {
                 Text = "New..",
-                Icon = "ic_action_add.png",
-                Command = addNewCommand
+                Icon = "ic_action_add.png"
             };
+
+            item.Clicked += AddNewClicked;
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
@@ -63,7 +62,7 @@ namespace Lingvo.MobileApp.Pages
             if (Device.OS == TargetPlatform.Android)
             {
                 LingvoFloatingActionButton fab = new LingvoFloatingActionButton();
-                fab.FabClicked += (o, e) => addNewCommand.Execute(null);
+                fab.FabClicked += AddNewClicked;
                 ContentLayout.Children.Add(fab, Constraint.RelativeToParent((parent) => { return parent.Width - parent.X - 1.5 * fab.WidthRequest; }),
                 Constraint.RelativeToParent((parent) => { return parent.Height - parent.Y - 1.5 * fab.HeightRequest; }),
                 Constraint.RelativeToParent((parent) => { return fab.WidthRequest; }),
@@ -95,6 +94,11 @@ namespace Lingvo.MobileApp.Pages
             {
                 ToolbarItems.Add(item);
             }
+        }
+
+        async void AddNewClicked(object sender, EventArgs e)
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new RecordTeacherMemoPage());
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
