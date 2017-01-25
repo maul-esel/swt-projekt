@@ -12,6 +12,10 @@ namespace Lingvo.Backend.Controllers
         {
             return View();
         }
+		public IActionResult NewWorkbook() 
+		{
+			return View();
+		}
 
         public IActionResult Workbook()
 		{
