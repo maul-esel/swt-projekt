@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Lingvo.Common.Entities;
 using UIKit;
 
 namespace Lingvo.MobileApp.iOS
@@ -14,6 +15,8 @@ namespace Lingvo.MobileApp.iOS
 		{
 			// if you want to use a different Application Delegate class from "AppDelegate"
 			// you can specify it here.
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
 			UIApplication.Main(args, null, "AppDelegate");
 		}
 	}

@@ -27,5 +27,6 @@ namespace Lingvo.MobileApp.iOS
 
 			return base.FinishedLaunching (app, options);
 		}
+
 	}
 }

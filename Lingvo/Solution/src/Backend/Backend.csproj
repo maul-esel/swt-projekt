@@ -13,11 +13,10 @@
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI-Xamarin|AnyCPU'" />
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="$(GlobalExclude)" />
     <EmbeddedResource Include="**\*.resx" Exclude="$(GlobalExclude)" />
-	<Folder Include="Entities\" />
+     <Content Include="Views\**\*.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.App">
@@ -75,12 +74,7 @@
 	  <Version>7.0.6-IR31</Version>
 	</PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-	  <Project>{0CCB2F42-9329-48E4-87B8-42BCB77E76CD}</Project>
-	  <Name>Common</Name>
-	</ProjectReference>
-  </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
    <Target Name="BeforePublish">

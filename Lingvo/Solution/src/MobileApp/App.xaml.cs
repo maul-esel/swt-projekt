@@ -13,7 +13,7 @@ namespace Lingvo.MobileApp
 		{
 			InitializeComponent();
 
-			MainPage = new MobileApp.MainPage();
+			MainPage = new MobileApp.Pages.MainPage();
 		}
 
 		protected override void OnStart ()

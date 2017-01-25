@@ -12,19 +12,49 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)DummyTestClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoFloatingActionButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoRoundImageButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\AudioCarouselPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\AudioPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPagesPage.cs">
+      <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoSingleProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoAudioProgressView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\WorkbookPagesPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\TeacherMemosPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\LocalCollectionPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Proxies\PageProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Proxies\CloudLibraryProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\TeacherMemoController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoTeacherMemoViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoWorkbookViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoPageViewCell.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Controllers\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
   </ItemGroup>
 </Project>

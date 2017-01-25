@@ -12,10 +12,18 @@ namespace Lingvo.Backend.Controllers
         {
             return View();
         }
+		public IActionResult AddWorkbook() 
+		{
+			return View();
+		}
+		public IActionResult AddPage() 
+		{
+			return View();
+		}
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+
+        public IActionResult Workbook()
+		{
 
             return View();
         }

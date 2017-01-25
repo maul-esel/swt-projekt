@@ -119,7 +119,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork@2x" />
+    <Compile Include="Views\CircleProgressBar.cs" />
+    <Compile Include="Views\SingleProgressView.cs" />
+    <Compile Include="Views\AudioProgressView.cs" />
+    <Compile Include="Renderers\AudioProgressViewRenderer.cs" />
+    <Compile Include="Renderers\SingleProgressViewRenderer.cs" />
     <None Include="packages.config" />
+    <Compile Include="Sound\Player.cs" />
+    <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
+    <Compile Include="Sound\Recorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -127,17 +135,27 @@
     <BundleResource Include="Resources\Default-Portrait%402x.png" />
     <BundleResource Include="Resources\Default.png" />
     <BundleResource Include="Resources\Default%402x.png" />
-    <BundleResource Include="Resources\Icon-60%402x.png" />
     <BundleResource Include="Resources\Icon-60%403x.png" />
-    <BundleResource Include="Resources\Icon-76.png" />
-    <BundleResource Include="Resources\Icon-76%402x.png" />
-    <BundleResource Include="Resources\Icon-Small-40.png" />
-    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
     <BundleResource Include="Resources\Icon-Small-40%403x.png" />
-    <BundleResource Include="Resources\Icon-Small.png" />
-    <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\ic_action_add.png" />
+    <BundleResource Include="Resources\ic_action_book.png" />
+    <BundleResource Include="Resources\ic_action_cancel.png" />
+    <BundleResource Include="Resources\ic_action_download.png" />
+    <BundleResource Include="Resources\ic_action_mic.png" />
+    <BundleResource Include="Resources\ic_action_save.png" />
+    <BundleResource Include="Resources\ic_action_tick.png" />
+    <BundleResource Include="Resources\ic_fiber_manual_record.png" />
+    <BundleResource Include="Resources\ic_forward.png" />
+    <BundleResource Include="Resources\ic_launcher.png" />
+    <BundleResource Include="Resources\ic_pause.png" />
+    <BundleResource Include="Resources\ic_play_arrow.png" />
+    <BundleResource Include="Resources\ic_rewind.png" />
+    <BundleResource Include="Resources\ic_stop.png" />
+    <BundleResource Include="Resources\ic_volume_off.png" />
+    <BundleResource Include="Resources\ic_volume_up.png" />
+    <BundleResource Include="Resources\startup.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -157,16 +175,38 @@
     </Reference>
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <Reference Include="Lingvo.Common">
-      <HintPath>..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
-    </Reference>
+  <ItemGroup>
+    <Folder Include="Sound\" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="Lingvo.Common">
-      <HintPath>..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll</HintPath>
-    </Reference>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\.DS_Store" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_add.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_book.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_cancel.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_download.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_mic.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_save.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_tick.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_fiber_manual_record.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_forward.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_launcher.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_pause.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_play_arrow.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_rewind.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_stop.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_off.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_up.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\startup.png" />
   </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
