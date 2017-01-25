@@ -125,11 +125,8 @@ Global
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|Any CPU.ActiveCfg = Release|Any CPU
-		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|Any CPU.Build.0 = Release|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|iPhone.ActiveCfg = Release|Any CPU
-		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|iPhone.Build.0 = Release|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.CI-Xamarin|iPhoneSimulator.Build.0 = Release|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}.Debug|iPhone.ActiveCfg = Debug|Any CPU
