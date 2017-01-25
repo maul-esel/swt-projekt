@@ -12,7 +12,7 @@ INSERT INTO Recordings (id, length, localPath) VALUES
 (3, 127000, 'audios/diktat_seite_03.mp3'),
 (4, 368000, 'audios/diktat_seite_04.mp3');
 
-INSERT INTO Pages(workbookID, number, description, teacherTrack) VALUES
+INSERT INTO Pages(workbookID, number, description, teacherTrackId) VALUES
 (1, 1, 'Begrüßung, Vorstellung und Familie', 1),
 (1, 2, 'Wie geht es Ihnen?', 2),
 (2, 1, 'Das Alphabet', 3),

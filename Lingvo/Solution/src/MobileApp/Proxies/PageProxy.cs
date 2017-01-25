@@ -110,7 +110,8 @@ namespace Lingvo.MobileApp.Proxies
 				original = page;
 
 				var db = App.Database;
-				if (db.Workbooks.Find(this.Workbook.Id) != null)
+
+				if (db.FindWorkbook(this.Workbook.Id) == null)
 				{
 					db.Save(this.Workbook);
 				}

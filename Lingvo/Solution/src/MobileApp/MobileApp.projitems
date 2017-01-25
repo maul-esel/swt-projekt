@@ -41,7 +41,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\DatabaseService.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\..\..\SQL\client.sql">
       <Link>SQL\client.sql</Link>
     </EmbeddedResource>

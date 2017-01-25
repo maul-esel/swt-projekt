@@ -1,5 +1,3 @@
--- SQLite database on client --
-
 CREATE TABLE IF NOT EXISTS Workbooks (
   id INT PRIMARY KEY,
   title TEXT NOT NULL,
@@ -22,13 +20,11 @@ CREATE TABLE IF NOT EXISTS Pages (
   description TEXT NOT NULL,
   teacherTrack INT NOT NULL REFERENCES Recordings,
   studentTrack INT REFERENCES Recordings,
-
   PRIMARY KEY (workbookID, number)
 );
 
--- only on client --
 CREATE TABLE IF NOT EXISTS TeacherMemos (
-  id INT PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   recording INT NOT NULL REFERENCES Recordings
 );

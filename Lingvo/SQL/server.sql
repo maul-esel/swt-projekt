@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Workbooks (
   subtitle TEXT,
   totalPages INT NOT NULL,
   lastModified TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  published BOOLEAN NOT NULL
+  isPublished BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Recordings (
@@ -17,16 +17,16 @@ CREATE TABLE IF NOT EXISTS Recordings (
 );
 
 CREATE TABLE IF NOT EXISTS Pages (
+  id INT PRIMARY KEY AUTO_INCREMENT,
   workbookID INT,
   number INT,
   description TEXT NOT NULL,
-  teacherTrack INT NOT NULL,
-  studentTrack INT, /* always NULL on server */
-  
-  PRIMARY KEY (workbookID, number),
+  teacherTrackId INT NOT NULL,
+  studentTrackId INT, /* always NULL on server */
+
   FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id),
-  FOREIGN KEY ttfk(teacherTrack) REFERENCES Recordings(id),
-  FOREIGN KEY stfk(studentTrack) REFERENCES Recordings(id)
+  FOREIGN KEY ttfk(teacherTrackId) REFERENCES Recordings(id),
+  FOREIGN KEY stfk(studentTrackId) REFERENCES Recordings(id)
 );
 
 -- only on server --

@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend.Controllers
 {
-	using Common.Services;
-
 	/// <summary>
 	/// Controller for App accessing the server
 	/// </summary>
@@ -34,7 +34,6 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook(int workbookId)
 		{
-
 			return Json((from workbook in Database.Workbooks
 						where workbook.IsPublished 
 			            && workbook.Id == workbookId
@@ -58,12 +57,14 @@ namespace Lingvo.Backend.Controllers
 		/// Gets the teacher track from the workbook with the page number.
 		/// </summary>
 		/// <returns>The teacher track.</returns>
-		/// <param name="workbookId">Workbook identifier.</param>
-		/// <param name="pageNumber">Page number.</param>
-		[Route("workbooks/{workbookId}/pages/{pageNumber}")]
-		public IActionResult GetTeacherTrack(int workbookId, int pageNumber)
+		[Route("pages/{pageId}")]
+		public IActionResult GetTeacherTrack(int pageId)
 		{
-			var page = Database.Pages.Find(workbookId, pageNumber);
+			var page = Database.Pages.Find(pageId);
+			Database.Entry(page).Reference(p => p.TeacherTrack).Load();
+
+			Console.WriteLine("TeacherTrackId:" + page.teacherTrackId);
+
 			if (page == null)
 				return NotFound();
 
@@ -85,7 +86,7 @@ namespace Lingvo.Backend.Controllers
 
 			return new FileContentResult(System.IO.File.ReadAllBytes(path), "audio/mpeg3")
 			{
-				FileDownloadName = $"w{workbookId}s{pageNumber}.mp3"
+				FileDownloadName = $"page{pageId}.mp3"
 			};
 		}
 

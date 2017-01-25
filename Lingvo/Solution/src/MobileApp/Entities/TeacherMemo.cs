@@ -1,6 +1,7 @@
 ﻿using Lingvo.Common.Entities;
 using System;
-using LinqToDB.Mapping;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace Lingvo.MobileApp.Entities
 {
@@ -10,16 +11,15 @@ namespace Lingvo.MobileApp.Entities
 	[Table("TeacherMemos")]
     public class TeacherMemo
 	{
-		[Column("recording"), NotNull]
+		[ForeignKey(typeof(Recording))]
 		public String RecordingId { get; set; }
 
-		[Column, NotNull]
 		public String Name { get; set; }
 
-		[Column, Identity, PrimaryKey]
+		[PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 
-		[Association(ThisKey = nameof(RecordingId), OtherKey = nameof(Common.Entities.Recording.Id), CanBeNull = false)]
+		[OneToOne]
 		public Recording Recording { get; set; }
 
 		public TeacherMemo()
