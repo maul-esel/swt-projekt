@@ -252,7 +252,9 @@ namespace Lingvo.MobileApp.Pages
 
 			if (currentState == PlayerState.STOPPED)
 			{
+				
 				StudentPageController.Instance.StartStudentRecording();
+				ProgressView.InnerProgressEnabled = true;
 				return;	
 			}
 			if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
