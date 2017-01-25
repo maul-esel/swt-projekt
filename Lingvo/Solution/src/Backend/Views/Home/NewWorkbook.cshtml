@@ -4,16 +4,20 @@
 <body>
 
 <h1>Neues Arbeitsheft erstellen</h1>
-<form style="padding-top: 20px">
+<form style="padding-top: 40px">
   <div class="form-group">
-    <label for="email">Arbeitsheft Name</label>
-    <input type="email" class="form-control" id="email">
+    <label for="workbook-title-name">Arbeitsheft Name</label>
+    <input class="form-control input-lg" id="workbook-title-name" placeholder="Thannhauser Band 1">
   </div>
   <div class="form-group">
-    <label for="pwd">Arbeitsheft Titel</label>
-    <input type="password" class="form-control" id="pwd">
+    <label for="workbook-subtitle">Arbeitsheft Titel</label>
+    <input class="form-control input-lg" id="workbook-subtitle" placeholder="Deutschkurs für Geflüchtete">
   </div>
-  <button type="submit" class="btn-lg btn-success" style="border:none">Arbeitsheft anlegen</button>
+	<div style="padding-top:10px">		
+		 <button type="cancel" class="btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Index">Abbrechen</button>
+     <button type="submit" class="btn-lg btn-success" style="border:none">Arbeitsheft anlegen</button>
+  </div>
+			
 </form>
 
 
