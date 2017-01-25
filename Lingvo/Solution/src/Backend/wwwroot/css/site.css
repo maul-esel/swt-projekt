@@ -1,4 +1,4 @@
-﻿    
+﻿
     html, body {
       font-size:20px;
       width: 100%;
@@ -98,4 +98,46 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
+        .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+
+      position: absolute;
+      z-index: -1;
+    }
+    .inputfile + label {
+      max-width: 80%;
+      border-width:2px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-block;
+      overflow: hidden;
+      padding: 0.625rem 1.25rem;
+    }
+
+    .inputfile:focus + label,
+    .inputfile + label:hover {
+      color: #4280D0;
+    }
+
+    .inputfile + label {
+      cursor: pointer; /* "hand" cursor */
+    }
+    .box {
+      padding: 6.25rem 1.25rem;
+      display: block;
+    }
+    .box + .box {
+      margin-top: 2.5rem;
+    }
+
+
+    .hover-blue {}
+    label:hover .hover-blue {
+        fill: #4280D0;
     }
