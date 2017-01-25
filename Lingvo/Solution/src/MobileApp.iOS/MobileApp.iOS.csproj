@@ -178,21 +178,6 @@
   <ItemGroup>
     <Folder Include="Sound\" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <Reference Include="Lingvo.Common">
-      <HintPath Condition="Exists('..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll')">..\Common\bin\Debug\netstandard1.6\Lingvo.Common.dll</HintPath>
-      <HintPath Condition="Exists('..\Common\bin\Debug\Lingvo.Common.dll')">..\Common\bin\Debug\Lingvo.Common.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="Lingvo.Common">
-      <HintPath Condition="Exists('..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll')">..\Common\bin\Release\netstandard1.6\Lingvo.Common.dll</HintPath>
-      <HintPath Condition="Exists('..\Common\bin\Release\Lingvo.Common.dll')">..\Common\bin\Release\Lingvo.Common.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Sound\" />
-  </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60%402x.png" />
@@ -221,6 +206,7 @@
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_up.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\startup.png" />
   </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
