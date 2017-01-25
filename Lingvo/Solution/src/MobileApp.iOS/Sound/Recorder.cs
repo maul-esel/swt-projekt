@@ -1,20 +1,43 @@
 ﻿using System;
+using System.IO;
 using Xamarin.Forms;
+using Foundation;
 using Lingvo.Common.Adapters;
 using Lingvo.MobileApp.iOS.Sound;
 using Lingvo.Common.Enums;
 using Lingvo.Common.Entities;
+using AVFoundation;
 
 [assembly: Dependency(typeof(Recorder))]
 namespace Lingvo.MobileApp.iOS.Sound
 {
-	
+
 	public class Recorder :IRecorder
 	{
+		private const String RECORDING_PREFIX = "record_";
+		private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+		private NSUrl currentRecordingUrl;
+		private Recording currentRecording;
+		private AVAudioRecorder recorder;
+		private NSError error;
+		private static readonly AudioSettings SETTINGS = new AudioSettings
+		{
+			SampleRate = 44100.0f,
+			Format = AudioToolbox.AudioFormatType.MPEG4AAC,
+			NumberChannels = 1,
+			LinearPcmBitDepth = 16,
+			AudioQuality = AVAudioQuality.High,
+		};
+
 		private RecorderState state;
+
 
 		public Recorder()
 		{
+			if (!initAudioSession())
+			{
+				State = RecorderState.ERROR;
+			}
 			State = RecorderState.IDLE;
 		}
 
@@ -34,13 +57,15 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void Continue()
 		{
+			recorder.Record();
 			State = RecorderState.RECORDING;
 		}
 
 		public void Pause()
 		{
 			if (State == RecorderState.RECORDING)
-			{ 
+			{
+				recorder.Pause();
 				State = RecorderState.PAUSED;
 			}
 
@@ -48,18 +73,87 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void SeekTo(int seconds)
 		{
-			
+			recorder.Pause();
+			var recordingTime = recorder.currentTime + seconds;
+			recorder.RecordAt(recordingTime);
 		}
 
 		public void Start()
 		{
+			recorder.Record();
 			State = RecorderState.RECORDING;
 		}
 
 		public Recording Stop()
 		{
-			State = RecorderState.STOPPED;
-			return new Recording();
+			recorder.Pause();
+			int recordingDuration = (int) recorder.currentTime;
+			recorder.Stop();
+			recorder.Dispose();
+			recorder = null;
+			State = RecorderState.IDLE;
+
+			//TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
+			currentRecording = new Recording(37, recordingDuration, currentRecordingUrl.ToString(), DateTime.Now);
+
+			return currentRecording;
+		}
+
+		public bool PrepareToRecord()
+		{
+			currentRecordingUrl = NSUrl.FromFilename(Path.Combine(getFilePath(), getFileName()));
+			recorder = AVAudioRecorder.Create(currentRecordingUrl, SETTINGS, out error);
+
+
+			if (error != null)
+			{
+				State = RecorderState.ERROR;
+				return false;
+			}
+
+			//Set Recorder to Prepare To Record
+			if (!recorder.PrepareToRecord())
+			{
+				
+				recorder.Dispose();
+				recorder = null;
+				State = RecorderState.ERROR;
+				return false;
+			}
+
+
+			State = RecorderState.PREPARED;
+			return true;
+
+		}
+
+		private bool initAudioSession()
+		{
+			var audioSession = AVAudioSession.SharedInstance();
+			var err = audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+			if (err != null)
+			{
+				return false;
+			}
+			err = audioSession.SetActive(true);
+			if (err != null)
+			{
+				return false;
+			}
+			return true;
+		}
+
+
+
+
+		private String getFilePath()
+		{
+			return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+		}
+
+		private String getFileName()
+		{
+			return RECORDING_PREFIX + DateTime.Now.ToString(DATE_FORMAT) + ".aac";
 		}
 	}
 }
