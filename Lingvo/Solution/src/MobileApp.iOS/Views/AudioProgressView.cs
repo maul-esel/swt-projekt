@@ -21,6 +21,7 @@ namespace Lingvo.MobileApp.iOS
 		private float lineWidth = 10.0f;
 		private bool studentMuted = false;
 		private int progress = 0;
+		int maxProgress = 100;
 
 
 
@@ -52,6 +53,8 @@ namespace Lingvo.MobileApp.iOS
 			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
 			teacherProgressBar.ProgressColor = teacherColor;
+			teacherProgressBar.MaxProgress = maxProgress;
+			teacherProgressBar.Progress = progress;
 			AddSubview(teacherProgressBar);
 
 			studentProgressBar = new CircleProgressBar(Frame);
@@ -59,6 +62,8 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.ProgressColor = studentColor;
 			studentProgressBar.NestingLevel = 1;
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
+			studentProgressBar.MaxProgress = maxProgress;
+			studentProgressBar.Progress = progress;
 			AddSubview(studentProgressBar);
 
 			//layout views programatically
@@ -160,10 +165,11 @@ namespace Lingvo.MobileApp.iOS
 		{
 			get
 			{
-				return teacherProgressBar.MaxProgress;
+				return maxProgress;
 			}
 			set
 			{
+				maxProgress = value;
 				studentProgressBar.MaxProgress = value;
 				teacherProgressBar.MaxProgress = value;
 			}
