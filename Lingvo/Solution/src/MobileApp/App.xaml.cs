@@ -14,11 +14,6 @@ namespace Lingvo.MobileApp
 	{
 		const string databasePath = "lingvo.sqlite";
 
-#if __ANDROID__
-		const string sqlResource = "Lingvo.MobileApp.Droid.SQL.client.sql";
-#elif __IOS__
-		const string sqlResource = "Lingvo.MobileApp.iOS.SQL.client.sql";
-#endif
 		public static LingvoMobileContext Database { get; private set; }
 
 		private static void SetupDatabaseConnection()
@@ -27,16 +22,8 @@ namespace Lingvo.MobileApp
 			{
 				string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), databasePath);
 				Database = new LingvoMobileContext(dbPath);
-				Database.createTables(ReadDatabaseDefinition());
+				Database.createTables();
 			}
-		}
-
-		private static string ReadDatabaseDefinition()
-		{
-			var assembly = typeof(App).GetTypeInfo().Assembly;
-			var stream = assembly.GetManifestResourceStream(sqlResource);
-			using (var reader = new StreamReader(stream))
-				return reader.ReadToEnd();
 		}
 
 		public App ()

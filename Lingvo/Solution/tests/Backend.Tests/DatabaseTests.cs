@@ -22,7 +22,7 @@ namespace Lingvo.Backend.Tests
 				.AddEnvironmentVariables("LINGVO_");
 			var config = builder.Build();
 
-			DatabaseTests.Database = DatabaseService.Connect(config);
+			DatabaseService.Connect(config);
 			DatabaseTests.Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
 		}
 
@@ -34,7 +34,7 @@ namespace Lingvo.Backend.Tests
     public class DatabaseTests : IClassFixture<TestsFixture>
     {
 
-		public static DatabaseService Database;
+		public static DatabaseService Database => DatabaseService.getNewContext();
 
 		public DatabaseTests()
 		{

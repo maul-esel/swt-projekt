@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using SQLiteNetExtensions.Extensions;
 
+#if __ANDROID__
+		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
+#elif __IOS__
+		using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
+#endif
+
 namespace Lingvo.MobileApp.Services
 {
 	public class LingvoMobileContext
@@ -20,17 +26,11 @@ namespace Lingvo.MobileApp.Services
 
 		public LingvoMobileContext(string dbPath)
 		{
-			database = new SQLiteConnection(new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS(), dbPath);
+			database = new SQLiteConnection(new SQLitePlatform(), dbPath);
 		}
 
-		public void createTables(string sql)
+		public void createTables()
 		{
-			//var sqls = sql.Split(new[] { "\n\n" }, StringSplitOptions.None);
-
-			//foreach (var statement in sqls)
-			//{
-			//	database.Execute(statement);
-			//}
 			database.CreateTable<Workbook>();
 			database.CreateTable<Recording>();
 			database.CreateTable<Page>();

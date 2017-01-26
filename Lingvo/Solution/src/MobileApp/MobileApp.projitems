@@ -41,9 +41,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\..\..\SQL\client.sql">
-      <Link>SQL\client.sql</Link>
-    </EmbeddedResource>
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoTeacherMemoViewCell.cs" />
@@ -61,6 +58,5 @@
     <Folder Include="$(MSBuildThisFileDirectory)Proxies\" />
     <Folder Include="$(MSBuildThisFileDirectory)Controllers\" />
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
-    <Folder Include="$(MSBuildThisFileDirectory)SQL\" />
   </ItemGroup>
 </Project>
