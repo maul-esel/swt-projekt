@@ -55,6 +55,7 @@ namespace Lingvo.MobileApp.iOS
 			teacherProgressBar.ProgressColor = teacherColor;
 			teacherProgressBar.MaxProgress = maxProgress;
 			teacherProgressBar.Progress = progress;
+			teacherProgressBar.LineWidth = lineWidth;
 			AddSubview(teacherProgressBar);
 
 			studentProgressBar = new CircleProgressBar(Frame);
@@ -64,6 +65,7 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			studentProgressBar.MaxProgress = maxProgress;
 			studentProgressBar.Progress = progress;
+			studentProgressBar.LineWidth = lineWidth;
 			AddSubview(studentProgressBar);
 
 			//layout views programatically
