@@ -178,11 +178,10 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(int seconds)
 		{
-			if (recorder.State == RecorderState.RECORDING)
+			if (recorder.State != RecorderState.RECORDING)
 			{
-				recorder.SeekTo(seconds);	
-			}
-			audioPlayer.SeekTo(seconds);
+                audioPlayer.SeekTo(seconds);
+            }
 		}
 
 		private void CheckIfRecordingHasToStop()

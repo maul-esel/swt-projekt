@@ -58,11 +58,6 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         }
 
-        public void SeekTo(int seconds)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Start()
         {
             recorder.Start();
