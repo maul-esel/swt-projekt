@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
-		private const string URL = "http://10.0.2.2:5000/api/app/";
+		private const string URL = "http://localhost:5000/api/app/";
 
 		private static APIService instance;
 
@@ -97,10 +97,11 @@ namespace Lingvo.MobileApp
 		/// <param name="proxy">Proxy.</param>
 		public async Task<Page> FetchPage(PageProxy proxy)
 		{
-			var recording = await FetchTeacherTrack(proxy.Workbook, proxy, 
+			var recording = await FetchTeacherTrack(proxy, 
 			                                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 			                                                     "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3"));
 			Page page = new Page();
+			page.Id = proxy.Id;
 			page.Description = proxy.Description;
 			page.Number = proxy.Number;
 			page.Workbook = proxy.Workbook;
@@ -135,9 +136,9 @@ namespace Lingvo.MobileApp
 		/// <param name="workbook">Workbook.</param>
 		/// <param name="page">Page.</param>
 		/// <param name="localPath">Local path.</param>
-		public Task<Recording> FetchTeacherTrack(Workbook workbook, IPage page, String localPath)
+		public Task<Recording> FetchTeacherTrack(IPage page, String localPath)
 		{
-			return FetchFromURLAsync($"{URL}workbooks/{workbook.Id}/pages/{page.Number}", async (response) =>
+			return FetchFromURLAsync($"{URL}pages/{page.Id}", async (response) =>
 			{
 				using (var fileStream = File.Create(localPath))
 					await response.GetResponseStream().CopyToAsync(fileStream);

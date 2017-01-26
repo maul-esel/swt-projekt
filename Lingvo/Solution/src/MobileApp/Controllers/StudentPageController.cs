@@ -35,16 +35,16 @@ namespace Lingvo.MobileApp.Controllers
 				selectedPage = value;
 
 				var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				var filePath = Path.Combine(documentsDirPath, "1.mp3");
-				var recording = new Recording(id: 99, duration: 231000, localPath: filePath, creationTime: new DateTime());
+				var filePath = Path.Combine(documentsDirPath, "page1.mp3");
+				var recording = new Recording(id: 99, duration: 95000, localPath: filePath, creationTime: new DateTime());
 				audioPlayer.PrepareTeacherTrack(recording);
-				//audioPlayer.PrepareStudentTrack(recording);
-				//audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+				audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
 
 				if (selectedPage.StudentTrack != null)
 				{
 					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
 				}
+				recorder.PrepareToRecord();
 			}
 
 		}
@@ -128,7 +128,12 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void StartStudentRecording()
 		{
-			recorder?.Start();
+			if (recorder.State != RecorderState.PREPARED)
+			{
+				recorder.PrepareToRecord();
+			}
+
+			recorder.Start();
 			PlayPage();
 
 		}
@@ -139,7 +144,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void Pause()
 		{
 			audioPlayer.Pause();
-			recorder?.Pause();
+			recorder.Pause();
 
 		}
 
@@ -148,7 +153,10 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void Continue()
 		{
-			recorder?.Continue();
+			if (recorder.State == RecorderState.PAUSED)
+			{
+				recorder.Continue();
+			}
 			audioPlayer.Play();
 		}
 
@@ -158,7 +166,10 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			Recording recording = recorder?.Stop();
+			if (recorder.State != RecorderState.IDLE && recorder.State != RecorderState.IDLE)
+			{
+				Recording recording = recorder.Stop();	
+			}
 			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
@@ -167,8 +178,20 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(int seconds)
 		{
-			recorder?.SeekTo(seconds);
+			if (recorder.State == RecorderState.RECORDING)
+			{
+				recorder.SeekTo(seconds);	
+			}
 			audioPlayer.SeekTo(seconds);
 		}
+
+		private void CheckIfRecordingHasToStop()
+		{
+			if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
+			{
+				recorder.Stop();
+			}
+		}
+
 	}
 }

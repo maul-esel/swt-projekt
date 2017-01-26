@@ -153,7 +153,7 @@ namespace Lingvo.MobileApp.Pages
 				InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
 				InnerProgressEnabled = page.StudentTrack != null,
 				MuteEnabled = page.StudentTrack != null,
-				MaxProgress = 44000
+				MaxProgress = 95000
             };
 
             if (page.TeacherTrack != null)
@@ -252,7 +252,9 @@ namespace Lingvo.MobileApp.Pages
 
 			if (currentState == PlayerState.STOPPED)
 			{
+				
 				StudentPageController.Instance.StartStudentRecording();
+				ProgressView.InnerProgressEnabled = true;
 				return;	
 			}
 			if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)

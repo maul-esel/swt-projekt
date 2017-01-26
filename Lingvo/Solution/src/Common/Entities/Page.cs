@@ -1,5 +1,6 @@
 ﻿using System;
-using LinqToDB.Mapping;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace Lingvo.Common.Entities
 {
@@ -9,27 +10,28 @@ namespace Lingvo.Common.Entities
 	[Table("Pages")]
 	public class Page : IPage
 	{
-		[Column("teacherTrack"), NotNull]
-		public int teacherTrackId;
+		[ForeignKey(typeof(Recording))]
+		public int teacherTrackId { get; set; }
 
-		[Column("studentTrack")]
-		public int? studentTrackId;
+		[ForeignKey(typeof(Recording))]
+		public int? studentTrackId { get; set; }
 
-		[Column, NotNull]
+		[PrimaryKey]
+		public int Id { get; set; }
+
+		[ForeignKey(typeof(Workbook))]
 		public int workbookId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the page number.
 		/// </summary>
 		/// <value>The number.</value>
-		[Column, NotNull]
 		public int Number { get; set; }
 
 		/// <summary>
 		/// Gets or sets the description.
 		/// </summary>
 		/// <value>The description.</value>
-		[Column, NotNull]
 		public String Description { get; set; }
 
 		/// <summary>
@@ -38,21 +40,21 @@ namespace Lingvo.Common.Entities
 		/// <value><c>true</c> if edited; otherwise, <c>false</c>.</value>
 		public bool Edited => StudentTrack != null;
 
-		[Association(ThisKey = nameof(workbookId), OtherKey = nameof(Entities.Workbook.Id), CanBeNull = false)]
+		[ManyToOne]
 		public Workbook Workbook { get; set; }
 
 		/// <summary>
 		/// Gets or sets the teacher track.
 		/// </summary>
 		/// <value>The teacher track.</value>
-		[Association(ThisKey = nameof(teacherTrackId), OtherKey = nameof(Recording.Id), CanBeNull = false)]
+		[OneToOne("teacherTrackId", CascadeOperations = CascadeOperation.All)]
 		public Recording TeacherTrack { get; set; }
 
 		/// <summary>
 		/// Gets or sets the student track.
 		/// </summary>
 		/// <value>The student track.</value>
-		[Association(ThisKey = nameof(studentTrackId), OtherKey = nameof(Recording.Id), CanBeNull = true)]
+		[OneToOne("studentTrackId", CascadeOperations = CascadeOperation.All)]
 		public Recording StudentTrack { get; set; }
 
 		public void DeleteStudentRecording()

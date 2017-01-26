@@ -1,6 +1,5 @@
 ﻿using System;
-using LinqToDB.Mapping;
-using System.ComponentModel;
+using SQLite.Net.Attributes;
 
 namespace Lingvo.Common.Entities
 {
@@ -23,20 +22,17 @@ namespace Lingvo.Common.Entities
 			CreationTime = creationTime;
 		}
 
-		[Column, PrimaryKey, NotNull]
+		[PrimaryKey]
 		public int Id { get; set; }
 
-		[Column, NotNull]
 		public DateTime CreationTime { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the duration of the audio file in milliseconds.
 		/// </summary>
 		/// <value>The length.</value>
-		[Column, NotNull]
 		public int Duration { get; set; }
 
-		[Column, NotNull]
 		public string LocalPath { get; set; }
 	}
 }

@@ -1,46 +1,69 @@
 ﻿using System;
 
-using LinqToDB.Mapping;
-using LinqToDB.DataProvider.MySql;
-using LinqToDB;
-
 using Microsoft.Extensions.Configuration;
 
-using Lingvo.Common.Services;
+using Lingvo.Common.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Server.Kestrel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lingvo.Backend
 {
 	using Common.Entities;
 
-    public class DatabaseService : Common.Services.DatabaseService
+	public class DatabaseService : DbContext
     {
-		public DatabaseService(string connectionString)
-			: base(new MySqlDataProvider(), connectionString)
+		private static DbContextOptions<DatabaseService> options;
+
+		public DbSet<Workbook> Workbooks { get; set; }
+		public DbSet<Page> Pages { get; set; }
+		public DbSet<Recording> Recordings { get; set; }
+
+		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
+    	{ }
+
+		public static void Connect(IConfiguration config)
 		{
-			AdjustMappingSchema(connection.MappingSchema);
+			var optionsBuilder = new DbContextOptionsBuilder<DatabaseService>();
+			var server = config["DB_HOST"];
+			var port = config["DB_PORT"];
+			var db = config["DB_NAME"];
+			var user = config["DB_USER"];
+			var password = config["DB_PASSWORD"];
+
+			optionsBuilder.UseMySql(@"Server=" + server + ";port=" + port + ";database=" + db + ";uid=" + user + ";pwd=" + password + ";");
+
+			options = optionsBuilder.Options;
 		}
 
-		public static DatabaseService Connect(IConfiguration config)
+		public static DatabaseService getNewContext()
 		{
-			return new DatabaseService(
-				$"Server={config["DB_HOST"]};Port={config["DB_PORT"]};Database={config["DB_NAME"]};Uid={config["DB_USER"]};Pwd={config["DB_PASSWORD"]};charset=utf8;"
-			);
+			return new DatabaseService(options);
 		}
 
-		private void AdjustMappingSchema(MappingSchema schema)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			schema.GetFluentMappingBuilder()
-			.Entity<Recording>()
-				.Property(r => r.Id).IsIdentity()
-				.Property(r => r.CreationTime)
-					.HasSkipOnInsert(true)
-					.HasSkipOnUpdate(true)
+			modelBuilder.Entity<Workbook>().Property(w => w.Title).IsRequired();
+			modelBuilder.Entity<Workbook>().Property(w => w.Subtitle).IsRequired();
+			modelBuilder.Entity<Workbook>().Property(w => w.LastModified).IsRequired().ValueGeneratedOnAddOrUpdate();
+			modelBuilder.Entity<Workbook>().HasMany(w => (IEnumerable<Page>) w.Pages).WithOne(p => p.Workbook).HasForeignKey(p => p.workbookId);
 
-			.Entity<Workbook>()
-				.Property(w => w.Id).IsIdentity()
-				.Property(w => w.LastModified)
-					.HasSkipOnInsert(true)
-					.HasSkipOnUpdate(true);
+			modelBuilder.Entity<Page>().Property(p => p.Description).IsRequired();
+			modelBuilder.Entity<Page>().HasOne(p => p.StudentTrack).WithMany().HasForeignKey(p => p.studentTrackId);
+			modelBuilder.Entity<Page>().HasOne(p => p.TeacherTrack).WithMany().HasForeignKey(p => p.teacherTrackId);
+
+			modelBuilder.Entity<Recording>().Property(r => r.LocalPath).IsRequired();
+		}
+
+		public List<Workbook> GetWorkbooksWithReferences()
+		{
+			return Workbooks.Include(w => w.Pages).ThenInclude(p => p.TeacherTrack).ToList();
+		}
+
+		public List<Page> GetPagesWithReferences()
+		{
+			return Pages.Include(p => p.TeacherTrack).ToList();
 		}
 
 		/// <summary>
@@ -50,14 +73,12 @@ namespace Lingvo.Backend
 		/// <param name="recording">Recording.</param>
 		public void Save(Recording recording)
 		{
-			if (Recordings.Find(recording.Id) != null) {
-				connection.Update(recording);
-			}
-			else
+			if (Recordings.Find(recording.Id) != null)
 			{
-				int id = Convert.ToInt32((UInt64)connection.InsertWithIdentity(recording));
-				recording.Id = id;
+				Recordings.Remove(Recordings.Find(recording.Id));
 			}
+			Recordings.Add(recording);
+			SaveChanges();
 		}
 
 		/// <summary>
@@ -67,14 +88,12 @@ namespace Lingvo.Backend
 		/// <param name="page">Page.</param>
 		public void Save(Page page)
 		{
-			if (Pages.Find(page.workbookId, page.Number) != null)
+			if (Pages.Find(page.Id) != null)
 			{
-				connection.Update(page);
+				Recordings.Remove(Recordings.Find(page.Id));
 			}
-			else
-			{
-				connection.InsertWithIdentity(page);
-			}
+			Pages.Add(page);
+			SaveChanges();
 		}
 
 		/// <summary>
@@ -86,13 +105,12 @@ namespace Lingvo.Backend
 		{
 			if (Workbooks.Find(workbook.Id) != null)
 			{
-				connection.Update(workbook);
+				Recordings.Remove(Recordings.Find(workbook.Id));
 			}
-			else
-			{
-				int id = Convert.ToInt32((UInt64) connection.InsertWithIdentity(workbook));
-				workbook.Id = id;
-			}
+			Workbooks.Add(workbook);
+			SaveChanges();
 		}
+
+
     }
 }

@@ -1,18 +1,17 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend.Controllers
 {
-	using Common.Services;
-
 	/// <summary>
 	/// Controller for App accessing the server
 	/// </summary>
 	[Route("api/app")]
 	public class AppController : Controller
     {
-		private DatabaseService Database => Startup.Database;
 
 		/// <summary>
 		/// Gets all workbooks without pages.
@@ -21,7 +20,8 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks()
 		{
-			return Json(from w in Database.Workbooks
+			var Database = DatabaseService.getNewContext();
+			return Json(from w in Database.GetWorkbooksWithReferences()
 						where w.IsPublished
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
@@ -34,8 +34,8 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook(int workbookId)
 		{
-
-			return Json((from workbook in Database.Workbooks
+			var Database = DatabaseService.getNewContext();
+			return Json((from workbook in Database.GetWorkbooksWithReferences()
 						where workbook.IsPublished 
 			            && workbook.Id == workbookId
 			             select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages}).Single());
@@ -49,21 +49,25 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages(int workbookId)
 		{
-			return Json(from p in Database.Pages
+			var Database = DatabaseService.getNewContext();
+			return Json(from p in Database.GetPagesWithReferences()
 						where p.workbookId == workbookId
-						select new { p.workbookId, p.Number, p.Description });
+						select new { p.Id, p.workbookId, p.Number, p.Description });
 		}
 
 		/// <summary>
 		/// Gets the teacher track from the workbook with the page number.
 		/// </summary>
 		/// <returns>The teacher track.</returns>
-		/// <param name="workbookId">Workbook identifier.</param>
-		/// <param name="pageNumber">Page number.</param>
-		[Route("workbooks/{workbookId}/pages/{pageNumber}")]
-		public IActionResult GetTeacherTrack(int workbookId, int pageNumber)
+		[Route("pages/{pageId}")]
+		public IActionResult GetTeacherTrack(int pageId)
 		{
-			var page = Database.Pages.Find(workbookId, pageNumber);
+			var Database = DatabaseService.getNewContext();
+
+			var page = Database.GetPagesWithReferences().Find(p => p.Id == pageId);
+
+			Console.WriteLine("TeacherTrackId:" + page.teacherTrackId);
+
 			if (page == null)
 				return NotFound();
 
@@ -85,7 +89,7 @@ namespace Lingvo.Backend.Controllers
 
 			return new FileContentResult(System.IO.File.ReadAllBytes(path), "audio/mpeg3")
 			{
-				FileDownloadName = $"w{workbookId}s{pageNumber}.mp3"
+				FileDownloadName = $"page{pageId}.mp3"
 			};
 		}
 

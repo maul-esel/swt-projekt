@@ -11,5 +11,6 @@ namespace Lingvo.Common.Adapters
 		void Continue();
 		void SeekTo(int seconds);
 		RecorderState State { get; }
+		bool PrepareToRecord();
 	}
 }

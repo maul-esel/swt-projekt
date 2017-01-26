@@ -8,7 +8,6 @@ namespace Lingvo.Backend
 {
     public class Startup
 	{
-		static public DatabaseService Database { get; private set; }
 
 		public Startup(IHostingEnvironment env)
 		{
@@ -18,7 +17,7 @@ namespace Lingvo.Backend
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables("LINGVO_");
             Configuration = builder.Build();
-			Database = DatabaseService.Connect(Configuration);
+			DatabaseService.Connect(Configuration);
 		}
 
 		public IConfigurationRoot Configuration { get; }

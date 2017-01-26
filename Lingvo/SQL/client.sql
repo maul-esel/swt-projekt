@@ -1,12 +1,10 @@
--- SQLite database on client --
-
 CREATE TABLE IF NOT EXISTS Workbooks (
   id INT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
   totalPages INT NOT NULL,
   lastModified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- see trigger below
-  published BOOLEAN NOT NULL
+  isPublished BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Recordings (
@@ -17,18 +15,16 @@ CREATE TABLE IF NOT EXISTS Recordings (
 );
 
 CREATE TABLE IF NOT EXISTS Pages (
+  id INT PRIMARY KEY,
   workbookID INT REFERENCES Workbooks ON DELETE CASCADE,
   number INT,
   description TEXT NOT NULL,
-  teacherTrack INT NOT NULL REFERENCES Recordings,
-  studentTrack INT REFERENCES Recordings,
-
-  PRIMARY KEY (workbookID, number)
+  teacherTrackId INT NOT NULL REFERENCES Recordings,
+  studentTrackId INT REFERENCES Recordings
 );
 
--- only on client --
 CREATE TABLE IF NOT EXISTS TeacherMemos (
-  id INT PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   recording INT NOT NULL REFERENCES Recordings
 );
