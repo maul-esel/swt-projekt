@@ -41,12 +41,16 @@
       padding: 15px;
     }
 
-    #workbook-header {
+    .lingvo-header {
       background-color: #4280D0; 
       color: white;
       padding: 18px;
       border-radius: 5px;
       font-weight: normal;
+    }
+    .lingvo-header a {
+        color: white;
+        text-decoration: underline;
     }
     .glyphicon.glyphicon-globe.published {
       color: #4280D0;
@@ -141,3 +145,4 @@
     label:hover .hover-blue {
         fill: #4280D0;
     }
+

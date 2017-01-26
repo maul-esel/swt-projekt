@@ -3,7 +3,9 @@
 <head></head>
 <body>
   <div class="container container-fluid">
-    <h3 id="workbook-header" style="padding-left:8px">Arbeitshefte > Thannhauser > Neue Seite erstellen</h3>
+    <h3 class="lingvo-header">
+	  <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > Thannhauser > @ViewData["Title"]
+	</h3>
     <form style="padding-top:20px;">
       <div class="form-group col-md-9" style="padding-left:0">
         <label for="page-name">Beschreibung</label>
