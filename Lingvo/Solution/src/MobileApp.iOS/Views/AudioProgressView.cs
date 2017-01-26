@@ -15,8 +15,8 @@ namespace Lingvo.MobileApp.iOS
 		public CircleProgressBar teacherProgressBar;
 		public CircleProgressBar studentProgressBar;
 
-		private static UIColor studentRed = UIColor.Red;
-		private static UIColor teacherBlue = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
+		private static UIColor studentColor = UIColor.Red;
+		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
 
 		private float lineWidth = 10.0f;
 		private bool studentMuted = false;
@@ -30,14 +30,14 @@ namespace Lingvo.MobileApp.iOS
 		UIButton muteBtn = new Func<UIButton>(() =>
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
-			btn.SetTitleColor(teacherBlue, UIControlState.Normal);
+			btn.SetTitleColor(teacherColor, UIControlState.Normal);
 			btn.SetTitle("Mute", UIControlState.Normal);
 			return btn;
 		})();
 		UILabel timeLabel = new UILabel()
 		{
 			Text = "00:00",
-			TextColor = teacherBlue,
+			TextColor = teacherColor,
 			Font = UIFont.SystemFontOfSize(28)
 		};
 
@@ -51,12 +51,12 @@ namespace Lingvo.MobileApp.iOS
 		{
 			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			teacherProgressBar.ProgressColor = teacherBlue;
+			teacherProgressBar.ProgressColor = teacherColor;
 			AddSubview(teacherProgressBar);
 
 			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			studentProgressBar.ProgressColor = studentRed;
+			studentProgressBar.ProgressColor = studentColor;
 			studentProgressBar.NestingLevel = 1;
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
@@ -228,6 +228,7 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
+				studentColor = value;
 				studentProgressBar.ProgressColor = value;
 				SetNeedsDisplay();
 			}
@@ -238,6 +239,7 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				teacherProgressBar.ProgressColor = value;
+				teacherColor = value;
 				SetNeedsDisplay();
 				timeLabel.TextColor = value;
 				muteBtn.SetTitleColor(value, UIControlState.Normal);
