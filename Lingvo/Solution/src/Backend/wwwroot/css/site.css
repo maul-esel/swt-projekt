@@ -1,38 +1,143 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
+﻿
+    html, body {
+      font-size:20px;
+      width: 100%;
+      padding: 30px 0;
+      height: 100%;
+    }
+    .navbar-inverse {
+      background-color: #4280D0 !important;
+      border-color: white !important;
+    }
+    .navbar-collapse.collapse li a {
+      color: white !important;
+      font-size: 24px;
+    }
+    .navbar-header a {
+      color: white !important;
+      font-size: 30px;
+    }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
+    .footer
+    {
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
+      left: 0;
+      right: 0;
+      margin: 0px;
+      width: 100%;
+      height: 51px;
+    }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
+    .fill {
+      min-height: 100%;
+      height: 100% important!;
+    }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"]
-{
-    width: 100%;
-}
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
-}
+
+    footer {
+      background-color: #4280D0;
+      color: white;
+      padding: 15px;
+    }
+
+    #workbook-header {
+      background-color: #4280D0; 
+      color: white;
+      padding: 18px;
+      border-radius: 5px;
+      font-weight: normal;
+    }
+    .glyphicon.glyphicon-globe.published {
+      color: #4280D0;
+    }
+    .glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
+      color: gray;
+    }
+
+    .workbook-title {
+      font-size: 24px;
+      margin: 0px;
+    }
+    .workbook-subtitle {
+      font-size: 20px;
+      color: gray;
+    }
+
+    #workbooks td {
+      vertical-align: middle !important; /*needed to override default bootstrap <td> layout*/
+      font-size: 20px;
+    }
+
+    p { margin:0; }
+
+    .glyphicon-button {
+      border: 0;
+      background: white;
+    }
+
+    /*Fab button CSS*/
+    .fab {
+      background: #4280D0;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      text-align: center;
+      color: #FFF;
+      box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.25);
+      position: fixed;
+      bottom: 80px;
+      right: 48px;
+      font-size: 40px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .fab span {
+      height: 64px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+        .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+
+      position: absolute;
+      z-index: -1;
+    }
+    .inputfile + label {
+      max-width: 80%;
+      border-width:2px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-block;
+      overflow: hidden;
+      padding: 0.625rem 1.25rem;
+    }
+
+    .inputfile:focus + label,
+    .inputfile + label:hover {
+      color: #4280D0;
+    }
+
+    .inputfile + label {
+      cursor: pointer; /* "hand" cursor */
+    }
+    .box {
+      padding: 6.25rem 1.25rem;
+      display: block;
+    }
+    .box + .box {
+      margin-top: 2.5rem;
+    }
+
+
+    .hover-blue {}
+    label:hover .hover-blue {
+        fill: #4280D0;
+    }

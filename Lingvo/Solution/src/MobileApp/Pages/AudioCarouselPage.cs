@@ -14,8 +14,8 @@ namespace Lingvo.MobileApp.Pages
 		{
 			Title = workbook.Title;
 
-			//workbook.Pages.ForEach((p) => Children.Add(new AudioPage(p, workbook.Pages.Count)));
-			Children.Add(new AudioPage(workbook.Pages[0], workbook.Pages.Count));
+			workbook.Pages.ForEach((p) => Children.Add(new AudioPage(p, workbook.Pages.Count)));
+			//Children.Add(new AudioPage(workbook.Pages[0], workbook.Pages.Count));
 
 			SelectedItem = new List<ContentPage>(Children).Find((p) => ((AudioPage)p).Page.Equals(selectedPage));
 			((AudioPage)SelectedItem).IsActive = true;
