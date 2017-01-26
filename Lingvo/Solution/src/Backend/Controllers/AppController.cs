@@ -21,7 +21,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks()
 		{
-			return Json(from w in Database.Workbooks
+			return Json(from w in Database.GetWorkbooksWithReferences()
 						where w.IsPublished
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
@@ -34,7 +34,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook(int workbookId)
 		{
-			return Json((from workbook in Database.Workbooks
+			return Json((from workbook in Database.GetWorkbooksWithReferences()
 						where workbook.IsPublished 
 			            && workbook.Id == workbookId
 			             select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages}).Single());
@@ -48,7 +48,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages(int workbookId)
 		{
-			return Json(from p in Database.Pages
+			return Json(from p in Database.GetPagesWithReferences()
 						where p.workbookId == workbookId
 						select new { p.workbookId, p.Number, p.Description });
 		}
@@ -60,8 +60,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("pages/{pageId}")]
 		public IActionResult GetTeacherTrack(int pageId)
 		{
-			var page = Database.Pages.Find(pageId);
-			Database.Entry(page).Reference(p => p.TeacherTrack).Load();
+			var page = Database.GetPagesWithReferences().Find(p => p.Id == pageId);
 
 			Console.WriteLine("TeacherTrackId:" + page.teacherTrackId);
 

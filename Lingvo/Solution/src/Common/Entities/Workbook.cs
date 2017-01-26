@@ -94,6 +94,7 @@ namespace Lingvo.Common.Entities
 		/// </summary>
 		public Workbook()
 		{
+			Pages = new List<IPage>();
 		}
 
 	}

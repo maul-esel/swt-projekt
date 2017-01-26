@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 
 using Lingvo.Common.Entities;
-using Lingvo.Common.Services;
 
 using Xunit;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend.Tests
 {
@@ -23,7 +23,7 @@ namespace Lingvo.Backend.Tests
 			var config = builder.Build();
 
 			DatabaseTests.Database = DatabaseService.Connect(config);
-			DatabaseTests.Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
+			DatabaseTests.Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
 		}
 
 		public void Dispose()
@@ -39,7 +39,7 @@ namespace Lingvo.Backend.Tests
 		public DatabaseTests()
 		{
 			
-			Database.Execute(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
+			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
 		}
 
 		public void SetFixture(TestsFixture data)
@@ -65,10 +65,9 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindPages()
 		{
-			Assert.NotNull(Database.Pages.Find(1, 1));
-			Assert.NotNull(Database.Pages.Find(2, 2));
-			Assert.Null(Database.Pages.Find(1, 3));
-			Assert.Null(Database.Pages.Find(3, 1));
+			Assert.NotNull(Database.Pages.Find(1));
+			Assert.NotNull(Database.Pages.Find(4));
+			Assert.Null(Database.Pages.Find(5));
 		}
 
 		[Fact]
@@ -85,7 +84,7 @@ namespace Lingvo.Backend.Tests
 			var dbWorkbook = Database.Workbooks.Find(1);
 			Assert.Equal(2, dbWorkbook.Pages.Count);
 
-			var newWorkbook = new Workbook(42) { Title = "Irgendein Workbook", Subtitle = "neu erstellt" };
+			var newWorkbook = new Workbook() { Title = "Irgendein Workbook", Subtitle = "neu erstellt" };
 			Assert.NotNull(newWorkbook.Pages);
 			Assert.Equal(0, newWorkbook.Pages.Count);
 
@@ -124,7 +123,7 @@ namespace Lingvo.Backend.Tests
 			Console.WriteLine(testPage.studentTrackId);
 			Database.Save(testPage);
 			Assert.Equal(5, Database.Pages.Count());
-			Assert.NotNull(Database.Pages.Find(1, 5));
+			Assert.NotNull(Database.Pages.Find(testPage.Id));
 		}
 
 		[Fact]

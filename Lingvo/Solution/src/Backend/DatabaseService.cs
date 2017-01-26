@@ -6,6 +6,7 @@ using Lingvo.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Server.Kestrel;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lingvo.Backend
 {
@@ -49,6 +50,16 @@ namespace Lingvo.Backend
 			modelBuilder.Entity<Recording>().Property(r => r.LocalPath).IsRequired();
 		}
 
+		public List<Workbook> GetWorkbooksWithReferences()
+		{
+			return Workbooks.Include(w => w.Pages).ThenInclude(p => p.TeacherTrack).ToList();
+		}
+
+		public List<Page> GetPagesWithReferences()
+		{
+			return Pages.Include(p => p.TeacherTrack).ToList();
+		}
+
 		/// <summary>
 		/// Save the specified recording, updates it if it already exists.
 		/// </summary>
@@ -56,7 +67,12 @@ namespace Lingvo.Backend
 		/// <param name="recording">Recording.</param>
 		public void Save(Recording recording)
 		{
-			
+			if (Recordings.Find(recording.Id) != null)
+			{
+				Recordings.Remove(Recordings.Find(recording.Id));
+			}
+			Recordings.Add(recording);
+			SaveChanges();
 		}
 
 		/// <summary>
@@ -66,7 +82,12 @@ namespace Lingvo.Backend
 		/// <param name="page">Page.</param>
 		public void Save(Page page)
 		{
-			
+			if (Pages.Find(page.Id) != null)
+			{
+				Recordings.Remove(Recordings.Find(page.Id));
+			}
+			Pages.Add(page);
+			SaveChanges();
 		}
 
 		/// <summary>
@@ -76,7 +97,14 @@ namespace Lingvo.Backend
 		/// <param name="workbook">Workbook.</param>
 		public void Save(Workbook workbook)
 		{
-			
+			if (Workbooks.Find(workbook.Id) != null)
+			{
+				Recordings.Remove(Recordings.Find(workbook.Id));
+			}
+			Workbooks.Add(workbook);
+			SaveChanges();
 		}
+
+
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
-using Lingvo.Common.Services;
 
 namespace Lingvo.MobileApp.Proxies
 {
