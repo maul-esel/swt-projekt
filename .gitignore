@@ -1,5 +1,12 @@
 ## Custom rules
 
+#Upload-Folder content in Backend
+Lingvo/Solution/src/Backend/wwwroot/uploaded/*
+
+# exception to the rule
+!Lingvo/Solution/src/Backend/wwwroot/uploaded/.gitkeep 
+
+
 # VS-generated code
 *.Designer.cs
 
