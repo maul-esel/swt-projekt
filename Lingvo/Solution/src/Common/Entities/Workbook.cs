@@ -45,15 +45,6 @@ namespace Lingvo.Common.Entities
 		/// Gets or sets all the pages of .
 		/// </summary>
 		/// <value>The pages.</value>
-		
-		/******* TODO: Linq2DB polymorphism workaround: ********
-		 * 
-		 * Linq2DB attempts to create instances of IPage and thus fails. It should be possible to specify the concrete type
-		 * (see "OtherType" below). Pending this feature, a workaround is implemented to load the pages on-demand from the DB.
-		 * 
-		 * */
-
-		// TODO: [Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId), TODO: OtherType = typeof(List<Page>))]
 		[OneToMany(CascadeOperations = CascadeOperation.All)]
 		public List<IPage> Pages  { get; set; }
 

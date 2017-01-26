@@ -10,7 +10,7 @@ namespace Lingvo.Common.Entities
 	public interface IPage : IDownloadable
 	{
 		[PrimaryKey]
-        int Id { get; set; }
+		int Id { get; set; }
         
 		/// <summary>
 		/// Gets or sets the page number.
