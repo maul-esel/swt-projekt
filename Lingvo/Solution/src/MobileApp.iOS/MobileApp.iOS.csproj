@@ -121,10 +121,8 @@
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork@2x" />
     <Compile Include="Views\CircleProgressBar.cs" />
-    <Compile Include="Views\SingleProgressView.cs" />
     <Compile Include="Views\AudioProgressView.cs" />
     <Compile Include="Renderers\AudioProgressViewRenderer.cs" />
-    <Compile Include="Renderers\SingleProgressViewRenderer.cs" />
     <None Include="packages.config" />
     <Compile Include="Sound\Player.cs" />
     <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
@@ -258,6 +256,7 @@
       <HintPath>..\..\packages\SQLite.Net-PCL.3.1.1\lib\Xamarin.iOS10\SQLite.Net.Platform.XamarinIOS.Unified.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Folder Include="Sound\" />
 		

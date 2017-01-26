@@ -19,7 +19,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPagesPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoSingleProgressView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoAudioProgressView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPage.cs">
       <SubType>Code</SubType>

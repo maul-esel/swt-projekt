@@ -41,10 +41,11 @@ namespace Lingvo.MobileApp.Templates
             Workbook workbook = (Workbook)BindingContext;
 
             string color = workbook.Pages.Count == workbook.TotalPages ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = workbook.TotalPages;
             ProgressView.Progress = workbook.Pages.Count;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.Percentual;
+            ProgressView.InnerProgressEnabled = false;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
         }
     }
 }

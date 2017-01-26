@@ -39,10 +39,10 @@ namespace Lingvo.MobileApp.Templates
             IPage page = (IPage)BindingContext;
 
             string color = page.TeacherTrack != null ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;
             ProgressView.Progress = page.TeacherTrack != null ? 100 : 0;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.Percentual;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
         }
     }
 }

@@ -17,7 +17,9 @@ namespace Lingvo.MobileApp.Droid.Activities
 
             base.OnCreate (bundle);
 
-			global::Xamarin.Forms.Forms.Init (this, bundle);
+            this.Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
+
+            global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new MobileApp.App ());
 		}
     }
