@@ -7,6 +7,8 @@ namespace Lingvo.MobileApp.Proxies
 {
 	public class PageProxy : IPage
 	{
+        public int Id { get; set; }
+        
 		private int number;
 		private String description;
 

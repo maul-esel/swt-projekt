@@ -18,7 +18,14 @@ namespace Lingvo.MobileApp.Entities
 		/// The workbooks, does not return null but an empty list.
 		/// </summary>
 		/// <value>The workbooks.</value>
-		public IEnumerable<Workbook> Workbooks => App.Database.Workbooks;
+		public IEnumerable<Workbook> Workbooks 
+		{ 
+			get
+			{
+				return App.Database.getWorkbooksWithReferences();
+			}
+		}
+
 
 		private LocalCollection()
 		{

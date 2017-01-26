@@ -1,11 +1,17 @@
-﻿using System;
+using System;
+using SQLite.Net.Attributes;
+
 namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// A page of a workbook.
 	/// </summary>
+	[Table("Pages")]
 	public interface IPage : IDownloadable
 	{
+		[PrimaryKey]
+        int Id { get; set; }
+        
 		/// <summary>
 		/// Gets or sets the page number.
 		/// </summary>

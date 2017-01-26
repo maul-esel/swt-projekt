@@ -1,6 +1,6 @@
 ﻿using Lingvo.Common.Entities;
 using System;
-using SQLite;
+using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 
 namespace Lingvo.MobileApp.Entities

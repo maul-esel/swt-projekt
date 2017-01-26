@@ -1,5 +1,6 @@
 ﻿using System;
-using SQLite;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace Lingvo.Common.Entities
 {
@@ -9,13 +10,16 @@ namespace Lingvo.Common.Entities
 	[Table("Pages")]
 	public class Page : IPage
 	{
+		[ForeignKey(typeof(Recording))]
 		public int teacherTrackId { get; set; }
 
+		[ForeignKey(typeof(Recording))]
 		public int? studentTrackId { get; set; }
 
 		[PrimaryKey]
 		public int Id { get; set; }
 
+		[ForeignKey(typeof(Workbook))]
 		public int workbookId { get; set; }
 
 		/// <summary>
@@ -36,18 +40,21 @@ namespace Lingvo.Common.Entities
 		/// <value><c>true</c> if edited; otherwise, <c>false</c>.</value>
 		public bool Edited => StudentTrack != null;
 
+		[ManyToOne]
 		public Workbook Workbook { get; set; }
 
 		/// <summary>
 		/// Gets or sets the teacher track.
 		/// </summary>
 		/// <value>The teacher track.</value>
+		[OneToOne("teacherTrackId", CascadeOperations = CascadeOperation.All)]
 		public Recording TeacherTrack { get; set; }
 
 		/// <summary>
 		/// Gets or sets the student track.
 		/// </summary>
 		/// <value>The student track.</value>
+		[OneToOne("studentTrackId", CascadeOperations = CascadeOperation.All)]
 		public Recording StudentTrack { get; set; }
 
 		public void DeleteStudentRecording()

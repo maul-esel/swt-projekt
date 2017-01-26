@@ -1,10 +1,11 @@
 ﻿using System;
-using SQLite;
+using SQLite.Net;
 using Lingvo.MobileApp.Entities;
 using Lingvo.Common.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using SQLiteNetExtensions.Extensions;
 
 namespace Lingvo.MobileApp.Services
 {
@@ -15,24 +16,56 @@ namespace Lingvo.MobileApp.Services
 		public IEnumerable<Workbook> 	Workbooks => database.Table<Workbook>();
 		public IEnumerable<Recording> 	Recordings => database.Table<Recording>();
 		public IEnumerable<Page> 		Pages => database.Table<Page>();
-
 		public IEnumerable<TeacherMemo>	TeacherMemos => database.Table<TeacherMemo>();
 
 		public LingvoMobileContext(string dbPath)
 		{
-			database = new SQLiteConnection(dbPath);
+			database = new SQLiteConnection(new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS(), dbPath);
 		}
 
 		public void createTables(string sql)
 		{
-			var sqls = sql.Split(new[] { "\n\n" }, StringSplitOptions.None);
+			//var sqls = sql.Split(new[] { "\n\n" }, StringSplitOptions.None);
 
-			foreach (var statement in sqls)
+			//foreach (var statement in sqls)
+			//{
+			//	database.Execute(statement);
+			//}
+			database.CreateTable<Workbook>();
+			database.CreateTable<Recording>();
+			database.CreateTable<Page>();
+			database.CreateTable<TeacherMemo>();
+
+		}
+
+		public IEnumerable<Workbook> getWorkbooksWithReferences()
+		{
+			var val = new List<Workbook>();
+			foreach (var w in Workbooks)
 			{
-				database.Execute(statement);
-			}
+				var pages = database.Query<Page>("select * from Pages where workbookId = ?", w.Id);
+				var pagesWithReferences = new List<Page>();
 
-		}	
+				foreach (var p in pages)
+				{
+					if (p.teacherTrackId > 0)
+					{
+						p.TeacherTrack = FindRecording(p.teacherTrackId);
+					}
+
+					if (p.studentTrackId != null)
+					{
+						p.StudentTrack = FindRecording(p.studentTrackId.Value);
+					}
+
+					pagesWithReferences.Add(p);
+				}
+
+				w.Pages = pagesWithReferences.Cast<IPage>().ToList();
+				val.Add(w);
+			}
+			return val;
+		}
 
 		public void Save(Recording recording)
 		{
@@ -47,6 +80,7 @@ namespace Lingvo.MobileApp.Services
 		public void Save(Page page)
 		{
 			database.InsertOrReplace(page);
+			database.UpdateWithChildren(page);
 		}
 
 		/// <summary>
@@ -57,6 +91,7 @@ namespace Lingvo.MobileApp.Services
 		public void Save(Workbook workbook)
 		{
 			database.InsertOrReplace(workbook);
+			database.UpdateWithChildren(workbook);
 		}
 
 		/// <summary>
@@ -71,6 +106,7 @@ namespace Lingvo.MobileApp.Services
 			{
 				memo.Id = returnedKey;
 			}
+			database.UpdateWithChildren(memo);
 		}
 
 		public void Delete(TeacherMemo memo)

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using SQLite;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace Lingvo.Common.Entities
 {
@@ -13,6 +14,7 @@ namespace Lingvo.Common.Entities
 		/// Gets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
+		[PrimaryKey]
 		public int Id { get;  set; }
 
 		/// <summary>
@@ -52,7 +54,7 @@ namespace Lingvo.Common.Entities
 		 * */
 
 		// TODO: [Association(ThisKey = nameof(Id), OtherKey = nameof(Page.workbookId), TODO: OtherType = typeof(List<Page>))]
-		[Ignore]
+		[OneToMany(CascadeOperations = CascadeOperation.All)]
 		public List<IPage> Pages  { get; set; }
 
 		/// <summary>
@@ -86,6 +88,7 @@ namespace Lingvo.Common.Entities
 		[JsonConstructor]
 		public Workbook(int id)
 		{
+			Pages = new List<IPage>();			
 			Id = id;
 		}
 

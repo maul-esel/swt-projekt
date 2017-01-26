@@ -12,7 +12,6 @@ namespace Lingvo.Backend.Controllers
 	[Route("api/app")]
 	public class AppController : Controller
     {
-		private DatabaseService Database => Startup.Database;
 
 		/// <summary>
 		/// Gets all workbooks without pages.
@@ -21,6 +20,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks()
 		{
+			var Database = DatabaseService.getNewContext();
 			return Json(from w in Database.GetWorkbooksWithReferences()
 						where w.IsPublished
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
@@ -34,6 +34,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook(int workbookId)
 		{
+			var Database = DatabaseService.getNewContext();
 			return Json((from workbook in Database.GetWorkbooksWithReferences()
 						where workbook.IsPublished 
 			            && workbook.Id == workbookId
@@ -48,9 +49,10 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages(int workbookId)
 		{
+			var Database = DatabaseService.getNewContext();
 			return Json(from p in Database.GetPagesWithReferences()
 						where p.workbookId == workbookId
-						select new { p.workbookId, p.Number, p.Description });
+						select new { p.Id, p.workbookId, p.Number, p.Description });
 		}
 
 		/// <summary>
@@ -60,6 +62,8 @@ namespace Lingvo.Backend.Controllers
 		[Route("pages/{pageId}")]
 		public IActionResult GetTeacherTrack(int pageId)
 		{
+			var Database = DatabaseService.getNewContext();
+
 			var page = Database.GetPagesWithReferences().Find(p => p.Id == pageId);
 
 			Console.WriteLine("TeacherTrackId:" + page.teacherTrackId);
