@@ -47,7 +47,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
-    <MtouchLink>SdkLink</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <!--CodesignEntitlements>Entitlements.plist</CodesignEntitlements-->
@@ -63,6 +63,7 @@
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -72,7 +73,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
-    <MtouchLink>SdkLink</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <BuildIpa>True</BuildIpa>
     <CodesignProvision>Automatic:AdHoc</CodesignProvision>
     <CodesignKey>iPhone Distribution</CodesignKey>
@@ -126,6 +127,7 @@
     <Compile Include="Sound\Player.cs" />
     <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
     <Compile Include="Sound\Recorder.cs" />
+    <None Include="Content\page1.mp3" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -175,84 +177,36 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\.DS_Store">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_add.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_book.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_cancel.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_download.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_mic.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_save.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_tick.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_fiber_manual_record.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_forward.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_launcher.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_pause.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_play_arrow.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_rewind.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_stop.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_off.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_up.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\xcassets assets\startup.png">
-      <InProject>false</InProject>
-    </ImageAsset>
+    <Folder Include="Sound\" />
+    <Folder Include="Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-76%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\.DS_Store" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_add.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_book.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_cancel.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_download.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_mic.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_save.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_tick.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_fiber_manual_record.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_forward.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_launcher.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_pause.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_play_arrow.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_rewind.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_stop.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_off.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\ic_volume_up.png" />
+    <ImageAsset Include="Assets.xcassets\xcassets assets\startup.png" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
