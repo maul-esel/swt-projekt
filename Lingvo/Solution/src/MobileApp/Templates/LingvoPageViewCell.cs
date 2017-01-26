@@ -6,7 +6,7 @@ namespace Lingvo.MobileApp.Templates
 {
     class LingvoPageViewCell : ViewCell
     {
-        internal LingvoSingleProgressView ProgressView
+        internal LingvoAudioProgressView ProgressView
         {
             get; private set;
         }
@@ -32,10 +32,10 @@ namespace Lingvo.MobileApp.Templates
 
             subtitleLabel.SetBinding(Label.TextProperty, "Description");
 
-            ProgressView = new LingvoSingleProgressView()
+            ProgressView = new LingvoAudioProgressView()
             {
                 Size = Device.OnPlatform(iOS: 50, Android: 120, WinPhone: 240),
-                LabelType = LingvoSingleProgressView.LabelTypeValue.None
+                LabelType = LingvoAudioProgressView.LabelTypeValue.None
             };
 
             View = new StackLayout
@@ -69,10 +69,13 @@ namespace Lingvo.MobileApp.Templates
             IPage page = (IPage)BindingContext;
 
             string color = page.StudentTrack != null ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 1;
             ProgressView.Progress = 1;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.None;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
+            ProgressView.InnerProgressColor = Color.Red;
+            ProgressView.InnerProgressEnabled = true;
+            ProgressView.MuteEnabled = false;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
         }
