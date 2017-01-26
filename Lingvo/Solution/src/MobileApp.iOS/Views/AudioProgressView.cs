@@ -129,16 +129,18 @@ namespace Lingvo.MobileApp.iOS
 						studentProgressBar.SetNeedsDisplay();
 
 					}
-
-
-					//update the progress time label text
-					string minutes = ((value / 60000 < 10 ? "0" : "") + value / 60000).Substring(0,2);
-					string seconds = (((value % 60000) / 1000 < 10 ? "0" : "") + (value % 60000) / 1000).Substring(0,2);
-
-					timeLabel.Text = minutes + ":" + seconds;
-
 			}
 		}
+
+        public string Text
+        {
+            get { return timeLabel.Text; }
+            set
+            {
+                timeLabel.Text = value;
+            }
+        }
+
 		protected void runOnMainThread(Action action)
 		{
 			//updates on UI only work on the main thread

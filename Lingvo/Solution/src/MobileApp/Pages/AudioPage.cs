@@ -13,7 +13,7 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
-        private static readonly int SeekTimeStep = 15;
+        private static readonly int SeekTimeStep = 5;
 		private bool isActive;
 
         public IPage Page
@@ -150,7 +150,7 @@ namespace Lingvo.MobileApp.Pages
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				OuterProgressColor = (Color)App.Current.Resources["primaryColor"],
-				InnerProgressColor = (Color)App.Current.Resources["secondaryColor"],
+				InnerProgressColor = Color.Red,
 				InnerProgressEnabled = page.StudentTrack != null,
 				MuteEnabled = page.StudentTrack != null,
 				MaxProgress = 44000
@@ -168,7 +168,7 @@ namespace Lingvo.MobileApp.Pages
 			RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
-                Text = "" + SeekTimeStep,
+                Text = "-" + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
@@ -180,7 +180,7 @@ namespace Lingvo.MobileApp.Pages
             ForwardButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.ForwardImage,
-                Text = "" + SeekTimeStep,
+                Text = "+" + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),

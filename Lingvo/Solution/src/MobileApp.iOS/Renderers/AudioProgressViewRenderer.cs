@@ -61,8 +61,24 @@ namespace Lingvo.MobileApp.iOS
 				progressView.MaxProgress = element.MaxProgress;
 			if (progressView.Progress != element.Progress)
 				progressView.Progress = element.Progress;
-			
-		}
+
+            switch (element.LabelType)
+            {
+                case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
+                case LingvoAudioProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
+                case LingvoAudioProgressView.LabelTypeValue.Time:
+                    {
+                        string minutes = (element.Progress / 60 < 10 ? "0" : "") + element.Progress / 60;
+                        string seconds = (element.Progress % 60 < 10 ? "0" : "") + element.Progress % 60;
+
+                        progressView.Text = minutes + ":" + seconds;
+
+                        break;
+                    }
+                case LingvoAudioProgressView.LabelTypeValue.None: progressView.Text = ""; break;
+            }
+
+        }
 		private void NewElementOnSizeChanged(object sender, EventArgs eventArgs)
 		{
 			var audioProgressView = sender as LingvoAudioProgressView;
@@ -71,7 +87,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
 				var squareMeasure = Math.Min(audioProgressView.Width, audioProgressView.Height);
-				var lineWidth = squareMeasure * 0.05;
+				var lineWidth = squareMeasure * 0.075;
 				progressView.LineWidth = (float)lineWidth;
 				progressView.Frame = frame;
 				progressView.render();
