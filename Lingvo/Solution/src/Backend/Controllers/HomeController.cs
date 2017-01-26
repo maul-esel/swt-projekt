@@ -14,11 +14,24 @@ namespace Lingvo.Backend.Controllers
         }
 		public IActionResult AddWorkbook() 
 		{
+			ViewData["Title"] = "Neues Arbeitsheft erstellen";
 			return View();
+		}
+		public IActionResult EditWorkbook()
+		{
+			ViewData["Title"] = "Arbeitsheft bearbeiten";
+			return View("AddWorkbook");
 		}
 		public IActionResult AddPage() 
 		{
+			ViewData["Title"] = "Neue Seite erstellen";
 			return View();
+		}
+
+		public IActionResult EditPage()
+		{
+			ViewData["Title"] = "Seite bearbeiten";
+			return View("AddPage");
 		}
 
 
