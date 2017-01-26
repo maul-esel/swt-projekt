@@ -5,26 +5,52 @@ using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Droid.Sound;
 using Xamarin.Forms;
+using Android.OS;
 
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.Droid.Sound
 {
-	public class Player : IPlayer
-	{
+    public class Player : IPlayer
+    {
 
-		private MediaPlayer teacherTrack;
-		private MediaPlayer studentTrack;
+        private MediaPlayer teacherTrack;
+        private MediaPlayer studentTrack;
 
-		private bool isStudentTrackMuted;
+        private bool isStudentTrackMuted;
 
-		public event Action<int> Update;
-		public event Action<PlayerState> StateChange;
+        private PlayerState state;
 
-		public Player()
+        public event Action<int> Update;
+        public event Action<PlayerState> StateChange;
+
+        private Handler progressHandler;
+        private Action progressUpdate; 
+
+    public Player()
 		{
-		}
+            progressHandler = new Handler(Looper.MainLooper);
+            progressUpdate = new Action(() =>
+            {
+                OnProgress();
+                
+                if(studentTrack.CurrentPosition > teacherTrack.CurrentPosition + 100)
+                {
+                    Sync();
+                }
 
-		public bool IsStudentTrackMuted
+                progressHandler.PostDelayed(progressUpdate, 100);
+            });
+            State = PlayerState.IDLE;
+        }
+
+        private void OnProgress()
+        {
+            var milliseconds = teacherTrack.CurrentPosition * 1000;
+            Update?.Invoke((int)milliseconds);
+
+        }
+
+        public bool IsStudentTrackMuted
 		{
 			get
 			{
@@ -34,10 +60,8 @@ namespace Lingvo.MobileApp.Droid.Sound
 			set
 			{
 				isStudentTrackMuted = value;
-				float leftVolume = value ? 0.0f : 1.0f;
-				float rightVolume = value ? 0.0f : 1.0f;
-
-				studentTrack.SetVolume(leftVolume, rightVolume);
+				float volume = isStudentTrackMuted ? 0.0f : 1.0f;
+				studentTrack.SetVolume(volume, volume);
 			}
 		}
 
@@ -45,7 +69,11 @@ namespace Lingvo.MobileApp.Droid.Sound
 		{
 			get
 			{
-				throw new NotImplementedException();
+                if (teacherTrack != null)
+                {
+                    return teacherTrack.Duration;
+                }
+                return 0.0;
 			}
 		}
 
@@ -53,39 +81,42 @@ namespace Lingvo.MobileApp.Droid.Sound
 		{
 			get
 			{
-				throw new NotImplementedException();
-			}
+                if (teacherTrack != null)
+                {
+                    return teacherTrack.CurrentPosition;
+                }
+                return 0.0;
+            }
 		}
 
 		public PlayerState State
 		{
 			get
 			{
-				throw new NotImplementedException();
+                return state;
 			}
-		}
-
-		public void Continue()
-		{
-			Play();
-		}
+            private set
+            {
+                state = value;
+                OnStateChange();
+            }
+        }
 
 		public void Pause()
 		{
-			teacherTrack.Pause();
-			if (studentTrack != null)
-			{
-				studentTrack.Pause();
-			}
+			teacherTrack?.Pause();
+			studentTrack?.Pause();
+            State = PlayerState.PAUSED;
+            progressHandler.RemoveCallbacks(progressUpdate);
+            Sync();
 		}
 
 		public void Play()
 		{
-			teacherTrack.Start();
-			if (studentTrack != null)
-			{
-				studentTrack.Start();
-			}
+			teacherTrack?.Start();
+			studentTrack?.Start();
+            State = PlayerState.PLAYING;
+            progressHandler.PostDelayed(progressUpdate, 100);
 		}
 
 		public void PrepareStudentTrack(Recording recording)
@@ -97,21 +128,32 @@ namespace Lingvo.MobileApp.Droid.Sound
 		public void PrepareTeacherTrack(Recording recording)
 		{
 			teacherTrack = CreateNewPlayer(recording);
+            teacherTrack.Completion += (o, e) => Stop();
+            State = PlayerState.STOPPED;
 		}
 
-		public void SeekTo(TimeSpan seek)
+		public void SeekTo(int milliseconds)
 		{
-			teacherTrack.SeekTo(seek.Milliseconds);
+            if(teacherTrack?.CurrentPosition + milliseconds >= teacherTrack?.Duration)
+            {
+                teacherTrack?.SeekTo(teacherTrack.Duration);
+                OnProgress();
+                Stop();
+                return;
+            }
+			teacherTrack?.SeekTo(milliseconds);
+            studentTrack?.SeekTo(milliseconds);
+            OnProgress();
 		}
 
 		public void Stop()
 		{
-			teacherTrack.Stop();
-			if (studentTrack != null)
-			{
-				studentTrack.Stop();
-			}
-
+			teacherTrack?.Stop();
+			studentTrack?.Stop();
+            teacherTrack?.SeekTo(0);
+            studentTrack.SeekTo(0);
+            State = PlayerState.STOPPED;
+            progressHandler.RemoveCallbacks(progressUpdate);
 		}
 
 		private MediaPlayer CreateNewPlayer(Recording recording)
@@ -126,9 +168,14 @@ namespace Lingvo.MobileApp.Droid.Sound
 			return mediaPlayer;
 		}
 
-		public void SeekTo(int seek)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        private void OnStateChange()
+        {
+            StateChange?.Invoke(state);
+        }
+
+        private void Sync()
+        {
+            studentTrack?.SeekTo(teacherTrack.CurrentPosition);
+        }
+    }
 }
