@@ -1,16 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bootstrap Example</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="container container-fluid">
-		<h3 id="workbook-header">Arbeitshefte</h3>
+		<div class="lingvo-header container-fluid">
+			<h3>Arbeitshefte</h3>
+			<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddWorkbook">Neues Arbeitsheft</a>
+		</div>
 		<table id="workbooks" class="table">
 			<tbody>
 				<tr>
@@ -24,18 +21,18 @@
 					<td>Erstellt: 21.01.17</td>
 					<td>Geändert: 21.01.17</td>
 					<td>
-						<button type="button" class="glyphicon-button" title="Arbeitsheft bearbeiten">
+						<a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook">
 							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+						<button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
+							<span class="glyphicon glyphicon-globe unpublished"></span>
 						</button>
 					</td>
 					<td>
 						<button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
 							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-					</td>
-					<td>
-						<button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
-							<span class="glyphicon glyphicon-globe unpublished"></span>
 						</button>
 					</td>
 				</tr>
@@ -51,8 +48,13 @@
 					<td>Erstellt: 31.01.17</td>
 					<td>Geändert: 02.02.17</td>
 					<td>
-						<button type="button" class="glyphicon-button" title="Arbeitsheft bearbeiten">
+						<a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook">
 							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+						<button type="button" class="glyphicon-button" title="Arbeitsheft zurücknehmen">
+							<span class="glyphicon glyphicon-globe published"></span>
 						</button>
 					</td>
 					<td>
@@ -60,19 +62,12 @@
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</td>
-					<td>
-						<button type="button" class="glyphicon-button" title="Arbeitsheft zurücknehmen">
-							<span class="glyphicon glyphicon-globe published"></span>
-						</button>
-					</td>
 				</tr>
 
 
 			</tbody>
 		</table>
-		<a asp-area="" asp-controller="Home" asp-action="AddWorkbook"><div class="fab" id="masterfab" title="Neues Arbeitsheft erstellen"><span>+</span></div></a>
 	</div>
-
 </body>
 </html>
 
