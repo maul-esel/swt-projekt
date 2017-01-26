@@ -23,7 +23,9 @@ namespace Lingvo.MobileApp.iOS
 		//
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
-			global::Xamarin.Forms.Forms.Init ();
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
+
+            global::Xamarin.Forms.Forms.Init ();
 			LoadApplication (new MobileApp.App ());
 
 			//write a samle file to the documents dir
@@ -39,6 +41,5 @@ namespace Lingvo.MobileApp.iOS
 
 			return base.FinishedLaunching (app, options);
 		}
-
 	}
 }

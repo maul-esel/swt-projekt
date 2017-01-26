@@ -46,6 +46,12 @@ namespace Lingvo.MobileApp
            declaringType: typeof(LingvoAudioProgressView),
            defaultValue: true);
 
+        public static readonly BindableProperty LabelTypeProperty = BindableProperty.Create(
+          propertyName: "LabelType",
+          returnType: typeof(LabelTypeValue),
+          declaringType: typeof(LingvoAudioProgressView),
+          defaultValue: LabelTypeValue.Time);
+
         public delegate void StudentTrackMutedEventHandler(bool muted);
 
         public event StudentTrackMutedEventHandler StudentTrackMuted;
@@ -59,9 +65,10 @@ namespace Lingvo.MobileApp
         public int Progress
         {
             get { return (int)GetValue(ProgressProperty); }
-            set { 
-				SetValue(ProgressProperty, value); 
-			}
+            set
+            {
+                SetValue(ProgressProperty, value);
+            }
         }
 
         public int MaxProgress
@@ -97,6 +104,17 @@ namespace Lingvo.MobileApp
         public void OnStudentTrackMuted(bool muted)
         {
             StudentTrackMuted?.Invoke(muted);
+        }
+
+        public LabelTypeValue LabelType
+        {
+            get { return (LabelTypeValue)GetValue(LabelTypeProperty); }
+            set { SetValue(LabelTypeProperty, value); }
+        }
+
+        public enum LabelTypeValue
+        {
+            NOfM, Percentual, Time, None
         }
     }
 }
