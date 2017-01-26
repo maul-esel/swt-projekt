@@ -18,13 +18,12 @@ namespace Lingvo.MobileApp.Droid.Sound
         private string currentRecordingPath;
         private Recording currentRecording;
         private MediaRecorder recorder;
-        private bool headsetConnected;
         private RecorderState state;
+        private AudioManager audioManager;
 
         public Recorder()
         {
-            AudioManager manager = AudioManager.FromContext(Android.App.Application.Context);
-            headsetConnected = manager.WiredHeadsetOn;
+            audioManager = AudioManager.FromContext(Android.App.Application.Context);
             State = RecorderState.IDLE;
         }
 
@@ -44,8 +43,11 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void Continue()
         {
-            recorder.Resume();
-            State = RecorderState.RECORDING;
+            if (State == RecorderState.PAUSED)
+            {
+                recorder.Resume();
+                State = RecorderState.RECORDING;
+            }
         }
 
         public void Pause()
@@ -66,24 +68,28 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public Recording Stop()
         {
-            recorder.Stop();
-            recorder.Release();
+            if (State == RecorderState.RECORDING || State == RecorderState.PAUSED)
+            {
+                recorder.Stop();
+                recorder.Reset();
 
-            //Hack: For duration, a new player is needed
-            MediaPlayer tempPlayer = new MediaPlayer();
-            var file = global::Android.App.Application.Context.Assets.OpenFd(currentRecordingPath);
-            tempPlayer.SetDataSource(file.FileDescriptor);
-            tempPlayer.Prepare();
-            int recordingDuration = tempPlayer.GetTrackInfo().Length;
-            tempPlayer.Release();
+                //Hack: For duration, a new player is needed
+                MediaPlayer tempPlayer = new MediaPlayer();
+                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(currentRecordingPath), Android.OS.ParcelFileMode.ReadOnly);
+                tempPlayer.SetDataSource(fileDesriptor.FileDescriptor);
+                tempPlayer.Prepare();
+                int recordingDuration = tempPlayer.GetTrackInfo().Length;
+                tempPlayer.Release();
 
-            recorder = null;
-            State = RecorderState.IDLE;
+                recorder = null;
+                State = RecorderState.IDLE;
 
-            //TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
-            currentRecording = new Recording(37, recordingDuration, currentRecordingPath, DateTime.Now);
+                //TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
+                currentRecording = new Recording(37, recordingDuration, currentRecordingPath, DateTime.Now);
 
-            return currentRecording;
+                return currentRecording;
+            }
+            return null;
         }
 
         public bool PrepareToRecord()
@@ -91,23 +97,17 @@ namespace Lingvo.MobileApp.Droid.Sound
             currentRecordingPath = Path.Combine(getFilePath(), getFileName());
             recorder = new MediaRecorder();
 
-            try
-            {
-                recorder.SetAudioChannels(1);
-                recorder.SetAudioEncoder(AudioEncoder.Aac);
-                recorder.SetAudioSamplingRate(44100);
-                recorder.SetAudioEncodingBitRate(16);
-                recorder.SetAudioSource(headsetConnected ? AudioSource.Mic : AudioSource.VoiceCommunication);
-                recorder.SetOutputFile(currentRecordingPath);
-                recorder.Prepare();
+            recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
+            recorder.SetOutputFormat(OutputFormat.ThreeGpp);
+            recorder.SetAudioEncoder(AudioEncoder.AmrNb);
+            recorder.SetAudioSamplingRate(44100);
+            recorder.SetAudioEncodingBitRate(16);
+            recorder.SetOutputFile(currentRecordingPath);
+            recorder.Prepare();
 
-                State = RecorderState.PREPARED;
-                return true;
-            } catch(Exception)
-            {
-                State = RecorderState.ERROR;
-                return false;
-            }
+            State = RecorderState.PREPARED;
+            return true;
+
         }
 
         private String getFilePath()
@@ -117,7 +117,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         private String getFileName()
         {
-            return RECORDING_PREFIX + DateTime.Now.ToString(DATE_FORMAT) + ".aac";
+            return RECORDING_PREFIX + DateTime.Now.ToString(DATE_FORMAT) + ".3gpp";
         }
     }
 }

@@ -16,6 +16,9 @@ namespace Lingvo.MobileApp.Droid.Sound
         private MediaPlayer teacherTrack;
         private MediaPlayer studentTrack;
 
+        private Recording teacherRecording;
+        private Recording studentRecording;
+
         private bool isStudentTrackMuted;
 
         private PlayerState state;
@@ -24,21 +27,21 @@ namespace Lingvo.MobileApp.Droid.Sound
         public event Action<PlayerState> StateChange;
 
         private Handler progressHandler;
-        private Action progressUpdate; 
+        private Action progressUpdate;
 
-    public Player()
-		{
+        private AudioManager audioManager;
+
+        public Player()
+        {
+            audioManager = AudioManager.FromContext(Android.App.Application.Context);
             progressHandler = new Handler(Looper.MainLooper);
             progressUpdate = new Action(() =>
             {
-                OnProgress();
-                
-                if(studentTrack.CurrentPosition > teacherTrack.CurrentPosition + 100)
+                if (State == PlayerState.PLAYING)
                 {
-                    Sync();
+                    OnProgress();
+                    progressHandler.PostDelayed(progressUpdate, 100);
                 }
-
-                progressHandler.PostDelayed(progressUpdate, 100);
             });
             State = PlayerState.IDLE;
         }
@@ -51,50 +54,50 @@ namespace Lingvo.MobileApp.Droid.Sound
         }
 
         public bool IsStudentTrackMuted
-		{
-			get
-			{
-				return isStudentTrackMuted;
-			}
+        {
+            get
+            {
+                return isStudentTrackMuted;
+            }
 
-			set
-			{
-				isStudentTrackMuted = value;
-				float volume = isStudentTrackMuted ? 0.0f : 1.0f;
-				studentTrack.SetVolume(volume, volume);
-			}
-		}
+            set
+            {
+                isStudentTrackMuted = value;
+                float volume = isStudentTrackMuted ? 0.0f : 1.0f;
+                studentTrack.SetVolume(volume, volume);
+            }
+        }
 
-		public double TotalLengthOfTrack
-		{
-			get
-			{
+        public double TotalLengthOfTrack
+        {
+            get
+            {
                 if (teacherTrack != null)
                 {
                     return teacherTrack.Duration;
                 }
                 return 0.0;
-			}
-		}
+            }
+        }
 
-		public double CurrentProgress
-		{
-			get
-			{
+        public double CurrentProgress
+        {
+            get
+            {
                 if (teacherTrack != null)
                 {
                     return teacherTrack.CurrentPosition;
                 }
                 return 0.0;
             }
-		}
+        }
 
-		public PlayerState State
-		{
-			get
-			{
+        public PlayerState State
+        {
+            get
+            {
                 return state;
-			}
+            }
             private set
             {
                 state = value;
@@ -102,71 +105,99 @@ namespace Lingvo.MobileApp.Droid.Sound
             }
         }
 
-		public void Pause()
-		{
-			teacherTrack?.Pause();
-			studentTrack?.Pause();
+        public void Pause()
+        {
+            teacherTrack?.Pause();
+            studentTrack?.Pause();
             State = PlayerState.PAUSED;
             progressHandler.RemoveCallbacks(progressUpdate);
             Sync();
-		}
+        }
 
-		public void Play()
-		{
-			teacherTrack?.Start();
-			studentTrack?.Start();
+        public void Play()
+        {
+            teacherTrack?.Start();
+            studentTrack?.Start();
             State = PlayerState.PLAYING;
             progressHandler.PostDelayed(progressUpdate, 100);
-		}
+        }
 
-		public void PrepareStudentTrack(Recording recording)
-		{
-			studentTrack = CreateNewPlayer(recording);
-			IsStudentTrackMuted = false;
-		}
+        public void PrepareStudentTrack(Recording recording)
+        {
+            studentRecording = recording;
+            studentTrack = CreateNewPlayer(recording);
+            IsStudentTrackMuted = false;
+        }
 
-		public void PrepareTeacherTrack(Recording recording)
-		{
-			teacherTrack = CreateNewPlayer(recording);
+        public void PrepareTeacherTrack(Recording recording)
+        {
+            teacherRecording = recording;
+            teacherTrack = CreateNewPlayer(recording);
             teacherTrack.Completion += (o, e) => Stop();
             State = PlayerState.STOPPED;
-		}
+        }
 
-		public void SeekTo(int milliseconds)
-		{
-            if(teacherTrack?.CurrentPosition + milliseconds >= teacherTrack?.Duration)
+        public void SeekTo(int seconds)
+        {
+            if (teacherTrack?.CurrentPosition + seconds * 1000 >= teacherTrack?.Duration)
             {
                 teacherTrack?.SeekTo(teacherTrack.Duration);
                 OnProgress();
                 Stop();
                 return;
             }
-			teacherTrack?.SeekTo(milliseconds);
-            studentTrack?.SeekTo(milliseconds);
+            teacherTrack?.SeekTo(teacherTrack.CurrentPosition + seconds * 1000);
+            studentTrack?.SeekTo(studentTrack.CurrentPosition + seconds * 1000);
             OnProgress();
-		}
+        }
 
-		public void Stop()
-		{
-			teacherTrack?.Stop();
-			studentTrack?.Stop();
-            teacherTrack?.SeekTo(0);
-            studentTrack.SeekTo(0);
+        public void Stop()
+        {
+            teacherTrack?.Stop();
+            studentTrack?.Stop();
+            ReinitializePlayer(teacherTrack, teacherRecording);
+            ReinitializePlayer(studentTrack, studentRecording);
             State = PlayerState.STOPPED;
             progressHandler.RemoveCallbacks(progressUpdate);
-		}
+        }
 
-		private MediaPlayer CreateNewPlayer(Recording recording)
-		{
-			var mediaPlayer = new MediaPlayer();
+        private void ReinitializePlayer(MediaPlayer player, Recording recording)
+        {
+            if (recording != null)
+            {
+                player?.Reset();
+                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(recording.LocalPath), Android.OS.ParcelFileMode.ReadOnly);
+                player?.SetDataSource(fileDesriptor.FileDescriptor);
+                //var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
+                //player?.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
+                player?.Prepare();
+            }
+        }
 
-			var file = global::Android.App.Application.Context.Assets.OpenFd(recording.LocalPath);
-			mediaPlayer.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
-			mediaPlayer.SetVolume(1.0f, 1.0f);
-			mediaPlayer.Prepare();
+        private MediaPlayer CreateNewPlayer(Recording recording)
+        {
+            var mediaPlayer = new MediaPlayer();
 
-			return mediaPlayer;
-		}
+            audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
+            audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
+
+           // if (recording.LocalPath.Length > 0)
+            //{
+                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(recording.LocalPath), Android.OS.ParcelFileMode.ReadOnly);
+                mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
+            //}
+            //else
+            //{
+            //   var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
+            //    mediaPlayer.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
+            //}
+
+            mediaPlayer.SetAudioStreamType(audioManager.WiredHeadsetOn ? Stream.Music : Stream.VoiceCall);
+            mediaPlayer.SetVolume(1.0f, 1.0f);
+            mediaPlayer.Prepare();
+
+            return mediaPlayer;
+        }
 
         private void OnStateChange()
         {
