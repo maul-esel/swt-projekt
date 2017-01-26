@@ -47,10 +47,21 @@
       padding: 18px;
       border-radius: 5px;
       font-weight: normal;
+      margin-top: 20px;
     }
-    .lingvo-header a {
+    .lingvo-header h3 a {
         color: white;
         text-decoration: underline;
+    }
+        .lingvo-header h3 {
+            display: inline-block;
+            margin: 0px;
+            padding: 0px;
+            vertical-align: middle;
+        }
+    .lingvo-header .create-button {
+        float: right;
+        margin: 0px;
     }
     .glyphicon.glyphicon-globe.published {
       color: #4280D0;

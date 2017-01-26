@@ -3,9 +3,11 @@
 <head></head>
 <body>
   <div class="container container-fluid">
-    <h3 class="lingvo-header">
-	  <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook">Thannhauser</a> > @ViewData["Title"]
-	</h3>
+	<div class="lingvo-header container-fluid">
+		<h3>
+			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook">Thannhauser</a> > @ViewData["Title"]
+		</h3>
+	</div>
   	<form style="padding-top:20px;">
   		<div class="form-group col-md-9" style="padding-left:0">
   			<label for="page-name">Beschreibung</label>

@@ -4,7 +4,10 @@
 </head>
 <body>
 	<div class="container container-fluid">
-		<h3 class="lingvo-header">Arbeitshefte</h3>
+		<div class="lingvo-header container-fluid">
+			<h3>Arbeitshefte</h3>
+			<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddWorkbook">Neues Arbeitsheft</a>
+		</div>
 		<table id="workbooks" class="table">
 			<tbody>
 				<tr>
@@ -64,9 +67,7 @@
 
 			</tbody>
 		</table>
-		<a asp-area="" asp-controller="Home" asp-action="AddWorkbook"><div class="fab" id="masterfab" title="Neues Arbeitsheft erstellen"><span>+</span></div></a>
 	</div>
-
 </body>
 </html>
 
