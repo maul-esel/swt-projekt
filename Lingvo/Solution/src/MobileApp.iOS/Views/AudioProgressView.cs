@@ -15,7 +15,7 @@ namespace Lingvo.MobileApp.iOS
 		public CircleProgressBar teacherProgressBar;
 		public CircleProgressBar studentProgressBar;
 
-		private static UIColor studentGreen = new UIColor(61.0f / 255.0f, 182.0f / 255.0f, 128.0f / 255.0f, 1.0f);
+		private static UIColor studentRed = UIColor.Red;
 		private static UIColor teacherBlue = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
 
 		private float lineWidth = 10.0f;
@@ -56,7 +56,7 @@ namespace Lingvo.MobileApp.iOS
 
 			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
-			studentProgressBar.ProgressColor = studentGreen;
+			studentProgressBar.ProgressColor = studentRed;
 			studentProgressBar.NestingLevel = 1;
 			studentProgressBar.backgroundLayer.SetNeedsDisplay();
 			AddSubview(studentProgressBar);
@@ -109,7 +109,16 @@ namespace Lingvo.MobileApp.iOS
 				studentProgressBar.Hidden = true;
 			}
 		}
-
+		public bool MuteEnabled
+		{
+			get { 
+				return !muteBtn.Hidden;
+			}
+			set 
+			{ 
+				muteBtn.Hidden = !value;
+			}
+		}
 		public int Progress
 		{
 			get

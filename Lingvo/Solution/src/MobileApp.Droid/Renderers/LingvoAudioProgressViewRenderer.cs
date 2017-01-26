@@ -60,14 +60,14 @@ namespace Lingvo.MobileApp.Droid.Renderers
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
                 case LingvoAudioProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
                 case LingvoAudioProgressView.LabelTypeValue.Time:
-                    {
-                        string minutes = (element.Progress / 60 < 10 ? "0" : "") + element.Progress / 60;
-                        string seconds = (element.Progress % 60 < 10 ? "0" : "") + element.Progress % 60;
+					{
+						string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0, 2);
+						string seconds = (((element.Progress % 60000) / 1000 < 10 ? "0" : "") + (element.Progress % 60000) / 1000).Substring(0, 2);
 
-                        progressView.Text = minutes + ":" + seconds;
+						progressView.Text = minutes + ":" + seconds;
 
-                        break;
-                    }
+						break;
+					}
                 case LingvoAudioProgressView.LabelTypeValue.None: progressView.Text = ""; break;
             }
         }
