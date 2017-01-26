@@ -14,9 +14,9 @@ namespace Lingvo.Common.Entities
 		/// Gets or sets the duration of the audio file in milliseconds.
 		/// </summary>
 		/// <value>The length.</value>
-		public int Duration { get; private set; }
+		public int Duration { get; set; }
 
-		public string LocalPath { get; private set; }
+		public string LocalPath { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class, the creation time is set
