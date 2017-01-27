@@ -42,7 +42,7 @@ namespace Lingvo.MobileApp.Controllers
 
 				if (selectedPage.StudentTrack != null)
 				{
-					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
+					audioPlayer.PrepareStudentTrack(selectedPage.StudentTrack);
 				}
 				recorder.PrepareToRecord();
 			}
@@ -166,11 +166,6 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			if (recorder.State != RecorderState.IDLE && recorder.State != RecorderState.IDLE)
-			{
-				Recording recording = recorder.Stop();	
-			}
-			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
@@ -178,19 +173,20 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(int seconds)
 		{
-			if (recorder.State == RecorderState.RECORDING)
+			if (recorder.State != RecorderState.RECORDING)
 			{
-				recorder.SeekTo(seconds);	
-			}
-			audioPlayer.SeekTo(seconds);
+                audioPlayer.SeekTo(seconds);
+            }
 		}
 
 		private void CheckIfRecordingHasToStop()
 		{
 			if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
 			{
-				recorder.Stop();
-			}
+                Recording recording = recorder.Stop();
+                SelectedPage.StudentTrack = recording;
+                SelectedPage = selectedPage;
+            }
 		}
 
 	}
