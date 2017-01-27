@@ -34,13 +34,13 @@ namespace Lingvo.MobileApp.Controllers
 			{
 				selectedPage = value;
 
-				var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				var filePath = Path.Combine(documentsDirPath, "page1.mp3");
-				var recording = new Recording(id: 99, duration: 95000, localPath: filePath, creationTime: new DateTime());
-				audioPlayer.PrepareTeacherTrack(recording);
-				audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
+                var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var filePath = Path.Combine(documentsDirPath, "page1.mp3");
+                var recording = new Recording(id: 99, duration: 95000, localPath: filePath, creationTime: new DateTime());
+                audioPlayer.PrepareTeacherTrack(recording);
+                audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
 
-				if (selectedPage.StudentTrack != null)
+                if (selectedPage.StudentTrack != null)
 				{
 					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
 				}
