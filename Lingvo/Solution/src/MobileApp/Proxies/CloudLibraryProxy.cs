@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 
 using Lingvo.Common;
 using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
+using System;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -19,15 +21,6 @@ namespace Lingvo.MobileApp.Proxies
 		{
 			service = APIService.Instance;
 		}
-
-        internal Task Download(IDownloadable downloadable)
-        {
-            if(downloadable is PageProxy)
-            {
-                return DownloadSinglePage((PageProxy)downloadable);
-            }
-            return DownloadWorkbook(((Workbook)downloadable).Id);
-        }
 
 		/// <summary>
 		/// Gets the instance of cloud library proxy (singleton pattern).
@@ -53,6 +46,8 @@ namespace Lingvo.MobileApp.Proxies
 		public async Task<Workbook> DownloadWorkbook(int workbookID)
 		{
 			var workbook = await service.FetchWorkbook(workbookID);
+
+            LocalCollection.Instance.AddWorkbook(workbook);
 
 			return workbook;
 		}

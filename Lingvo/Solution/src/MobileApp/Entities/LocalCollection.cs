@@ -6,6 +6,12 @@ namespace Lingvo.MobileApp.Entities
 {
     public class LocalCollection
 	{
+        public delegate void OnWorkbooksChanged();
+        public delegate void OnTeacherMemosChanged();
+
+        public event OnWorkbooksChanged WorkbooksChanged;
+        public event OnTeacherMemosChanged TeacherMemosChanged;
+
 		private static LocalCollection instance;
 
 		/// <summary>
@@ -29,30 +35,25 @@ namespace Lingvo.MobileApp.Entities
 
 		private LocalCollection()
 		{
-            
+
         }
 
 		/// <summary>
 		/// Gets the instance of local collection (singleton pattern).
 		/// </summary>
 		/// <returns>The instance.</returns>
-		public static LocalCollection GetInstance()
-		{
-			if (instance == null)
-			{
-				instance = new LocalCollection();
-			}
+         public static LocalCollection Instance => instance ?? (instance = new LocalCollection());
 
-			return instance;
-		}
 
-		/// <summary>
-		/// Adds a teacher memo to the collection.
-		/// </summary>
-		/// <param name="memo">Memo.</param>
-		public void AddTeacherMemo(TeacherMemo memo)
+        /// <summary>
+        /// Adds a teacher memo to the collection.
+        /// </summary>
+        /// <param name="memo">Memo.</param>
+        public void AddTeacherMemo(TeacherMemo memo)
 		{
 			App.Database.Save(memo);
+
+            TeacherMemosChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -62,6 +63,8 @@ namespace Lingvo.MobileApp.Entities
 		public void AddWorkbook(Workbook workbook)
 		{
 			App.Database.Save(workbook);
+
+            WorkbooksChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -71,6 +74,8 @@ namespace Lingvo.MobileApp.Entities
 		public void DeleteWorkbook(Workbook workbook)
 		{
 			App.Database.Delete(workbook);
+
+            WorkbooksChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -80,6 +85,13 @@ namespace Lingvo.MobileApp.Entities
 		public void DeleteTeacherMemo(TeacherMemo memo)
 		{
 			App.Database.Delete(memo);
+
+            TeacherMemosChanged?.Invoke();
 		}
+
+        public void OnWorkbookChanged()
+        {
+            WorkbooksChanged?.Invoke();
+        }
 	}
 }

@@ -7,7 +7,7 @@ namespace Lingvo.Common.Entities
 	/// A page of a workbook.
 	/// </summary>
 	[Table("Pages")]
-	public interface IPage : IDownloadable
+	public interface IPage
 	{
 		[PrimaryKey]
 		int Id { get; set; }

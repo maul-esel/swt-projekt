@@ -48,7 +48,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         private void OnProgress()
         {
-            var milliseconds = teacherTrack.CurrentPosition * 1000;
+            var milliseconds = teacherTrack.CurrentPosition;
             Update?.Invoke((int)milliseconds);
 
         }

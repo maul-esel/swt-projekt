@@ -68,13 +68,12 @@ namespace Lingvo.MobileApp.Templates
 
             IPage page = (IPage)BindingContext;
 
-            string color = page.StudentTrack != null ? "secondaryColor" : "primaryColor";
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
             ProgressView.MaxProgress = 1;
             ProgressView.Progress = 1;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
             ProgressView.InnerProgressColor = Color.Red;
-            ProgressView.InnerProgressEnabled = true;
+            ProgressView.InnerProgressEnabled = page.StudentTrack != null;
             ProgressView.MuteEnabled = false;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
