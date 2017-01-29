@@ -1,9 +1,10 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Templates;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using System;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -31,7 +32,7 @@ namespace Lingvo.MobileApp.Pages
                 ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
-                IsVisible = LocalCollection.GetInstance().TeacherMemos.Count > 0
+				IsVisible = LocalCollection.GetInstance().TeacherMemos.Count() > 0
             };
 
             listView.ItemTapped += Handle_ItemTapped;
@@ -51,7 +52,7 @@ namespace Lingvo.MobileApp.Pages
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     LineBreakMode = LineBreakMode.WordWrap,
                     HorizontalTextAlignment = TextAlignment.Center,
-                    IsVisible=LocalCollection.GetInstance().TeacherMemos.Count == 0
+					IsVisible=LocalCollection.GetInstance().TeacherMemos.Count() == 0
 
                 }
                 }

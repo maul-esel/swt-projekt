@@ -30,8 +30,7 @@ namespace Lingvo.MobileApp.Pages
                 ItemsSource = workbook.Pages,
                 ItemTemplate = new DataTemplate(typeof(LingvoDownloadPageViewCell)),
                 IsPullToRefreshEnabled = true,
-                HasUnevenRows = true,
-                IsVisible = workbook.Pages.Count > 0
+                HasUnevenRows = true
             };
 
             listView.ItemTapped += Handle_ItemEvent;
@@ -48,6 +47,26 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 IsVisible = workbook.Pages.Count == 0
             };
+
+            listView.RefreshCommand = new Command(async () =>
+            {
+                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
+
+                foreach(Workbook w in newWorkbooks)
+                {
+                    if(w.Id.Equals(workbook.Id))
+                    {
+                        workbook = w;
+                    }
+                }
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    errorLabel.IsVisible = workbook.Pages.Count == 0;
+                    listView.ItemsSource = workbook.Pages;
+                    listView.IsRefreshing = false;
+                });
+            });
 
             RelativeLayout contentLayout = new RelativeLayout();
 

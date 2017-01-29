@@ -7,6 +7,8 @@ namespace Lingvo.MobileApp.Proxies
 {
 	public class PageProxy : IPage
 	{
+        public int Id { get; set; }
+        
 		private int number;
 		private String description;
 
@@ -101,6 +103,23 @@ namespace Lingvo.MobileApp.Proxies
 
 		public async Task Resolve()
 		{
+
+			if (original == null)
+			{
+				var service = CloudLibraryProxy.Instance;
+				var page = await service.DownloadSinglePage(this);
+				original = page;
+
+				var db = App.Database;
+
+				if (db.FindWorkbook(this.Workbook.Id) == null)
+				{
+					db.Save(this.Workbook);
+				}
+
+				db.Save(original.TeacherTrack);
+				db.Save(original);
+			}
 		}
 
 		/// <summary>

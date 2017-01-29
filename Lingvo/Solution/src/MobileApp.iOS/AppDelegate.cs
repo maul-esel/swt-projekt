@@ -33,6 +33,7 @@ namespace Lingvo.MobileApp.iOS
 			var filePath = Path.Combine(documentsDirPath, "page1.mp3");
 
 			var bundleFileUrl = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/page1.mp3");
+
 			var bundleFileBytes = File.ReadAllBytes(bundleFileUrl);
 
 			//Now write to the documents directory

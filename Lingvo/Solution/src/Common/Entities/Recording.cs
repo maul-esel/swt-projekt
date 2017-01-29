@@ -1,12 +1,29 @@
 ﻿using System;
+using SQLite.Net.Attributes;
+
 namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// Objects from this class represent audio files.
 	/// </summary>
+	[Table("Recordings")]
 	public class Recording
 	{
-		public int Id { get; private set; }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class
+		/// </summary>
+		public Recording() { } // used by Linq2DB
+
+		public Recording(int id, int duration, string localPath, DateTime creationTime)
+		{
+			Id = id;
+			Duration = duration;
+			LocalPath = localPath;
+			CreationTime = creationTime;
+		}
+
+		[PrimaryKey]
+		public int Id { get; set; }
 
 		public DateTime CreationTime { get; private set; }
 
@@ -17,23 +34,5 @@ namespace Lingvo.Common.Entities
 		public int Duration { get; set; }
 
 		public string LocalPath { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class, the creation time is set
-		/// to the moment the constructor is called.
-		/// </summary>
-		public Recording()
-		{
-			CreationTime = DateTime.Now;
-		}
-
-		public Recording(int id, int duration, string localPath, DateTime creationTime)
-		{
-			Id = id;
-			Duration = duration;
-			LocalPath = localPath;
-			CreationTime = creationTime;
-		}
-
 	}
 }

@@ -1,5 +1,8 @@
-﻿using Lingvo.Common.Entities;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Lingvo.Common;
+using Lingvo.Common.Entities;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -10,8 +13,11 @@ namespace Lingvo.MobileApp.Proxies
 	{
 		private static CloudLibraryProxy instance;
 
+		private APIService service;
+
 		private CloudLibraryProxy()
 		{
+			service = APIService.Instance;
 		}
 
         internal Task Download(IDownloadable downloadable)
@@ -36,25 +42,36 @@ namespace Lingvo.MobileApp.Proxies
 		/// <param name="proxy">A proxy for the page that is downloaded</param>
 		internal Task<Page> DownloadSinglePage(PageProxy proxy)
 		{
-			// to do: get correspondent page from server
-			return null;
+			return service.FetchPage(proxy);
 		}
 
 		/// <summary>
-		/// Downloads a workbook.
+		/// Downloads a workbook and adds it to the local collection
 		/// </summary>
 		/// <returns>The workbook.</returns>
 		/// <param name="workbookID">Workbook identifier.</param>
 		public async Task<Workbook> DownloadWorkbook(int workbookID)
 		{
-			// to do: get correspondent workbook from server
-			return null;
+			var workbook = await service.FetchWorkbook(workbookID);
+
+			return workbook;
 		}
 
+		/// <summary>
+		/// Returns a list of all workbooks, with page proxy objects for all existing pages on server
+		/// </summary>
+		/// <returns>The all workbooks.</returns>
 		public async Task<Workbook[]> FetchAllWorkbooks()
 		{
-			// TODO
-			return null;
+			var workbooks =  await service.FetchWorkbooks();
+
+			foreach (var w in workbooks)
+			{
+				await service.FetchPages(w);
+				w.IsPublished = true;
+			}
+
+			return workbooks;
 		}
 	}
 }
