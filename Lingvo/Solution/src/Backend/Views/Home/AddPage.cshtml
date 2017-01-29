@@ -1,11 +1,15 @@
+@using Lingvo.Common.Entities
 <!DOCTYPE html>
 <html lang="en">
 <head></head>
 <body>
+@{
+	var workbook = (Workbook)ViewData["Workbook"];
+}
   <div class="container container-fluid">
 	<div class="lingvo-header container-fluid">
 		<h3>
-			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook">Thannhauser</a> > @ViewData["Title"]
+			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a> > @ViewData["Title"]
 		</h3>
 	</div>
   	<form style="padding-top:20px;" enctype="multipart/form-data"

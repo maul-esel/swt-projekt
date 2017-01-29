@@ -11,7 +11,7 @@
 		<h3>
 			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @workbook.Title
 		</h3>
-		<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage">Neue Seite anlegen</a>
+		<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@workbook.Id">Neue Seite anlegen</a>
 	</div>
 	<table id="workbooks" class="table">
 		<tbody>
@@ -24,7 +24,7 @@
 				</td>
 				<td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td> 
 				<td>
-					<a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten">
+					<a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-workbookId="@workbook.Id">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
 				</td>
