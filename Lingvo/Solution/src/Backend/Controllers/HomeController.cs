@@ -63,7 +63,7 @@ namespace Lingvo.Backend.Controllers
 		[Route("workbooks/{id}")]
         public IActionResult Workbook(int id)
         {
-	        var workbook = DatabaseService.getNewContext().GetWorkbooksWithReferences().Find(w => w.Id == id);
+			var workbook = DatabaseService.getNewContext().FindWorkbookWithReferences(id);
 	        ViewData["workbook"] = workbook;
 			return View();
         }
