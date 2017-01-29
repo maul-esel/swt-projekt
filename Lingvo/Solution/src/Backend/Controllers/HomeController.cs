@@ -30,8 +30,10 @@ namespace Lingvo.Backend.Controllers
 			ViewData["Title"] = "Neues Arbeitsheft erstellen";
 			return View();
 		}
-		public IActionResult EditWorkbook()
+
+		public IActionResult EditWorkbook(int id)
 		{
+			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(id);
 			ViewData["Title"] = "Arbeitsheft bearbeiten";
 			return View("AddWorkbook");
 		}
@@ -43,9 +45,13 @@ namespace Lingvo.Backend.Controllers
 			return View();
 		}
 
-		public IActionResult EditPage(int workbookId)
+		public IActionResult EditPage(int id)
 		{
-			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(workbookId);
+			var context = DatabaseService.getNewContext();
+			var page = context.Find<Page>(id);
+			ViewData["Workbook"] = context.Find<Workbook>(page.workbookId);;
+			ViewData["Page"] = page;
+
 			ViewData["Title"] = "Seite bearbeiten";
 			return View("AddPage");
 		}

@@ -24,7 +24,7 @@
 				</td>
 				<td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td> 
 				<td>
-					<a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-workbookId="@workbook.Id">
+					<a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
 				</td>

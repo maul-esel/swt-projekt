@@ -27,7 +27,7 @@
 						<td>@workbook.TotalPages Seiten</td>
 						<td>Ge&auml;ndert: @workbook.LastModified.ToString("dd. MM. yyyy")</td>
 						<td>
-							<a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook">
+							<a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook" asp-route-id="@workbook.Id">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
 						</td>
