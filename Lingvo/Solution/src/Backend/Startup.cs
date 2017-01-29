@@ -15,9 +15,9 @@ namespace Lingvo.Backend
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables("LINGVO_");
+                .AddEnvironmentVariables();
             Configuration = builder.Build();
-			DatabaseService.Connect(Configuration);
+			DatabaseService.Connect(Configuration["MYSQLCONNSTR_localdb"]);
 		}
 
 		public IConfigurationRoot Configuration { get; }

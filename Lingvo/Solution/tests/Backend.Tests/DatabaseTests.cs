@@ -19,10 +19,10 @@ namespace Lingvo.Backend.Tests
 				.SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json")
 				.AddJsonFile($"appsettings.{environmentName}.json", optional: true)
-				.AddEnvironmentVariables("LINGVO_");
+				.AddEnvironmentVariables();
 			var config = builder.Build();
 
-			DatabaseService.Connect(config);
+			DatabaseService.Connect(config["MYSQLCONNSTR_localdb"]);
 
 			DatabaseService Database = DatabaseService.getNewContext();
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
