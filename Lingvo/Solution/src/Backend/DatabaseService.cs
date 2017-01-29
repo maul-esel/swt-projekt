@@ -46,7 +46,7 @@ namespace Lingvo.Backend
 		{
 			modelBuilder.Entity<Workbook>().Property(w => w.Title).IsRequired();
 			modelBuilder.Entity<Workbook>().Property(w => w.Subtitle).IsRequired();
-			modelBuilder.Entity<Workbook>().Property(w => w.LastModified).IsRequired().ValueGeneratedOnAddOrUpdate();
+			modelBuilder.Entity<Workbook>().Property(w => w.LastModified).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMP").HasComputedColumnSql("CURRENT_TIMESTAMP");
 			modelBuilder.Entity<Workbook>().HasMany(w => (IEnumerable<Page>) w.Pages).WithOne(p => p.Workbook).HasForeignKey(p => p.workbookId);
 
 			modelBuilder.Entity<Page>().Property(p => p.Description).IsRequired();
