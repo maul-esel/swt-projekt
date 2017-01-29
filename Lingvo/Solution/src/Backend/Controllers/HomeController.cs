@@ -25,12 +25,14 @@ namespace Lingvo.Backend.Controllers
             return View();
         }
 
+		[Route("workbooks/add")]
 		public IActionResult AddWorkbook() 
 		{
 			ViewData["Title"] = "Neues Arbeitsheft erstellen";
 			return View();
 		}
 
+		[Route("workbooks/{id}/edit")]
 		public IActionResult EditWorkbook(int id)
 		{
 			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(id);
@@ -38,6 +40,7 @@ namespace Lingvo.Backend.Controllers
 			return View("AddWorkbook");
 		}
 
+		[Route("workbooks/{workbookId}/pages/add")]
 		public IActionResult AddPage(int workbookId)
 		{
 			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(workbookId);
@@ -45,6 +48,7 @@ namespace Lingvo.Backend.Controllers
 			return View();
 		}
 
+		[Route("pages/edit/{id}")]
 		public IActionResult EditPage(int id)
 		{
 			var context = DatabaseService.getNewContext();
@@ -56,6 +60,7 @@ namespace Lingvo.Backend.Controllers
 			return View("AddPage");
 		}
 
+		[Route("workbooks/{id}")]
         public IActionResult Workbook(int id)
         {
 	        var workbook = DatabaseService.getNewContext().GetWorkbooksWithReferences().Find(w => w.Id == id);
@@ -63,22 +68,10 @@ namespace Lingvo.Backend.Controllers
 			return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
         public IActionResult Error()
         {
             return View();
         }
-
-		internal bool DummyTestMethod()
-		{
-			return true;
-		}
     
 		[HttpPost]
 		public async Task<IActionResult> UploadFile(IFormFile file)
@@ -96,7 +89,7 @@ namespace Lingvo.Backend.Controllers
 			await file.CopyToAsync(stream);
 			stream.Dispose();
 
-			return View("Workbook");
+			return View("Workbook"); // TODO: redirect to proper workbook page
 		}
 	}
 }
