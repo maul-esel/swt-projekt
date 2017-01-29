@@ -46,11 +46,11 @@ namespace Lingvo.Backend.Controllers
 			return View("AddPage");
 		}
 
-
-        public IActionResult Workbook()
-		{
-
-            return View();
+        public IActionResult Workbook(int id)
+        {
+	        var workbook = DatabaseService.getNewContext().GetWorkbooksWithReferences().Find(w => w.Id == id);
+	        ViewData["workbook"] = workbook;
+			return View();
         }
 
         public IActionResult Contact()
