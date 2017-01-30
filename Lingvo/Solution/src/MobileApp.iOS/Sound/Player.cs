@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.IsolatedStorage;
 using AVFoundation;
 using Foundation;
 using Lingvo.Common.Adapters;
@@ -51,12 +52,21 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			get
 			{
-				return (studentTrack.Volume.Equals(0.0f));
+				if (studentTrack != null)
+				{
+					return (studentTrack.Volume.Equals(0.0f));
+				}
+				return true;
+
 			}
 
 			set
 			{
-				studentTrack.Volume = value ? 0.0f : 1.0f;   
+				if (studentTrack != null)
+				{
+					studentTrack.Volume = value ? 0.0f : 1.0f;
+				}
+
 			}
 		}
 

@@ -14,8 +14,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 	public class Recorder :IRecorder
 	{
-		private const String RECORDING_PREFIX = "record_";
-		private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+		private const string RECORDING_PREFIX = "record_";
+		private const string DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
 		private NSUrl currentRecordingUrl;
 		private Recording currentRecording;
 		private AVAudioRecorder recorder;
@@ -81,13 +81,16 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			recorder.Pause();
 			int recordingDuration = (int) recorder.currentTime;
+			string path = recorder.Url.ToString();
 			recorder.Stop();
-			recorder.Dispose();
+
 			recorder = null;
 			State = RecorderState.IDLE;
 
-			//TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
-			currentRecording = new Recording(37, recordingDuration, currentRecordingUrl.ToString(), DateTime.Now);
+			currentRecording = new Recording();
+			currentRecording.LocalPath = path.Substring(7);
+			currentRecording.Duration = recordingDuration;
+
 
 			return currentRecording;
 		}
