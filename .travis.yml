@@ -48,5 +48,5 @@ deploy:
   site: lingvo
   verbose: true
   on:
-    branch: master
+    branch: azure-db-setup
     condition: $DOTNETCORE = 1

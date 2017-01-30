@@ -68,6 +68,12 @@ namespace Lingvo.Backend.Controllers
 			return View();
         }
 
+		public IActionResult TestMysql([FromServices] DatabaseService db)
+		{
+			db.Workbooks.ToList();
+			return Json(new { a = "a" });
+		}
+
         public IActionResult Error()
         {
             return View();
