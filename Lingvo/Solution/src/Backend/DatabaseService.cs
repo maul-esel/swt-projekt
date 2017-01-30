@@ -47,6 +47,7 @@ namespace Lingvo.Backend
 			modelBuilder.Entity<Page>().HasOne(p => p.TeacherTrack).WithMany().HasForeignKey(p => p.teacherTrackId);
 
 			modelBuilder.Entity<Recording>().Property(r => r.LocalPath).IsRequired();
+			modelBuilder.Entity<Recording>().Property(r => r.CreationTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
 		}
 
 		public List<Workbook> GetWorkbooksWithReferences()
