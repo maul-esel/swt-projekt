@@ -14,8 +14,6 @@ namespace Lingvo.Backend
 
 	public class DatabaseService : DbContext
     {
-		private static DbContextOptions<DatabaseService> options;
-
 		public DbSet<Workbook> Workbooks { get; set; }
 		public DbSet<Page> Pages { get; set; }
 		public DbSet<Recording> Recordings { get; set; }
@@ -23,23 +21,13 @@ namespace Lingvo.Backend
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
     	{ }
 
-		public static void Connect(IConfiguration config)
+		public static DatabaseService Connect(string connectionString)
 		{
-			var optionsBuilder = new DbContextOptionsBuilder<DatabaseService>();
-			var server = config["DB_HOST"];
-			var port = config["DB_PORT"];
-			var db = config["DB_NAME"];
-			var user = config["DB_USER"];
-			var password = config["DB_PASSWORD"];
-
-			optionsBuilder.UseMySql(@"Server=" + server + ";port=" + port + ";database=" + db + ";uid=" + user + ";pwd=" + password + ";");
-
-			options = optionsBuilder.Options;
-		}
-
-		public static DatabaseService getNewContext()
-		{
-			return new DatabaseService(options);
+			return new DatabaseService(
+				new DbContextOptionsBuilder<DatabaseService>()
+					.UseMySql(connectionString)
+					.Options
+			);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,6 +42,7 @@ namespace Lingvo.Backend
 			modelBuilder.Entity<Page>().HasOne(p => p.TeacherTrack).WithMany().HasForeignKey(p => p.teacherTrackId);
 
 			modelBuilder.Entity<Recording>().Property(r => r.LocalPath).IsRequired();
+			modelBuilder.Entity<Recording>().Property(r => r.CreationTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
 		}
 
 		public List<Workbook> GetWorkbooksWithReferences()
@@ -69,11 +58,24 @@ namespace Lingvo.Backend
 		public Workbook FindWorkbookWithReferences(int id)
 		{
 			var workbook = Find<Workbook>(id);
+			if (workbook == null)
+				return null;
+
 			Entry(workbook).Collection(w => (IEnumerable<Page>) w.Pages)
 				.Query()
 				.Include(p => p.TeacherTrack)
 				.Load();
 			return workbook;
+		}
+
+		public Page FindPageWithRecording(int id)
+		{
+			var page = Find<Page>(id);
+			if (page == null)
+				return null;
+
+			Entry(page).Reference(p => p.TeacherTrack).Load();
+			return page;
 		}
 
 		/// <summary>

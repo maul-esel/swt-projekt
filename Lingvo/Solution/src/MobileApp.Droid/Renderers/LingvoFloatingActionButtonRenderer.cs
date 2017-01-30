@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
             if (Control == null)
             {
                 fab = new FloatingActionButton(Context);
-                Drawable image = Resources.GetDrawable(Resource.Drawable.ic_action_add, Resources.NewTheme());
+                Drawable image = Resources.GetDrawable(Resource.Drawable.ic_action_add);
                 image.SetColorFilter(Android.Graphics.Color.White, PorterDuff.Mode.SrcIn);
                 fab.SetImageDrawable(image);
                 fab.Show();
