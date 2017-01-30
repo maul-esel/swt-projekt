@@ -22,7 +22,8 @@ namespace Lingvo.Backend.Controllers
 
         public IActionResult Index()
         {
-            return View();
+			ViewData["Workbooks"] = DatabaseService.getNewContext().Workbooks;
+			return View();
         }
 
 		[Route("workbooks/add")]
