@@ -22,10 +22,9 @@ namespace Lingvo.Backend.Tests
 				.AddEnvironmentVariables();
 			var config = builder.Build();
 
-			DatabaseService.Connect(config["MYSQLCONNSTR_localdb"]);
-
-			DatabaseService Database = DatabaseService.getNewContext();
-			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
+			DatabaseTests.ConnectionString = config["MYSQLCONNSTR_localdb"];
+			var db = DatabaseService.Connect(DatabaseTests.ConnectionString);
+			db.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
 		}
 
 		public void Dispose()
@@ -35,9 +34,11 @@ namespace Lingvo.Backend.Tests
 
     public class DatabaseTests : IClassFixture<TestsFixture>
     {
+		public static string ConnectionString { get; set; }
+
 		public DatabaseTests()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
 		}
 
@@ -48,7 +49,7 @@ namespace Lingvo.Backend.Tests
         [Fact]
         public void TestLoadTables()
         {
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			Assert.Equal(4, Database.Pages.Count());
 			Assert.Equal(4, Database.Recordings.Count());
 			Assert.Equal(2, Database.Workbooks.Count());
@@ -57,7 +58,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindWorkbooks()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			Assert.NotNull(Database.Workbooks.Find(1));
 			Assert.NotNull(Database.Workbooks.Find(2));
 			Assert.Null(Database.Workbooks.Find(3));
@@ -66,7 +67,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindPages()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			Assert.NotNull(Database.Pages.Find(1));
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Pages.Find(5));
@@ -75,7 +76,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindRecordings()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			Assert.NotNull(Database.Recordings.Find(1));
 			Assert.NotNull(Database.Recordings.Find(4));
 			Assert.Null(Database.Recordings.Find(5));
@@ -84,7 +85,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookPages()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			var dbWorkbook = Database.GetWorkbooksWithReferences().Find(w => w.Id == 1);
 			Assert.Equal(2, dbWorkbook.Pages.Count);
 
@@ -99,7 +100,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveWorkbook()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			var testWorkbook = new Workbook()
 			{
 				Title = "Test",
@@ -114,7 +115,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSavePage()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			var testPage = new Page()
 			{
 				Number = 5,
@@ -135,7 +136,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveRecording()
 		{
-			DatabaseService Database = DatabaseService.getNewContext();
+			DatabaseService Database = DatabaseService.Connect(ConnectionString);
 			var testRecording = new Recording()
 			{
 				Duration = 12 /* milliseconds */,

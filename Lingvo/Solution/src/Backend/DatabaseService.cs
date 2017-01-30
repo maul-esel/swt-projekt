@@ -14,8 +14,6 @@ namespace Lingvo.Backend
 
 	public class DatabaseService : DbContext
     {
-		private static DbContextOptions<DatabaseService> options;
-
 		public DbSet<Workbook> Workbooks { get; set; }
 		public DbSet<Page> Pages { get; set; }
 		public DbSet<Recording> Recordings { get; set; }
@@ -23,16 +21,13 @@ namespace Lingvo.Backend
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
     	{ }
 
-		public static void Connect(string connectionString)
+		public static DatabaseService Connect(string connectionString)
 		{
-			options = new DbContextOptionsBuilder<DatabaseService>()
-				.UseMySql(connectionString)
-				.Options;
-		}
-
-		public static DatabaseService getNewContext()
-		{
-			return new DatabaseService(options);
+			return new DatabaseService(
+				new DbContextOptionsBuilder<DatabaseService>()
+					.UseMySql(connectionString)
+					.Options
+			);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

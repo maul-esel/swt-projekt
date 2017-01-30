@@ -20,9 +20,9 @@ namespace Lingvo.Backend.Controllers
 			this.environment = environment;
 		}
 
-        public IActionResult Index()
+        public IActionResult Index([FromServices] DatabaseService db)
         {
-			ViewData["Workbooks"] = DatabaseService.getNewContext().Workbooks;
+			ViewData["Workbooks"] = db.Workbooks;
 			return View();
         }
 
@@ -34,27 +34,26 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[Route("workbooks/{id}/edit")]
-		public IActionResult EditWorkbook(int id)
+		public IActionResult EditWorkbook([FromServices] DatabaseService db, int id)
 		{
-			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(id);
+			ViewData["Workbook"] = db.Find<Workbook>(id);
 			ViewData["Title"] = "Arbeitsheft bearbeiten";
 			return View("AddWorkbook");
 		}
 
 		[Route("workbooks/{workbookId}/pages/add")]
-		public IActionResult AddPage(int workbookId)
+		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
 		{
-			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(workbookId);
+			ViewData["Workbook"] = db.Find<Workbook>(workbookId);
 			ViewData["Title"] = "Neue Seite erstellen";
 			return View();
 		}
 
 		[Route("pages/edit/{id}")]
-		public IActionResult EditPage(int id)
+		public IActionResult EditPage([FromServices] DatabaseService db, int id)
 		{
-			var context = DatabaseService.getNewContext();
-			var page = context.Find<Page>(id);
-			ViewData["Workbook"] = context.Find<Workbook>(page.workbookId);;
+			var page = db.Find<Page>(id);
+			ViewData["Workbook"] = db.Find<Workbook>(page.workbookId);;
 			ViewData["Page"] = page;
 
 			ViewData["Title"] = "Seite bearbeiten";
@@ -62,9 +61,9 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[Route("workbooks/{id}")]
-        public IActionResult Workbook(int id)
+        public IActionResult Workbook([FromServices] DatabaseService db, int id)
         {
-			var workbook = DatabaseService.getNewContext().FindWorkbookWithReferences(id);
+			var workbook = db.FindWorkbookWithReferences(id);
 	        ViewData["workbook"] = workbook;
 			return View();
         }

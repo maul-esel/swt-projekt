@@ -18,10 +18,9 @@ namespace Lingvo.Backend.Controllers
 		/// </summary>
 		/// <returns>The workbooks.</returns>
 		[Route("workbooks"), HttpGet]
-		public IActionResult GetWorkbooks()
+		public IActionResult GetWorkbooks([FromServices] DatabaseService db)
 		{
-			var Database = DatabaseService.getNewContext();
-			return Json(from w in Database.GetWorkbooksWithReferences()
+			return Json(from w in db.Workbooks
 						where w.IsPublished
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
@@ -32,13 +31,12 @@ namespace Lingvo.Backend.Controllers
 		/// <returns>The workbook.</returns>
 		/// <param name="workbookId">Workbook identifier.</param>
 		[Route("workbooks/{workbookId}")]
-		public IActionResult GetWorkbook(int workbookId)
+		public IActionResult GetWorkbook([FromServices] DatabaseService db, int workbookId)
 		{
-			var Database = DatabaseService.getNewContext();
-			return Json((from workbook in Database.GetWorkbooksWithReferences()
-						where workbook.IsPublished 
-			            && workbook.Id == workbookId
-			             select new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages}).Single());
+			var workbook = db.FindWorkbookWithReferences(workbookId);
+			if (workbook.IsPublished)
+				return Json(new { workbook.Id, workbook.Title, workbook.Subtitle, workbook.LastModified, workbook.TotalPages });
+			return Unauthorized();
 		}
 
 		/// <summary>
@@ -47,10 +45,9 @@ namespace Lingvo.Backend.Controllers
 		/// <returns>The pages.</returns>
 		/// <param name="workbookId">Workbook identifier.</param>
 		[Route("workbooks/{workbookId}/pages")]
-		public IActionResult GetPages(int workbookId)
+		public IActionResult GetPages([FromServices] DatabaseService db, int workbookId)
 		{
-			var Database = DatabaseService.getNewContext();
-			return Json(from p in Database.GetPagesWithReferences()
+			return Json(from p in db.Pages
 						where p.workbookId == workbookId
 						select new { p.Id, p.workbookId, p.Number, p.Description });
 		}
@@ -60,14 +57,9 @@ namespace Lingvo.Backend.Controllers
 		/// </summary>
 		/// <returns>The teacher track.</returns>
 		[Route("pages/{pageId}")]
-		public IActionResult GetTeacherTrack(int pageId)
+		public IActionResult GetTeacherTrack([FromServices] DatabaseService db, int pageId)
 		{
-			var Database = DatabaseService.getNewContext();
-
-			var page = Database.GetPagesWithReferences().Find(p => p.Id == pageId);
-
-			Console.WriteLine("TeacherTrackId:" + page.teacherTrackId);
-
+			var page = db.FindPageWithRecording(pageId);
 			if (page == null)
 				return NotFound();
 
