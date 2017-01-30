@@ -23,18 +23,11 @@ namespace Lingvo.Backend
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
     	{ }
 
-		public static void Connect(IConfiguration config)
+		public static void Connect(string connectionString)
 		{
-			var optionsBuilder = new DbContextOptionsBuilder<DatabaseService>();
-			var server = config["DB_HOST"];
-			var port = config["DB_PORT"];
-			var db = config["DB_NAME"];
-			var user = config["DB_USER"];
-			var password = config["DB_PASSWORD"];
-
-			optionsBuilder.UseMySql(@"Server=" + server + ";port=" + port + ";database=" + db + ";uid=" + user + ";pwd=" + password + ";");
-
-			options = optionsBuilder.Options;
+			options = new DbContextOptionsBuilder<DatabaseService>()
+				.UseMySql(connectionString)
+				.Options;
 		}
 
 		public static DatabaseService getNewContext()
