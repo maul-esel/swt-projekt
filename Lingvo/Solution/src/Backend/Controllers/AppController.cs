@@ -73,7 +73,7 @@ namespace Lingvo.Backend.Controllers
 
 			Response.Headers["X-Audio-Duration"] = page.TeacherTrack.Duration.ToString();
 			Response.Headers["X-Recording-Id"] = page.TeacherTrack.Id.ToString();
-			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH: mm:ss");
+			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
 
 			//relative and absolute paths supported
 			string path = null;
