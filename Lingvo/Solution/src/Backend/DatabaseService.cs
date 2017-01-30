@@ -62,11 +62,24 @@ namespace Lingvo.Backend
 		public Workbook FindWorkbookWithReferences(int id)
 		{
 			var workbook = Find<Workbook>(id);
+			if (workbook == null)
+				return null;
+
 			Entry(workbook).Collection(w => (IEnumerable<Page>) w.Pages)
 				.Query()
 				.Include(p => p.TeacherTrack)
 				.Load();
 			return workbook;
+		}
+
+		public Page FindPageWithRecording(int id)
+		{
+			var page = Find<Page>(id);
+			if (page == null)
+				return null;
+
+			Entry(page).Reference(p => p.TeacherTrack).Load();
+			return page;
 		}
 
 		/// <summary>
