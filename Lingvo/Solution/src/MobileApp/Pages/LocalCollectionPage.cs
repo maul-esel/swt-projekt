@@ -55,11 +55,6 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
-        private void Instance_OnWorkbooksChanged()
-        {
-            throw new System.NotImplementedException();
-        }
-
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
             => ((ListView)sender).SelectedItem = null;
 
