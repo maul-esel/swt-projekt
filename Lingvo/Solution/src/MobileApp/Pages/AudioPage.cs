@@ -27,40 +27,19 @@ namespace Lingvo.MobileApp.Pages
             get { return page; }
             internal set
             {
-                page = value;
+               page = value;
+
                 Label.Text = ((Span)App.Current.Resources["text_seite"]).Text + " " + page.Number + " / " + workbook.Pages.Count;
-            }
-        }
-
-        public bool IsActive
-        {
-            get
-            {
-                return isActive;
-            }
-
-            set
-            {
-                isActive = value;
-                if (isActive)
-                {
-                    StudentPageController.Instance.Update += RedrawProgressBar;
-                    StudentPageController.Instance.StateChange += SetButtonsAccordingToState;
-                }
-                else
-                {
-                    StudentPageController.Instance.Update -= RedrawProgressBar;
-                    StudentPageController.Instance.StateChange -= SetButtonsAccordingToState;
-                }
+                StudentPageController.Instance.SelectedPage = page;
             }
         }
 
         private void RedrawProgressBar(int elapsedTime)
         {
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(new Action(() =>
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
                 ProgressView.Progress = elapsedTime;
-            }));
+            });
 
         }
 
@@ -176,7 +155,8 @@ namespace Lingvo.MobileApp.Pages
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
 
-
+            StudentPageController.Instance.Update += RedrawProgressBar;
+            StudentPageController.Instance.StateChange += SetButtonsAccordingToState;
 
             RewindButton = new LingvoRoundImageButton()
             {
@@ -227,10 +207,10 @@ namespace Lingvo.MobileApp.Pages
             buttonGrid.Children.Add(PlayPauseButton, 1, 0);
             buttonGrid.Children.Add(RecordStopButton, 2, 0);
 
-            //RewindButton.OnClicked += RewindButton_OnClicked;
-            //ForwardButton.OnClicked += ForwardButton_OnClicked;
-            //PlayPauseButton.OnClicked += PlayPauseButton_OnClicked;
-            //RecordStopButton.OnClicked += RecordStopButton_OnClicked;
+            RewindButton.OnClicked += RewindButton_OnClicked;
+            ForwardButton.OnClicked += ForwardButton_OnClicked;
+            PlayPauseButton.OnClicked += PlayPauseButton_OnClicked;
+            RecordStopButton.OnClicked += RecordStopButton_OnClicked;
 
             NextPageButton = new LingvoRoundImageButton
             {
@@ -318,10 +298,10 @@ namespace Lingvo.MobileApp.Pages
             PreviousPageButton.IsEnabled = nextIndex > 0;
             Page = workbook.Pages[nextIndex];
             
-            //if (StudentPageController.Instance.CurrentPlayerState != PlayerState.STOPPED)
-            //{
-            //RecordStopButton_OnClicked(RecordStopButton, new EventArgs());
-            //}
+            if (StudentPageController.Instance.CurrentPlayerState != PlayerState.STOPPED)
+            {
+            RecordStopButton_OnClicked(RecordStopButton, new EventArgs());
+            }
         }
 
         private void ProgressView_StudentTrackMuted(bool muted)
@@ -331,54 +311,54 @@ namespace Lingvo.MobileApp.Pages
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
-            //PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
+            PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
 
-            //if (currentState == PlayerState.STOPPED)
-            //{
+            if (currentState == PlayerState.STOPPED)
+            {
 
-                //StudentPageController.Instance.StartStudentRecording();
-            //    ProgressView.InnerProgressEnabled = true;
-            //    return;
-            //}
-            //if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
-            //{
-                //StudentPageController.Instance.Stop();
-           //     RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
-           //     return;
-           // }
+                StudentPageController.Instance.StartStudentRecording();
+                ProgressView.InnerProgressEnabled = true;
+                return;
+            }
+            if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
+            {
+                StudentPageController.Instance.Stop();
+                RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
+                return;
+            }
         }
 
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)
         {
-            //PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
-            //RecorderState currentRecorderState = StudentPageController.Instance.CurrentRecorderState;
+            PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
+            RecorderState currentRecorderState = StudentPageController.Instance.CurrentRecorderState;
 
-            //if (currentState == PlayerState.PAUSED || currentState == PlayerState.STOPPED)
-            //{
-            //    if (currentRecorderState == RecorderState.PAUSED)
-            //    {
-            //        StudentPageController.Instance.Continue();
-            //        return;
-            //    }
+            if (currentState == PlayerState.PAUSED || currentState == PlayerState.STOPPED)
+            {
+                if (currentRecorderState == RecorderState.PAUSED)
+                {
+                    StudentPageController.Instance.Continue();
+                    return;
+                }
 
-            //    StudentPageController.Instance.PlayPage();
-            //    return;
-            //}
-            //if (currentState == PlayerState.PLAYING)
-            //{
-            //    StudentPageController.Instance.Pause();
-            //    return;
-            //}
+                StudentPageController.Instance.PlayPage();
+                return;
+            }
+            if (currentState == PlayerState.PLAYING)
+            {
+                StudentPageController.Instance.Pause();
+                return;
+            }
         }
 
         private void ForwardButton_OnClicked(object sender, EventArgs e)
         {
-            //StudentPageController.Instance.SeekTo(SeekTimeStep);
+            StudentPageController.Instance.SeekTo(SeekTimeStep);
         }
 
         private void RewindButton_OnClicked(object sender, EventArgs e)
         {
-            //StudentPageController.Instance.SeekTo(-SeekTimeStep);
+            StudentPageController.Instance.SeekTo(-SeekTimeStep);
         }
     }
 }

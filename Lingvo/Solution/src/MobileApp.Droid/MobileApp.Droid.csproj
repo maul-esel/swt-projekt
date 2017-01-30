@@ -228,9 +228,6 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\ic_previous.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\Values\attrs.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -512,7 +509,34 @@
     <AndroidResource Include="Resources\Drawable\round_button_filled.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\ic_next.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\ic_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-ldpi\ic_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-ldpi\ic_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_next.png" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <Import Project="..\MobileApp\MobileApp.projitems" Label="Shared" Condition="Exists('..\MobileApp\MobileApp.projitems')" />
