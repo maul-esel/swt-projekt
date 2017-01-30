@@ -12,9 +12,11 @@ namespace Lingvo.MobileApp.Templates
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
+        private LingvoRoundImageButton downloadButton;
+
         public LingvoDownloadPageViewCell() : base()
         {
-            LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
+            downloadButton = new LingvoRoundImageButton()
             {
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 HorizontalOptions = LayoutOptions.End,
@@ -48,6 +50,8 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = 100;
             ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+
+            downloadButton.IsEnabled = !downloaded;
         }
     }
 }

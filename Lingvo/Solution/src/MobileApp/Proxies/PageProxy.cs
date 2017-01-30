@@ -124,8 +124,6 @@ namespace Lingvo.MobileApp.Proxies
 
 				db.Save(original.TeacherTrack);
 				db.Save(original);
-
-                LocalCollection.Instance.OnWorkbookChanged();
 			}
 		}
 
