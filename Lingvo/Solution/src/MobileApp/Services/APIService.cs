@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
-		private const string URL = "http://localhost:5000/api/app/";
+		private const string URL = "http://10.0.2.2:5000/api/app/";
 
 		private static APIService instance;
 
@@ -146,7 +146,7 @@ namespace Lingvo.MobileApp
 				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
 				                     int.Parse(response.Headers["X-Audio-Duration"]), 
 				                     localPath,
-				                     DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yy HH:mm:ss", null));
+				                     DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yyyy HH:mm:ss", null));
 			});
 		}
 	}

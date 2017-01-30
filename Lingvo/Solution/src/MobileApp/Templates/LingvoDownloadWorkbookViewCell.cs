@@ -4,6 +4,7 @@ using System;
 using Xamarin.Forms;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Entities;
+using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -40,10 +41,13 @@ namespace Lingvo.MobileApp.Templates
 
             Workbook workbook = (Workbook)BindingContext;
 
-            string color = workbook.Pages.Count == workbook.TotalPages ? "secondaryColor" : "primaryColor";
+            List<Workbook> currentWorkbooks = new List<Workbook>(LocalCollection.Instance.Workbooks);
+
+            int progress = (currentWorkbooks.Find(w => w.Id.Equals(workbook.Id))?.Pages.Count).GetValueOrDefault(0);
+            string color = progress == workbook.TotalPages ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = workbook.TotalPages;
-            ProgressView.Progress = workbook.Pages.Count;
+            ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
         }

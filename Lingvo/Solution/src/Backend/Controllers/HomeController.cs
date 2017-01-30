@@ -24,51 +24,54 @@ namespace Lingvo.Backend.Controllers
         {
             return View();
         }
+
+		[Route("workbooks/add")]
 		public IActionResult AddWorkbook() 
 		{
 			ViewData["Title"] = "Neues Arbeitsheft erstellen";
 			return View();
 		}
-		public IActionResult EditWorkbook()
+
+		[Route("workbooks/{id}/edit")]
+		public IActionResult EditWorkbook(int id)
 		{
+			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(id);
 			ViewData["Title"] = "Arbeitsheft bearbeiten";
 			return View("AddWorkbook");
 		}
-		public IActionResult AddPage() 
+
+		[Route("workbooks/{workbookId}/pages/add")]
+		public IActionResult AddPage(int workbookId)
 		{
+			ViewData["Workbook"] = DatabaseService.getNewContext().Find<Workbook>(workbookId);
 			ViewData["Title"] = "Neue Seite erstellen";
 			return View();
 		}
 
-		public IActionResult EditPage()
+		[Route("pages/edit/{id}")]
+		public IActionResult EditPage(int id)
 		{
+			var context = DatabaseService.getNewContext();
+			var page = context.Find<Page>(id);
+			ViewData["Workbook"] = context.Find<Workbook>(page.workbookId);;
+			ViewData["Page"] = page;
+
 			ViewData["Title"] = "Seite bearbeiten";
 			return View("AddPage");
 		}
 
-
-        public IActionResult Workbook()
-		{
-
-            return View();
-        }
-
-        public IActionResult Contact()
+		[Route("workbooks/{id}")]
+        public IActionResult Workbook(int id)
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+			var workbook = DatabaseService.getNewContext().FindWorkbookWithReferences(id);
+	        ViewData["workbook"] = workbook;
+			return View();
         }
 
         public IActionResult Error()
         {
             return View();
         }
-
-		internal bool DummyTestMethod()
-		{
-			return true;
-		}
     
 		[HttpPost]
 		public async Task<IActionResult> UploadFile(IFormFile file)
@@ -86,7 +89,7 @@ namespace Lingvo.Backend.Controllers
 			await file.CopyToAsync(stream);
 			stream.Dispose();
 
-			return View("Workbook");
+			return View("Workbook"); // TODO: redirect to proper workbook page
 		}
 	}
 }

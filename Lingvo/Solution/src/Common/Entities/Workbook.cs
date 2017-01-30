@@ -8,7 +8,7 @@ using SQLiteNetExtensions.Attributes;
 namespace Lingvo.Common.Entities
 {
 	[Table("Workbooks")]
-	public class Workbook : IDownloadable
+	public class Workbook
 	{
 		/// <summary>
 		/// Gets the identifier.

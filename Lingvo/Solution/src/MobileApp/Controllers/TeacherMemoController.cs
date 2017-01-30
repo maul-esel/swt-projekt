@@ -60,7 +60,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void SaveTeacherMemo(String name, TeacherMemo recordFile)
 		{
 			recordFile.Name = name;
-			LocalCollection.GetInstance().AddTeacherMemo(recordFile);
+			LocalCollection.Instance.AddTeacherMemo(recordFile);
 
 		}
 

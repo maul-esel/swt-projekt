@@ -2,13 +2,18 @@
 using System.Threading.Tasks;
 using Lingvo.Common;
 using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 
 namespace Lingvo.MobileApp.Proxies
 {
 	public class PageProxy : IPage
 	{
         public int Id { get; set; }
-        
+
+        public delegate void OnPageChanged(int id);
+
+        public event OnPageChanged PageChanged;
+
 		private int number;
 		private String description;
 
@@ -114,11 +119,13 @@ namespace Lingvo.MobileApp.Proxies
 
 				if (db.FindWorkbook(this.Workbook.Id) == null)
 				{
-					db.Save(this.Workbook);
+                    LocalCollection.Instance.AddWorkbook(Workbook);
 				}
 
 				db.Save(original.TeacherTrack);
 				db.Save(original);
+
+                LocalCollection.Instance.OnWorkbookChanged();
 			}
 		}
 
