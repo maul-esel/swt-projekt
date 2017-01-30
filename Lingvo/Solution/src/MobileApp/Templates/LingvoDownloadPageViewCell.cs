@@ -1,13 +1,15 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoDownloadPageViewCell : LingvoPageViewCell
-	{
+    {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
         public LingvoDownloadPageViewCell() : base()
@@ -24,7 +26,7 @@ namespace Lingvo.MobileApp.Templates
 
             downloadButton.OnClicked += (o, e) => DownloadPage();
 
-            ((StackLayout)View).Children.Add(downloadButton);            
+            ((StackLayout)View).Children.Add(downloadButton);
         }
 
         private async void DownloadPage()
@@ -38,10 +40,13 @@ namespace Lingvo.MobileApp.Templates
 
             IPage page = (IPage)BindingContext;
 
-            string color = page.TeacherTrack != null ? "secondaryColor" : "primaryColor";
+            Workbook localWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
+            bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
+
+            string color = downloaded ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;
-            ProgressView.Progress = page.TeacherTrack != null ? 100 : 0;
+            ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
         }
     }
