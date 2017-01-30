@@ -14,7 +14,7 @@ namespace Lingvo.MobileApp.Droid.Sound
     public class Recorder : IRecorder
     {
         private const String RECORDING_PREFIX = "record_";
-        private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+        private const String DATE_FORMAT = "yyyy-MM-ddTHH-mm-ss";
         private string currentRecordingPath;
         private Recording currentRecording;
         private MediaRecorder recorder;

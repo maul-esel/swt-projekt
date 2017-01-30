@@ -15,7 +15,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 	public class Recorder :IRecorder
 	{
 		private const String RECORDING_PREFIX = "record_";
-		private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+		private const String DATE_FORMAT = "yyyy-MM-ddTHH-mm-ss";
 		private NSUrl currentRecordingUrl;
 		private Recording currentRecording;
 		private AVAudioRecorder recorder;

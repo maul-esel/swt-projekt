@@ -17,7 +17,7 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
-		private const string URL = "http://10.0.2.2:5000/api/app/";
+		private const string URL = "http://localhost:5000/api/app/";
 
 		private static APIService instance;
 

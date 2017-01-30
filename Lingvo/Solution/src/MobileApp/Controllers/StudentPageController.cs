@@ -182,6 +182,9 @@ namespace Lingvo.MobileApp.Controllers
 			{
                 Recording recording = recorder.Stop();
                 SelectedPage.StudentTrack = recording;
+				var db = App.Database;
+				db.Save(recording);
+				db.Save((Lingvo.Common.Entities.Page)SelectedPage);
                 SelectedPage = selectedPage;
             }
 		}
