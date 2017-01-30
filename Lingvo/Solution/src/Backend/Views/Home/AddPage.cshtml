@@ -1,22 +1,27 @@
+@using Lingvo.Common.Entities
 <!DOCTYPE html>
 <html lang="en">
 <head></head>
 <body>
+@{
+	var workbook = (Workbook)ViewData["Workbook"];
+	var page = (Page) ViewData["Page"];
+}
   <div class="container container-fluid">
 	<div class="lingvo-header container-fluid">
 		<h3>
-			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook">Thannhauser</a> > @ViewData["Title"]
+			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a> > @ViewData["Title"]
 		</h3>
 	</div>
   	<form style="padding-top:20px;" enctype="multipart/form-data"
 	  method="post"	asp-controller="Home" asp-action="UploadFile" >
   		<div class="form-group col-md-9" style="padding-left:0">
   			<label for="page-name">Beschreibung</label>
-  			<input class="form-control input-lg" id="page-name" placeholder="z.B. Die Zahlen">
+			 <input class="form-control input-lg" id="page-name" placeholder="z.B. Die Zahlen" value="@page?.Description">
   		</div>
   		<div class="form-group col-md-3" style=" padding-right:0px;">
   			<label for="page-number">Seite Nr.</label>
-  			<input type="number" min="1" class="form-control input-lg" id="page-number" placeholder="1">
+  			<input type="number" min="1" class="form-control input-lg" id="page-number" placeholder="1" value="@page?.Number">
   		</div>
   		<div class="form-group">
   			<label for="audiofile-name">Audiodatei Name</label>

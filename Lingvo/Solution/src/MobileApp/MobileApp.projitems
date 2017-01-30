@@ -38,11 +38,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoTeacherMemoViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoPageViewCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LingvoMobileContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">

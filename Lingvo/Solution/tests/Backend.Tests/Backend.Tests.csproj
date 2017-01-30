@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup Label="Configuration">
     <AssemblyName>Lingvo.Backend.Tests</AssemblyName>
@@ -11,6 +11,12 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\SQL\DummyDataForServer.sql" CopyToOutputDirectory="Always">
+      <Link>SQL\DummyDataForServer.sql</Link>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\..\..\SQL\server.sql" CopyToOutputDirectory="Always">
+      <Link>SQL\server.sql</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.App">
@@ -28,6 +34,9 @@
     </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio">
       <Version>2.2.0-beta4-build1194</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore">
+      <Version>1.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

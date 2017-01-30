@@ -9,10 +9,10 @@
     <Import_RootNamespace>Lingvo.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)SqliteAttributeMocks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Page.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\IPage.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Workbook.cs" Exclude="$(GlobalExclude)" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\IDownloadable.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Recording.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Adapters\IPlayer.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Adapters\IRecorder.cs" Exclude="$(GlobalExclude)" />

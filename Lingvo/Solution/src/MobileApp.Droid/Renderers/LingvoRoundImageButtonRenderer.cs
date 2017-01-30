@@ -63,7 +63,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
                     Drawable[] layers = new Drawable[2 + offset];
                     layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
                     layers[0 + offset].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
-                    layers[1 + offset] = Resources.GetDrawable(resourceId);
+                    layers[1 + offset] = Resources.GetDrawable(resourceId).Mutate();
                     layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
                     if (element.Toggled)
                     {
@@ -74,7 +74,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
                 }
                 else
                 {
-                    Drawable image = Resources.GetDrawable(resourceId);
+                    Drawable image = Resources.GetDrawable(resourceId).Mutate();
                     image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
                     if (element.Toggled)
                     {

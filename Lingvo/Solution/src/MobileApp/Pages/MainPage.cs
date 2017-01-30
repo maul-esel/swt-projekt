@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -15,7 +16,10 @@ namespace Lingvo.MobileApp.Pages
             
             TeacherMemosPage teacherMemosPage = new TeacherMemosPage(contentPage);
             contentPage.Children.Add(teacherMemosPage);
+
             return contentPage;
         }
+
+        
     }
 }

@@ -71,13 +71,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		}
 
-		public void SeekTo(int seconds)
-		{
-			recorder.Pause();
-			var recordingTime = recorder.currentTime + seconds;
-			recorder.RecordAt(recordingTime);
-		}
-
 		public void Start()
 		{
 			recorder.Record();

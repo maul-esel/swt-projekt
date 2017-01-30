@@ -326,7 +326,7 @@ namespace Lingvo.MobileApp.Pages
 
         private void ProgressView_StudentTrackMuted(bool muted)
         {
-            //StudentPageController.Instance.IsMuted = muted;
+            StudentPageController.Instance.IsMuted = muted;
         }
 
         private void RecordStopButton_OnClicked(object sender, EventArgs e)
@@ -373,12 +373,12 @@ namespace Lingvo.MobileApp.Pages
 
         private void ForwardButton_OnClicked(object sender, EventArgs e)
         {
-            //StudentPageController.Instance.SeekTo(15);
+            //StudentPageController.Instance.SeekTo(SeekTimeStep);
         }
 
         private void RewindButton_OnClicked(object sender, EventArgs e)
         {
-            //StudentPageController.Instance.SeekTo(-15);
+            //StudentPageController.Instance.SeekTo(-SeekTimeStep);
         }
     }
 }

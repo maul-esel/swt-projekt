@@ -34,15 +34,12 @@ namespace Lingvo.MobileApp.Controllers
 			{
 				selectedPage = value;
 
-                var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var filePath = Path.Combine(documentsDirPath, "page1.mp3");
-                var recording = new Recording(id: 99, duration: 95000, localPath: filePath, creationTime: new DateTime());
-                audioPlayer.PrepareTeacherTrack(recording);
-                audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
+				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
+				audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
 
                 if (selectedPage.StudentTrack != null)
 				{
-					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
+					audioPlayer.PrepareStudentTrack(selectedPage.StudentTrack);
 				}
 				recorder.PrepareToRecord();
 			}
@@ -166,11 +163,6 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			if (recorder.State != RecorderState.IDLE && recorder.State != RecorderState.IDLE)
-			{
-				Recording recording = recorder.Stop();	
-			}
-			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
@@ -178,19 +170,20 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(int seconds)
 		{
-			if (recorder.State == RecorderState.RECORDING)
+			if (recorder.State != RecorderState.RECORDING)
 			{
-				recorder.SeekTo(seconds);	
-			}
-			audioPlayer.SeekTo(seconds);
+                audioPlayer.SeekTo(seconds);
+            }
 		}
 
 		private void CheckIfRecordingHasToStop()
 		{
 			if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
 			{
-				recorder.Stop();
-			}
+                Recording recording = recorder.Stop();
+                SelectedPage.StudentTrack = recording;
+                SelectedPage = selectedPage;
+            }
 		}
 
 	}
