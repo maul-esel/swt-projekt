@@ -3,6 +3,7 @@ using Lingvo.MobileApp.Templates;
 using Lingvo.MobileApp.Entities;
 using Xamarin.Forms;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -15,30 +16,41 @@ namespace Lingvo.MobileApp.Pages
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                ItemsSource = LocalCollection.GetInstance().Workbooks,
+                ItemsSource = LocalCollection.Instance.Workbooks,
                 ItemTemplate = new DataTemplate(typeof(LingvoWorkbookViewCell)),
                 HasUnevenRows = true,
-				IsVisible = LocalCollection.GetInstance().Workbooks.Count() > 0
+                IsVisible = LocalCollection.Instance.Workbooks.Count() > 0
+            };
+
+            Label errorLabel = new Label
+            {
+                Text = ((Span)App.Current.Resources["label_no_local_workbooks"]).Text,
+                TextColor = (Color)App.Current.Resources["primaryColor"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                IsVisible = LocalCollection.Instance.Workbooks.Count() == 0,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap
             };
 
             listView.ItemTapped += Handle_ItemTapped;
             listView.ItemSelected += Handle_ItemSelected;
 
+            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() => {
+                List<Workbook> newSource = new List<Workbook>(LocalCollection.Instance.Workbooks);
+                listView.ItemsSource = newSource;
+                errorLabel.IsVisible = newSource.Count == 0;
+                listView.IsVisible = newSource.Count > 0;
+            }));
+
+            LocalCollection.Instance.WorkbooksChanged += () => listView.RefreshCommand.Execute(null);
+
             Content = new StackLayout
             {
                 Children = {
                 listView,
-                new Label
-                {
-                    Text = ((Span)App.Current.Resources["label_no_local_workbooks"]).Text,
-                    TextColor = (Color)App.Current.Resources["primaryColor"],
-                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                    HorizontalOptions=LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
-						IsVisible=LocalCollection.GetInstance().Workbooks.Count() == 0,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    LineBreakMode = LineBreakMode.WordWrap
-                }
+                errorLabel
                 }
             };
         }
