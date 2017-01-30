@@ -4,7 +4,7 @@
 </head>
 <body>
 	@{
-		var db = DatabaseService.getNewContext();
+        var workbooks = (IEnumerable<Workbook>)ViewData["Workbooks"];
 	}
 	<div class="container container-fluid">
 		<div class="lingvo-header container-fluid">
@@ -13,7 +13,7 @@
 		</div>
 		<table id="workbooks" class="table">
 			<tbody>
-				@foreach (var workbook in db.Workbooks)
+				@foreach (var workbook in workbooks)
 				{
 					<tr>
 						<td>
