@@ -12,7 +12,10 @@ namespace Lingvo.MobileApp.Entities
     public class TeacherMemo
 	{
 		[ForeignKey(typeof(Recording))]
-		public String RecordingId { get; set; }
+		public int RecordingId { get; set; }
+
+		[ForeignKey(typeof(Recording))]
+		public int? StudentTrackId { get; set; }
 
 		public String Name { get; set; }
 
@@ -21,6 +24,9 @@ namespace Lingvo.MobileApp.Entities
 
 		[OneToOne]
 		public Recording Recording { get; set; }
+
+		[OneToOne]
+		public Recording StudentTrack { get; set; }
 
 		public TeacherMemo()
 		{

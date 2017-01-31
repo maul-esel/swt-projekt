@@ -39,7 +39,7 @@ namespace Lingvo.MobileApp.Controllers
 				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
 
 
-				if (selectedPage.StudentTrack != null)
+                if (selectedPage.StudentTrack != null)
 				{
 					audioPlayer.PrepareStudentTrack(selectedPage.StudentTrack);
 				}

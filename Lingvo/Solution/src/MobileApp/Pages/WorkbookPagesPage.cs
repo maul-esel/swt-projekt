@@ -87,7 +87,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await App.Current.MainPage.Navigation.PushAsync(new AudioCarouselPage(workbook, (IPage)e.SelectedItem));
+            await App.Current.MainPage.Navigation.PushAsync(new AudioPage((IPage)e.SelectedItem, workbook));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

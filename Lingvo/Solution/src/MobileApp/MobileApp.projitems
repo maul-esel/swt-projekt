@@ -14,7 +14,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoFloatingActionButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Forms\LingvoRoundImageButton.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\AudioCarouselPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\AudioPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\DownloadPagesPage.cs">
       <SubType>Code</SubType>
