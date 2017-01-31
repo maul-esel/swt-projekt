@@ -4,6 +4,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lingvo.Common.Services;
 
 using Newtonsoft.Json;
 
@@ -97,9 +98,7 @@ namespace Lingvo.MobileApp
 		/// <param name="proxy">Proxy.</param>
 		public async Task<Page> FetchPage(PageProxy proxy)
 		{
-			var recording = await FetchTeacherTrack(proxy, 
-			                                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-			                                                     "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3"));
+			var recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3");
 			Page page = new Page();
 			page.Id = proxy.Id;
 			page.Description = proxy.Description;
@@ -140,13 +139,15 @@ namespace Lingvo.MobileApp
 		{
 			return FetchFromURLAsync($"{URL}pages/{page.Id}", async (response) =>
 			{
-				using (var fileStream = File.Create(localPath))
+				using (var fileStream = File.Create(Util.getAbsolutePath(localPath)))
+				{
 					await response.GetResponseStream().CopyToAsync(fileStream);
 
-				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
-				                     int.Parse(response.Headers["X-Audio-Duration"]), 
-				                     localPath,
-				                     DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yyyy HH:mm:ss", null));
+					return new Recording(int.Parse(response.Headers["X-Recording-Id"]),
+										 int.Parse(response.Headers["X-Audio-Duration"]),
+										 localPath,
+										 DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yyyy HH:mm:ss", null));
+				}
 			});
 		}
 	}
