@@ -68,11 +68,6 @@ namespace Lingvo.Backend.Controllers
 			return View();
         }
 
-		public IActionResult TestMysql()
-		{
-			return Json(new { a = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb") });
-		}
-
         public IActionResult Error()
         {
             return View();
