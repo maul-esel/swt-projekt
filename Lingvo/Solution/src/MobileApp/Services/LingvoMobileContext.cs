@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using SQLiteNetExtensions.Extensions;
+using Lingvo.Common.Services;
+using System.IO;
 
 #if __ANDROID__
 		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
@@ -127,12 +129,16 @@ namespace Lingvo.MobileApp.Services
         {
             database.Delete(memo);
 
+            Delete(memo.Recording);
+
             TeacherMemoChanged?.Invoke(memo);
         }
 
         public void Delete(Recording recording)
         {
             database.Delete(recording);
+
+            File.Delete(FileUtil.getAbsolutePath(recording.LocalPath));
 
             RecordingChanged?.Invoke(recording);
         }
@@ -153,6 +159,8 @@ namespace Lingvo.MobileApp.Services
 
         public void Delete(Workbook workbook)
         {
+            workbook.Pages.ForEach(p => Delete((Page)p));
+
             database.Delete(workbook); //On delete cascade used for pages
 
             WorkbookChanged?.Invoke(workbook);
