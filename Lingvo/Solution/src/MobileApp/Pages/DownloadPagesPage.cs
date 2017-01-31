@@ -1,7 +1,9 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Templates;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -50,15 +52,9 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
-                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
+                List<Workbook> newWorkbooks = new List<Workbook>(await CloudLibraryProxy.Instance.FetchAllWorkbooks());
 
-                foreach(Workbook w in newWorkbooks)
-                {
-                    if(w.Id.Equals(workbook.Id))
-                    {
-                        workbook = w;
-                    }
-                }
+                workbook = newWorkbooks.Find(w => w.Id.Equals(workbook.Id));
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -76,7 +72,7 @@ namespace Lingvo.MobileApp.Pages
                             Constraint.RelativeToParent((p) => { return p.Width; }),
                             Constraint.RelativeToParent((p) => { return p.Height; }));
 
-            contentLayout.Children.Add(listView, 
+            contentLayout.Children.Add(listView,
                            Constraint.RelativeToParent((p) => { return p.X; }),
                            Constraint.RelativeToParent((p) => { return p.Y; }),
                            Constraint.RelativeToParent((p) => { return p.Width; }),

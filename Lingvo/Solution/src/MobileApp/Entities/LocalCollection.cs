@@ -6,11 +6,21 @@ namespace Lingvo.MobileApp.Entities
 {
     public class LocalCollection
 	{
-        public delegate void OnWorkbooksChanged();
-        public delegate void OnTeacherMemosChanged();
-
-        public event OnWorkbooksChanged WorkbooksChanged;
-        public event OnTeacherMemosChanged TeacherMemosChanged;
+        public event Action<Workbook> WorkbookChanged
+        {
+            add { App.Database.WorkbookChanged += value; }
+            remove { App.Database.WorkbookChanged -= value; }
+        }
+        public event Action<TeacherMemo> TeacherMemoChanged
+        {
+            add { App.Database.TeacherMemoChanged += value; }
+            remove { App.Database.TeacherMemoChanged -= value; }
+        }
+        public event Action<Page> PageChanged
+        {
+            add { App.Database.PageChanged += value; }
+            remove { App.Database.PageChanged -= value; }
+        }
 
 		private static LocalCollection instance;
 
@@ -52,8 +62,6 @@ namespace Lingvo.MobileApp.Entities
         public void AddTeacherMemo(TeacherMemo memo)
 		{
 			App.Database.Save(memo);
-
-            TeacherMemosChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -63,8 +71,6 @@ namespace Lingvo.MobileApp.Entities
 		public void AddWorkbook(Workbook workbook)
 		{
 			App.Database.Save(workbook);
-
-            WorkbooksChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -74,8 +80,6 @@ namespace Lingvo.MobileApp.Entities
 		public void DeleteWorkbook(Workbook workbook)
 		{
 			App.Database.Delete(workbook);
-
-            WorkbooksChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -85,13 +89,6 @@ namespace Lingvo.MobileApp.Entities
 		public void DeleteTeacherMemo(TeacherMemo memo)
 		{
 			App.Database.Delete(memo);
-
-            TeacherMemosChanged?.Invoke();
 		}
-
-        public void OnWorkbookChanged()
-        {
-            WorkbooksChanged?.Invoke();
-        }
 	}
 }

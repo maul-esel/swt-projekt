@@ -44,7 +44,7 @@ namespace Lingvo.MobileApp.Pages
                 listView.IsVisible = newSource.Count > 0;
             }));
 
-            LocalCollection.Instance.WorkbooksChanged += () => listView.RefreshCommand.Execute(null);
+            LocalCollection.Instance.WorkbookChanged += (w) => listView.RefreshCommand.Execute(null);
 
             Content = new StackLayout
             {

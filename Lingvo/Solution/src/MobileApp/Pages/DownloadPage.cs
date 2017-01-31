@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Lingvo.MobileApp.Entities;
 
 namespace Lingvo.MobileApp.Pages
 {
     public partial class DownloadPage : ContentPage
     {
-
-        private List<Workbook> workbooks = new List<Workbook>();
         public DownloadPage()
         {
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
@@ -24,7 +23,6 @@ namespace Lingvo.MobileApp.Pages
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                ItemsSource = workbooks,
                 ItemTemplate = new DataTemplate(typeof(LingvoDownloadWorkbookViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true
