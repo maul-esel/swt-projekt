@@ -4,12 +4,8 @@ using Lingvo.Common.Entities;
 
 namespace Lingvo.Common.Services
 {
-	public class FileUtil
+	public static class FileUtil
 	{
-		public FileUtil()
-		{
-		}
-
 		/// <summary>
 		/// Calculates the absolute URL dynamically. In iOS, the app's folder path might change due to app updates or internal file system restructuring.
 		/// </summary>

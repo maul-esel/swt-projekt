@@ -65,7 +65,7 @@ namespace Lingvo.MobileApp.Droid.Sound
             {
                 isStudentTrackMuted = value;
                 float volume = isStudentTrackMuted ? 0.0f : 1.0f;
-                studentTrack.SetVolume(volume, volume);
+                studentTrack?.SetVolume(volume, volume);
             }
         }
 
