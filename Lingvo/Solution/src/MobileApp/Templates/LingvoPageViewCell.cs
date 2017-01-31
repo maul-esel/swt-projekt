@@ -1,5 +1,7 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
@@ -38,10 +40,21 @@ namespace Lingvo.MobileApp.Templates
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None
             };
 
+            LocalCollection.Instance.PageChanged += (p) =>
+            {
+                IPage page = (IPage)BindingContext;
+                if (p.Id.Equals(page.Id))
+                {
+                    IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+
+                    BindingContext = local != null ? local : p;
+                };
+            };
+
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-				HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 260),
+                HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {

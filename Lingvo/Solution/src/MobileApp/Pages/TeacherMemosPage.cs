@@ -60,7 +60,7 @@ namespace Lingvo.MobileApp.Pages
                 listView.IsVisible = newSource.Count > 0;
             }));
 
-            LocalCollection.Instance.TeacherMemosChanged += () => listView.RefreshCommand.Execute(null);
+            LocalCollection.Instance.TeacherMemoChanged += (t) => listView.RefreshCommand.Execute(null);
 
             RelativeLayout ContentLayout = new RelativeLayout();
             StackLayout innerLayout = new StackLayout

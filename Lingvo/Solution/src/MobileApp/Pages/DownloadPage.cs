@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Lingvo.MobileApp.Entities;
 
 namespace Lingvo.MobileApp.Pages
 {

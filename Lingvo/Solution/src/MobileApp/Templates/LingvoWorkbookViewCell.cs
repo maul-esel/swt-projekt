@@ -1,4 +1,6 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
@@ -37,11 +39,32 @@ namespace Lingvo.MobileApp.Templates
                 InnerProgressEnabled = false
             };
 
+            LocalCollection.Instance.WorkbookChanged += (w) =>
+            {
+                Workbook workbook = (Workbook)BindingContext;
+                if (w.Id.Equals(workbook.Id))
+                {
+                    Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(w.Id));
+
+                    BindingContext = local != null ? local : w;
+                }
+            };
+
+            LocalCollection.Instance.PageChanged += (p) =>
+            {
+                Workbook workbook = (Workbook)BindingContext;
+                if (p.workbookId.Equals(workbook.Id))
+                {
+                    Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId));
+
+                    BindingContext = local != null ? local : p.Workbook;
+                };
+            };
 
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-				HeightRequest = Device.OnPlatform(iOS: 70, Android:72, WinPhone:260),
+                HeightRequest = Device.OnPlatform(iOS: 70, Android: 72, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
