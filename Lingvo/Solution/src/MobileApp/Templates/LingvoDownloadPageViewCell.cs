@@ -46,6 +46,7 @@ namespace Lingvo.MobileApp.Templates
             bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
 
             string color = downloaded ? "secondaryColor" : "primaryColor";
+            ProgressView.InnerProgressEnabled = false;
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;
             ProgressView.Progress = downloaded ? 100 : 0;

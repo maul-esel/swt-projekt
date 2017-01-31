@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Text.RegularExpressions;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +12,7 @@ namespace Lingvo.Backend
 {
     public class Startup
 	{
+		private const string ConnectionStringVariable = "MYSQLCONNSTR_localdb";
 
 		public Startup(IHostingEnvironment env)
 		{
@@ -17,7 +21,18 @@ namespace Lingvo.Backend
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+			Configuration = builder.Build();
+
+			// read DB connection string from system environment variables if present (as it is on azure)
+			var envConnectionString = Environment.GetEnvironmentVariable(ConnectionStringVariable);
+			if (!string.IsNullOrEmpty(envConnectionString))
+				Configuration[ConnectionStringVariable] = ConvertAzureDatabaseConfiguration(envConnectionString);
+		}
+
+		private string ConvertAzureDatabaseConfiguration(string connectionString)
+		{
+			var m = new Regex(@"Database=(?<db>[^;]*);Data Source=(?<host>[^:;]*):(?<port>\d+);User Id=(?<user>[^;]*);Password=(?<password>[^;]*)").Match(connectionString);
+			return $"Server={m.Groups["host"]};port={m.Groups["port"]};database={m.Groups["db"]};uid={m.Groups["user"]};pwd={m.Groups["password"]};";
 		}
 
 		public IConfigurationRoot Configuration { get; }
@@ -27,7 +42,7 @@ namespace Lingvo.Backend
         {
             // Add framework services.
             services.AddMvc();
-			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration["MYSQLCONNSTR_localdb"]), ServiceLifetime.Transient);
+			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration[ConnectionStringVariable]), ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
