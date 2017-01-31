@@ -2,26 +2,56 @@
 using Lingvo.MobileApp.Forms;
 using System;
 using Xamarin.Forms;
+using Lingvo.MobileApp.Proxies;
+using Lingvo.MobileApp.Entities;
+using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoDownloadWorkbookViewCell : LingvoWorkbookViewCell
     {
-        public delegate void OnDownloadClickedHandler(Workbook page);
+        private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
-        public LingvoDownloadWorkbookViewCell(OnDownloadClickedHandler handler) : base()
+        private LingvoRoundImageButton downloadButton;
+
+        public LingvoDownloadWorkbookViewCell() : base()
         {
-            LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
+            downloadButton = new LingvoRoundImageButton()
             {
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
+                WidthRequest = DownloadButtonSize,
+                HeightRequest = DownloadButtonSize,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center
             };
 
-            downloadButton.OnClicked += (o, e) => handler((Workbook)BindingContext);
+			downloadButton.OnClicked += (o, e) => DownloadWorkbook();
 
             ((StackLayout)View).Children.Add(downloadButton);
+        }
+
+        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (p.workbookId.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            };
+        }
+
+        protected override void Event_WorkbookChanged(Workbook w)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (w.Id.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            }
+        }
+
+        private async void DownloadWorkbook()
+        {
+            await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id);
         }
 
         protected override void OnBindingContextChanged()
@@ -30,11 +60,19 @@ namespace Lingvo.MobileApp.Templates
 
             Workbook workbook = (Workbook)BindingContext;
 
-            string color = workbook.Pages.Count == workbook.TotalPages ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            List<Workbook> currentWorkbooks = new List<Workbook>(LocalCollection.Instance.Workbooks);
+
+            int progress = (currentWorkbooks.Find(w => w.Id.Equals(workbook.Id))?.Pages.Count).GetValueOrDefault(0);
+            string color = progress == workbook.TotalPages ? "secondaryColor" : "primaryColor";
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = workbook.TotalPages;
-            ProgressView.Progress = workbook.Pages.Count;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.Percentual;
+            ProgressView.Progress = progress;
+            ProgressView.InnerProgressEnabled = false;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+
+            ContextActions.Clear();
+
+            downloadButton.IsEnabled = progress != workbook.TotalPages;
         }
     }
 }

@@ -16,6 +16,8 @@
             <Span x:Key="page_title_pagesDownload">Seiten Download</Span>
             <Span x:Key="label_no_local_pages">Für dieses Arbeitsheft sind lokal keine Seiten verfügbar!</Span>
             <Span x:Key="page_title_recordTeacherMemo">Neue Lehrerspur</Span>
+            <Span x:Key="label_delete">Löschen</Span>
+            <Span x:Key="label_delete_studentTrack">Aufnahme löschen</Span>
             <Span x:Key="text_seite">Seite</Span>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,5 +1,5 @@
 ﻿using Lingvo.Common.Adapters;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using System;
 using Xamarin.Forms;
 
@@ -60,7 +60,7 @@ namespace Lingvo.MobileApp.Controllers
 		public void SaveTeacherMemo(String name, TeacherMemo recordFile)
 		{
 			recordFile.Name = name;
-			LocalCollection.GetInstance().AddTeacherMemo(recordFile);
+			LocalCollection.Instance.AddTeacherMemo(recordFile);
 
 		}
 

@@ -1,31 +1,18 @@
 ﻿using System;
+using SQLite.Net.Attributes;
+
 namespace Lingvo.Common.Entities
 {
 	/// <summary>
 	/// Objects from this class represent audio files.
 	/// </summary>
+	[Table("Recordings")]
 	public class Recording
 	{
-		public int Id { get; private set; }
-
-		public DateTime CreationTime { get; private set; }
-
 		/// <summary>
-		/// Gets or sets the duration of the audio file in milliseconds.
+		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class
 		/// </summary>
-		/// <value>The length.</value>
-		public int Duration { get; private set; }
-
-		public string LocalPath { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class, the creation time is set
-		/// to the moment the constructor is called.
-		/// </summary>
-		public Recording()
-		{
-			CreationTime = DateTime.Now;
-		}
+		public Recording() { } // used by Linq2DB
 
 		public Recording(int id, int duration, string localPath, DateTime creationTime)
 		{
@@ -35,5 +22,17 @@ namespace Lingvo.Common.Entities
 			CreationTime = creationTime;
 		}
 
+		[PrimaryKey]
+		public int Id { get; set; }
+
+		public DateTime CreationTime { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the duration of the audio file in milliseconds.
+		/// </summary>
+		/// <value>The length.</value>
+		public int Duration { get; set; }
+
+		public string LocalPath { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
+using Lingvo.Common.Services;
 using System;
 using Xamarin.Forms;
 using System.IO;
@@ -34,17 +35,14 @@ namespace Lingvo.MobileApp.Controllers
 			{
 				selectedPage = value;
 
-				var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				var filePath = Path.Combine(documentsDirPath, "1.mp3");
-				var recording = new Recording(id: 99, duration: 231000, localPath: filePath, creationTime: new DateTime());
-				audioPlayer.PrepareTeacherTrack(recording);
-				audioPlayer.StateChange += (obj) => CheckIfRecordingHasToStop();
+				audioPlayer.StateChange += (obj) => StopRecorderIfNecessary();
+				audioPlayer.PrepareTeacherTrack(selectedPage.TeacherTrack);
 
-				if (selectedPage.StudentTrack != null)
+
+                if (selectedPage.StudentTrack != null)
 				{
-					audioPlayer.PrepareStudentTrack(selectedPage.TeacherTrack);
+					audioPlayer.PrepareStudentTrack(selectedPage.StudentTrack);
 				}
-				recorder.PrepareToRecord();
 			}
 
 		}
@@ -132,7 +130,7 @@ namespace Lingvo.MobileApp.Controllers
 			{
 				recorder.PrepareToRecord();
 			}
-
+			audioPlayer.IsStudentTrackMuted = true;
 			recorder.Start();
 			PlayPage();
 
@@ -166,11 +164,6 @@ namespace Lingvo.MobileApp.Controllers
 		public void Stop()
 		{
 			audioPlayer.Stop();
-			if (recorder.State != RecorderState.IDLE && recorder.State != RecorderState.IDLE)
-			{
-				Recording recording = recorder.Stop();	
-			}
-			//TODO: save the recording like: SelectedPage.StudentTrack = recording;
 		}
 
 		/// <summary>
@@ -178,19 +171,39 @@ namespace Lingvo.MobileApp.Controllers
 		/// </summary>
 		public void SeekTo(int seconds)
 		{
-			if (recorder.State == RecorderState.RECORDING)
+			if (recorder.State != RecorderState.RECORDING)
 			{
-				recorder.SeekTo(seconds);	
-			}
-			audioPlayer.SeekTo(seconds);
+                audioPlayer.SeekTo(seconds);
+            }
 		}
 
-		private void CheckIfRecordingHasToStop()
+		private void StopRecorderIfNecessary()
 		{
 			if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
 			{
-				recorder.Stop();
-			}
+				//This means an recording-session has come to an end. Thus we are deleting the old studentTrack-Recording
+				//if necessary and adding the new one to the selectedPage
+
+				//Getting new recording
+                Recording recording = recorder.Stop();
+
+				//deleting the old recording
+				if (selectedPage.StudentTrack != null)
+				{
+					File.Delete(FileUtil.getAbsolutePath(selectedPage.StudentTrack)); 	
+				}
+
+				SelectedPage.StudentTrack = recording;
+				var db = App.Database;
+				db.Save(recording);
+				db.Save((Lingvo.Common.Entities.Page) SelectedPage);
+
+				//Setting the new recording
+				SelectedPage.StudentTrack = recording;
+
+				//Reset the page
+                SelectedPage = selectedPage;
+            }
 		}
 
 	}

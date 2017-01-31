@@ -1,16 +1,21 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoWorkbookViewCell : ViewCell
     {
-        internal LingvoSingleProgressView ProgressView
+        internal LingvoAudioProgressView ProgressView
         {
             get; private set;
         }
 
         private Label subtitleLabel;
+
+        private MenuItem deleteAction;
+
         public LingvoWorkbookViewCell() :
             base()
         {
@@ -29,17 +34,36 @@ namespace Lingvo.MobileApp.Templates
 
             subtitleLabel.SetBinding(Label.TextProperty, "Subtitle");
 
-            ProgressView = new LingvoSingleProgressView()
+            ProgressView = new LingvoAudioProgressView()
             {
                 Size = Device.OnPlatform(iOS: 80, Android: 120, WinPhone: 240),
-                LabelType = LingvoSingleProgressView.LabelTypeValue.NOfM
+                LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM,
+                MuteEnabled = false,
+                InnerProgressEnabled = false
             };
 
+            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged += Event_PageChanged; 
+
+
+            deleteAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete"]).Text,
+                Icon = "ic_delete.png",
+                IsDestructive = true
+            };
+
+            deleteAction.Clicked += (o, e) =>
+            {
+                LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
+            };
+
+            ContextActions.Add(deleteAction);
 
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-				HeightRequest = Device.OnPlatform(iOS: 70, Android:72, WinPhone:260),
+                HeightRequest = Device.OnPlatform(iOS: 70, Android: 72, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -60,6 +84,28 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (p.workbookId.Equals(workbook.Id))
+            {
+                Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId));
+
+                BindingContext = local != null ? local : p.Workbook;
+            }
+        }
+
+        protected virtual void Event_WorkbookChanged(Workbook w)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (w.Id.Equals(workbook.Id))
+            {
+                Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(w.Id));
+
+                BindingContext = local != null ? local : w;
+            }
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -68,11 +114,11 @@ namespace Lingvo.MobileApp.Templates
 
             int completed = 0;
             workbook.Pages.ForEach((p) => { if (p.StudentTrack != null) completed++; });
-            string color = workbook.Pages.Count == completed ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
             ProgressView.MaxProgress = workbook.Pages.Count;
             ProgressView.Progress = completed;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.NOfM;
+            ProgressView.InnerProgressEnabled = false;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
 
             subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
         }

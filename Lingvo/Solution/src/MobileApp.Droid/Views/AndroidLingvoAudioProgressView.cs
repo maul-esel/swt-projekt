@@ -19,27 +19,27 @@ namespace Lingvo.MobileApp.Droid.Views
 
         private static readonly int INSTANCE_STUDENT_MUTED = "student_muted".GetHashCode();
 
-        public string Text
-        {
-            get { return studentProgressBar.Text; }
-        }
-
         public int Progress
         {
             get { return (int)teacherProgressBar.Progress; }
             set
             {
-                if (InnerProgressEnabled)
-                {
-                    studentProgressBar.Progress = value;
-                }
+                studentProgressBar.Progress = value;
                 teacherProgressBar.Progress = value;
+                Invalidate();
+            }
+        }
 
-                string minutes = (value / 60 < 10 ? "0" : "") + value / 60;
-                string seconds = (value % 60 < 10 ? "0" : "") + value % 60;
+        public string Text
+        {
+            get
+            {
+                return studentProgressBar.Text;
+            }
 
-                studentProgressBar.Text = minutes + ":" + seconds;
-
+            set
+            {
+                studentProgressBar.Text = value;
                 Invalidate();
             }
         }
@@ -112,6 +112,8 @@ namespace Lingvo.MobileApp.Droid.Views
             {
                 bool newVal = InnerProgressEnabled && value;
                 studentMuteButton.Visibility = newVal ? ViewStates.Visible : ViewStates.Gone;
+                studentProgressBar.CenterText = !newVal;
+                Invalidate();
             }
         }
 
@@ -133,8 +135,6 @@ namespace Lingvo.MobileApp.Droid.Views
 
             teacherProgressBar.StartingDegree = studentProgressBar.StartingDegree = -90;
             teacherProgressBar.Text = "";
-
-            studentProgressBar.CenterText = false;
 
             Progress = 0;
 
@@ -181,9 +181,6 @@ namespace Lingvo.MobileApp.Droid.Views
             int height = LayoutParameters.Height <= 0 ? Math.Max(0, MeasuredHeight
                             - PaddingTop - PaddingBottom) : LayoutParameters.Height;
 
-            width = Math.Max(width, studentMuteButton.MeasuredWidth * 4);
-            height = Math.Max(height, studentMuteButton.MeasuredHeight * 4);
-
             int childWidthMeasureSpec = MeasureSpec.MakeMeasureSpec(
                    width, MeasureSpecMode.Exactly);
             int childHeightMeasureSpec = MeasureSpec.MakeMeasureSpec(
@@ -193,10 +190,10 @@ namespace Lingvo.MobileApp.Droid.Views
 
             int size = Math.Min(teacherProgressBar.MeasuredWidth, teacherProgressBar.MeasuredHeight);
 
-            studentProgressBar.FinishedStrokeWidth = size * 0.05f;
-            teacherProgressBar.FinishedStrokeWidth = size * 0.05f;
-            studentProgressBar.UnfinishedStrokeWidth = size * 0.05f;
-            teacherProgressBar.UnfinishedStrokeWidth = size * 0.05f;
+            studentProgressBar.FinishedStrokeWidth = size * 0.075f;
+            teacherProgressBar.FinishedStrokeWidth = size * 0.075f;
+            studentProgressBar.UnfinishedStrokeWidth = size * 0.075f;
+            teacherProgressBar.UnfinishedStrokeWidth = size * 0.075f;
             studentProgressBar.TextSize = size * 0.2f;
 
             int studentWidth = width - (int)(2.0 * teacherProgressBar.FinishedStrokeWidth);

@@ -9,7 +9,6 @@ namespace Lingvo.Common.Adapters
 		Recording Stop();
 		void Pause();
 		void Continue();
-		void SeekTo(int seconds);
 		RecorderState State { get; }
 		bool PrepareToRecord();
 	}
