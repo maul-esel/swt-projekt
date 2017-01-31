@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Lingvo.MobileApp.Entities;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -44,7 +45,7 @@ namespace Lingvo.MobileApp.Pages
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                IsVisible = workbooks.Count == 0
+                IsVisible = false
             };
 
             contentLayout.Children.Add(new StackLayout() { Children = { errorLabel } },
@@ -62,14 +63,14 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
-                listView.IsRefreshing = true;
-                workbooks.Clear();
-                IEnumerable<Workbook> newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
-                if (newWorkbooks != null)
+                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
+
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    workbooks.AddRange(newWorkbooks);
-                }
-                listView.IsRefreshing = false;
+                    errorLabel.IsVisible = newWorkbooks.Length == 0;
+                    listView.ItemsSource = newWorkbooks;
+                    listView.IsRefreshing = false;
+                });
             });
 
             listView.RefreshCommand.Execute(null);

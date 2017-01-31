@@ -1,12 +1,14 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
     class LingvoPageViewCell : ViewCell
     {
-        internal LingvoSingleProgressView ProgressView
+        internal LingvoAudioProgressView ProgressView
         {
             get; private set;
         }
@@ -32,16 +34,27 @@ namespace Lingvo.MobileApp.Templates
 
             subtitleLabel.SetBinding(Label.TextProperty, "Description");
 
-            ProgressView = new LingvoSingleProgressView()
+            ProgressView = new LingvoAudioProgressView()
             {
                 Size = Device.OnPlatform(iOS: 50, Android: 120, WinPhone: 240),
-                LabelType = LingvoSingleProgressView.LabelTypeValue.None
+                LabelType = LingvoAudioProgressView.LabelTypeValue.None
+            };
+
+            LocalCollection.Instance.PageChanged += (p) =>
+            {
+                IPage page = (IPage)BindingContext;
+                if (p.Id.Equals(page.Id))
+                {
+                    IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+
+                    BindingContext = local != null ? local : p;
+                };
             };
 
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-				HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 260),
+                HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -68,11 +81,13 @@ namespace Lingvo.MobileApp.Templates
 
             IPage page = (IPage)BindingContext;
 
-            string color = page.StudentTrack != null ? "secondaryColor" : "primaryColor";
-            ProgressView.ProgressColor = (Color)App.Current.Resources[color];
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
             ProgressView.MaxProgress = 1;
             ProgressView.Progress = 1;
-            ProgressView.LabelType = LingvoSingleProgressView.LabelTypeValue.None;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
+            ProgressView.InnerProgressColor = Color.Red;
+            ProgressView.InnerProgressEnabled = page.StudentTrack != null;
+            ProgressView.MuteEnabled = false;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
         }

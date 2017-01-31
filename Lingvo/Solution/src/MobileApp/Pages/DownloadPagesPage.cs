@@ -1,7 +1,9 @@
 ﻿using Lingvo.Common.Entities;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Templates;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -30,8 +32,7 @@ namespace Lingvo.MobileApp.Pages
                 ItemsSource = workbook.Pages,
                 ItemTemplate = new DataTemplate(typeof(LingvoDownloadPageViewCell)),
                 IsPullToRefreshEnabled = true,
-                HasUnevenRows = true,
-                IsVisible = workbook.Pages.Count > 0
+                HasUnevenRows = true
             };
 
             listView.ItemTapped += Handle_ItemEvent;
@@ -49,6 +50,20 @@ namespace Lingvo.MobileApp.Pages
                 IsVisible = workbook.Pages.Count == 0
             };
 
+            listView.RefreshCommand = new Command(async () =>
+            {
+                List<Workbook> newWorkbooks = new List<Workbook>(await CloudLibraryProxy.Instance.FetchAllWorkbooks());
+
+                workbook = newWorkbooks.Find(w => w.Id.Equals(workbook.Id));
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    errorLabel.IsVisible = workbook.Pages.Count == 0;
+                    listView.ItemsSource = workbook.Pages;
+                    listView.IsRefreshing = false;
+                });
+            });
+
             RelativeLayout contentLayout = new RelativeLayout();
 
             contentLayout.Children.Add(new StackLayout() { Children = { errorLabel } },
@@ -57,7 +72,7 @@ namespace Lingvo.MobileApp.Pages
                             Constraint.RelativeToParent((p) => { return p.Width; }),
                             Constraint.RelativeToParent((p) => { return p.Height; }));
 
-            contentLayout.Children.Add(listView, 
+            contentLayout.Children.Add(listView,
                            Constraint.RelativeToParent((p) => { return p.X; }),
                            Constraint.RelativeToParent((p) => { return p.Y; }),
                            Constraint.RelativeToParent((p) => { return p.Width; }),

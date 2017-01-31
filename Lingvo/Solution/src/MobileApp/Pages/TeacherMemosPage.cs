@@ -1,9 +1,11 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Templates;
-using MobileApp.Entities;
+using Lingvo.MobileApp.Entities;
 using System;
 using Xamarin.Forms;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -27,33 +29,45 @@ namespace Lingvo.MobileApp.Pages
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                ItemsSource = LocalCollection.GetInstance().TeacherMemos,
+                ItemsSource = LocalCollection.Instance.TeacherMemos,
                 ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
-                IsVisible = LocalCollection.GetInstance().TeacherMemos.Count > 0
+                IsVisible = LocalCollection.Instance.TeacherMemos.Count() > 0
             };
 
             listView.ItemTapped += Handle_ItemTapped;
             listView.ItemSelected += Handle_ItemSelected;
+
+            Label errorLabel = new Label
+            {
+                Text = ((Span)App.Current.Resources["label_no_teacher_memos"]).Text,
+                TextColor = (Color)App.Current.Resources["primaryColor"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.WordWrap,
+                HorizontalTextAlignment = TextAlignment.Center,
+                IsVisible = LocalCollection.Instance.TeacherMemos.Count() == 0
+
+            };
+
+            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
+            {
+                List<TeacherMemo> newSource = new List<TeacherMemo>(LocalCollection.Instance.TeacherMemos);
+                listView.ItemsSource = newSource;
+                errorLabel.IsVisible = newSource.Count == 0;
+                listView.IsVisible = newSource.Count > 0;
+            }));
+
+            LocalCollection.Instance.TeacherMemoChanged += (t) => listView.RefreshCommand.Execute(null);
 
             RelativeLayout ContentLayout = new RelativeLayout();
             StackLayout innerLayout = new StackLayout
             {
                 Children = {
                 listView,
-                new Label
-                {
-                    Text = ((Span)App.Current.Resources["label_no_teacher_memos"]).Text,
-                    TextColor = (Color)App.Current.Resources["primaryColor"],
-                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                    HorizontalOptions=LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
-                    LineBreakMode = LineBreakMode.WordWrap,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    IsVisible=LocalCollection.GetInstance().TeacherMemos.Count == 0
-
-                }
+                errorLabel
                 }
             };
             ContentLayout.Children.Add(innerLayout, Constraint.RelativeToParent((parent) => { return parent.X; }),

@@ -18,6 +18,7 @@ namespace Lingvo.MobileApp.iOS
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
 			UIApplication.Main(args, null, "AppDelegate");
+
 		}
 	}
 }
