@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +26,13 @@ namespace Lingvo.Backend
 			// read DB connection string from system environment variables if present (as it is on azure)
 			var envConnectionString = Environment.GetEnvironmentVariable(ConnectionStringVariable);
 			if (!string.IsNullOrEmpty(envConnectionString))
-				Configuration[ConnectionStringVariable] = envConnectionString;
+				Configuration[ConnectionStringVariable] = ConvertAzureDatabaseConfiguration(envConnectionString);
+		}
+
+		private string ConvertAzureDatabaseConfiguration(string connectionString)
+		{
+			var m = new Regex(@"Database=(?<db>[^;]*);Data Source=(?<host>[^:;]*):(?<port>\d+);User Id=(?<user>[^;]*);Password=(?<password>[^;]*)").Match(connectionString);
+			return $"Server={m.Groups["host"]};port={m.Groups["port"]};database={m.Groups["db"]};uid={m.Groups["user"]};pwd={m.Groups["password"]};";
 		}
 
 		public IConfigurationRoot Configuration { get; }
