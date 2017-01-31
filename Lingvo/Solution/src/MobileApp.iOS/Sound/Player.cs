@@ -178,7 +178,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void PrepareTeacherTrack(Recording recording)
 		{
-			NSUrl url = NSUrl.FromString(Util.getAbsolutePath(recording));
+			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			teacherTrack = AVAudioPlayer.FromUrl(url);
 			teacherTrack.PrepareToPlay();
 			teacherTrack.FinishedPlaying += (sender, e) => Stop();
@@ -187,7 +187,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void PrepareStudentTrack(Recording recording)
 		{
-			NSUrl url = NSUrl.FromString(Util.getAbsolutePath(recording));
+			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			studentTrack = AVAudioPlayer.FromUrl(url);
 			studentTrack.PrepareToPlay();
 		}

@@ -70,10 +70,6 @@ namespace Lingvo.MobileApp.Services
 
 		public void Save(Recording recording)
 		{
-			if (recording.LocalPath.StartsWith("file:///"))
-			{
-				recording.LocalPath = recording.LocalPath.Substring(7);
-			}
 			database.InsertOrReplace(recording);
 		}
 

@@ -4,9 +4,9 @@ using Lingvo.Common.Entities;
 
 namespace Lingvo.Common.Services
 {
-	public class Util
+	public class FileUtil
 	{
-		public Util()
+		public FileUtil()
 		{
 		}
 

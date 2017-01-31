@@ -13,16 +13,6 @@ namespace Lingvo.MobileApp.Controllers
     /// </summary>
     public class StudentPageController
 	{
-
-		//Fields for testing puposes------Can be deleted once the database works
-		private string documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-		private string filename = "page1.mp3";
-		private IPage testPage;
-
-		//______________________________________________
-
-
-
 		private static StudentPageController instance;
 
 		private IPlayer audioPlayer;
@@ -121,13 +111,6 @@ namespace Lingvo.MobileApp.Controllers
 		{
 			audioPlayer = DependencyService.Get<IPlayer>();
 			recorder = DependencyService.Get<IRecorder>();
-
-			//Testing purposes
-			testPage = new Common.Entities.Page();
-			Recording recording = new Recording(id: 99, duration: 95000, localPath: Path.Combine(documentsDirPath, filename), creationTime: new DateTime());
-			testPage.TeacherTrack = recording;
-
-			//________________
 		}
 
 		/// <summary>
@@ -207,13 +190,13 @@ namespace Lingvo.MobileApp.Controllers
 				//deleting the old recording
 				if (selectedPage.StudentTrack != null)
 				{
-					File.Delete(Util.getAbsolutePath(selectedPage.StudentTrack)); 	
+					File.Delete(FileUtil.getAbsolutePath(selectedPage.StudentTrack)); 	
 				}
 
 				SelectedPage.StudentTrack = recording;
 				var db = App.Database;
 				db.Save(recording);
-				db.Save((Lingvo.Common.Entities.Page)SelectedPage);
+				db.Save((Lingvo.Common.Entities.Page) SelectedPage);
 
 				//Setting the new recording
 				SelectedPage.StudentTrack = recording;

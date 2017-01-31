@@ -139,7 +139,7 @@ namespace Lingvo.MobileApp
 		{
 			return FetchFromURLAsync($"{URL}pages/{page.Id}", async (response) =>
 			{
-				using (var fileStream = File.Create(Util.getAbsolutePath(localPath)))
+				using (var fileStream = File.Create(FileUtil.getAbsolutePath(localPath)))
 				{
 					await response.GetResponseStream().CopyToAsync(fileStream);
 

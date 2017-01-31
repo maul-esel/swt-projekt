@@ -98,7 +98,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public bool PrepareToRecord()
 		{
-			currentRecordingUrl = NSUrl.FromFilename(Util.getAbsolutePath(getFileName()));
+			currentRecordingUrl = NSUrl.FromFilename(FileUtil.getAbsolutePath(getFileName()));
 			recorder = AVAudioRecorder.Create(currentRecordingUrl, SETTINGS, out error);
 
 
