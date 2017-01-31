@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO.IsolatedStorage;
 using AVFoundation;
 using Foundation;
 using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
+using Lingvo.Common.Services;
 using Lingvo.MobileApp.iOS.Sound;
 using Xamarin.Forms;
 using System.Timers;
@@ -51,12 +53,21 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			get
 			{
-				return (studentTrack.Volume.Equals(0.0f));
+				if (studentTrack != null)
+				{
+					return (studentTrack.Volume.Equals(0.0f));
+				}
+				return true;
+
 			}
 
 			set
 			{
-				studentTrack.Volume = value ? 0.0f : 1.0f;   
+				if (studentTrack != null)
+				{
+					studentTrack.Volume = value ? 0.0f : 1.0f;
+				}
+
 			}
 		}
 
@@ -167,7 +178,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void PrepareTeacherTrack(Recording recording)
 		{
-			NSUrl url = NSUrl.FromString(recording.LocalPath);
+			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			teacherTrack = AVAudioPlayer.FromUrl(url);
 			teacherTrack.PrepareToPlay();
 			teacherTrack.FinishedPlaying += (sender, e) => Stop();
@@ -176,7 +187,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void PrepareStudentTrack(Recording recording)
 		{
-			NSUrl url = NSUrl.FromString(recording.LocalPath);
+			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			studentTrack = AVAudioPlayer.FromUrl(url);
 			studentTrack.PrepareToPlay();
 		}

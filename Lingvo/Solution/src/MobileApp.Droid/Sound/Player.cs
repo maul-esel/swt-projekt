@@ -6,6 +6,7 @@ using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Droid.Sound;
 using Xamarin.Forms;
 using Android.OS;
+using Lingvo.Common.Services;
 
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.Droid.Sound
@@ -64,7 +65,7 @@ namespace Lingvo.MobileApp.Droid.Sound
             {
                 isStudentTrackMuted = value;
                 float volume = isStudentTrackMuted ? 0.0f : 1.0f;
-                studentTrack.SetVolume(volume, volume);
+                studentTrack?.SetVolume(volume, volume);
             }
         }
 
@@ -166,7 +167,7 @@ namespace Lingvo.MobileApp.Droid.Sound
             if (recording != null)
             {
                 player?.Reset();
-                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(recording.LocalPath), Android.OS.ParcelFileMode.ReadOnly);
+                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 player?.SetDataSource(fileDesriptor.FileDescriptor);
                 //var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
                 //player?.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
@@ -183,7 +184,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
            // if (recording.LocalPath.Length > 0)
             //{
-                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(recording.LocalPath), Android.OS.ParcelFileMode.ReadOnly);
+			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
             //}
             //else

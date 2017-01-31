@@ -6,6 +6,7 @@ using Lingvo.Common.Adapters;
 using Lingvo.MobileApp.iOS.Sound;
 using Lingvo.Common.Enums;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Services;
 using AVFoundation;
 
 [assembly: Dependency(typeof(Recorder))]
@@ -15,7 +16,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 	public class Recorder :IRecorder
 	{
 		private const String RECORDING_PREFIX = "record_";
-		private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+		private const String DATE_FORMAT = "yyyy-MM-ddTHH-mm-ss";
 		private NSUrl currentRecordingUrl;
 		private Recording currentRecording;
 		private AVAudioRecorder recorder;
@@ -81,20 +82,23 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			recorder.Pause();
 			int recordingDuration = (int) recorder.currentTime;
+			string path = recorder.Url.ToString();
 			recorder.Stop();
-			recorder.Dispose();
+
 			recorder = null;
 			State = RecorderState.IDLE;
 
-			//TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
-			currentRecording = new Recording(37, recordingDuration, currentRecordingUrl.ToString(), DateTime.Now);
+			currentRecording = new Recording();
+			currentRecording.LocalPath = Path.GetFileName(currentRecordingUrl.Path);
+			currentRecording.Duration = recordingDuration;
+
 
 			return currentRecording;
 		}
 
 		public bool PrepareToRecord()
 		{
-			currentRecordingUrl = NSUrl.FromFilename(Path.Combine(getFilePath(), getFileName()));
+			currentRecordingUrl = NSUrl.FromFilename(FileUtil.getAbsolutePath(getFileName()));
 			recorder = AVAudioRecorder.Create(currentRecordingUrl, SETTINGS, out error);
 
 
@@ -134,14 +138,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 				return false;
 			}
 			return true;
-		}
-
-
-
-
-		private String getFilePath()
-		{
-			return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 		}
 
 		private String getFileName()

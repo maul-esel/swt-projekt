@@ -63,6 +63,7 @@ namespace Lingvo.MobileApp.Services
                         p.StudentTrack = FindRecording(p.studentTrackId.Value);
                     }
 
+                    p.Workbook = w;
                     pagesWithReferences.Add(p);
                 }
 
