@@ -175,11 +175,16 @@ namespace Lingvo.MobileApp.Services
         /// <param name="memo">Memo.</param>
         public void Save(TeacherMemo memo)
         {
-            var returnedKey = database.InsertOrReplace(memo);
-            if (returnedKey > 0)
-            {
-                memo.Id = returnedKey;
-            }
+			if (FindRecording(memo.Recording.Id) == null)
+			{
+				Save(memo.Recording);
+			}
+
+			if (FindRecording(memo.StudentTrack.Id) == null)
+			{
+				Save(memo.StudentTrack);
+			}
+			database.InsertOrReplace(memo);
             database.UpdateWithChildren(memo);
 
             TeacherMemoChanged?.Invoke(memo);
