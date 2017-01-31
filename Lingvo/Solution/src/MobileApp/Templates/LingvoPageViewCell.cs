@@ -14,6 +14,8 @@ namespace Lingvo.MobileApp.Templates
         }
 
         private Label subtitleLabel;
+        private MenuItem deleteStudentAction, deleteAction;
+
         public LingvoPageViewCell() :
             base()
         {
@@ -40,15 +42,34 @@ namespace Lingvo.MobileApp.Templates
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None
             };
 
-            LocalCollection.Instance.PageChanged += (p) =>
-            {
-                IPage page = (IPage)BindingContext;
-                if (p.Id.Equals(page.Id))
-                {
-                    IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+            LocalCollection.Instance.PageChanged += Event_PageChanged;
 
-                    BindingContext = local != null ? local : p;
-                };
+            deleteAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete"]).Text,
+                Icon = "ic_delete.png",
+                IsDestructive = true
+            };
+
+            ContextActions.Add(deleteAction);
+
+            deleteStudentAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete_studentTrack"]).Text,
+                Icon = "ic_mic_off.png"
+            };
+
+            deleteAction.Clicked += (o, e) =>
+            {
+                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
+                Workbook workbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
+                LocalCollection.Instance.DeletePage((Lingvo.Common.Entities.Page)workbook.Pages.Find(p => p.Id.Equals(page.Id)));
+            };
+
+            deleteStudentAction.Clicked += (o, e) =>
+            {
+                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
+                LocalCollection.Instance.DeleteStudentRecording(page);
             };
 
             View = new StackLayout
@@ -75,6 +96,17 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            IPage page = (IPage)BindingContext;
+            if (p.Id.Equals(page.Id))
+            {
+                IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+
+                BindingContext = local != null ? local : p;
+            }
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -82,12 +114,17 @@ namespace Lingvo.MobileApp.Templates
             IPage page = (IPage)BindingContext;
 
             ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
-            ProgressView.InnerProgressColor = Color.Red;
             ProgressView.InnerProgressEnabled = page.StudentTrack != null;
-            ProgressView.MaxProgress = 1;
+            ProgressView.InnerProgressColor = Color.Red;
             ProgressView.Progress = 1;
+            ProgressView.MaxProgress = 1;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
             ProgressView.MuteEnabled = false;
+
+            if (page.StudentTrack != null && !ContextActions.Contains(deleteStudentAction))
+            {
+                ContextActions.Add(deleteStudentAction);
+            }
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
         }

@@ -44,9 +44,12 @@ namespace Lingvo.MobileApp.Pages
             listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
             {
                 Workbook newWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(workbook.Id));
-                listView.ItemsSource = newWorkbook.Pages;
-                listView.IsVisible = workbook.Pages.Count > 0;
-                errorLabel.IsVisible = workbook.Pages.Count == 0;
+                if (newWorkbook != null)
+                {
+                    listView.ItemsSource = newWorkbook.Pages;
+                    listView.IsVisible = workbook.Pages.Count > 0;
+                    errorLabel.IsVisible = workbook.Pages.Count == 0;
+                }
             }));
 
             LocalCollection.Instance.WorkbookChanged += (w) =>

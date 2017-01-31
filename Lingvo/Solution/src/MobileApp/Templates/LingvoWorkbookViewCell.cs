@@ -13,6 +13,9 @@ namespace Lingvo.MobileApp.Templates
         }
 
         private Label subtitleLabel;
+
+        private MenuItem deleteAction;
+
         public LingvoWorkbookViewCell() :
             base()
         {
@@ -39,27 +42,23 @@ namespace Lingvo.MobileApp.Templates
                 InnerProgressEnabled = false
             };
 
-            LocalCollection.Instance.WorkbookChanged += (w) =>
-            {
-                Workbook workbook = (Workbook)BindingContext;
-                if (w.Id.Equals(workbook.Id))
-                {
-                    Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(w.Id));
+            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged += Event_PageChanged; 
 
-                    BindingContext = local != null ? local : w;
-                }
+
+            deleteAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete"]).Text,
+                Icon = "ic_delete.png",
+                IsDestructive = true
             };
 
-            LocalCollection.Instance.PageChanged += (p) =>
+            deleteAction.Clicked += (o, e) =>
             {
-                Workbook workbook = (Workbook)BindingContext;
-                if (p.workbookId.Equals(workbook.Id))
-                {
-                    Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId));
-
-                    BindingContext = local != null ? local : p.Workbook;
-                };
+                LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
             };
+
+            ContextActions.Add(deleteAction);
 
             View = new StackLayout
             {
@@ -83,6 +82,28 @@ namespace Lingvo.MobileApp.Templates
                                 }
 
             };
+        }
+
+        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (p.workbookId.Equals(workbook.Id))
+            {
+                Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId));
+
+                BindingContext = local != null ? local : p.Workbook;
+            }
+        }
+
+        protected virtual void Event_WorkbookChanged(Workbook w)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (w.Id.Equals(workbook.Id))
+            {
+                Workbook local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(w.Id));
+
+                BindingContext = local != null ? local : w;
+            }
         }
 
         protected override void OnBindingContextChanged()
