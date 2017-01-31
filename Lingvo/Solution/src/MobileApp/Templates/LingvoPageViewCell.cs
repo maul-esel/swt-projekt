@@ -14,6 +14,8 @@ namespace Lingvo.MobileApp.Templates
         }
 
         private Label subtitleLabel;
+        private MenuItem deleteStudentAction;
+
         public LingvoPageViewCell() :
             base()
         {
@@ -50,6 +52,35 @@ namespace Lingvo.MobileApp.Templates
                     BindingContext = local != null ? local : p;
                 };
             };
+
+            var deleteAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete"]).Text,
+                Icon = "ic_delete.png",
+                IsDestructive = true
+            };
+
+            deleteStudentAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete_studentTrack"]).Text,
+                Icon = "ic_mic_off.png",
+                IsDestructive = true
+            };
+
+            deleteAction.Clicked += (o, e) =>
+            {
+                IPage page = (IPage)BindingContext;
+                Workbook workbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
+                workbook.DeletePage(workbook.Pages.Find(p => p.Id.Equals(page.Id)));
+            };
+
+            deleteStudentAction.Clicked += (o, e) =>
+            {
+                IPage page = (IPage)BindingContext;
+                page.DeleteStudentRecording();
+            };
+
+            ContextActions.Add(deleteAction);
 
             View = new StackLayout
             {
@@ -90,6 +121,15 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MuteEnabled = false;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
+
+            if (page.StudentTrack != null)
+            {
+                ContextActions.Add(deleteStudentAction);
+            }
+            else
+            {
+                ContextActions.Remove(deleteStudentAction);
+            }
         }
     }
 }

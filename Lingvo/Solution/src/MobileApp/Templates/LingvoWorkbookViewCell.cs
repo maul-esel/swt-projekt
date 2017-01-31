@@ -13,6 +13,7 @@ namespace Lingvo.MobileApp.Templates
         }
 
         private Label subtitleLabel;
+
         public LingvoWorkbookViewCell() :
             base()
         {
@@ -60,6 +61,20 @@ namespace Lingvo.MobileApp.Templates
                     BindingContext = local != null ? local : p.Workbook;
                 };
             };
+
+            MenuItem deleteAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete"]).Text,
+                Icon = "ic_delete.png",
+                IsDestructive = true
+            };
+
+            deleteAction.Clicked += (o, e) =>
+            {
+                LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
+            };
+
+            ContextActions.Add(deleteAction);
 
             View = new StackLayout
             {
