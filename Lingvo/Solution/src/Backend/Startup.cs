@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ namespace Lingvo.Backend
 {
     public class Startup
 	{
+		private const string ConnectionStringVariable = "MYSQLCONNSTR_localdb";
 
 		public Startup(IHostingEnvironment env)
 		{
@@ -17,7 +19,12 @@ namespace Lingvo.Backend
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+			Configuration = builder.Build();
+
+			// read DB connection string from system environment variables if present (as it is on azure)
+			var envConnectionString = Environment.GetEnvironmentVariable(ConnectionStringVariable);
+			if (!string.IsNullOrEmpty(envConnectionString))
+				Configuration[ConnectionStringVariable] = envConnectionString;
 		}
 
 		public IConfigurationRoot Configuration { get; }
@@ -27,7 +34,7 @@ namespace Lingvo.Backend
         {
             // Add framework services.
             services.AddMvc();
-			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration["MYSQLCONNSTR_localdb"]), ServiceLifetime.Transient);
+			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration[ConnectionStringVariable]), ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
