@@ -42,16 +42,7 @@ namespace Lingvo.MobileApp.Templates
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None
             };
 
-            LocalCollection.Instance.PageChanged += (p) =>
-            {
-                IPage page = (IPage)BindingContext;
-                if (p.Id.Equals(page.Id))
-                {
-                    IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
-
-                    BindingContext = local != null ? local : p;
-                };
-            };
+            LocalCollection.Instance.PageChanged += Event_PageChanged;
 
             deleteAction = new MenuItem
             {
@@ -59,6 +50,8 @@ namespace Lingvo.MobileApp.Templates
                 Icon = "ic_delete.png",
                 IsDestructive = true
             };
+
+            ContextActions.Add(deleteAction);
 
             deleteStudentAction = new MenuItem
             {
@@ -103,6 +96,17 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            IPage page = (IPage)BindingContext;
+            if (p.Id.Equals(page.Id))
+            {
+                IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+
+                BindingContext = local != null ? local : p;
+            }
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -110,26 +114,19 @@ namespace Lingvo.MobileApp.Templates
             IPage page = (IPage)BindingContext;
 
             ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
-            ProgressView.InnerProgressColor = Color.Red;
             ProgressView.InnerProgressEnabled = page.StudentTrack != null;
-            ProgressView.MaxProgress = 1;
+            ProgressView.InnerProgressColor = Color.Red;
             ProgressView.Progress = 1;
+            ProgressView.MaxProgress = 1;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
             ProgressView.MuteEnabled = false;
 
-            subtitleLabel.IsVisible = page.Description?.Length > 0;
-
-            ContextActions.Clear();
-            ContextActions.Add(deleteAction);
-
-            if (page.StudentTrack != null)
+            if (page.StudentTrack != null && !ContextActions.Contains(deleteStudentAction))
             {
                 ContextActions.Add(deleteStudentAction);
             }
-            else
-            {
-                ContextActions.Remove(deleteStudentAction);
-            }
+
+            subtitleLabel.IsVisible = page.Description?.Length > 0;
         }
     }
 }

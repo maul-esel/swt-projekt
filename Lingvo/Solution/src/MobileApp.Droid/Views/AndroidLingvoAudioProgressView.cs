@@ -24,10 +24,7 @@ namespace Lingvo.MobileApp.Droid.Views
             get { return (int)teacherProgressBar.Progress; }
             set
             {
-                if (InnerProgressEnabled)
-                {
-                    studentProgressBar.Progress = value;
-                }
+                studentProgressBar.Progress = value;
                 teacherProgressBar.Progress = value;
                 Invalidate();
             }

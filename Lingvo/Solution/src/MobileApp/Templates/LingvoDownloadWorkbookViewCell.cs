@@ -31,6 +31,24 @@ namespace Lingvo.MobileApp.Templates
             ((StackLayout)View).Children.Add(downloadButton);
         }
 
+        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (p.workbookId.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            };
+        }
+
+        protected override void Event_WorkbookChanged(Workbook w)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (w.Id.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            }
+        }
+
         private async void DownloadWorkbook()
         {
             await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id);
@@ -51,6 +69,8 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+
+            ContextActions.Clear();
 
             downloadButton.IsEnabled = progress != workbook.TotalPages;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lingvo.Common.Entities;
 using System.IO;
+using Lingvo.Common.Services;
 
 namespace Lingvo.MobileApp.Entities
 {
@@ -110,12 +111,10 @@ namespace Lingvo.MobileApp.Entities
         [Obsolete]
         public void DeleteStudentRecording(Page page)
         {
-            //File.Delete(FileUtils.getAbsolutePath(page.StudentTrack.LocalPath));
-            Page local = App.Database.FindPage(page.Id);
-            File.Delete(local.StudentTrack.LocalPath);
-            App.Database.Delete(local.StudentTrack);
+            File.Delete(FileUtil.getAbsolutePath(page.StudentTrack.LocalPath));
+            App.Database.Delete(page.StudentTrack);
             page.DeleteStudentRecording();
-            App.Database.Save(local);
+            App.Database.Save(page);
         }
     }
 }
