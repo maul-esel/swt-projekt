@@ -167,7 +167,7 @@ namespace Lingvo.MobileApp.Droid.Sound
             if (recording != null)
             {
                 player?.Reset();
-                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(Util.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
+                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 player?.SetDataSource(fileDesriptor.FileDescriptor);
                 //var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
                 //player?.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
@@ -184,7 +184,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
            // if (recording.LocalPath.Length > 0)
             //{
-			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(Util.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
+			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
             //}
             //else

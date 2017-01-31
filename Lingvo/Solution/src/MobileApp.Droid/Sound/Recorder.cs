@@ -97,7 +97,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public bool PrepareToRecord()
         {
-            currentRecordingPath = Path.Combine(Util.getAbsolutePath(getFileName()));
+            currentRecordingPath = Path.Combine(FileUtil.getAbsolutePath(getFileName()));
             recorder = new MediaRecorder();
 
             recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
