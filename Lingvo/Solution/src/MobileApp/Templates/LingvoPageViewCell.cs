@@ -14,7 +14,7 @@ namespace Lingvo.MobileApp.Templates
         }
 
         private Label subtitleLabel;
-        private MenuItem deleteStudentAction;
+        private MenuItem deleteStudentAction, deleteAction;
 
         public LingvoPageViewCell() :
             base()
@@ -53,7 +53,7 @@ namespace Lingvo.MobileApp.Templates
                 };
             };
 
-            var deleteAction = new MenuItem
+            deleteAction = new MenuItem
             {
                 Text = ((Span)App.Current.Resources["label_delete"]).Text,
                 Icon = "ic_delete.png",
@@ -68,18 +68,16 @@ namespace Lingvo.MobileApp.Templates
 
             deleteAction.Clicked += (o, e) =>
             {
-                IPage page = (IPage)BindingContext;
+                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
                 Workbook workbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
-                workbook.DeletePage(workbook.Pages.Find(p => p.Id.Equals(page.Id)));
+                LocalCollection.Instance.DeletePage((Lingvo.Common.Entities.Page)workbook.Pages.Find(p => p.Id.Equals(page.Id)));
             };
 
             deleteStudentAction.Clicked += (o, e) =>
             {
-                IPage page = (IPage)BindingContext;
-                page.DeleteStudentRecording();
+                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
+                LocalCollection.Instance.DeleteStudentRecording(page);
             };
-
-            ContextActions.Add(deleteAction);
 
             View = new StackLayout
             {
@@ -120,6 +118,9 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MuteEnabled = false;
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;
+
+            ContextActions.Clear();
+            ContextActions.Add(deleteAction);
 
             if (page.StudentTrack != null)
             {
