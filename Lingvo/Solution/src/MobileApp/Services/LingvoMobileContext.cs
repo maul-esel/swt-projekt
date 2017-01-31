@@ -10,151 +10,172 @@ using SQLiteNetExtensions.Extensions;
 #if __ANDROID__
 		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
 #elif __IOS__
-		using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
+using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 #endif
 
 namespace Lingvo.MobileApp.Services
 {
-	public class LingvoMobileContext
-	{
-		readonly SQLiteConnection database;
+    public class LingvoMobileContext
+    {
+        readonly SQLiteConnection database;
 
-		public IEnumerable<Workbook> 	Workbooks => database.Table<Workbook>();
-		public IEnumerable<Recording> 	Recordings => database.Table<Recording>();
-		public IEnumerable<Page> 		Pages => database.Table<Page>();
-		public IEnumerable<TeacherMemo>	TeacherMemos => database.Table<TeacherMemo>();
+        public IEnumerable<Workbook> Workbooks => database.Table<Workbook>();
+        public IEnumerable<Recording> Recordings => database.Table<Recording>();
+        public IEnumerable<Page> Pages => database.Table<Page>();
+        public IEnumerable<TeacherMemo> TeacherMemos => database.Table<TeacherMemo>();
 
-		public LingvoMobileContext(string dbPath)
-		{
-			database = new SQLiteConnection(new SQLitePlatform(), dbPath);
-		}
+        public event Action<Workbook> WorkbookChanged;
+        public event Action<TeacherMemo> TeacherMemoChanged;
+        public event Action<Page> PageChanged;
+        public event Action<Recording> RecordingChanged;
 
-		public void createTables()
-		{
-			database.CreateTable<Workbook>();
-			database.CreateTable<Recording>();
-			database.CreateTable<Page>();
-			database.CreateTable<TeacherMemo>();
+        public LingvoMobileContext(string dbPath)
+        {
+            database = new SQLiteConnection(new SQLitePlatform(), dbPath);
+        }
 
-		}
+        public void createTables()
+        {
+            database.CreateTable<Workbook>();
+            database.CreateTable<Recording>();
+            database.CreateTable<Page>();
+            database.CreateTable<TeacherMemo>();
 
-		public IEnumerable<Workbook> getWorkbooksWithReferences()
-		{
-			var val = new List<Workbook>();
-			foreach (var w in Workbooks)
-			{
-				var pages = database.Query<Page>("select * from Pages where workbookId = ?", w.Id);
-				var pagesWithReferences = new List<Page>();
+        }
 
-				foreach (var p in pages)
-				{
-					if (p.teacherTrackId > 0)
-					{
-						p.TeacherTrack = FindRecording(p.teacherTrackId);
-					}
+        public IEnumerable<Workbook> getWorkbooksWithReferences()
+        {
+            var val = new List<Workbook>();
+            foreach (var w in Workbooks)
+            {
+                var pages = database.Query<Page>("select * from Pages where workbookId = ?", w.Id);
+                var pagesWithReferences = new List<Page>();
 
-					if (p.studentTrackId != null)
-					{
-						p.StudentTrack = FindRecording(p.studentTrackId.Value);
-					}
+                foreach (var p in pages)
+                {
+                    if (p.teacherTrackId > 0)
+                    {
+                        p.TeacherTrack = FindRecording(p.teacherTrackId);
+                    }
 
-					pagesWithReferences.Add(p);
-				}
+                    if (p.studentTrackId != null)
+                    {
+                        p.StudentTrack = FindRecording(p.studentTrackId.Value);
+                    }
 
-				w.Pages = pagesWithReferences.Cast<IPage>().ToList();
-				val.Add(w);
-			}
-			return val;
-		}
+                    p.Workbook = w;
+                    pagesWithReferences.Add(p);
+                }
 
-		public void Save(Recording recording)
-		{
-			database.InsertOrReplace(recording);
-		}
+                w.Pages = pagesWithReferences.Cast<IPage>().ToList();
+                val.Add(w);
+            }
+            return val;
+        }
 
-		/// <summary>
-		/// Save the specified page, updates it if it already exists.
-		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="page">Page.</param>
-		public void Save(Page page)
-		{
-			database.InsertOrReplace(page);
-			database.UpdateWithChildren(page);
-		}
+        public void Save(Recording recording)
+        {
+            database.InsertOrReplace(recording);
 
-		/// <summary>
-		/// Save the specified workbook, updates it if it already exists.
-		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="workbook">Workbook.</param>
-		public void Save(Workbook workbook)
-		{
-			database.InsertOrReplace(workbook);
-			database.UpdateWithChildren(workbook);
-		}
+            RecordingChanged?.Invoke(recording);
+        }
 
-		/// <summary>
-		/// Save the specified memo.
-		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="memo">Memo.</param>
-		public void Save(TeacherMemo memo)
-		{
-			var returnedKey = database.InsertOrReplace(memo);
-			if ( returnedKey > 0)
-			{
-				memo.Id = returnedKey;
-			}
-			database.UpdateWithChildren(memo);
-		}
+        /// <summary>
+        /// Save the specified page, updates it if it already exists.
+        /// </summary>
+        /// <returns>The save.</returns>
+        /// <param name="page">Page.</param>
+        public void Save(Page page)
+        {
+            database.InsertOrReplace(page);
+            database.UpdateWithChildren(page);
 
-		public void Delete(TeacherMemo memo)
-		{
-			database.Delete(memo);
-		}
+            PageChanged?.Invoke(page);
+        }
 
-		public void Delete(Recording recording)
-		{
-			database.Delete(recording);
-		}
+        /// <summary>
+        /// Save the specified workbook, updates it if it already exists.
+        /// </summary>
+        /// <returns>The save.</returns>
+        /// <param name="workbook">Workbook.</param>
+        public void Save(Workbook workbook)
+        {
+            database.InsertOrReplace(workbook);
+            database.UpdateWithChildren(workbook);
 
-		public void Delete(Page page)
-		{
-			Delete(page.TeacherTrack);
+            WorkbookChanged?.Invoke(workbook);
+        }
 
-			if (page.StudentTrack != null)
-			{
-				Delete(page.StudentTrack);
-			}
+        /// <summary>
+        /// Save the specified memo.
+        /// </summary>
+        /// <returns>The save.</returns>
+        /// <param name="memo">Memo.</param>
+        public void Save(TeacherMemo memo)
+        {
+            var returnedKey = database.InsertOrReplace(memo);
+            if (returnedKey > 0)
+            {
+                memo.Id = returnedKey;
+            }
+            database.UpdateWithChildren(memo);
 
-			database.Delete(page);
+            TeacherMemoChanged?.Invoke(memo);
+        }
 
-		}
+        public void Delete(TeacherMemo memo)
+        {
+            database.Delete(memo);
 
-		public void Delete(Workbook workbook)
-		{
-			database.Delete(workbook); //On delete cascade used for pages
-		}
+            TeacherMemoChanged?.Invoke(memo);
+        }
 
-		public Recording FindRecording(int id)
-		{
-			return Recordings.FirstOrDefault(r => r.Id == id);
-		}
+        public void Delete(Recording recording)
+        {
+            database.Delete(recording);
 
-		public Workbook FindWorkbook(int id)
-		{
-			return Workbooks.FirstOrDefault(w => w.Id == id);
-		}
+            RecordingChanged?.Invoke(recording);
+        }
 
-		public Page FindPage(int id)
-		{
-			return Pages.FirstOrDefault(p => p.Id == id);
-		}
+        public void Delete(Page page)
+        {
+            Delete(page.TeacherTrack);
 
-		public TeacherMemo FindTeacherMemo(int id)
-		{
-			return TeacherMemos.FirstOrDefault(t => t.Id == id);
-		}
-	}
+            if (page.StudentTrack != null)
+            {
+                Delete(page.StudentTrack);
+            }
+
+            database.Delete(page);
+
+            PageChanged?.Invoke(page);
+        }
+
+        public void Delete(Workbook workbook)
+        {
+            database.Delete(workbook); //On delete cascade used for pages
+
+            WorkbookChanged?.Invoke(workbook);
+        }
+
+        public Recording FindRecording(int id)
+        {
+            return Recordings.FirstOrDefault(r => r.Id == id);
+        }
+
+        public Workbook FindWorkbook(int id)
+        {
+            return Workbooks.FirstOrDefault(w => w.Id == id);
+        }
+
+        public Page FindPage(int id)
+        {
+            return Pages.FirstOrDefault(p => p.Id == id);
+        }
+
+        public TeacherMemo FindTeacherMemo(int id)
+        {
+            return TeacherMemos.FirstOrDefault(t => t.Id == id);
+        }
+    }
 }

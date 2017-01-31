@@ -2,6 +2,7 @@
 using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
+using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
 using System;
 using Xamarin.Forms;
@@ -16,6 +17,7 @@ namespace Lingvo.MobileApp.Pages
 
         private static readonly int SeekTimeStep = 5;
         private bool isActive;
+
         private IPage page;
         private Workbook workbook;
         private Label Label;
@@ -27,9 +29,9 @@ namespace Lingvo.MobileApp.Pages
             get { return page; }
             internal set
             {
-               page = value;
+                page = value;
 
-                Label.Text = ((Span)App.Current.Resources["text_seite"]).Text + " " + page.Number + " / " + workbook.Pages.Count;
+                Label.Text = ((Span)App.Current.Resources["text_seite"]).Text + " " + page.Number + " / " + workbook.TotalPages;
                 StudentPageController.Instance.SelectedPage = page;
             }
         }
@@ -152,6 +154,19 @@ namespace Lingvo.MobileApp.Pages
             {
                 ProgressView.MaxProgress = page.TeacherTrack.Duration;
             }
+
+            LocalCollection.Instance.PageChanged += (p) =>
+            {
+                if (p.Id.Equals(page.Id))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ProgressView.InnerProgressEnabled = page.StudentTrack != null;
+                        ProgressView.MuteEnabled = page.StudentTrack != null;
+                    });
+
+                }
+            };
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
 
@@ -294,14 +309,16 @@ namespace Lingvo.MobileApp.Pages
 
         private void SwitchPage(int nextIndex)
         {
+            PlayerState currentState = StudentPageController.Instance.CurrentPlayerState;
+            if (currentState != PlayerState.STOPPED)
+            {
+                StudentPageController.Instance.Stop();
+                RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
+            }
+
             NextPageButton.IsEnabled = nextIndex + 1 < workbook.Pages.Count;
             PreviousPageButton.IsEnabled = nextIndex > 0;
             Page = workbook.Pages[nextIndex];
-            
-            if (StudentPageController.Instance.CurrentPlayerState != PlayerState.STOPPED)
-            {
-            RecordStopButton_OnClicked(RecordStopButton, new EventArgs());
-            }
         }
 
         private void ProgressView_StudentTrackMuted(bool muted)

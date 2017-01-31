@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Lingvo.Common.Adapters;
 using Lingvo.Common.Enums;
 using Lingvo.Common.Entities;
+using Lingvo.Common.Services;
 using Android.Media;
 using Lingvo.MobileApp.Droid.Sound;
 
@@ -14,7 +15,7 @@ namespace Lingvo.MobileApp.Droid.Sound
     public class Recorder : IRecorder
     {
         private const String RECORDING_PREFIX = "record_";
-        private const String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+        private const String DATE_FORMAT = "yyyy-MM-ddTHH-mm-ss";
         private string currentRecordingPath;
         private Recording currentRecording;
         private MediaRecorder recorder;
@@ -85,7 +86,9 @@ namespace Lingvo.MobileApp.Droid.Sound
                 State = RecorderState.IDLE;
 
                 //TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
-                currentRecording = new Recording(37, recordingDuration, currentRecordingPath, DateTime.Now);
+                currentRecording = new Recording();
+				currentRecording.LocalPath = Path.GetFileName(currentRecordingPath);
+				currentRecording.Duration = recordingDuration;
 
                 return currentRecording;
             }
@@ -94,7 +97,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public bool PrepareToRecord()
         {
-            currentRecordingPath = Path.Combine(getFilePath(), getFileName());
+            currentRecordingPath = FileUtil.getAbsolutePath(getFileName());
             recorder = new MediaRecorder();
 
             recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
@@ -108,11 +111,6 @@ namespace Lingvo.MobileApp.Droid.Sound
             State = RecorderState.PREPARED;
             return true;
 
-        }
-
-        private String getFilePath()
-        {
-            return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
         private String getFileName()

@@ -12,10 +12,11 @@ namespace Lingvo.MobileApp.Templates
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
+        private LingvoRoundImageButton downloadButton;
 
         public LingvoDownloadWorkbookViewCell() : base()
         {
-            LingvoRoundImageButton downloadButton = new LingvoRoundImageButton()
+            downloadButton = new LingvoRoundImageButton()
             {
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
@@ -50,6 +51,8 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+
+            downloadButton.IsEnabled = progress != workbook.TotalPages;
         }
     }
 }
