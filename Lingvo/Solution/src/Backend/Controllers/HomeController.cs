@@ -68,10 +68,9 @@ namespace Lingvo.Backend.Controllers
 			return View();
         }
 
-		public IActionResult TestMysql([FromServices] DatabaseService db)
+		public IActionResult TestMysql()
 		{
-			db.Workbooks.ToList();
-			return Json(new { a = "a" });
+			return Json(new { a = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb") });
 		}
 
         public IActionResult Error()
