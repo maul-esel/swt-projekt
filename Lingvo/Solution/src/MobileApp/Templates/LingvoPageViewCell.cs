@@ -63,8 +63,7 @@ namespace Lingvo.MobileApp.Templates
             deleteStudentAction = new MenuItem
             {
                 Text = ((Span)App.Current.Resources["label_delete_studentTrack"]).Text,
-                Icon = "ic_mic_off.png",
-                IsDestructive = true
+                Icon = "ic_mic_off.png"
             };
 
             deleteAction.Clicked += (o, e) =>
