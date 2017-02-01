@@ -22,7 +22,7 @@ namespace Lingvo.Common.Entities
 			CreationTime = creationTime;
 		}
 
-		[PrimaryKey]
+		[PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 
 		public DateTime CreationTime { get; private set; }

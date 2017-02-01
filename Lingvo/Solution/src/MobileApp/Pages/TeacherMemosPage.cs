@@ -123,7 +123,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await DisplayAlert("Selected", ((Workbook)e.SelectedItem).Title, "OK");
+			await DisplayAlert("Selected", ((TeacherMemo)e.SelectedItem).Name, "OK");
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;
