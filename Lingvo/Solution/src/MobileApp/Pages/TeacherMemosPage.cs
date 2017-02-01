@@ -30,7 +30,6 @@ namespace Lingvo.MobileApp.Pages
             {
                 ItemsSource = LocalCollection.Instance.TeacherMemos,
                 ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
-                IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
                 IsVisible = LocalCollection.Instance.TeacherMemos.Count() > 0
             };
@@ -48,7 +47,6 @@ namespace Lingvo.MobileApp.Pages
                 LineBreakMode = LineBreakMode.WordWrap,
                 HorizontalTextAlignment = TextAlignment.Center,
                 IsVisible = LocalCollection.Instance.TeacherMemos.Count() == 0
-
             };
 
             listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
@@ -112,7 +110,7 @@ namespace Lingvo.MobileApp.Pages
 
         async void AddNewClicked(object sender, EventArgs e)
         {
-            await App.Current.MainPage.Navigation.PushAsync(new RecordTeacherMemoPage());
+            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -123,7 +121,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-			await DisplayAlert("Selected", ((TeacherMemo)e.SelectedItem).Name, "OK");
+            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage((TeacherMemo)e.SelectedItem));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

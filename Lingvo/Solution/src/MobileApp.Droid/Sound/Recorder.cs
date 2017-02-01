@@ -79,7 +79,7 @@ namespace Lingvo.MobileApp.Droid.Sound
                 var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(currentRecordingPath), Android.OS.ParcelFileMode.ReadOnly);
                 tempPlayer.SetDataSource(fileDesriptor.FileDescriptor);
                 tempPlayer.Prepare();
-                int recordingDuration = tempPlayer.GetTrackInfo().Length;
+                int recordingDuration = tempPlayer.Duration;
                 tempPlayer.Release();
 
                 recorder = null;
@@ -87,8 +87,8 @@ namespace Lingvo.MobileApp.Droid.Sound
 
                 //TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
                 currentRecording = new Recording();
-				currentRecording.LocalPath = Path.GetFileName(currentRecordingPath);
-				currentRecording.Duration = recordingDuration;
+                currentRecording.LocalPath = Path.GetFileName(currentRecordingPath);
+                currentRecording.Duration = recordingDuration;
 
                 return currentRecording;
             }

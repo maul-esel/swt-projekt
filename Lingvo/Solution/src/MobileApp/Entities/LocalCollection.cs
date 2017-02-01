@@ -30,7 +30,13 @@ namespace Lingvo.MobileApp.Entities
         /// The teacher memos collection, does not return null but an empty list.
         /// </summary>
         /// <value>The teacher memos.</value>
-        public IEnumerable<TeacherMemo> TeacherMemos => App.Database.TeacherMemos;
+        public IEnumerable<TeacherMemo> TeacherMemos
+        {
+            get
+            {
+                return App.Database.getTeacherMemosWithReferences();
+            }
+        }
 
         /// <summary>
         /// The workbooks, does not return null but an empty list.
@@ -63,22 +69,22 @@ namespace Lingvo.MobileApp.Entities
         /// <param name="memo">Memo.</param>
         public void AddTeacherMemo(TeacherMemo memo)
         {
-			if (memo.Recording != null && App.Database.FindRecording(memo.Recording.Id) == null)
-			{
-				App.Database.Save(memo.Recording);
-			}
+            if (memo.Recording != null && App.Database.FindRecording(memo.Recording.Id) == null)
+            {
+                App.Database.Save(memo.Recording);
+            }
 
-			if (memo.StudentTrack != null && App.Database.FindRecording(memo.StudentTrack.Id) == null)
-			{
-				App.Database.Save(memo.StudentTrack);
-			}
+            if (memo.StudentTrack != null && App.Database.FindRecording(memo.StudentTrack.Id) == null)
+            {
+                App.Database.Save(memo.StudentTrack);
+            }
 
-			memo.RecordingId = memo.Recording.Id;
+            memo.RecordingId = memo.Recording.Id;
 
-			if (memo.StudentTrack != null)
-			{
-				memo.StudentTrackId = memo.StudentTrack.Id;
-			}
+            if (memo.StudentTrack != null)
+            {
+                memo.StudentTrackId = memo.StudentTrack.Id;
+            }
 
             App.Database.Save(memo);
         }

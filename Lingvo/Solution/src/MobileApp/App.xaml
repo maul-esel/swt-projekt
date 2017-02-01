@@ -23,6 +23,7 @@
             <Span x:Key="text_teacherTrack">Lehrerspur</Span>
             <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
             <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen. Bitte wählen Sie einen anderen.</Span>
+            <Span x:Key="label_edit">Bearbeiten</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

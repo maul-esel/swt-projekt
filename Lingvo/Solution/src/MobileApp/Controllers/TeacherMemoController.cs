@@ -35,24 +35,24 @@ namespace Lingvo.MobileApp.Controllers
 
         private TeacherMemoController()
         {
-			initForNewRecording();
+            initForNewRecording();
         }
 
-		private void initForNewRecording()
-		{
-			audioRecorder = DependencyService.Get<IRecorder>();
+        private void initForNewRecording()
+        {
+            audioRecorder = DependencyService.Get<IRecorder>();
 
-			progressHandler = new Task(async () =>
-			{
-				DateTime begin = DateTime.Now;
-				while (State == RecorderState.RECORDING)
-				{
-					int seconds = (int)new TimeSpan(DateTime.Now.Ticks - begin.Ticks).TotalSeconds;
-					Update?.Invoke(seconds);
-					await Task.Delay(1000);
-				}
-			});
-		}
+            progressHandler = new Task(async () =>
+            {
+                DateTime begin = DateTime.Now;
+                while (State == RecorderState.RECORDING)
+                {
+                    int seconds = (int)new TimeSpan(DateTime.Now.Ticks - begin.Ticks).TotalMilliseconds;
+                    Update?.Invoke(seconds);
+                    await Task.Delay(1000);
+                }
+            });
+        }
 
         /// <summary>
         /// Starts a new teacher memo.
@@ -86,7 +86,7 @@ namespace Lingvo.MobileApp.Controllers
             LocalCollection.Instance.AddTeacherMemo(CurrentMemo);
             CurrentMemo = null;
 
-			initForNewRecording();
+            initForNewRecording();
         }
 
         /// <summary>
