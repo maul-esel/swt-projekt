@@ -157,6 +157,8 @@
     <BundleResource Include="Resources\ic_volume_up.png" />
     <BundleResource Include="Resources\startup.png" />
     <BundleResource Include="Content\page1.mp3" />
+    <BundleResource Include="Resources\ic_next.png" />
+    <BundleResource Include="Resources\ic_previous.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
