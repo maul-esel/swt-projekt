@@ -198,22 +198,12 @@ namespace Lingvo.MobileApp.Services
         }
 
         /// <summary>
-        /// Save the specified memo and recursively its recordings if not already saved
+        /// Save the specified memo 
         /// </summary>
         /// <returns>The save.</returns>
         /// <param name="memo">Memo.</param>
         public void Save(TeacherMemo memo)
-        {
-			if (memo.Recording != null && FindRecording(memo.Recording.Id) == null)
-			{
-				Save(memo.Recording);
-			}
-
-			if (memo.StudentTrack != null && FindRecording(memo.StudentTrack.Id) == null)
-			{
-				Save(memo.StudentTrack);
-			}
-            
+        {   
 			if (memo.Id > 0 && FindTeacherMemo(memo.Id) != null)
 			{
 				database.Update(memo);
@@ -222,8 +212,6 @@ namespace Lingvo.MobileApp.Services
 			{
 				database.Insert(memo);
 			}            
-
-			database.UpdateWithChildren(memo);
 
             TeacherMemoChanged?.Invoke(memo);
         }
