@@ -54,7 +54,7 @@ namespace Lingvo.MobileApp.Pages
             NameLabel.Text = memo.Name;
             ToolbarItems.Clear();
             RecordButton.IsEnabled = false;
-            Progress_Update(memo.Recording.Duration);
+            Progress_Update(memo.TeacherTrack.Duration);
             SaveItem.Clicked -= SaveItem_Clicked;
             SaveItem.Clicked += async (o, e) =>
             {
@@ -71,6 +71,8 @@ namespace Lingvo.MobileApp.Pages
         public EditTeacherMemoPage() : base()
         {
             Title = ((Span)App.Current.Resources["page_title_recordTeacherMemo"]).Text;
+
+            TeacherMemoController.Instance.Reset();
 
             SaveItem = new ToolbarItem
             {
@@ -173,8 +175,8 @@ namespace Lingvo.MobileApp.Pages
         private void Progress_Update(int progress)
         {
             int minutes = progress / 60000;
-            int seconds = (progress / 1000) % 60;
-            string minuteString = (minutes < 10 ? "0" + minutes : "" + minutes);
+            int seconds = Math.Abs(progress / 1000) % 60;
+            string minuteString = (Math.Abs(minutes) < 10 ? "0" + minutes : "" + minutes);
             string secondString = (seconds < 10 ? "0" + seconds : "" + seconds);
             Device.BeginInvokeOnMainThread(() => Label.Text = minuteString + ":" + secondString);
         }
@@ -222,6 +224,7 @@ namespace Lingvo.MobileApp.Pages
             else
             {
                 TeacherMemoController.Instance.EndTeacherMemo();
+                Progress_Update(TeacherMemoController.Instance.CurrentMemo.TeacherTrack.Duration);
                 RecordButton.Image = LingvoRoundImageButton.RecordImage;
                 return;
             }

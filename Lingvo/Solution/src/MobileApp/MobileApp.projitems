@@ -38,7 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\TeacherMemoController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\LocalCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentPageController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentAudioController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />

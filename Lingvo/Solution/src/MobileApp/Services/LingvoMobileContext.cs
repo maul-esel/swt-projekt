@@ -143,7 +143,7 @@ namespace Lingvo.MobileApp.Services
 		{
 			if (t.RecordingId > 0)
 			{
-				t.Recording = FindRecording(t.RecordingId);
+				t.TeacherTrack = FindRecording(t.RecordingId);
 			}
 
 			if (t.StudentTrackId != null)
@@ -225,7 +225,7 @@ namespace Lingvo.MobileApp.Services
         {
             database.Delete(memo);
 
-            Delete(memo.Recording);
+            Delete(memo.TeacherTrack);
 
             if (memo.StudentTrack != null)
             {

@@ -35,12 +35,27 @@ namespace Lingvo.MobileApp.Controllers
 
         private TeacherMemoController()
         {
-            initForNewRecording();
+            audioRecorder = DependencyService.Get<IRecorder>();
         }
 
-        private void initForNewRecording()
+        public void Reset()
         {
-            audioRecorder = DependencyService.Get<IRecorder>();
+            if (CurrentMemo != null)
+            {
+                App.Database.Delete(CurrentMemo);
+                CurrentMemo = null;
+            }
+        }
+
+        /// <summary>
+        /// Starts a new teacher memo.
+        /// </summary>
+        public void StartTeacherMemo()
+        {
+            if (audioRecorder.State != RecorderState.PREPARED)
+            {
+                audioRecorder.PrepareToRecord();
+            }
 
             progressHandler = new Task(async () =>
             {
@@ -52,18 +67,7 @@ namespace Lingvo.MobileApp.Controllers
                     await Task.Delay(1000);
                 }
             });
-        }
 
-        /// <summary>
-        /// Starts a new teacher memo.
-        /// </summary>
-        public void StartTeacherMemo()
-        {
-            if (CurrentMemo != null)
-            {
-                App.Database.Delete(CurrentMemo);
-            }
-            audioRecorder.PrepareToRecord();
             audioRecorder.Start();
             progressHandler.Start();
         }
@@ -73,7 +77,7 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void EndTeacherMemo()
         {
-            CurrentMemo = new TeacherMemo() { Recording = audioRecorder.Stop() };
+            CurrentMemo = new TeacherMemo() { TeacherTrack = audioRecorder.Stop() };
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace Lingvo.MobileApp.Controllers
             LocalCollection.Instance.AddTeacherMemo(CurrentMemo);
             CurrentMemo = null;
 
-            initForNewRecording();
+            Reset();
         }
 
         /// <summary>

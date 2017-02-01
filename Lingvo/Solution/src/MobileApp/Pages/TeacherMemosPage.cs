@@ -121,7 +121,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage((TeacherMemo)e.SelectedItem));
+            await App.Current.MainPage.Navigation.PushAsync(new AudioPage((TeacherMemo)e.SelectedItem));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

@@ -70,7 +70,7 @@ namespace Lingvo.MobileApp.Pages
                 });
             });
 
-            listView.RefreshCommand.Execute(null);
+            //listView.RefreshCommand.Execute(null);
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)

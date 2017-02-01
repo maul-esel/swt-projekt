@@ -69,9 +69,9 @@ namespace Lingvo.MobileApp.Entities
         /// <param name="memo">Memo.</param>
         public void AddTeacherMemo(TeacherMemo memo)
         {
-            if (memo.Recording != null && App.Database.FindRecording(memo.Recording.Id) == null)
+            if (memo.TeacherTrack != null && App.Database.FindRecording(memo.TeacherTrack.Id) == null)
             {
-                App.Database.Save(memo.Recording);
+                App.Database.Save(memo.TeacherTrack);
             }
 
             if (memo.StudentTrack != null && App.Database.FindRecording(memo.StudentTrack.Id) == null)
@@ -79,7 +79,7 @@ namespace Lingvo.MobileApp.Entities
                 App.Database.Save(memo.StudentTrack);
             }
 
-            memo.RecordingId = memo.Recording.Id;
+            memo.RecordingId = memo.TeacherTrack.Id;
 
             if (memo.StudentTrack != null)
             {
