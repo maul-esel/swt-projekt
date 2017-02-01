@@ -19,6 +19,10 @@
             <Span x:Key="label_delete">Löschen</Span>
             <Span x:Key="label_delete_studentTrack">Aufnahme löschen</Span>
             <Span x:Key="text_seite">Seite</Span>
+            <Span x:Key="label_save">Speichern</Span>
+            <Span x:Key="text_teacherTrack">Lehrerspur</Span>
+            <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
+            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen. Bitte wählen Sie einen anderen.</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,6 +1,8 @@
 ﻿using Lingvo.Common.Adapters;
+using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Entities;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Controllers
@@ -9,69 +11,83 @@ namespace Lingvo.MobileApp.Controllers
     /// Controller for handling teacher memos.
     /// </summary>
     public class TeacherMemoController
-	{
-		private static TeacherMemoController instance;
-		private IPlayer player;
-		private IRecorder recorder;
+    {
+        private static TeacherMemoController instance;
+        private IRecorder audioRecorder;
 
-		/// <summary>
-		/// Gets the instance of the teacherMemoController (Singleton Pattern)
-		/// </summary>
-		/// <value>The instance.</value>
-		public static TeacherMemoController Instance => instance ?? (instance = new TeacherMemoController());
+        private Task progressHandler;
 
-		private TeacherMemoController()
-		{
-			player = DependencyService.Get<IPlayer>();
-			//TODO: recorder = DependencyController.Get<IRecorder>();
+        public delegate void OnProgressUpdate(int progress);
 
-		}
+        public event OnProgressUpdate Update;
 
-		/// <summary>
-		/// Starts a new teacher memo.
-		/// </summary>
-		public void StartTeacherMemo()
-		{
-			//TODO: recorder.Start();
-		}
+        public TeacherMemo CurrentMemo
+        {
+            get;
+            internal set;
+        }
 
-		/// <summary>
-		/// Ends the teacher memo started before with the start method.
-		/// </summary>
-		/// <returns>The teacher memo.</returns>
-		public TeacherMemo EndTeacherMemo()
-		{
-			return new TeacherMemo() { Recording = recorder.Stop() };
-		}
+        /// <summary>
+        /// Gets the instance of the teacherMemoController (Singleton Pattern)
+        /// </summary>
+        /// <value>The instance.</value>
+        public static TeacherMemoController Instance => instance ?? (instance = new TeacherMemoController());
 
-		/// <summary>
-		/// Restarts the teacher memo.
-		/// </summary>
-		public void RestartTeacherMemo()
-		{
-			//TODO: recorder.Start();
-		}
+        private TeacherMemoController()
+        {
+            audioRecorder = DependencyService.Get<IRecorder>();
 
-		/// <summary>
-		/// Saves the teacher memo to the local collection.
-		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="recordFile">Record file.</param>
-		public void SaveTeacherMemo(String name, TeacherMemo recordFile)
-		{
-			recordFile.Name = name;
-			LocalCollection.Instance.AddTeacherMemo(recordFile);
+            progressHandler = new Task(async () =>
+            {
+                DateTime begin = DateTime.Now;
+                while (State == RecorderState.RECORDING)
+                {
+                    int seconds = (int)new TimeSpan(DateTime.Now.Ticks - begin.Ticks).TotalSeconds;
+                    Update?.Invoke(seconds);
+                    await Task.Delay(1000);
+                }
+            });
+        }
 
-		}
+        /// <summary>
+        /// Starts a new teacher memo.
+        /// </summary>
+        public void StartTeacherMemo()
+        {
+            if (CurrentMemo != null)
+            {
+                App.Database.Delete(CurrentMemo);
+            }
+            audioRecorder.PrepareToRecord();
+            audioRecorder.Start();
+            progressHandler.Start();
+        }
 
-		/// <summary>
-		/// Plaies the teacher memo.
-		/// </summary>
-		/// <param name="memo">Memo.</param>
-		public void PlayTeacherMemo(TeacherMemo memo)
-		{
-			player.PrepareTeacherTrack(memo.Recording);
-			player.Play();
-		}
-	}
+        /// <summary>
+        /// Ends the teacher memo started before with the start method.
+        /// </summary>
+        public void EndTeacherMemo()
+        {
+            CurrentMemo = new TeacherMemo() { Recording = audioRecorder.Stop() };
+        }
+
+        /// <summary>
+        /// Saves the teacher memo to the local collection.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        public void SaveTeacherMemo(String name)
+        {
+            CurrentMemo.Name = name;
+            LocalCollection.Instance.AddTeacherMemo(CurrentMemo);
+            CurrentMemo = null;
+        }
+
+        /// <summary>
+        /// Returns the state of the recorder.
+        /// </summary>
+        public RecorderState State
+        {
+            get { return audioRecorder.State; }
+        }
+    }
 }
