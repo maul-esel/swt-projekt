@@ -68,6 +68,7 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = workbook.TotalPages;
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
+			ProgressView.TextSize = 20;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
             ContextActions.Clear();
