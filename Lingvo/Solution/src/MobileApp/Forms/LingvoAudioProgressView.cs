@@ -52,6 +52,12 @@ namespace Lingvo.MobileApp
           declaringType: typeof(LingvoAudioProgressView),
           defaultValue: LabelTypeValue.Time);
 
+		public static readonly BindableProperty TextSizeProperty = BindableProperty.Create(
+		   propertyName: "TextSize",
+		   returnType: typeof(int),
+		   declaringType: typeof(LingvoAudioProgressView),
+		   defaultValue: 28);
+
         public delegate void StudentTrackMutedEventHandler(bool muted);
 
         public event StudentTrackMutedEventHandler StudentTrackMuted;
@@ -70,6 +76,14 @@ namespace Lingvo.MobileApp
                 SetValue(ProgressProperty, value);
             }
         }
+		public int TextSize
+		{
+			get { return (int)GetValue(TextSizeProperty); }
+			set
+			{
+				SetValue(TextSizeProperty, value);
+			}
+		}
 
         public int MaxProgress
         {

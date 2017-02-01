@@ -63,6 +63,8 @@ namespace Lingvo.MobileApp.iOS
 				progressView.Progress = element.Progress;
 			if (progressView.MuteEnabled != element.MuteEnabled)
 				progressView.MuteEnabled = element.MuteEnabled;
+			if (progressView.TextSize != element.TextSize)
+				progressView.TextSize = element.TextSize;
 
             switch (element.LabelType)
             {
