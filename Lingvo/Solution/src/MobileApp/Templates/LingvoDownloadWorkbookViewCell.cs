@@ -26,7 +26,7 @@ namespace Lingvo.MobileApp.Templates
                 VerticalOptions = LayoutOptions.Center
             };
 
-			downloadButton.OnClicked += (o, e) => DownloadWorkbook();
+            downloadButton.OnClicked += (o, e) => DownloadWorkbook();
 
             ((StackLayout)View).Children.Add(downloadButton);
         }
@@ -68,10 +68,13 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = workbook.TotalPages;
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
-			ProgressView.TextSize = 20;
+            ProgressView.TextSize = 20;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
-            ContextActions.Clear();
+            if (ContextActions.Count > 0)
+            {
+                ContextActions.Clear();
+            }
 
             downloadButton.IsEnabled = progress != workbook.TotalPages;
         }

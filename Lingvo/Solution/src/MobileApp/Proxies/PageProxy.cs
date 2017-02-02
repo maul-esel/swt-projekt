@@ -12,8 +12,6 @@ namespace Lingvo.MobileApp.Proxies
 
         public delegate void OnPageChanged(int id);
 
-        public event OnPageChanged PageChanged;
-
 		private int number;
 		private String description;
 

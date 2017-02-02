@@ -16,7 +16,6 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 5;
-        private bool isActive;
 
         private IExercise exercisable;
         private Workbook workbook;
@@ -306,6 +305,17 @@ namespace Lingvo.MobileApp.Pages
                         buttonGrid
                 }
             };
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
+            if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
+            {
+                StudentAudioController.Instance.Stop();
+                RedrawProgressBar(0);
+            }
         }
 
         private void Event_TeacherMemoChanged(TeacherMemo t)
