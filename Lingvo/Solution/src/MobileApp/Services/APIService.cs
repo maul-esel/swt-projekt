@@ -141,21 +141,23 @@ namespace Lingvo.MobileApp
 		/// Fetchs a teacher track.
 		/// </summary>
 		/// <returns>The teacher track.</returns>
-		/// <param name="workbook">Workbook.</param>
 		/// <param name="page">Page.</param>
 		/// <param name="localPath">Local path.</param>
-		public Task<Recording> FetchTeacherTrack(IPage page, String localPath)
+		public async Task<Recording> FetchTeacherTrack(IPage page, String localPath)
 		{
-			return FetchFromURLAsync($"{URL}pages/{page.Id}", async (response) =>
+			var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+				await FetchTextFromURLAsync($"{URL}pages/{page.Id}")
+			);
+			return await FetchFromURLAsync(json["url"], async (response) =>
 			{
 				using (var fileStream = File.Create(FileUtil.getAbsolutePath(localPath)))
-				{
 					await response.GetResponseStream().CopyToAsync(fileStream);
 
-					return new Recording(int.Parse(response.Headers["X-Audio-Duration"]),
-										 localPath,
-										 DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yyyy HH:mm:ss", null));
-				}
+				return new Recording(
+					int.Parse(json["duration"]),
+					localPath,
+					DateTime.ParseExact(json["creationTime"], "dd.MM.yyyy HH:mm:ss", null)
+				);
 			});
 		}
 	}

@@ -43,10 +43,13 @@ namespace Lingvo.Backend
             // Add framework services.
             services.AddMvc();
 			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration[ConnectionStringVariable]), ServiceLifetime.Transient);
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+			// custom services
+			services.AddScoped<IStorage, AzureStorage>();
+		}
+
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

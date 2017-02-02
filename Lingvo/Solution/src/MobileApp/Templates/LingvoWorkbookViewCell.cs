@@ -7,6 +7,7 @@ namespace Lingvo.MobileApp.Templates
 {
     class LingvoWorkbookViewCell : ViewCell
     {
+		private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
         internal LingvoAudioProgressView ProgressView
         {
             get; private set;
@@ -22,8 +23,10 @@ namespace Lingvo.MobileApp.Templates
             Label titleLabel = new Label()
             {
                 FontAttributes = FontAttributes.Bold,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+				LineBreakMode = LineBreakMode.WordWrap
             };
+
             titleLabel.SetBinding(Label.TextProperty, "Title");
 
             subtitleLabel = new Label()
@@ -60,7 +63,20 @@ namespace Lingvo.MobileApp.Templates
 
             ContextActions.Add(deleteAction);
 
-            View = new StackLayout
+			var grid = new Grid();
+
+			grid.RowDefinitions.Add(new RowDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = DownloadButtonSize });
+
+
+		
+
+
+
+
+
+            var stackLayout =  new StackLayout
             {
                 Padding = new Thickness(5, 5),
                 HeightRequest = Device.OnPlatform(iOS: 70, Android: 72, WinPhone: 260),
@@ -79,9 +95,13 @@ namespace Lingvo.MobileApp.Templates
                                             subtitleLabel
                                         }
                                         }
+
                                 }
 
             };
+
+			grid.Children.Add(stackLayout, 0, 0);
+			View = grid;
         }
 
         protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)

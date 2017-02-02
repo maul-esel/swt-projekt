@@ -21,14 +21,15 @@ namespace Lingvo.MobileApp.Templates
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = DownloadButtonSize,
+				MinimumWidthRequest = DownloadButtonSize,
                 HeightRequest = DownloadButtonSize,
                 HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
             };
 
             downloadButton.OnClicked += (o, e) => DownloadWorkbook();
 
-            ((StackLayout)View).Children.Add(downloadButton);
+			((Grid)View).Children.Add(downloadButton, 1, 0);
         }
 
         protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
