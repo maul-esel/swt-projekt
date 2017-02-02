@@ -21,6 +21,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		private Recording currentRecording;
 		private AVAudioRecorder recorder;
 		private NSError error;
+
 		private static readonly AudioSettings SETTINGS = new AudioSettings
 		{
 			SampleRate = 44100.0f,
@@ -82,7 +83,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			recorder.Pause();
 			int recordingDuration = (int) recorder.currentTime;
-			string path = recorder.Url.ToString();
 			recorder.Stop();
 
 			recorder = null;
@@ -91,7 +91,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 			currentRecording = new Recording();
 			currentRecording.LocalPath = Path.GetFileName(currentRecordingUrl.Path);
 			currentRecording.Duration = recordingDuration;
-
 
 			return currentRecording;
 		}

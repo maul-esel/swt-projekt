@@ -45,7 +45,21 @@ namespace Lingvo.MobileApp.Services
 
         }
 
-        public IEnumerable<Workbook> getWorkbooksWithReferences()
+        /// <summary>
+        /// Finds the recording by id.
+        /// </summary>
+        /// <returns>The recording.</returns>
+        /// <param name="id">Identifier.</param>
+        public Recording FindRecording(int id)
+        {
+            return Recordings.FirstOrDefault(r => r.Id == id);
+        }
+
+        /// <summary>
+        /// Gets all the workbooks with all references: all associated pages and for all pages the existing recordings 
+        /// </summary>
+        /// <returns>The workbooks with references.</returns>
+        public IEnumerable<Workbook> FindWorkbooks()
         {
             var val = new List<Workbook>();
             foreach (var w in Workbooks)
@@ -56,9 +70,14 @@ namespace Lingvo.MobileApp.Services
             return val;
         }
 
-        public Workbook getWorkbookWithReferences(int workbookId)
+        /// <summary>
+        /// Gets the workbook with all references: all associated pages and for all pages the existing recordings 
+        /// </summary>
+        /// <returns>The workbook with references.</returns>
+        /// <param name="workbookId">Workbook identifier.</param>
+        public Workbook FindWorkbook(int workbookId)
         {
-            var result = database.Query<Workbook>("select * from Workbook where Id = ?", workbookId);
+            var result = database.Query<Workbook>("select * from Workbooks where Id = ?", workbookId);
 
             if (result == null || result.Count == 0)
             {
@@ -95,51 +114,97 @@ namespace Lingvo.MobileApp.Services
             w.Pages = pagesWithReferences.Cast<IPage>().ToList();
         }
 
-        public IEnumerable<TeacherMemo> getTeacherMemosWithReferences()
+        /// <summary>
+        /// Gets all the teacher memos with references (all existing recordings)
+        /// </summary>
+        /// <returns>The teacher memos with references.</returns>
+        public IEnumerable<TeacherMemo> FindTeacherMemos()
         {
             var val = new List<TeacherMemo>();
             foreach (var t in TeacherMemos)
             {
-                if (t.RecordingId > 0)
-                {
-                    t.Recording = FindRecording(t.RecordingId);
-                }
-
-                if (t.StudentTrackId != null)
-                {
-                    t.StudentTrack = FindRecording(t.StudentTrackId.Value);
-                }
+                GetTeacherMemosRecordings(t);
 
                 val.Add(t);
             }
             return val;
         }
 
-        public TeacherMemo getTeacherMemoWithReferences(int teacherMemoId)
+        /// <summary>
+        /// Gets the teacher memo with references (all existing recordings)
+        /// </summary>
+        /// <returns>The teacher memo with references.</returns>
+        /// <param name="teacherMemoId">Teacher memo identifier.</param>
+        public TeacherMemo FindTeacherMemo(int teacherMemoId)
         {
-            var t = FindTeacherMemo(teacherMemoId);
+            var t = TeacherMemos.FirstOrDefault(m => m.Id == teacherMemoId);
 
             if (t == null)
             {
                 return null;
             }
 
+            GetTeacherMemosRecordings(t);
+
+            return t;
+        }
+
+        /// <summary>
+        /// Gets the page with references (all existing recordings)
+        /// </summary>
+        /// <returns>The page with references.</returns>
+        /// <param name="pageId">Page identifier.</param>
+        public Page FindPage(int pageId)
+        {
+            var p = Pages.FirstOrDefault(pp => pp.Id == pageId);
+
+            if (p == null)
+            {
+                return null;
+            }
+
+            if (p.teacherTrackId > 0)
+            {
+                p.TeacherTrack = FindRecording(p.teacherTrackId);
+            }
+
+            if (p.studentTrackId != null)
+            {
+                p.StudentTrack = FindRecording(p.studentTrackId.Value);
+            }
+
+            return p;
+        }
+
+        private void GetTeacherMemosRecordings(TeacherMemo t)
+        {
             if (t.RecordingId > 0)
             {
-                t.Recording = FindRecording(t.RecordingId);
+                t.TeacherTrack = FindRecording(t.RecordingId);
             }
 
             if (t.StudentTrackId != null)
             {
                 t.StudentTrack = FindRecording(t.StudentTrackId.Value);
             }
-
-            return t;
         }
+
+        /// <summary>
+        /// Save the specified recording.
+        /// </summary>
+        /// <returns>The save.</returns>
+        /// <param name="recording">Recording.</param>
 
         public void Save(Recording recording)
         {
-            database.InsertOrReplace(recording);
+            if (recording.Id > 0 && FindRecording(recording.Id) != null)
+            {
+                database.Update(recording);
+            }
+            else
+            {
+                database.Insert(recording);
+            }
 
             RecordingChanged?.Invoke(recording);
         }
@@ -155,6 +220,7 @@ namespace Lingvo.MobileApp.Services
             database.UpdateWithChildren(page);
 
             PageChanged?.Invoke(page);
+            WorkbookChanged?.Invoke(page.Workbook);
         }
 
         /// <summary>
@@ -171,32 +237,39 @@ namespace Lingvo.MobileApp.Services
         }
 
         /// <summary>
-        /// Save the specified memo.
+        /// Save the specified memo 
         /// </summary>
         /// <returns>The save.</returns>
         /// <param name="memo">Memo.</param>
         public void Save(TeacherMemo memo)
         {
-            if (FindRecording(memo.Recording.Id) == null)
+            if (memo.StudentTrack != null)
             {
-                Save(memo.Recording);
+                memo.StudentTrackId = memo.StudentTrack.Id;
             }
 
-            if (FindRecording(memo.StudentTrack.Id) == null)
+            if (memo.Id > 0 && TeacherMemos.FirstOrDefault(t => t.Id == memo.Id) != null)
             {
-                Save(memo.StudentTrack);
+                database.Update(memo);
             }
-            database.InsertOrReplace(memo);
-            database.UpdateWithChildren(memo);
+            else
+            {
+                database.Insert(memo);
+            }
 
             TeacherMemoChanged?.Invoke(memo);
         }
 
+        /// <summary>
+        /// Delete the specified memo and its recordings.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="memo">Memo.</param>
         public void Delete(TeacherMemo memo)
         {
             database.Delete(memo);
 
-            Delete(memo.Recording);
+            Delete(memo.TeacherTrack);
 
             if (memo.StudentTrack != null)
             {
@@ -206,6 +279,11 @@ namespace Lingvo.MobileApp.Services
             TeacherMemoChanged?.Invoke(memo);
         }
 
+        /// <summary>
+        /// Delete the specified recording.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="recording">Recording.</param>
         public void Delete(Recording recording)
         {
             database.Delete(recording);
@@ -215,6 +293,11 @@ namespace Lingvo.MobileApp.Services
             RecordingChanged?.Invoke(recording);
         }
 
+        /// <summary>
+        /// Delete the specified page and its recordings.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="page">Page.</param>
         public void Delete(Page page)
         {
             Delete(page.TeacherTrack);
@@ -229,6 +312,11 @@ namespace Lingvo.MobileApp.Services
             PageChanged?.Invoke(page);
         }
 
+        /// <summary>
+        /// Delete the specified workbook and on cascade all its pages.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="workbook">Workbook.</param>
         public void Delete(Workbook workbook)
         {
             workbook.Pages.ForEach(p => Delete((Page)p));
@@ -236,41 +324,6 @@ namespace Lingvo.MobileApp.Services
             database.Delete(workbook); //On delete cascade used for pages
 
             WorkbookChanged?.Invoke(workbook);
-        }
-
-        public Recording FindRecording(int id)
-        {
-            return Recordings.FirstOrDefault(r => r.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load pages! Use getWorkbookWithReferences instead if you need them.
-        /// </summary>
-        /// <returns>The workbook.</returns>
-        /// <param name="id">Identifier.</param>
-        public Workbook FindWorkbook(int id)
-        {
-            return Workbooks.FirstOrDefault(w => w.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load teacher track and student track!
-        /// </summary>
-        /// <returns>The page.</returns>
-        /// <param name="id">Identifier.</param>
-        public Page FindPage(int id)
-        {
-            return Pages.FirstOrDefault(p => p.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load recording and student track! Use getTeacherMemoWithReferences instead if you need them.
-        /// </summary>
-        /// <returns>The teacher memo.</returns>
-        /// <param name="id">Identifier.</param>
-        public TeacherMemo FindTeacherMemo(int id)
-        {
-            return TeacherMemos.FirstOrDefault(t => t.Id == id);
         }
     }
 }

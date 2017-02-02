@@ -63,7 +63,6 @@ namespace Lingvo.Backend.Controllers
 				return NotFound();
 
 			return Json(new {
-				id = page.TeacherTrack.Id,
 				duration = page.TeacherTrack.Duration,
 				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
 				url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
