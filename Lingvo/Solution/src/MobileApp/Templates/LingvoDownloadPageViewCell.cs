@@ -52,7 +52,8 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
-            ContextActions.Clear();
+			//TODO: Bug in iOS "NullReferenceException"
+            //ContextActions.Clear();
 
             downloadButton.IsEnabled = !downloaded;
         }

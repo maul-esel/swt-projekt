@@ -125,9 +125,16 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void PrepareStudentTrack(Recording recording)
         {
-            studentRecording = recording;
-            studentTrack = CreateNewPlayer(recording);
-            IsStudentTrackMuted = false;
+			if (recording == null)
+			{
+				studentTrack = null;
+			}
+			else
+			{
+				studentRecording = recording;
+				studentTrack = CreateNewPlayer(recording);
+				IsStudentTrackMuted = false;
+			}
         }
 
         public void PrepareTeacherTrack(Recording recording)

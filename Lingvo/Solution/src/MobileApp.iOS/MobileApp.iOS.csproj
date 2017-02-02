@@ -146,7 +146,8 @@
     <BundleResource Include="Resources\ic_action_mic.png" />
     <BundleResource Include="Resources\ic_action_save.png" />
     <BundleResource Include="Resources\ic_action_tick.png" />
-    <BundleResource Include="Resources\ic_fiber_manual_record.png" />
+	<BundleResource Include="Resources\ic_action_tick.png" />
+    <BundleResource Include="Resources\ic_edit.png" />
     <BundleResource Include="Resources\ic_forward.png" />
     <BundleResource Include="Resources\ic_launcher.png" />
     <BundleResource Include="Resources\ic_pause.png" />
@@ -282,6 +283,7 @@
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_mic.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_save.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_action_tick.png" />
+	<ImageAsset Include="Assets.xcassets\xcassets assets\ic_edit.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_fiber_manual_record.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_forward.png" />
     <ImageAsset Include="Assets.xcassets\xcassets assets\ic_launcher.png" />
