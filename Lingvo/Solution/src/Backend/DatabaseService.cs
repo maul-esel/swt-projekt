@@ -123,6 +123,10 @@ namespace Lingvo.Backend
 			SaveChanges();
 		}
 
-
+		public void Delete(Recording recording)
+		{
+			Recordings.Remove(recording);
+			SaveChanges();
+		}
     }
 }
