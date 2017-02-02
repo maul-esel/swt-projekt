@@ -13,7 +13,7 @@ namespace Lingvo.MobileApp.Templates
             get; private set;
         }
 
-        private MenuItem deleteAction, editAction;
+        private MenuItem deleteAction, editAction, deleteStudentAction;
 
         public LingvoTeacherMemoViewCell() :
             base()
@@ -59,6 +59,18 @@ namespace Lingvo.MobileApp.Templates
                 LocalCollection.Instance.DeleteTeacherMemo(memo);
             };
 
+            deleteStudentAction = new MenuItem
+            {
+                Text = ((Span)App.Current.Resources["label_delete_studentTrack"]).Text,
+                Icon = "ic_mic_off.png"
+            };
+
+            deleteStudentAction.Clicked += (o, e) =>
+            {
+                TeacherMemo page = (TeacherMemo)BindingContext;
+                LocalCollection.Instance.DeleteStudentRecording(page);
+            };
+
             editAction.Clicked += async (o, e) =>
             {
                 await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage((TeacherMemo)BindingContext));
@@ -91,6 +103,11 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = 1;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
             ProgressView.MuteEnabled = false;
+
+            if (memo.StudentTrack != null && !ContextActions.Contains(deleteStudentAction))
+            {
+                ContextActions.Add(deleteStudentAction);
+            }
         }
 
         private void Event_TeacherMemoChanged(TeacherMemo t)

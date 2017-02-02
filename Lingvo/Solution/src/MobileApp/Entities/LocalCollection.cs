@@ -137,12 +137,20 @@ namespace Lingvo.MobileApp.Entities
 		/// </summary>
 		/// <param name="page">Page.</param>
         [Obsolete]
-        public void DeleteStudentRecording(Page page)
+        public void DeleteStudentRecording(IExercise exercise)
         {
-            File.Delete(FileUtil.getAbsolutePath(page.StudentTrack.LocalPath));
-            App.Database.Delete(page.StudentTrack);
-            page.DeleteStudentRecording();
-            App.Database.Save(page);
+            File.Delete(FileUtil.getAbsolutePath(exercise.StudentTrack.LocalPath));
+            App.Database.Delete(exercise.StudentTrack);
+            exercise.DeleteStudentRecording();
+
+            if (exercise is Page)
+            {
+                App.Database.Save((Page)exercise);
+            }
+            else
+            {
+                App.Database.Save((TeacherMemo)exercise);
+            }
         }
     }
 }

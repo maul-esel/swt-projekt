@@ -19,13 +19,13 @@ namespace Lingvo.MobileApp.Controllers
         private IPlayer audioPlayer;
         private IRecorder recorder;
 
-        private IExercisable exercisable;
+        private IExercise exercisable;
 
         /// <summary>
         /// Gets or sets the selected page.
         /// </summary>
         /// <value>The selected page.</value>
-        public IExercisable Exercisable
+        public IExercise Exercisable
         {
             get
             {
