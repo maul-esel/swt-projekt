@@ -95,7 +95,7 @@ namespace Lingvo.Backend.Controllers
 			{
 				var recording = await SaveRecording(db, storage, model);
 				await storage.DeleteAsync(page.TeacherTrack.LocalPath);
-				db.Delete(recording);
+				db.Delete(page.TeacherTrack);
 				page.TeacherTrack = recording;
 			}
 
