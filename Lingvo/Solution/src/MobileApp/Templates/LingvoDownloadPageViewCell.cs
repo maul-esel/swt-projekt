@@ -52,7 +52,10 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
-            ContextActions.Clear();
+            if (ContextActions.Count > 0)
+            {
+                ContextActions.Clear();
+            }
 
             downloadButton.IsEnabled = !downloaded;
         }

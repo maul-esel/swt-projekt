@@ -48,7 +48,7 @@ namespace Lingvo.MobileApp.Pages
             contentLayout.Children.Add(new StackLayout() { Children = { errorLabel } },
                 Constraint.RelativeToParent((p) => { return p.X; }),
                 Constraint.RelativeToParent((p) => { return p.Y; }),
-                Constraint.RelativeToParent((p) => { return p.Width; }), 
+                Constraint.RelativeToParent((p) => { return p.Width; }),
                 Constraint.RelativeToParent((p) => { return p.Height; }));
 
             contentLayout.Children.Add(listView, Constraint.RelativeToParent((p) => { return p.X; }),

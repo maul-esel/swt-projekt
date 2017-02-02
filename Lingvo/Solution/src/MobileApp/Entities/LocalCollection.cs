@@ -30,7 +30,13 @@ namespace Lingvo.MobileApp.Entities
         /// The teacher memos collection, does not return null but an empty list.
         /// </summary>
         /// <value>The teacher memos.</value>
-        public IEnumerable<TeacherMemo> TeacherMemos => App.Database.TeacherMemos;
+        public IEnumerable<TeacherMemo> TeacherMemos
+        {
+            get
+            {
+				return App.Database.FindTeacherMemos();
+            }
+        }
 
         /// <summary>
         /// The workbooks, does not return null but an empty list.
@@ -40,7 +46,7 @@ namespace Lingvo.MobileApp.Entities
         {
             get
             {
-                return App.Database.getWorkbooksWithReferences();
+				return App.Database.FindWorkbooks();
             }
         }
 
@@ -63,6 +69,23 @@ namespace Lingvo.MobileApp.Entities
         /// <param name="memo">Memo.</param>
         public void AddTeacherMemo(TeacherMemo memo)
         {
+            if (memo.TeacherTrack != null && App.Database.FindRecording(memo.TeacherTrack.Id) == null)
+            {
+                App.Database.Save(memo.TeacherTrack);
+            }
+
+            if (memo.StudentTrack != null && App.Database.FindRecording(memo.StudentTrack.Id) == null)
+            {
+                App.Database.Save(memo.StudentTrack);
+            }
+
+            memo.RecordingId = memo.TeacherTrack.Id;
+
+            if (memo.StudentTrack != null)
+            {
+                memo.StudentTrackId = memo.StudentTrack.Id;
+            }
+
             App.Database.Save(memo);
         }
 
@@ -102,6 +125,11 @@ namespace Lingvo.MobileApp.Entities
         {
             page.Workbook.DeletePage(page);
             App.Database.Delete(page);
+
+            if (page.Workbook.Pages.Count == 0)
+            {
+                DeleteWorkbook(page.Workbook);
+            }
         }
 
         /// <summary>
@@ -109,12 +137,20 @@ namespace Lingvo.MobileApp.Entities
 		/// </summary>
 		/// <param name="page">Page.</param>
         [Obsolete]
-        public void DeleteStudentRecording(Page page)
+        public void DeleteStudentRecording(IExercise exercise)
         {
-            File.Delete(FileUtil.getAbsolutePath(page.StudentTrack.LocalPath));
-            App.Database.Delete(page.StudentTrack);
-            page.DeleteStudentRecording();
-            App.Database.Save(page);
+            File.Delete(FileUtil.getAbsolutePath(exercise.StudentTrack.LocalPath));
+            App.Database.Delete(exercise.StudentTrack);
+            exercise.DeleteStudentRecording();
+
+            if (exercise is Page)
+            {
+                App.Database.Save((Page)exercise);
+            }
+            else
+            {
+                App.Database.Save((TeacherMemo)exercise);
+            }
         }
     }
 }

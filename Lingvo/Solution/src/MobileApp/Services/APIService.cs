@@ -154,7 +154,6 @@ namespace Lingvo.MobileApp
 					await response.GetResponseStream().CopyToAsync(fileStream);
 
 				return new Recording(
-					int.Parse(json["id"]),
 					int.Parse(json["duration"]),
 					localPath,
 					DateTime.ParseExact(json["creationTime"], "dd.MM.yyyy HH:mm:ss", null)

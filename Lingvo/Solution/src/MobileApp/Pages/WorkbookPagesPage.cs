@@ -21,36 +21,24 @@ namespace Lingvo.MobileApp.Pages
             {
                 ItemsSource = workbook.Pages,
                 ItemTemplate = new DataTemplate(typeof(LingvoPageViewCell)),
-                HasUnevenRows = true,
-                IsVisible = workbook.Pages.Count > 0
+                HasUnevenRows = true
             };
 
             listView.ItemTapped += Handle_ItemTapped;
             listView.ItemSelected += Handle_ItemSelected;
 
-            Label errorLabel = new Label
-            {
-                Text = ((Span)App.Current.Resources["label_no_local_pages"]).Text,
-                TextColor = (Color)App.Current.Resources["primaryColor"],
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap,
-                IsVisible = workbook.Pages.Count == 0
-
-            };
-
-            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
-            {
-                Workbook newWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(workbook.Id));
-                if (newWorkbook != null)
-                {
-                    listView.ItemsSource = newWorkbook.Pages;
-                    listView.IsVisible = workbook.Pages.Count > 0;
-                    errorLabel.IsVisible = workbook.Pages.Count == 0;
-                }
-            }));
+            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(async () =>
+             {
+                 Workbook newWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(workbook.Id));
+                 if (newWorkbook != null && newWorkbook.Pages.Count > 0)
+                 {
+                     listView.ItemsSource = newWorkbook.Pages;
+                 }
+                 else
+                 {
+                     await App.Current.MainPage.Navigation.PopAsync();
+                 }
+             }));
 
             LocalCollection.Instance.WorkbookChanged += (w) =>
             {
@@ -71,8 +59,7 @@ namespace Lingvo.MobileApp.Pages
             Content = new StackLayout
             {
                 Children = {
-                listView,
-                errorLabel
+                listView
                 }
             };
         }
