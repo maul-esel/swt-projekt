@@ -13,7 +13,7 @@
 		</h3>
 	</div>
   	<form style="padding-top:20px;" id="pageForm" enctype="multipart/form-data"
-	  method="post"	asp-controller="Home" asp-action="CreatePage" >
+	  method="post"	asp-controller="Home" asp-action="@(page == null ? "CreatePage" : "UpdatePage")" asp-route-id="@page?.Id">
 	    <input type="hidden" name="workbookID" value="@workbook.Id"/>
 		<div class="form-group col-md-9" style="padding-left:0">
 

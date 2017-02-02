@@ -87,9 +87,9 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int pageId, ViewModels.PageModel model)
+		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, ViewModels.PageModel model)
 		{
-			var page = db.FindPageWithRecording(pageId);
+			var page = db.FindPageWithRecording(id);
 
 			if (model.UploadedFile != null || model.RecordedFile != null)
 			{
