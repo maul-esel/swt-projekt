@@ -18,7 +18,7 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
-#if DEBUG
+#if !DEBUG
 	#if __ANDROID__
 		// Android Simulator forwards development localhost to IP 10.0.2.2
 		private const string URL = "http://10.0.2.2:5000/api/app/";
