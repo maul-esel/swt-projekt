@@ -87,29 +87,66 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, int workbookID, string description, int pageNumber, IFormFile file, IFormFile recording)
+		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int pageId, ViewModels.PageModel model)
 		{
+			var page = db.FindPageWithRecording(pageId);
 
-			var r = new Recording()
+			if (model.UploadedFile != null || model.RecordedFile != null)
+			{
+				var recording = await SaveRecording(db, storage, model);
+				await storage.DeleteAsync(page.TeacherTrack.LocalPath);
+				page.TeacherTrack = recording;
+			}
+
+			page.Description = model.Description;
+			page.Number = model.PageNumber;
+			db.Save(page);
+
+			return RedirectToAction(nameof(Workbook), model.WorkbookID);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, ViewModels.PageModel model)
+		{
+			var recording = await SaveRecording(db, storage, model);
+			db.Save(new Page()
+			{
+				Number = model.PageNumber,
+				Description = model.Description,
+				workbookId = model.WorkbookID,
+				teacherTrackId = recording.Id
+			});
+			return RedirectToAction(nameof(Workbook), model.WorkbookID);
+		}
+
+		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, ViewModels.PageModel model)
+		{
+			var file = model.RecordedFile ?? model.UploadedFile;
+			if (file == null)
+				throw new InvalidDataException("no file uploaded");
+
+			string prefix = (model.RecordedFile == null) ? "uploaded_" : "recorded_";
+			string fileName = prefix + Guid.NewGuid().ToString();
+
+			Stream stream = null;
+			try
+			{
+				stream = file.OpenReadStream();
+				await storage.SaveAsync(fileName, stream);
+			}
+			finally
+			{
+				stream?.Dispose();
+			}
+
+			var recording = new Recording()
 			{
 				Duration = 10,
-				LocalPath = filePath //TODO: set this path correctly to filename
+				LocalPath = fileName
 			};
+			db.Save(recording);
 
-			db.Save(r);
-
-			var p = new Page()
-			{
-				Number = pageNumber,
-				Description = description,
-				workbookId = workbookID,
-				teacherTrackId = r.Id
-			};
-
-			db.Save(p);
-
-			return RedirectToAction(nameof(Workbook), workbookID);
-
+			return recording;
 		}
 	}
 }
