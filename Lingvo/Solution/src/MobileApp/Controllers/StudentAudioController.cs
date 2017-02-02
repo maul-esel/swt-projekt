@@ -207,9 +207,6 @@ namespace Lingvo.MobileApp.Controllers
                     db.Save((TeacherMemo)Exercisable);
                 }
 
-                //Setting the new recording
-                Exercisable.StudentTrack = recording;
-
                 //Reset the page
                 Exercisable = exercisable;
             }
