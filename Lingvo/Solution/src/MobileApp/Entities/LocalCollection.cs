@@ -34,7 +34,7 @@ namespace Lingvo.MobileApp.Entities
         {
             get
             {
-                return App.Database.getTeacherMemosWithReferences();
+				return App.Database.FindTeacherMemos();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Lingvo.MobileApp.Entities
         {
             get
             {
-                return App.Database.getWorkbooksWithReferences();
+				return App.Database.FindWorkbooks();
             }
         }
 

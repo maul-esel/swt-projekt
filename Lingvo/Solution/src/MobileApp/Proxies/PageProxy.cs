@@ -106,25 +106,52 @@ namespace Lingvo.MobileApp.Proxies
 		{
 		}
 
+		/// <summary>
+		/// Load the real page object for this proxy
+		/// </summary>
+		/// <returns>The resolve.</returns>
 		public async Task Resolve()
 		{
 
 			if (original == null)
 			{
 				var service = CloudLibraryProxy.Instance;
-				var page = await service.DownloadSinglePage(this);
-				original = page;
 
 				var db = App.Database;
 
 				if (db.FindWorkbook(this.Workbook.Id) == null)
 				{
-                    LocalCollection.Instance.AddWorkbook(Workbook);
+					LocalCollection.Instance.AddWorkbook(Workbook);
+
+					await DownloadPage();
+				}
+				else
+				{
+					var p = db.FindPage(this.Id);
+
+					if (p != null)
+					{
+						original = p;
+					}
+					else
+					{
+						await DownloadPage();
+					}
 				}
 
-				db.Save(original.TeacherTrack);
-				db.Save(original);
 			}
+		}
+
+		private async Task DownloadPage()
+		{
+			var service = CloudLibraryProxy.Instance;
+			var db = App.Database;
+
+			var page = await service.DownloadSinglePage(this);
+			original = page;
+
+			db.Save(original.TeacherTrack);
+			db.Save(original);
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ using System.IO;
 #if __ANDROID__
 		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
 #elif __IOS__
-using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
+		using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 #endif
 
 namespace Lingvo.MobileApp.Services
@@ -46,10 +46,20 @@ namespace Lingvo.MobileApp.Services
         }
 
 		/// <summary>
+		/// Finds the recording by id.
+		/// </summary>
+		/// <returns>The recording.</returns>
+		/// <param name="id">Identifier.</param>
+		public Recording FindRecording(int id)
+		{
+			return Recordings.FirstOrDefault(r => r.Id == id);
+		}
+
+		/// <summary>
 		/// Gets all the workbooks with all references: all associated pages and for all pages the existing recordings 
 		/// </summary>
 		/// <returns>The workbooks with references.</returns>
-        public IEnumerable<Workbook> getWorkbooksWithReferences()
+        public IEnumerable<Workbook> FindWorkbooks()
         {
             var val = new List<Workbook>();
             foreach (var w in Workbooks)
@@ -65,9 +75,9 @@ namespace Lingvo.MobileApp.Services
 		/// </summary>
 		/// <returns>The workbook with references.</returns>
 		/// <param name="workbookId">Workbook identifier.</param>
-        public Workbook getWorkbookWithReferences(int workbookId)
+		public Workbook FindWorkbook(int workbookId)
         {
-            var result = database.Query<Workbook>("select * from Workbook where Id = ?", workbookId);
+            var result = database.Query<Workbook>("select * from Workbooks where Id = ?", workbookId);
 
             if (result == null || result.Count == 0)
             {
@@ -108,7 +118,7 @@ namespace Lingvo.MobileApp.Services
 		/// Gets all the teacher memos with references (all existing recordings)
 		/// </summary>
 		/// <returns>The teacher memos with references.</returns>
-        public IEnumerable<TeacherMemo> getTeacherMemosWithReferences()
+        public IEnumerable<TeacherMemo> FindTeacherMemos()
         {
             var val = new List<TeacherMemo>();
             foreach (var t in TeacherMemos)
@@ -125,9 +135,9 @@ namespace Lingvo.MobileApp.Services
 		/// </summary>
 		/// <returns>The teacher memo with references.</returns>
 		/// <param name="teacherMemoId">Teacher memo identifier.</param>
-        public TeacherMemo getTeacherMemoWithReferences(int teacherMemoId)
+		public TeacherMemo FindTeacherMemo(int teacherMemoId)
         {
-            var t = FindTeacherMemo(teacherMemoId);
+            var t = TeacherMemos.FirstOrDefault(m => m.Id == teacherMemoId);
 
             if (t == null)
             {
@@ -138,6 +148,33 @@ namespace Lingvo.MobileApp.Services
 
             return t;
         }
+
+		/// <summary>
+		/// Gets the page with references (all existing recordings)
+		/// </summary>
+		/// <returns>The page with references.</returns>
+		/// <param name="pageId">Page identifier.</param>
+		public Page FindPage(int pageId)
+		{
+			var p = Pages.FirstOrDefault(pp => pp.Id == pageId);
+
+			if (p == null)
+			{
+				return null;
+			}
+
+			if (p.teacherTrackId > 0)
+			{
+				p.TeacherTrack = FindRecording(p.teacherTrackId);
+			}
+
+			if (p.studentTrackId != null)
+			{
+				p.StudentTrack = FindRecording(p.studentTrackId.Value);
+			}
+
+			return p;
+		}
 
 		private void GetTeacherMemosRecordings(TeacherMemo t)
 		{
@@ -204,7 +241,7 @@ namespace Lingvo.MobileApp.Services
         /// <param name="memo">Memo.</param>
         public void Save(TeacherMemo memo)
         {   
-			if (memo.Id > 0 && FindTeacherMemo(memo.Id) != null)
+			if (memo.Id > 0 && TeacherMemos.FirstOrDefault(t => t.Id == memo.Id) != null)
 			{
 				database.Update(memo);
 			}
@@ -282,44 +319,5 @@ namespace Lingvo.MobileApp.Services
             WorkbookChanged?.Invoke(workbook);
         }
 
-		/// <summary>
-		/// Finds the recording by id.
-		/// </summary>
-		/// <returns>The recording.</returns>
-		/// <param name="id">Identifier.</param>
-        public Recording FindRecording(int id)
-        {
-            return Recordings.FirstOrDefault(r => r.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load pages! Use getWorkbookWithReferences instead if you need them.
-        /// </summary>
-        /// <returns>The workbook.</returns>
-        /// <param name="id">Identifier.</param>
-        public Workbook FindWorkbook(int id)
-        {
-            return Workbooks.FirstOrDefault(w => w.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load teacher track and student track!
-        /// </summary>
-        /// <returns>The page.</returns>
-        /// <param name="id">Identifier.</param>
-        public Page FindPage(int id)
-        {
-            return Pages.FirstOrDefault(p => p.Id == id);
-        }
-
-        /// <summary>
-        /// Important: does not load recording and student track! Use getTeacherMemoWithReferences instead if you need them.
-        /// </summary>
-        /// <returns>The teacher memo.</returns>
-        /// <param name="id">Identifier.</param>
-        public TeacherMemo FindTeacherMemo(int id)
-        {
-            return TeacherMemos.FirstOrDefault(t => t.Id == id);
-        }
     }
 }
