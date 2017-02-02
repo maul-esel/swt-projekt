@@ -18,13 +18,13 @@ namespace Lingvo.MobileApp.Pages
         private static readonly int SeekTimeStep = 5;
         private bool isActive;
 
-        private IExercisable exercisable;
+        private IExercise exercisable;
         private Workbook workbook;
         private Label Label;
         private LingvoRoundImageButton PreviousPageButton;
         private LingvoRoundImageButton NextPageButton;
 
-        public IExercisable Exercisable
+        public IExercise Exercisable
         {
             get { return exercisable; }
             internal set
@@ -130,7 +130,7 @@ namespace Lingvo.MobileApp.Pages
             get; private set;
         }
 
-        public AudioPage(TeacherMemo memo) : this((IExercisable)memo)
+        public AudioPage(TeacherMemo memo) : this((IExercise)memo)
         {
             Title = memo.Name;
             Exercisable = memo;
@@ -143,7 +143,7 @@ namespace Lingvo.MobileApp.Pages
             Exercisable = page;
         }
 
-        private AudioPage(IExercisable exercisable)
+        private AudioPage(IExercise exercisable)
         {
 
             Grid buttonGrid = new Grid()

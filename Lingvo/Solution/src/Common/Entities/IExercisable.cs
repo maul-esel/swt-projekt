@@ -2,7 +2,7 @@
 
 namespace Lingvo.Common.Entities
 {
-    public interface IExercisable
+    public interface IExercise
     {
         int Id { get; set; }
         /// <summary>
