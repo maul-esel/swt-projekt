@@ -33,6 +33,7 @@ namespace Lingvo.MobileApp.Pages
 
                 Label.Text = getLabelString();
                 StudentAudioController.Instance.Exercisable = exercisable;
+                Refresh();
             }
         }
 
@@ -179,18 +180,14 @@ namespace Lingvo.MobileApp.Pages
                 ProgressView.MaxProgress = exercisable.TeacherTrack.Duration;
             }
 
-            LocalCollection.Instance.PageChanged += (p) =>
+            if (exercisable is IPage)
             {
-                if (exercisable is IPage && p.Id.Equals(exercisable.Id))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
-                        ProgressView.MuteEnabled = exercisable.StudentTrack != null;
-                    });
-
-                }
-            };
+                LocalCollection.Instance.PageChanged += Event_PageChanged;
+            }
+            else
+            {
+                LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
+            }
 
             ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
 
@@ -309,6 +306,35 @@ namespace Lingvo.MobileApp.Pages
                         buttonGrid
                 }
             };
+        }
+
+        private void Event_TeacherMemoChanged(TeacherMemo t)
+        {
+            if (exercisable is TeacherMemo && t.Id.Equals(exercisable.Id))
+            {
+                Refresh();
+            }
+        }
+
+        private void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            if (exercisable is IPage && p.Id.Equals(exercisable.Id))
+            {
+                Refresh();
+            }
+        }
+
+        private void Refresh()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
+                ProgressView.MuteEnabled = exercisable.StudentTrack != null;
+                NextPageButton.IsVisible = exercisable is IPage;
+                PreviousPageButton.IsVisible = exercisable is IPage;
+                NextPageButton.IsEnabled = workbook != null && NextPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) < workbook.Pages.Count - 1;
+                PreviousPageButton.IsEnabled = workbook != null && PreviousPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) > 0;
+            });
         }
 
         private void PreviousPageButton_OnClicked(object sender, EventArgs e)

@@ -125,6 +125,11 @@ namespace Lingvo.MobileApp.Entities
         {
             page.Workbook.DeletePage(page);
             App.Database.Delete(page);
+
+            if (page.Workbook.Pages.Count == 0)
+            {
+                DeleteWorkbook(page.Workbook);
+            }
         }
 
         /// <summary>
