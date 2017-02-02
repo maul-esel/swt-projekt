@@ -31,9 +31,7 @@ CREATE TABLE IF NOT EXISTS Pages (
 
 -- only on server --
 
-DROP TRIGGER IF EXISTS updateTotalPages;
 CREATE TRIGGER updateTotalPages
-AFTER INSERT ON Pages FOR EACH ROW
-BEGIN
-  UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
-END;
+AFTER INSERT ON Pages
+FOR EACH ROW
+UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;

@@ -72,11 +72,24 @@ namespace Lingvo.Backend.Controllers
         {
             return View();
         }
-    
-		[HttpPost]
-		public async Task<IActionResult> UploadFile(IFormFile file)
-		{
 
+		[HttpPost]
+		public IActionResult CreateWorkbook([FromServices] DatabaseService db, string title, string subtitle)
+		{
+			var w = new Workbook()
+			{
+				Title = title,
+				Subtitle = subtitle
+			};
+
+			db.Save(w);
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, int workbookID, string description, int pageNumber, IFormFile file)
+		{
 			var uploads = Path.Combine(environment.WebRootPath, "uploaded");
 			var filePath = Path.Combine(uploads, file.FileName);
 
@@ -89,7 +102,25 @@ namespace Lingvo.Backend.Controllers
 			await file.CopyToAsync(stream);
 			stream.Dispose();
 
-			return View("Workbook"); // TODO: redirect to proper workbook page
+			var r = new Recording()
+			{
+				Duration = 10,
+				LocalPath = filePath //TODO: set this path correctly to filename
+			};
+
+			db.Save(r);
+
+			var p = new Page()
+			{
+				Number = pageNumber,
+				Description = description,
+				workbookId = workbookID,
+				teacherTrackId = r.Id
+			};
+
+			db.Save(p);
+
+			return RedirectToAction(nameof(Workbook), workbookID);
 		}
 	}
 }
