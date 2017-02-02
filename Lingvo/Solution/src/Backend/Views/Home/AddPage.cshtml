@@ -44,8 +44,11 @@
   					</div>
   				</div>
   				<div class="col-md-6" style="text-align: right;">
-  					<h3>Audio im Browser aufnehmen</h3>
-  					<img src="~/images/record.png" style="max-width:370px;">
+  					<h3>Audiospur jetzt direkt aufnehmen</h3>
+  					<input type="image" src="~/images/record_button.png" onclick="startRecording(this);"/>
+            <input type="image" src="~/images/stop_button.png" onclick="stopRecording(this);"/>
+            <input type="image" src="~/images/upload_button.png" onclick="sendBlobToServer(this);"/>
+            
   				</div>
   			</div>
   		</div>
@@ -54,26 +57,13 @@
   			<button type="reset" class="btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Workbook">Abbrechen</button>
   		</div>
   	</form>
-			<div>
-				<h1>Audio Recording test</h1>
-
-				  <button onclick="startRecording(this);">record</button>
-				  <button onclick="stopRecording(this);" disabled>stop</button>
-				  
-				  <h2>Recordings</h2>
-				  <ul id="recordingslist"></ul>
-				  
-				  <h2>Log</h2>
-				  <pre id="log"></pre>
-			</div>
+			
  </div>
   <script>
-  function __log(e, data) {
-    log.innerHTML += "\n" + e + " " + (data || '');
-  }
-
+ 
   var audio_context;
   var recorder;
+  var current_recording;
   var recording = 0;
 
   function startRecording(button) {
@@ -84,83 +74,41 @@
     recorder && recorder.record();
     button.disabled = true;
     button.nextElementSibling.disabled = false;
-    __log('Recording...');
   }
 
   function stopRecording(button) {
     recorder && recorder.stop();
     button.disabled = true;
     button.previousElementSibling.disabled = false;
-    __log('Stopped recording.');
     
-
-    createDownloadLink();
-    
+    prepareRecording();
 
   }
 
-  function createDownloadLink() {
+  function prepareRecording() {
 
+    recorder.exportMP3(function(blob){
+      current_recording = blob;
+      //Functions for displaying the current recording could be called here
+      //Playback function could be set up here
+    });
+  }
 
-    
-      __log('Exporting to mp3');
-
-
- var b = Date.now();
-
-      recorder.exportMP3(function(blob) {
-
-        __log('MP3 file successfully exported');
-
-          var a = Date.now();
-
-         __log('MP3 Processed in ' + (a -b) + 'ms' );
-
-
-         var length = ((blob.size*8)/128000);
-
-        __log('MP3 duration: ' +length + ' s' );
-
-        console.log(blob);
-
-        var url = URL.createObjectURL(blob);
-
+  function sendBlobToServer() {
+        if(current_recording == null){
+          return;}
+       
         var formData = new FormData($("#pageForm")[0]);
-        formData.append("recording", blob);
-
+        formData.append("RecordedFile", current_recording);
         var request = new XMLHttpRequest();
-        request.open("POST", "/Home/UploadFile");
+        request.open("POST", "/Home/CreatePage"); //Not sure which method exactly should be called? Do we have to call a method???
         request.send(formData);
-
-
-        console.log(url);
-
-        var link = document.createElement('a');
-        link.href = url;
-        link.innerHTML = "Recording #" + recording + " in mp3";
-
-        link.download = "example.mp3";
-
-        var li2 = document.createElement('li');
-        li2.appendChild(link);
-        document.getElementById("recordingslist").appendChild(li2);
-
-      });
-    };
-
-
-
-
-
-  
+  }
 
   window.onload = function init() {
-
     audioRecorder.requestDevice(function(recorderObject){
-
       recorder = recorderObject;
     });
-
   };
 
 </script>	
