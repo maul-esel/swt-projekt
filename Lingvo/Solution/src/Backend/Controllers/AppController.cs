@@ -1,8 +1,7 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend.Controllers
 {
@@ -57,33 +56,18 @@ namespace Lingvo.Backend.Controllers
 		/// </summary>
 		/// <returns>The teacher track.</returns>
 		[Route("pages/{pageId}")]
-		public IActionResult GetTeacherTrack([FromServices] DatabaseService db, int pageId)
+		public async Task<IActionResult> GetTeacherTrack([FromServices] DatabaseService db, [FromServices] IStorage storage, int pageId)
 		{
 			var page = db.FindPageWithRecording(pageId);
 			if (page == null)
 				return NotFound();
 
-			Response.Headers["X-Audio-Duration"] = page.TeacherTrack.Duration.ToString();
-			Response.Headers["X-Recording-Id"] = page.TeacherTrack.Id.ToString();
-			Response.Headers["X-Recording-Creation-Time"] = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
-
-			//relative and absolute paths supported
-			string path = null;
-			if (Path.IsPathRooted(page.TeacherTrack.LocalPath))
-			{
-				path = page.TeacherTrack.LocalPath;
-			}
-			else
-			{
-				path = Path.Combine(Directory.GetCurrentDirectory(), page.TeacherTrack.LocalPath);
-			}
-
-
-			return new FileContentResult(System.IO.File.ReadAllBytes(path), "audio/mpeg3")
-			{
-				FileDownloadName = $"page{pageId}.mp3"
-			};
+			return Json(new {
+				id = page.TeacherTrack.Id,
+				duration = page.TeacherTrack.Duration,
+				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
+				url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
+			});
 		}
-
     }
 }
