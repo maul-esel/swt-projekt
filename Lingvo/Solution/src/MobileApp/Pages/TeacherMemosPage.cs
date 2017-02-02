@@ -1,4 +1,4 @@
-﻿using Lingvo.Common.Entities;
+using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Templates;
 using Lingvo.MobileApp.Entities;
@@ -73,8 +73,18 @@ namespace Lingvo.MobileApp.Pages
 
             if (Device.OS == TargetPlatform.Android)
             {
-                LingvoFloatingActionButton fab = new LingvoFloatingActionButton();
-                fab.FabClicked += AddNewClicked;
+                LingvoRoundImageButton fab = new LingvoRoundImageButton()
+                {
+                    Image = "ic_action_add.png",
+                    WidthRequest = Device.OnPlatform(iOS: 56, Android: 56, WinPhone: 56),
+                    HeightRequest = Device.OnPlatform(iOS: 56, Android: 56, WinPhone: 56),
+                    Color = (Color)App.Current.Resources["secondaryColor"],
+                    Border = true,
+                    Text = "",
+                    Filled = true
+                };
+                fab.OnClicked += AddNewClicked;
+
                 ContentLayout.Children.Add(fab, Constraint.RelativeToParent((parent) => { return parent.Width - parent.X - 1.5 * fab.WidthRequest; }),
                 Constraint.RelativeToParent((parent) => { return parent.Height - parent.Y - 1.5 * fab.HeightRequest; }),
                 Constraint.RelativeToParent((parent) => { return fab.WidthRequest; }),

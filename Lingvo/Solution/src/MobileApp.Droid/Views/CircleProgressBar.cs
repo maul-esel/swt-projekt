@@ -7,12 +7,12 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Android.Util;
 using Android.Graphics;
 using Android.Content.Res;
 using Android.Text;
+using Android.Views;
 
 namespace Lingvo.MobileApp.Droid.Views
 {
@@ -74,7 +74,7 @@ namespace Lingvo.MobileApp.Droid.Views
 
         public CircleProgressBar(Context context, IAttributeSet attrs) : this(context, attrs, 0) { }
 
-        public CircleProgressBar(Context context, IAttributeSet attrs, int defStyleAttr, int defStyleRes) : base(context, attrs, defStyleAttr, defStyleRes)
+        public CircleProgressBar(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr)
         {
             default_text_size = TypedValue.ApplyDimension(ComplexUnitType.Sp, 18, Resources.DisplayMetrics);
             min_size = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 20, Resources.DisplayMetrics);
@@ -86,8 +86,6 @@ namespace Lingvo.MobileApp.Droid.Views
 
             initPainters();
         }
-
-        public CircleProgressBar(Context context, IAttributeSet attrs, int defStyleAttr) : this(context, attrs, defStyleAttr, 0) { }
 
         protected void initPainters()
         {
@@ -381,7 +379,8 @@ namespace Lingvo.MobileApp.Droid.Views
                         //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
                         float textHeight = textPaint.Descent() + textPaint.Ascent();
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, (Width - textHeight) / 2.0f, textPaint);
-                    } else
+                    }
+                    else
                     {
                         //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - textPaint.Descent() - offset);
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, Width / 2.0f - textPaint.Descent() / 2.0f, textPaint);
@@ -422,7 +421,7 @@ namespace Lingvo.MobileApp.Droid.Views
         {
             if (state is Bundle)
             {
-				var bundle = state as Bundle;
+                var bundle = state as Bundle;
                 int colorValue = bundle.GetInt(INSTANCE_TEXT_COLOR);
                 textColor = Color.Argb(Color.GetAlphaComponent(colorValue), Color.GetRedComponent(colorValue), Color.GetGreenComponent(colorValue), Color.GetBlueComponent(colorValue));
                 textSize = bundle.GetFloat(INSTANCE_TEXT_SIZE);
