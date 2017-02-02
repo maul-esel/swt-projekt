@@ -12,10 +12,11 @@
 			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > <a asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a> > @ViewData["Title"]
 		</h3>
 	</div>
-  	<form style="padding-top:20px;" enctype="multipart/form-data"
+  	<form style="padding-top:20px;" id="pageForm" enctype="multipart/form-data"
 	  method="post"	asp-controller="Home" asp-action="CreatePage" >
-	  	<input type="hidden" name="workbookID" value="@workbook.Id"/>
+	    <input type="hidden" name="workbookID" value="@workbook.Id"/>
 		<div class="form-group col-md-9" style="padding-left:0">
+
   			<label for="page-name">Beschreibung</label>
 			 <input name ="description" class="form-control input-lg" id="page-name" placeholder="z.B. Die Zahlen" value="@page?.Description">
   		</div>
@@ -53,7 +54,117 @@
   			<button type="reset" class="btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Workbook">Abbrechen</button>
   		</div>
   	</form>
+			<div>
+				<h1>Audio Recording test</h1>
+
+				  <button onclick="startRecording(this);">record</button>
+				  <button onclick="stopRecording(this);" disabled>stop</button>
+				  
+				  <h2>Recordings</h2>
+				  <ul id="recordingslist"></ul>
+				  
+				  <h2>Log</h2>
+				  <pre id="log"></pre>
+			</div>
  </div>
+  <script>
+  function __log(e, data) {
+    log.innerHTML += "\n" + e + " " + (data || '');
+  }
+
+  var audio_context;
+  var recorder;
+  var recording = 0;
+
+  function startRecording(button) {
+
+    recording = recording + 1;
+    recorder.clear();
+
+    recorder && recorder.record();
+    button.disabled = true;
+    button.nextElementSibling.disabled = false;
+    __log('Recording...');
+  }
+
+  function stopRecording(button) {
+    recorder && recorder.stop();
+    button.disabled = true;
+    button.previousElementSibling.disabled = false;
+    __log('Stopped recording.');
+    
+
+    createDownloadLink();
+    
+
+  }
+
+  function createDownloadLink() {
+
+
+    
+      __log('Exporting to mp3');
+
+
+ var b = Date.now();
+
+      recorder.exportMP3(function(blob) {
+
+        __log('MP3 file successfully exported');
+
+          var a = Date.now();
+
+         __log('MP3 Processed in ' + (a -b) + 'ms' );
+
+
+         var length = ((blob.size*8)/128000);
+
+        __log('MP3 duration: ' +length + ' s' );
+
+        console.log(blob);
+
+        var url = URL.createObjectURL(blob);
+
+        var formData = new FormData($("#pageForm")[0]);
+        formData.append("recording", blob);
+
+        var request = new XMLHttpRequest();
+        request.open("POST", "/Home/UploadFile");
+        request.send(formData);
+
+
+        console.log(url);
+
+        var link = document.createElement('a');
+        link.href = url;
+        link.innerHTML = "Recording #" + recording + " in mp3";
+
+        link.download = "example.mp3";
+
+        var li2 = document.createElement('li');
+        li2.appendChild(link);
+        document.getElementById("recordingslist").appendChild(li2);
+
+      });
+    };
+
+
+
+
+
+  
+
+  window.onload = function init() {
+
+    audioRecorder.requestDevice(function(recorderObject){
+
+      recorder = recorderObject;
+    });
+
+  };
+
+</script>	
+<script src="~/js/recorder/audioRecord.js"></script>
 <script src="~/js/custom-file-input.js"></script>
 </body>
 </html>

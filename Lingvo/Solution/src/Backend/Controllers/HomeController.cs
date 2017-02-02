@@ -83,24 +83,12 @@ namespace Lingvo.Backend.Controllers
 			};
 
 			db.Save(w);
-
 			return RedirectToAction(nameof(Index));
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, int workbookID, string description, int pageNumber, IFormFile file)
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, int workbookID, string description, int pageNumber, IFormFile file, IFormFile recording)
 		{
-			var uploads = Path.Combine(environment.WebRootPath, "uploaded");
-			var filePath = Path.Combine(uploads, file.FileName);
-
-			Console.WriteLine(filePath);
-			Console.WriteLine(file);
-			//TODO: Create Recording and save it to database
-			//TODO: Get sound duration somehow from file => crazy magic!
-
-			var stream = new FileStream(filePath, FileMode.Create);
-			await file.CopyToAsync(stream);
-			stream.Dispose();
 
 			var r = new Recording()
 			{
@@ -121,6 +109,7 @@ namespace Lingvo.Backend.Controllers
 			db.Save(p);
 
 			return RedirectToAction(nameof(Workbook), workbookID);
+
 		}
 	}
 }
