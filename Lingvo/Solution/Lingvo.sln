@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+VisualStudioVersion = 15.0.26127.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MobileApp", "src\MobileApp\MobileApp.shproj", "{0001E584-0BEE-4D0C-9466-9EA2F1487A9F}"
 EndProject
@@ -18,6 +18,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\MobileApp\MobileApp.projitems*{0001e584-0bee-4d0c-9466-9ea2f1487a9f}*SharedItemsImports = 13
+		src\Common\Common.projitems*{39e6b00d-5bd7-4f7b-b64b-a58aa7068915}*SharedItemsImports = 4
 		src\Common\Common.projitems*{80b9eaef-f8fc-4351-a078-17b64fc856de}*SharedItemsImports = 4
 		src\MobileApp\MobileApp.projitems*{80b9eaef-f8fc-4351-a078-17b64fc856de}*SharedItemsImports = 4
 		src\Common\Common.projitems*{e7a8d792-7ef3-4b19-ae98-01f7eb2062ef}*SharedItemsImports = 13
