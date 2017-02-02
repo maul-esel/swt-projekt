@@ -10,10 +10,17 @@ namespace Lingvo.Backend
 		private readonly CloudBlobClient _client;
 		private CloudBlobContainer _container;
 
+		private static string _connectionString;
+
 		public AzureStorage()
 		{
-			var storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=lingvostorage;AccountKey=D7fHdT4yIweuYMNzSawJWPvD5m8zwe9zSmZk9dNZVoAnmRSmG2MX3DLXD5vfLUTqPLUSJGY+Pmp7f79SeZR3wA=="); // TODO
-			_client = storageAccount.CreateCloudBlobClient();
+			if (_connectionString == null)
+			{
+				_connectionString = System.Environment.GetEnvironmentVariable("LINGVO_AZURE_CONNSTR");
+				if (string.IsNullOrEmpty(_connectionString))
+					throw new System.Exception("Cannot start server without configuring azure connection");
+			}
+			_client = CloudStorageAccount.Parse(_connectionString).CreateCloudBlobClient();
 		}
 
 		private async Task InitializeAsync()
