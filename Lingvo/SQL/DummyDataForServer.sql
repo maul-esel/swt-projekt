@@ -17,3 +17,7 @@ INSERT INTO Pages(id, workbookID, number, description, teacherTrackId) VALUES
 (2, 1, 2, 'Wie geht es Ihnen?', 2),
 (3, 2, 1, 'Das Alphabet', 3),
 (4, 2, 2, 'Erste Gespräche', 4);
+
+INSERT INTO Editors(name, passwordHash) VALUES
+("DEV", "AQAAAAEAACcQAAAAEObagOrjXY6h0oymHQWd9na59TRLBdb9etP31ZWMN5OfbCopKZazN4HH59t1SELvPA=="),
+("GIETMANN", "AQAAAAEAACcQAAAAEM75qbd85ybQJzWImNGHOoJ7gEu59ANQ2aFf1E86+uCA9M4deXUDixFOTHMfFjUSQQ==");
