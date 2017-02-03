@@ -44,6 +44,11 @@ namespace Lingvo.Backend
             services.AddMvc();
 			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration[ConnectionStringVariable]), ServiceLifetime.Transient);
 
+			services.AddIdentity<Editor, object>()
+				.AddUserStore<Services.EditorStore>()
+				.AddRoleStore<Services.RoleStore>()
+				.AddDefaultTokenProviders();
+
 			// custom services
 			services.AddScoped<IStorage, AzureStorage>();
 		}
@@ -64,6 +69,7 @@ namespace Lingvo.Backend
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseIdentity();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
