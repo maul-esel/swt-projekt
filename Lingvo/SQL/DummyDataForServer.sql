@@ -1,6 +1,7 @@
 DELETE FROM Pages;
 DELETE FROM Workbooks;
 DELETE FROM Recordings;
+DELETE FROM Editors;
 
 INSERT INTO Workbooks(id, title, subtitle, totalPages, isPublished) VALUES
 (1, 'Deutschkurs für Asylbewerber', 'Thannhauser Modell', 2, 1),
