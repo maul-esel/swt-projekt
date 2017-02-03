@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using Lingvo.Common.Entities;
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend.Controllers
 {
+	[Authorize]
     public class HomeController : Controller
     {
-
 		private IHostingEnvironment environment;
 
 		public HomeController(IHostingEnvironment environment)
@@ -68,6 +69,7 @@ namespace Lingvo.Backend.Controllers
 			return View();
         }
 
+		[AllowAnonymous]
         public IActionResult Error()
         {
             return View();
