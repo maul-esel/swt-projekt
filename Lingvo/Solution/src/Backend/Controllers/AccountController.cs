@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,12 +52,13 @@ namespace Lingvo.Backend.Controllers
 			return View();
 		}
 
+		[Authorize]
 		public IActionResult CreateUser()
 		{
 			return View(new CreateUserModel());
 		}
 
-		[HttpPost]
+		[HttpPost, Authorize]
 		public async Task<IActionResult> CreateUser(CreateUserModel model)
 		{
 			if (model.Password != model.PasswordRepeat)
