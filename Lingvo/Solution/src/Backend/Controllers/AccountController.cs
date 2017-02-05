@@ -3,6 +3,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+using Lingvo.Backend.ViewModels;
+
 namespace Lingvo.Backend.Controllers
 {
     public class AccountController : Controller
@@ -47,6 +49,30 @@ namespace Lingvo.Backend.Controllers
 		{
 			await _signInManager.SignOutAsync();
 			return View();
+		}
+
+		public IActionResult CreateUser()
+		{
+			return View(new CreateUserModel());
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreateUser(CreateUserModel model)
+		{
+			if (model.Password != model.PasswordRepeat)
+			{
+				ModelState.AddModelError(nameof(CreateUserModel.PasswordRepeat), "Passwort stimmt nicht überein");
+				return View(model);
+			}
+
+			var result = await _userManager.CreateAsync(new Editor { Name = model.Username }, model.Password);
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError(string.Empty, "Erstellung des Benutzers ist fehlgeschlagen");
+				return View(model);
+			}
+
+			return View("UserCreated");
 		}
 	}
 }
