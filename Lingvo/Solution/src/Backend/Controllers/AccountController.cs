@@ -8,7 +8,10 @@ using Lingvo.Backend.ViewModels;
 
 namespace Lingvo.Backend.Controllers
 {
-    public class AccountController : Controller
+#if !DEBUG
+	[RequireHttps]
+#endif
+	public class AccountController : Controller
     {
 		private readonly UserManager<Editor> _userManager;
 		private readonly SignInManager<Editor> _signInManager;

@@ -11,6 +11,9 @@ using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend.Controllers
 {
+#if !DEBUG
+	[RequireHttps]
+#endif
 	[Authorize]
     public class HomeController : Controller
     {
