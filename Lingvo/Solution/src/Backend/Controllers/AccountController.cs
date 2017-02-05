@@ -48,10 +48,12 @@ namespace Lingvo.Backend.Controllers
 
 		public async Task<IActionResult> Logout()
 		{
-			if (!_signInManager.IsSignedIn(User))
-				return Redirect("/");
-
 			await _signInManager.SignOutAsync();
+			return RedirectToAction(nameof(LoggedOut));
+		}
+
+		public IActionResult LoggedOut()
+		{
 			return View();
 		}
 

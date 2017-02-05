@@ -11,11 +11,25 @@
     }
     .navbar-collapse.collapse li a {
       color: white !important;
-      font-size: 24px;
+      font-size: 18px;
     }
     .navbar-header a {
       color: white !important;
       font-size: 30px;
+    }
+    .navbar .dropdown-menu li a {
+        color: gray !important;
+        font-size: 120%;
+    }
+    .dropdown-menu li.textonly-item  a {
+        color: #010101 !important;
+        pointer-events: none;
+    }
+    .nav .open > a.btn-primary, .nav .open > a.btn-primary:focus, .nav .open > a.btn-primary:hover
+    {
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #2e6da4;
     }
 
     .footer

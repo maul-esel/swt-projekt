@@ -20,13 +20,12 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
+                <!-- TODO: icon-->
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Lingvo</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-controller="Account"  asp-action="Logout">
-                        <span class="glyphicon glyphicon-log-out"></span> Abmelden
-                    </a></li>
+                    <li>@await Component.InvokeAsync("AccountMenu")</li>
                 </ul>
             </div>
         </div>
