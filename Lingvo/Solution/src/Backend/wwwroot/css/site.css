@@ -135,3 +135,9 @@
         fill: #4280D0;
     }
 
+
+    .field-validation-error {
+        font-size: 70%;
+        font-weight: bold;
+        color: red;
+    }

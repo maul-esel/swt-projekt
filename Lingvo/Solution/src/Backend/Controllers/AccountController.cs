@@ -79,5 +79,12 @@ namespace Lingvo.Backend.Controllers
 
 			return View("UserCreated");
 		}
+
+		[AcceptVerbs("GET", "POST"), Authorize]
+		public async Task<IActionResult> VerifyUniqueUsername(string username)
+		{
+			var user = await _userManager.FindByNameAsync(username);
+			return Json(data: user == null);
+		}
 	}
 }
