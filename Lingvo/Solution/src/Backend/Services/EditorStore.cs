@@ -42,7 +42,7 @@ namespace Lingvo.Backend.Services
 
 		Task<Editor> IUserStore<Editor>.FindByIdAsync(string userId, CancellationToken cancellationToken)
 		{
-			return _db.Editors.FindAsync(userId, cancellationToken);
+			return _db.Editors.FindAsync(new[] { userId }, cancellationToken);
 		}
 
 		Task<Editor> IUserStore<Editor>.FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
