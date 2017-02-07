@@ -15,7 +15,15 @@
             <Span x:Key="label_no_teacher_memos">Noch keine Lehrerspuren aufgenommen!</Span>
             <Span x:Key="page_title_pagesDownload">Seiten Download</Span>
             <Span x:Key="label_no_local_pages">Für dieses Arbeitsheft sind lokal keine Seiten verfügbar!</Span>
+            <Span x:Key="page_title_recordTeacherMemo">Neue Lehrerspur</Span>
+            <Span x:Key="label_delete">Löschen</Span>
+            <Span x:Key="label_delete_studentTrack">Aufnahme löschen</Span>
             <Span x:Key="text_seite">Seite</Span>
+            <Span x:Key="label_save">Speichern</Span>
+            <Span x:Key="text_teacherTrack">Lehrerspur</Span>
+            <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
+            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen. Bitte wählen Sie einen anderen.</Span>
+            <Span x:Key="label_edit">Bearbeiten</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

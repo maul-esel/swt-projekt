@@ -148,6 +148,18 @@ namespace Lingvo.MobileApp.iOS
 			}
 		}
 
+		public int TextSize
+		{
+			get
+			{
+				return (int)timeLabel.Font.PointSize;
+			}
+			set
+			{
+				timeLabel.Font = UIFont.SystemFontOfSize(value, UIFontWeight.Regular);
+			}
+		}
+
         public string Text
         {
             get { return timeLabel.Text; }

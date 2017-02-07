@@ -11,8 +11,6 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class DownloadPage : ContentPage
     {
-
-        private List<Workbook> workbooks = new List<Workbook>();
         public DownloadPage()
         {
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
@@ -25,7 +23,6 @@ namespace Lingvo.MobileApp.Pages
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                ItemsSource = workbooks,
                 ItemTemplate = new DataTemplate(typeof(LingvoDownloadWorkbookViewCell)),
                 IsPullToRefreshEnabled = true,
                 HasUnevenRows = true
@@ -51,7 +48,7 @@ namespace Lingvo.MobileApp.Pages
             contentLayout.Children.Add(new StackLayout() { Children = { errorLabel } },
                 Constraint.RelativeToParent((p) => { return p.X; }),
                 Constraint.RelativeToParent((p) => { return p.Y; }),
-                Constraint.RelativeToParent((p) => { return p.Width; }), 
+                Constraint.RelativeToParent((p) => { return p.Width; }),
                 Constraint.RelativeToParent((p) => { return p.Height; }));
 
             contentLayout.Children.Add(listView, Constraint.RelativeToParent((p) => { return p.X; }),

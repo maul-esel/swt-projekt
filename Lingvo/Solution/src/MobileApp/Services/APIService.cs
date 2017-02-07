@@ -4,6 +4,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lingvo.Common.Services;
 
 using Newtonsoft.Json;
 
@@ -17,7 +18,16 @@ namespace Lingvo.MobileApp
 	/// </summary>
 	public class APIService
 	{
+#if DEBUG
+	#if __ANDROID__
+		// Android Simulator forwards development localhost to IP 10.0.2.2
 		private const string URL = "http://10.0.2.2:5000/api/app/";
+	#elif __IOS__
+		private const string URL = "http://localhost:5000/api/app/";
+	#endif
+#else
+		private const string URL = "https://lingvo.azurewebsites.net/api/app/";
+#endif
 
 		private static APIService instance;
 
@@ -97,9 +107,7 @@ namespace Lingvo.MobileApp
 		/// <param name="proxy">Proxy.</param>
 		public async Task<Page> FetchPage(PageProxy proxy)
 		{
-			var recording = await FetchTeacherTrack(proxy, 
-			                                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-			                                                     "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3"));
+			var recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3");
 			Page page = new Page();
 			page.Id = proxy.Id;
 			page.Description = proxy.Description;
@@ -133,20 +141,23 @@ namespace Lingvo.MobileApp
 		/// Fetchs a teacher track.
 		/// </summary>
 		/// <returns>The teacher track.</returns>
-		/// <param name="workbook">Workbook.</param>
 		/// <param name="page">Page.</param>
 		/// <param name="localPath">Local path.</param>
-		public Task<Recording> FetchTeacherTrack(IPage page, String localPath)
+		public async Task<Recording> FetchTeacherTrack(IPage page, String localPath)
 		{
-			return FetchFromURLAsync($"{URL}pages/{page.Id}", async (response) =>
+			var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+				await FetchTextFromURLAsync($"{URL}pages/{page.Id}")
+			);
+			return await FetchFromURLAsync(json["url"], async (response) =>
 			{
-				using (var fileStream = File.Create(localPath))
+				using (var fileStream = File.Create(FileUtil.getAbsolutePath(localPath)))
 					await response.GetResponseStream().CopyToAsync(fileStream);
 
-				return new Recording(int.Parse(response.Headers["X-Recording-Id"]), 
-				                     int.Parse(response.Headers["X-Audio-Duration"]), 
-				                     localPath,
-				                     DateTime.ParseExact(response.Headers["X-Recording-Creation-Time"], "dd.MM.yyyy HH:mm:ss", null));
+				return new Recording(
+					int.Parse(json["duration"]),
+					localPath,
+					DateTime.ParseExact(json["creationTime"], "dd.MM.yyyy HH:mm:ss", null)
+				);
 			});
 		}
 	}

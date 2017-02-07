@@ -46,12 +46,27 @@ namespace Lingvo.MobileApp.Templates
             bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
 
             string color = downloaded ? "secondaryColor" : "primaryColor";
+            ProgressView.InnerProgressEnabled = false;
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;
             ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
+            if (ContextActions.Count > 0)
+            {
+                ContextActions.Clear();
+            }
+
             downloadButton.IsEnabled = !downloaded;
+        }
+
+        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            IPage page = (IPage)BindingContext;
+            if (p.Id.Equals(page.Id))
+            {
+                OnBindingContextChanged();
+            }
         }
     }
 }

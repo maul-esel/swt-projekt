@@ -1,3 +1,4 @@
+using Android.Content.Res;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
@@ -46,47 +47,55 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             LingvoRoundImageButton element = (LingvoRoundImageButton)sender;
 
-            string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
-            int resourceId = (int)typeof(Resource.Drawable).GetField(identifier).GetValue(null);
-
             Color color = element.IsEnabled ? element.Color.ToAndroid() : Color.LightGray;
 
-            if (element.Border)
+            string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
+            int resourceId = 0;
+            if (identifier != null)
             {
-                int offset = element.Toggled ? 1 : 0;
-                Drawable[] layers = new Drawable[2 + offset];
-                layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
-                layers[0 + offset].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
-                layers[1 + offset] = Resources.GetDrawable(resourceId).Mutate();
-                layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                if(element.Toggled)
-                {
-                    layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
-                    layers[0].Alpha = 96;
-                }
-                button.Background = new LayerDrawable(layers);
+                resourceId = (int)typeof(Resource.Drawable).GetField(identifier).GetValue(null);
             }
-            else
+
+            if (resourceId != 0)
             {
-                Drawable image = Resources.GetDrawable(resourceId).Mutate();
-                image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                if (element.Toggled)
+                if (element.Border)
                 {
-                    Drawable[] layers = new Drawable[2];
-                    layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
-                    layers[0].Alpha = 96;
-                    layers[1] = image;
+                    int offset = element.Filled ? 1 : 0;
+                    Drawable[] layers = new Drawable[2 + offset];
+                    layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
+                    layers[0 + offset].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                    layers[1 + offset] = Resources.GetDrawable(resourceId).Mutate();
+                    if (element.Filled)
+                    {
+                        layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
+                        layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                        layers[1 + offset].SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
+                    }
+                    else
+                    {
+                        layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
+                    }
                     button.Background = new LayerDrawable(layers);
                 }
                 else
                 {
-                    button.Background = image;
-                }
-            }
+                    Drawable image = Resources.GetDrawable(resourceId).Mutate();
 
-            if (element.Text?.Length > 0)
-            {
-                button.SetTextColor(color);
+                    if (element.Filled)
+                    {
+                        Drawable[] layers = new Drawable[2];
+                        layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
+                        layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                        layers[1] = image;
+                        layers[1].SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
+                        button.Background = new LayerDrawable(layers);
+                    }
+                    else
+                    {
+                        image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
+                        button.Background = image;
+                    }
+                }
             }
 
             if (element.Text?.Length > 0)
@@ -127,6 +136,15 @@ namespace Lingvo.MobileApp.Droid.Renderers
                     alignment = element.TextOrientation;
                 }
             }
+
+
+            if (element.Text?.Length > 0)
+            {
+                button.SetTextColor(color);
+            }
+
+
+
         }
     }
 }

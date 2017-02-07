@@ -12,17 +12,19 @@ namespace Lingvo.Common.Entities
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Lingvo.Common.Recording"/> class
 		/// </summary>
-		public Recording() { } // used by Linq2DB
-
-		public Recording(int id, int duration, string localPath, DateTime creationTime)
+		public Recording() 
 		{
-			Id = id;
+			CreationTime = DateTime.Now;
+		}
+
+		public Recording(int duration, string localPath, DateTime creationTime)
+		{
 			Duration = duration;
 			LocalPath = localPath;
 			CreationTime = creationTime;
 		}
 
-		[PrimaryKey]
+		[PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 
 		public DateTime CreationTime { get; private set; }

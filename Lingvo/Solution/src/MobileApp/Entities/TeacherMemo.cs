@@ -9,21 +9,33 @@ namespace Lingvo.MobileApp.Entities
     /// Teacher memo: teacher can record a scentence or word the student cant pronounce easily.
     /// </summary>
 	[Table("TeacherMemos")]
-    public class TeacherMemo
-	{
-		[ForeignKey(typeof(Recording))]
-		public String RecordingId { get; set; }
+    public class TeacherMemo : IExercise
+    {
+        [ForeignKey(typeof(Recording))]
+        public int RecordingId { get; set; }
 
-		public String Name { get; set; }
+        [ForeignKey(typeof(Recording))]
+        public int? StudentTrackId { get; set; }
 
-		[PrimaryKey, AutoIncrement]
-		public int Id { get; set; }
+        public String Name { get; set; }
 
-		[OneToOne]
-		public Recording Recording { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
 
-		public TeacherMemo()
-		{
-		}
-	}
+        [OneToOne]
+        public Recording TeacherTrack { get; set; }
+
+        [OneToOne]
+        public Recording StudentTrack { get; set; }
+
+        public TeacherMemo()
+        {
+        }
+
+        public void DeleteStudentRecording()
+        {
+            StudentTrack = null;
+            StudentTrackId = 0;
+        }
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNetCore.Builder;
@@ -40,13 +41,35 @@ namespace Lingvo.Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
-			services.AddDbContext<DatabaseService>(options => options.UseMySql(Configuration[ConnectionStringVariable]), ServiceLifetime.Transient);
-        }
+			// Setup localization
+			services.AddLocalization(options => options.ResourcesPath = "Resources");
+			services.Configure<RequestLocalizationOptions>(options =>
+			{
+				var german = new CultureInfo("de-DE");
+				options.SupportedCultures.Clear();
+				options.SupportedCultures.Add(german);
+				options.SupportedUICultures.Clear();
+				options.SupportedUICultures.Add(german);
+			});
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+			// Add framework services
+            services.AddMvc().AddDataAnnotationsLocalization();
+			services.AddDbContext<DatabaseService>(
+				options => options.UseMySql(Configuration[ConnectionStringVariable]),
+				ServiceLifetime.Transient
+			);
+
+			services.AddIdentity<Editor, object>()
+				.AddUserStore<Services.EditorStore>()
+				.AddRoleStore<Services.RoleStore>()
+				.AddDefaultTokenProviders();
+
+			// custom services
+			services.AddScoped<IStorage, AzureStorage>();
+		}
+
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -61,6 +84,7 @@ namespace Lingvo.Backend
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseIdentity();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

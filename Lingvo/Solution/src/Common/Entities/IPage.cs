@@ -7,7 +7,7 @@ namespace Lingvo.Common.Entities
 	/// A page of a workbook.
 	/// </summary>
 	[Table("Pages")]
-	public interface IPage
+	public interface IPage : IExercise
 	{
 		[PrimaryKey]
 		int Id { get; set; }
@@ -32,33 +32,8 @@ namespace Lingvo.Common.Entities
 			set;
 		}
 
-		/// <summary>
-		/// Gets or sets the teacher track.
-		/// </summary>
-		/// <value>The teacher track.</value>
-		Recording TeacherTrack
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the student track.
-		/// </summary>
-		/// <value>The student track.</value>
-		Recording StudentTrack
-		{
-			get;
-			set;
-		}
-
 		Workbook Workbook { get; set; }
 
 		int workbookId { get; set; }
-
-		/// <summary>
-		/// Deletes the student recording that is currently attached to this page.
-		/// </summary>
-		void DeleteStudentRecording();
 	}
 }

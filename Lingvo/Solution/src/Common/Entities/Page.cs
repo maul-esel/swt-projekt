@@ -60,6 +60,7 @@ namespace Lingvo.Common.Entities
 		public void DeleteStudentRecording()
 		{
 			StudentTrack = null;
+			studentTrackId = null;
 		}
 	}
 }

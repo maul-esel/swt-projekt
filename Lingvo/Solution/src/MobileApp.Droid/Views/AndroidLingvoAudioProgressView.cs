@@ -24,10 +24,7 @@ namespace Lingvo.MobileApp.Droid.Views
             get { return (int)teacherProgressBar.Progress; }
             set
             {
-                if (InnerProgressEnabled)
-                {
-                    studentProgressBar.Progress = value;
-                }
+                studentProgressBar.Progress = value;
                 teacherProgressBar.Progress = value;
                 Invalidate();
             }
@@ -170,7 +167,7 @@ namespace Lingvo.MobileApp.Droid.Views
         private void SetButtonResource(ImageButton button, bool isEnabled)
         {
             int resourceId = isEnabled ? Resource.Drawable.ic_volume_off : Resource.Drawable.ic_volume_up;
-            button.SetImageDrawable(VectorDrawableCompat.Create(Resources, resourceId, Resources.NewTheme()));
+            button.SetImageResource(resourceId);
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)

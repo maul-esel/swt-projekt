@@ -3,4 +3,5 @@
   <item name="primaryColor" type="color">#4890e2</item>
   <item name="secondaryColor" type="color">#3db664</item>
   <item name="primaryDarkColor" type="color">#32649E</item>
+  <item name="highlightColor" type="color">#28000000</item>
 </resources>

@@ -28,17 +28,17 @@ namespace Lingvo.MobileApp.iOS
             global::Xamarin.Forms.Forms.Init ();
 			LoadApplication (new MobileApp.App ());
 
-			//write a samle file to the documents dir
-			var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var filePath = Path.Combine(documentsDirPath, "page1.mp3");
-
+			////write a samle file to the documents dir
+			//var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//var filePath = Path.Combine(documentsDirPath, "page1.mp3");
 			var bundleFileUrl = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/page1.mp3");
 
 			var bundleFileBytes = File.ReadAllBytes(bundleFileUrl);
 
-			//Now write to the documents directory
-			File.WriteAllBytes(filePath, bundleFileBytes);
-			Console.WriteLine("filePath = " + filePath);
+
+			////Now write to the documents directory
+			//File.WriteAllBytes(filePath, bundleFileBytes);
+			//Console.WriteLine("filePath = " + filePath);
 
 			return base.FinishedLaunching (app, options);
 		}

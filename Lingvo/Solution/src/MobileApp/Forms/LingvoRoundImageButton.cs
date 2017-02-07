@@ -50,16 +50,16 @@ namespace Lingvo.MobileApp.Forms
             set { SetValue(BorderProperty, value); }
         }
 
-        public static readonly BindableProperty ToggledProperty = BindableProperty.Create(
-          propertyName: "Toggled",
+        public static readonly BindableProperty FilledProperty = BindableProperty.Create(
+          propertyName: "Filled",
           returnType: typeof(bool),
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: false);
 
-        public bool Toggled
+        public bool Filled
         {
-            get { return (bool)GetValue(ToggledProperty); }
-            set { SetValue(ToggledProperty, value); }
+            get { return (bool)GetValue(FilledProperty); }
+            set { SetValue(FilledProperty, value); }
         }
 
         public static readonly BindableProperty TextProperty = BindableProperty.Create(

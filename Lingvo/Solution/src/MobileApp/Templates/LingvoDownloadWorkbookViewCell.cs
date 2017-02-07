@@ -21,14 +21,33 @@ namespace Lingvo.MobileApp.Templates
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = DownloadButtonSize,
+				MinimumWidthRequest = DownloadButtonSize,
                 HeightRequest = DownloadButtonSize,
                 HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
             };
 
-			downloadButton.OnClicked += (o, e) => DownloadWorkbook();
+            downloadButton.OnClicked += (o, e) => DownloadWorkbook();
 
-            ((StackLayout)View).Children.Add(downloadButton);
+			((Grid)View).Children.Add(downloadButton, 1, 0);
+        }
+
+        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (p.workbookId.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            };
+        }
+
+        protected override void Event_WorkbookChanged(Workbook w)
+        {
+            Workbook workbook = (Workbook)BindingContext;
+            if (w.Id.Equals(workbook.Id))
+            {
+                OnBindingContextChanged();
+            }
         }
 
         private async void DownloadWorkbook()
@@ -50,7 +69,13 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.MaxProgress = workbook.TotalPages;
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
+            ProgressView.TextSize = 20;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+
+            if (ContextActions.Count > 0)
+            {
+                ContextActions.Clear();
+            }
 
             downloadButton.IsEnabled = progress != workbook.TotalPages;
         }
