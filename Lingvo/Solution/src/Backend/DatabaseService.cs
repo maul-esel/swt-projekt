@@ -1,12 +1,7 @@
-﻿using System;
-
-using Microsoft.Extensions.Configuration;
-
-using Lingvo.Common.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Server.Kestrel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend
 {
@@ -17,6 +12,7 @@ namespace Lingvo.Backend
 		public DbSet<Workbook> Workbooks { get; set; }
 		public DbSet<Page> Pages { get; set; }
 		public DbSet<Recording> Recordings { get; set; }
+		public DbSet<Editor> Editors { get; set; }
 
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
     	{ }
@@ -43,6 +39,10 @@ namespace Lingvo.Backend
 
 			modelBuilder.Entity<Recording>().Property(r => r.LocalPath).IsRequired();
 			modelBuilder.Entity<Recording>().Property(r => r.CreationTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+			modelBuilder.Entity<Editor>().Property(e => e.Name).IsRequired();
+			modelBuilder.Entity<Editor>().Property(e => e.PasswordHash).IsRequired();
+			modelBuilder.Entity<Editor>().HasKey(e => e.Name);
 		}
 
 		public List<Workbook> GetWorkbooksWithReferences()

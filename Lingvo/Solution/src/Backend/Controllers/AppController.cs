@@ -8,6 +8,9 @@ namespace Lingvo.Backend.Controllers
 	/// <summary>
 	/// Controller for App accessing the server
 	/// </summary>
+#if !DEBUG
+	[RequireHttps]
+#endif
 	[Route("api/app")]
 	public class AppController : Controller
     {
