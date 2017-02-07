@@ -1,6 +1,5 @@
-﻿@{
-    var workbooks = (IEnumerable<Workbook>)ViewData["Workbooks"];
-}
+﻿@model IEnumerable<Workbook>
+
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>Arbeitshefte</h3>
@@ -8,7 +7,7 @@
     </div>
     <table id="workbooks" class="table">
         <tbody>
-            @foreach (var workbook in workbooks)
+            @foreach (var workbook in Model)
             {
                 <tr>
                     <td>

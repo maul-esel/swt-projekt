@@ -1,6 +1,7 @@
+@model Tuple<Workbook, Page>
 @{
-    var workbook = (Workbook)ViewData["Workbook"];
-    var page = (Page)ViewData["Page"];
+    var workbook = Model.Item1;
+    var page = Model.Item2;
 }
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">

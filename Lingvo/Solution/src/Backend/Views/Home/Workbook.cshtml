@@ -1,16 +1,15 @@
-@{
-    var workbook = (Workbook)ViewData["workbook"];
-}
+@model Workbook
+
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>
-            <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @workbook.Title
+            <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @Model.Title
         </h3>
-        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@workbook.Id">Neue Seite anlegen</a>
+        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
     </div>
     <table id="workbooks" class="table">
         <tbody>
-            @foreach (var page in workbook.Pages)
+            @foreach (var page in Model.Pages)
             {
                 <tr>
                     <td>
