@@ -18,11 +18,11 @@
       font-size: 30px;
     }
     .navbar .dropdown-menu li a {
-        color: gray !important;
+        color: black !important;
         font-size: 120%;
     }
     .dropdown-menu li.textonly-item  a {
-        color: #010101 !important;
+        color: gray !important;
         pointer-events: none;
     }
     .nav .open > a.btn-primary, .nav .open > a.btn-primary:focus, .nav .open > a.btn-primary:hover

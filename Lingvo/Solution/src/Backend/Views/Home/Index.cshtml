@@ -1,51 +1,41 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-</head>
-<body>
-	@{
-        var workbooks = (IEnumerable<Workbook>)ViewData["Workbooks"];
-	}
-	<div class="container container-fluid">
-		<div class="lingvo-header container-fluid">
-			<h3>Arbeitshefte</h3>
-			<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddWorkbook">Neues Arbeitsheft</a>
-		</div>
-		<table id="workbooks" class="table">
-			<tbody>
-				@foreach (var workbook in workbooks)
-				{
-					<tr>
-						<td>
-							<div>
-								<h3 class="workbook-title">
-									<a asp-area="" asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a>
-								</h3>
-								<span class="workbook-subtitle">@workbook.Subtitle</span>
-							</div>
-						</td>
-						<td>@workbook.TotalPages Seiten</td>
-						<td>Ge&auml;ndert: @workbook.LastModified.ToString("dd. MM. yyyy")</td>
-						<td>
-							<a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook" asp-route-id="@workbook.Id">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-						<td>
-							<button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
-								<span class="glyphicon glyphicon-globe @(workbook.IsPublished ? "" : "unpublished")"></span>
-							</button>
-						</td>
-						<td>
-							<button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
-</body>
-</html>
+﻿@model IEnumerable<Workbook>
 
+<div class="container container-fluid">
+    <div class="lingvo-header container-fluid">
+        <h3>Arbeitshefte</h3>
+        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddWorkbook">Neues Arbeitsheft</a>
+    </div>
+    <table id="workbooks" class="table">
+        <tbody>
+            @foreach (var workbook in Model)
+            {
+                <tr>
+                    <td>
+                        <div>
+                            <h3 class="workbook-title">
+                                <a asp-area="" asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a>
+                            </h3>
+                            <span class="workbook-subtitle">@workbook.Subtitle</span>
+                        </div>
+                    </td>
+                    <td>@workbook.TotalPages Seiten</td>
+                    <td>Ge&auml;ndert: @workbook.LastModified.ToString("dd. MM. yyyy")</td>
+                    <td>
+                        <a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook" asp-route-id="@workbook.Id">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
+                            <span class="glyphicon glyphicon-globe @(workbook.IsPublished ? "" : "unpublished")"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                </tr>}
+        </tbody>
+    </table>
+</div>
