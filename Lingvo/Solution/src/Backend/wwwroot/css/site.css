@@ -155,3 +155,10 @@
         font-weight: bold;
         color: red;
     }
+
+.vcenter {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(25%);
+}
