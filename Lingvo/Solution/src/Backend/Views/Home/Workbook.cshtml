@@ -1,50 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head></head>
-<body>
-@{
-	var workbook = (Workbook) ViewData["workbook"];
-}
+@model Workbook
+
 <div class="container container-fluid">
-	<div class="lingvo-header container-fluid">
-		<h3>
-			<a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @workbook.Title
-		</h3>
-		<a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@workbook.Id">Neue Seite anlegen</a>
-	</div>
-	<table id="workbooks" class="table">
-		<tbody>
-		@foreach (var page in workbook.Pages)
-		{
-			<tr>
-				<td>
-					<h3 class="workbook-title">Seite @page.Number</h3>
-					<span class="workbook-subtitle">@page.Description</span>
-				</td>
-				<td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td> 
-				<td>
-					<a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
-						<span class="glyphicon glyphicon-pencil"></span>
-					</a>
-				</td>
-				<td>
-					<a title="Seite abspielen">
-						<span class="glyphicon glyphicon-play"></span>
-					</a>
-				</td>
-				<td>
-					<button type="button" class="glyphicon-button" title="Seite löschen">
-						<span class="glyphicon glyphicon-trash"></span>
-					</button>
-				</td>
-			</tr>
-		}
-		</tbody>
-	</table>
+    <div class="lingvo-header container-fluid">
+        <h3>
+            <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @Model.Title
+        </h3>
+        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
+    </div>
+    <table id="workbooks" class="table">
+        <tbody>
+            @foreach (var page in Model.Pages)
+            {
+                <tr>
+                    <td>
+                        <h3 class="workbook-title">Seite @page.Number</h3>
+                        <span class="workbook-subtitle">@page.Description</span>
+                    </td>
+                    <td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a title="Seite abspielen">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <button type="button" class="glyphicon-button" title="Seite löschen">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                </tr>}
+        </tbody>
+    </table>
 </div>
-</body>
-</html>
-
-
-
-
