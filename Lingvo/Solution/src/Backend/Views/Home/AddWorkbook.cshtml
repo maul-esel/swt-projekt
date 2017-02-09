@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head></head>
-<body>
-	@{
-		var workbook = (Workbook) ViewData["Workbook"];
-	}
-	<div class="container container-fluid">
-		<div class="lingvo-header">
-			<h3><a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @ViewData["Title"]</h3>
-		</div>
-		<form asp-controller="Home" asp-action="CreateWorkbook" method="post" style="padding-top: 40px">
-			<div class="form-group">
-				<label for="workbook-title-name">Titel</label>
-				<input name="title" class="form-control input-lg" id="workbook-title-name" placeholder="z.B. Thannhauser Band 1" value="@workbook?.Title">
-			</div>
-			<div class="form-group">
-				<label for="workbook-subtitle">Untertitel</label>
-				<input name="subtitle" class="form-control input-lg" id="workbook-subtitle" placeholder="z.B. Deutschkurs für Geflüchtete" value="@workbook?.Subtitle">
-			</div>
-			<div style="padding-top:10px">
-				<button type="cancel" class="btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Index">Abbrechen</button>
-				<button type="submit" class="btn-lg btn-success" style="border:none">Arbeitsheft anlegen</button>
-			</div>
+@model Workbook
 
-		</form>
-
-		</div>
-</body>
-</html>
-
+<div class="container container-fluid">
+    <div class="lingvo-header">
+        <h3><a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @ViewData["Title"]</h3>
+    </div>
+    <form asp-controller="Home" asp-action="CreateWorkbook" method="post" style="padding-top: 40px">
+        <div class="form-group">
+            <label for="workbook-title-name">Titel</label>
+            <input name="title" class="form-control input-lg" id="workbook-title-name" placeholder="z.B. Thannhauser Band 1" value="@Model?.Title">
+        </div>
+        <div class="form-group">
+            <label for="workbook-subtitle">Untertitel</label>
+            <input name="subtitle" class="form-control input-lg" id="workbook-subtitle" placeholder="z.B. Deutschkurs für Geflüchtete" value="@Model?.Subtitle">
+        </div>
+        <div class="form-group" style="text-align: center">
+            <a class="btn btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Index">Abbrechen</a>
+            <button type="submit" class="btn-lg btn-success" style="border:none">Arbeitsheft anlegen</button>
+        </div>
+    </form>
+</div>

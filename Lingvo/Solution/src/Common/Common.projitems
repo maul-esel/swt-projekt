@@ -9,6 +9,7 @@
     <Import_RootNamespace>Lingvo.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\IExercisable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqliteAttributeMocks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Page.cs" Exclude="$(GlobalExclude)" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\IPage.cs" Exclude="$(GlobalExclude)" />

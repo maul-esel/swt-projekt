@@ -1,0 +1,14 @@
+﻿@model string
+
+<div class="btn-group btn-group-lg navbar-btn">
+    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">
+        <span class="glyphicon glyphicon-log-out"></span> Abmelden
+    </a>
+    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></button>
+    <ul class="dropdown-menu" style="color:black">
+        <li class="textonly-item"><a>Aktueller Nutzer: @Model</a></li>
+        <li class="divider"></li>
+        <li><a asp-controller="Account" asp-action="CreateUser">Neuen Nutzer anlegen</a></li>
+        <li><a asp-controller="Account" asp-action="Logout">Abmelden</a></li>
+    </ul>
+</div>

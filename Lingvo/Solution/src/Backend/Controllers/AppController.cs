@@ -8,6 +8,9 @@ namespace Lingvo.Backend.Controllers
 	/// <summary>
 	/// Controller for App accessing the server
 	/// </summary>
+#if !DEBUG
+	[RequireHttps]
+#endif
 	[Route("api/app")]
 	public class AppController : Controller
     {
@@ -63,7 +66,6 @@ namespace Lingvo.Backend.Controllers
 				return NotFound();
 
 			return Json(new {
-				id = page.TeacherTrack.Id,
 				duration = page.TeacherTrack.Duration,
 				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
 				url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)

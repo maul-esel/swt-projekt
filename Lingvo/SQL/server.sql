@@ -30,7 +30,12 @@ CREATE TABLE IF NOT EXISTS Pages (
 );
 
 -- only on server --
+CREATE TABLE IF NOT EXISTS Editors (
+  name varchar(30) PRIMARY KEY,
+  passwordHash TEXT NOT NULL
+);
 
+DROP TRIGGER IF EXISTS updateTotalPages;
 CREATE TRIGGER updateTotalPages
 AFTER INSERT ON Pages
 FOR EACH ROW

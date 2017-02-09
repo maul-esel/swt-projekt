@@ -1,4 +1,4 @@
-﻿using Lingvo.Common.Entities;
+using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Templates;
 using Lingvo.MobileApp.Entities;
@@ -11,8 +11,6 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class TeacherMemosPage : ContentPage
     {
-        private Command addNewCommand = new Command(new Action(() => { Console.WriteLine("New teachermemo"); }));
-
         private ToolbarItem item;
 
         public TeacherMemosPage(Xamarin.Forms.Page parentPage)
@@ -23,15 +21,15 @@ namespace Lingvo.MobileApp.Pages
             item = new ToolbarItem
             {
                 Text = "New..",
-                Icon = "ic_action_add.png",
-                Command = addNewCommand
+                Icon = "ic_action_add.png"
             };
+
+            item.Clicked += AddNewClicked;
 
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = LocalCollection.Instance.TeacherMemos,
                 ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
-                IsPullToRefreshEnabled = true,
                 HasUnevenRows = true,
                 IsVisible = LocalCollection.Instance.TeacherMemos.Count() > 0
             };
@@ -49,7 +47,6 @@ namespace Lingvo.MobileApp.Pages
                 LineBreakMode = LineBreakMode.WordWrap,
                 HorizontalTextAlignment = TextAlignment.Center,
                 IsVisible = LocalCollection.Instance.TeacherMemos.Count() == 0
-
             };
 
             listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
@@ -76,8 +73,18 @@ namespace Lingvo.MobileApp.Pages
 
             if (Device.OS == TargetPlatform.Android)
             {
-                LingvoFloatingActionButton fab = new LingvoFloatingActionButton();
-                fab.FabClicked += (o, e) => addNewCommand.Execute(null);
+                LingvoRoundImageButton fab = new LingvoRoundImageButton()
+                {
+                    Image = "ic_action_add.png",
+                    WidthRequest = Device.OnPlatform(iOS: 56, Android: 56, WinPhone: 56),
+                    HeightRequest = Device.OnPlatform(iOS: 56, Android: 56, WinPhone: 56),
+                    Color = (Color)App.Current.Resources["secondaryColor"],
+                    Border = true,
+                    Text = "",
+                    Filled = true
+                };
+                fab.OnClicked += AddNewClicked;
+
                 ContentLayout.Children.Add(fab, Constraint.RelativeToParent((parent) => { return parent.Width - parent.X - 1.5 * fab.WidthRequest; }),
                 Constraint.RelativeToParent((parent) => { return parent.Height - parent.Y - 1.5 * fab.HeightRequest; }),
                 Constraint.RelativeToParent((parent) => { return fab.WidthRequest; }),
@@ -111,6 +118,11 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        async void AddNewClicked(object sender, EventArgs e)
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
+        }
+
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
             => ((ListView)sender).SelectedItem = null;
 
@@ -119,7 +131,7 @@ namespace Lingvo.MobileApp.Pages
             if (e.SelectedItem == null)
                 return;
 
-            await DisplayAlert("Selected", ((Workbook)e.SelectedItem).Title, "OK");
+            await App.Current.MainPage.Navigation.PushAsync(new AudioPage((TeacherMemo)e.SelectedItem));
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

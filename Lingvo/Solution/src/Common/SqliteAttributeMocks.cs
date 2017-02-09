@@ -8,6 +8,7 @@ namespace SQLite.Net.Attributes
 		public TableAttribute(string tbl) { }
 	}
 	internal class PrimaryKeyAttribute : Attribute { }
+	internal class AutoIncrementAttribute : Attribute { }
 }
 
 namespace SQLiteNetExtensions.Attributes

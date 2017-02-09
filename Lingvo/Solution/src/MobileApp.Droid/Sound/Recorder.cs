@@ -72,23 +72,20 @@ namespace Lingvo.MobileApp.Droid.Sound
             if (State == RecorderState.RECORDING || State == RecorderState.PAUSED)
             {
                 recorder.Stop();
-                recorder.Reset();
+                recorder.Release();
+                recorder.Dispose();
 
-                //Hack: For duration, a new player is needed
-                MediaPlayer tempPlayer = new MediaPlayer();
-                var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(currentRecordingPath), Android.OS.ParcelFileMode.ReadOnly);
-                tempPlayer.SetDataSource(fileDesriptor.FileDescriptor);
-                tempPlayer.Prepare();
-                int recordingDuration = tempPlayer.GetTrackInfo().Length;
-                tempPlayer.Release();
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.SetDataSource(Android.App.Application.Context, Android.Net.Uri.FromFile(new Java.IO.File(currentRecordingPath)));
+                String durationStr = mmr.ExtractMetadata(MediaMetadataRetriever.MetadataKeyDuration);
+                int recordingDuration = int.Parse(durationStr);
 
                 recorder = null;
                 State = RecorderState.IDLE;
 
-                //TODO: Issue! Where does the id come from? Could use other constructor but then the property setter have to be set to public
                 currentRecording = new Recording();
-				currentRecording.LocalPath = Path.GetFileName(currentRecordingPath);
-				currentRecording.Duration = recordingDuration;
+                currentRecording.LocalPath = Path.GetFileName(currentRecordingPath);
+                currentRecording.Duration = recordingDuration;
 
                 return currentRecording;
             }
@@ -103,11 +100,9 @@ namespace Lingvo.MobileApp.Droid.Sound
             recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
             recorder.SetOutputFormat(OutputFormat.ThreeGpp);
             recorder.SetAudioEncoder(AudioEncoder.AmrNb);
-            recorder.SetAudioSamplingRate(44100);
-            recorder.SetAudioEncodingBitRate(16);
             recorder.SetOutputFile(currentRecordingPath);
-            recorder.Prepare();
 
+            recorder.Prepare();
             State = RecorderState.PREPARED;
             return true;
 

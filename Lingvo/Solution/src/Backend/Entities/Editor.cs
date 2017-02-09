@@ -17,17 +17,13 @@ namespace Lingvo.Backend
 		}
 
 		/// <summary>
-		/// Gets or sets the password.
+		/// Gets or sets the hashed password.
 		/// </summary>
 		/// <value>The password.</value>
-		public String Password
+		public String PasswordHash
 		{
 			get;
 			set;
-		}
-
-		public Editor()
-		{
 		}
 	}
 }

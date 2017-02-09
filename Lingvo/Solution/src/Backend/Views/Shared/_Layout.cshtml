@@ -20,17 +20,12 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <!-- TODO: icon-->
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Lingvo</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    <li>@await Component.InvokeAsync("AccountMenu")</li>
                 </ul>
             </div>
         </div>
@@ -45,6 +40,8 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -53,11 +50,19 @@
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
+                asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validate">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
+                asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive">
+        </script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("scripts", required: false)
 </body>

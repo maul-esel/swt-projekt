@@ -1,3 +1,4 @@
+using Android.Content.Res;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
@@ -59,33 +60,39 @@ namespace Lingvo.MobileApp.Droid.Renderers
             {
                 if (element.Border)
                 {
-                    int offset = element.Toggled ? 1 : 0;
+                    int offset = element.Filled ? 1 : 0;
                     Drawable[] layers = new Drawable[2 + offset];
                     layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
                     layers[0 + offset].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
                     layers[1 + offset] = Resources.GetDrawable(resourceId).Mutate();
-                    layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                    if (element.Toggled)
+                    if (element.Filled)
                     {
                         layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
-                        layers[0].Alpha = 96;
+                        layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                        layers[1 + offset].SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
+                    }
+                    else
+                    {
+                        layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
                     }
                     button.Background = new LayerDrawable(layers);
                 }
                 else
                 {
                     Drawable image = Resources.GetDrawable(resourceId).Mutate();
-                    image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
-                    if (element.Toggled)
+
+                    if (element.Filled)
                     {
                         Drawable[] layers = new Drawable[2];
                         layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
-                        layers[0].Alpha = 96;
+                        layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
                         layers[1] = image;
+                        layers[1].SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
                         button.Background = new LayerDrawable(layers);
                     }
                     else
                     {
+                        image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
                         button.Background = image;
                     }
                 }
