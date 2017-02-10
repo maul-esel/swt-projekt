@@ -22,23 +22,49 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
+                @if (Model.Page != null)
+                {
+                    <div class="form-group">
+                        <label>Aktuelle Lehrerspur</label>
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <input class="input-lg form-control" type="text" readonly value="@Model.CurrentRecordingName" />
+                            </div>
+                            <div class="col-md-6" style="position:relative">
+                                <audio controls class="vcenter" style="width:100%;" src="@Model.CurrentRecordingUrl"></audio>
+                            </div>
+                            <div class="col-md-1 text-center" style="position:relative">
+                                <a href="@Model.CurrentRecordingUrl" class="vcenter" download="@Model.CurrentRecordingName">
+                                    <span class="glyphicon glyphicon-download-alt" style="font-size: 125%" title="Herunterladen"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                }
                 <div class="form-group">
-                    <label>Aktuelle Aufnahme</label>
-                    <div class="form-group row">
+                    <label>Neue Lehrerspur</label>
+                    <div id="noNewRecordingWarning" class="panel @(Model.Page == null ? "panel-warning" : "panel-info")">
+                        <div class="panel-heading">Keine neue Lehrerspur</div>
+                        <p class="panel-body">
+                            Sie haben noch keine neue Lehrerspur angegeben.
+                            Wählen Sie eine Datei zum Hochladen aus oder starten Sie eine neue Aufnahme, um eine Lehrerspur zu erstellen.
+                        </p>
+                    </div>
+                    <div id="newRecording" class="form-group row hidden">
                         <div class="col-md-5">
-                            <input class="input-lg form-control" type="text" readonly value="Aufnahme vom 22. 03. 2018" />
+                            <input id="newRecordingName" class="input-lg form-control" type="text" readonly value="@Model.CurrentRecordingName" />
                         </div>
                         <div class="col-md-6" style="position:relative">
-                            <audio controls class="vcenter" style="width:100%;"></audio>
+                            <audio id="newRecordingAudio" controls class="vcenter" style="width:100%;" src="@Model.CurrentRecordingUrl"></audio>
                         </div>
                         <div class="col-md-1 text-center" style="position:relative">
-                            <a href="#" class="vcenter">
+                            <a href="@Model.CurrentRecordingUrl" class="vcenter" download="@Model.CurrentRecordingName">
                                 <span class="glyphicon glyphicon-download-alt" style="font-size: 125%" title="Herunterladen"></span>
                             </a>
                         </div>
                     </div>
                 </div>
-                <hr />
                 <div class="row">
                     <div class="col-md-6">
                         <h3>Audiodatei hochladen</h3>
@@ -117,7 +143,9 @@
   }
   function prepareRecording() {
     recorder.exportMP3(function(blob){
-      current_recording = blob;
+        current_recording = blob;
+
+        setNewRecordingDisplay(URL.createObjectURL(blob));
       //Functions for displaying the current recording could be called here
       //Playback function could be set up here
     });
@@ -136,7 +164,22 @@
     audioRecorder.requestDevice(function(recorderObject){
       recorder = recorderObject;
     });
-  };
+    };
+
+    function setNewRecordingDisplay(blobUrl)
+    {
+        var now = new Date();
+        $("#newRecordingName").text("Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr");
+        $("#newRecordingAudio").attr("src", blobUrl)
+        $("#noNewRecordingWarning").hide();
+        $("#newRecording").show();
+    }
+
+    function setUploadedFileDisplay()
+    {
+
+
+    }
 </script>	
 <script src="~/js/recorder/audioRecord.js"></script>
 <script src="~/js/custom-file-input.js"></script>
