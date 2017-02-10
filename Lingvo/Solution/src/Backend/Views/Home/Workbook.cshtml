@@ -1,4 +1,5 @@
 @model Workbook
+@inject IStorage storage
 
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
@@ -25,6 +26,11 @@
                     <td>
                         <a title="Seite abspielen">
                             <span class="glyphicon glyphicon-play"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a title="Aufnahme herunterladen" href="@await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)" target="_blank" download>
+                            <span class="glyphicon glyphicon-download-alt"></span>
                         </a>
                     </td>
                     <td>
