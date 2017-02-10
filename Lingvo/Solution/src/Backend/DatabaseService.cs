@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Lingvo.Backend
 {
@@ -87,9 +88,14 @@ namespace Lingvo.Backend
 		{
 			if (Recordings.Find(recording.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(recording.Id));
+				var r = Recordings.Find(recording.Id);
+				r.Duration = recording.Duration;
+				r.LocalPath = recording.LocalPath;
 			}
-			Recordings.Add(recording);
+			else
+			{
+				Recordings.Add(recording);
+			}
 			SaveChanges();
 		}
 
@@ -102,9 +108,20 @@ namespace Lingvo.Backend
 		{
 			if (Pages.Find(page.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(page.Id));
+				var p = Pages.Find(page.Id);
+				p.Description = page.Description;
+				p.Number = page.Number;
+				p.StudentTrack = page.StudentTrack;
+				p.studentTrackId = page.studentTrackId;
+				p.teacherTrackId = page.teacherTrackId;
+				p.TeacherTrack = page.TeacherTrack;
+				p.workbookId = page.workbookId;
+				p.Workbook = page.Workbook;
 			}
-			Pages.Add(page);
+			else
+			{
+				Pages.Add(page);
+			}
 			SaveChanges();
 		}
 
@@ -117,9 +134,16 @@ namespace Lingvo.Backend
 		{
 			if (Workbooks.Find(workbook.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(workbook.Id));
+				var w = Workbooks.Find(workbook.Id);
+				w.Title = workbook.Title;
+				w.Subtitle = workbook.Subtitle;
+				w.Pages = workbook.Pages;
+				w.TotalPages = workbook.TotalPages;
 			}
-			Workbooks.Add(workbook);
+			else
+			{
+				Workbooks.Add(workbook);
+			}
 			SaveChanges();
 		}
 

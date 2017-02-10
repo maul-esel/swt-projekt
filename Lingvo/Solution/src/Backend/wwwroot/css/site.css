@@ -77,10 +77,10 @@
         float: right;
         margin: 0px;
     }
-    .glyphicon.glyphicon-globe.published {
+    .glyphicon.glyphicon-eye-open {
       color: #4280D0;
     }
-    .glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
+    .glyphicon-pencil, .glyphicon-trash, .glyphicon-eye-close {
       color: gray;
     }
 

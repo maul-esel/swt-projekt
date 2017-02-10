@@ -45,6 +45,15 @@ namespace Lingvo.Backend.Controllers
 			return View("AddWorkbook", workbook);
 		}
 
+		[Route("workbooks/{id}/publish")]
+		public IActionResult PublishWorkbook([FromServices] DatabaseService db, int id)
+		{
+			var workbook = db.Find<Workbook>(id);
+			workbook.IsPublished = !workbook.IsPublished;
+			db.Save(workbook);
+			return RedirectToAction(nameof(Index));
+		}
+
 		[Route("workbooks/{workbookId}/pages/add")]
 		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
 		{

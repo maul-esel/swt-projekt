@@ -26,9 +26,16 @@
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
-                            <span class="glyphicon glyphicon-globe @(workbook.IsPublished ? "" : "unpublished")"></span>
-                        </button>
+                        <a class="glyphicon-button" title="Arbeitsheft veröffentlichen" asp-controller="Home" asp-action="PublishWorkbook" asp-route-id="@workbook.Id">
+                        @if (workbook.IsPublished)
+						{
+  							<span class="glyphicon glyphicon-eye-open"></span>
+  						}
+						else
+						{
+  							<span class="glyphicon glyphicon-eye-close"></span>
+						}
+                        </a>
                     </td>
                     <td>
                         <button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
