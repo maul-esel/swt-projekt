@@ -38,9 +38,9 @@
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
+                        <a class="glyphicon-button" title="Arbeitsheft löschen" asp-controller="Home" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id">
                             <span class="glyphicon glyphicon-trash"></span>
-                        </button>
+                        </a>
                     </td>
                 </tr>}
         </tbody>

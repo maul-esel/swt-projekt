@@ -147,6 +147,63 @@ namespace Lingvo.Backend
 			SaveChanges();
 		}
 
+		/// <summary>
+		/// Delete the specified recording.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="recording">Recording.</param>
+		public void Delete(Recording recording)
+		{
+			var r = Recordings.Find(recording.Id);
+			if (r != null)
+			{
+				Recordings.Remove(r);
+				SaveChanges();
+			}
+		}
 
+		/// <summary>
+		/// Delete the specified page and the recording belonging to it.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="page">Page.</param>
+		public void Delete(Page page)
+		{
+			var p = Pages.Find(page.Id);
+
+			if (p == null)
+			{
+				return;
+			}
+
+			if (page.TeacherTrack != null)
+			{
+				Delete(page.TeacherTrack);
+			}
+
+			Pages.Remove(p);
+			SaveChanges();
+		}
+
+		/// <summary>
+		/// Delete the specified workbook and all corresponding pages.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="workbook">Workbook.</param>
+		public void Delete(Workbook workbook)
+		{
+			var w = Workbooks.Find(workbook.Id);
+
+			if (w != null)
+			{
+				foreach (var p in workbook.Pages)
+				{
+					Delete((Page) p);
+				}
+
+				Workbooks.Remove(w); 
+				SaveChanges();
+			}
+		}
     }
 }

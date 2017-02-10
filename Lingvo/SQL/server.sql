@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Pages (
   teacherTrackId INT NOT NULL,
   studentTrackId INT, /* always NULL on server */
 
-  FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id),
+  FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id) ON DELETE CASCADE,
   FOREIGN KEY ttfk(teacherTrackId) REFERENCES Recordings(id),
   FOREIGN KEY stfk(studentTrackId) REFERENCES Recordings(id)
 );

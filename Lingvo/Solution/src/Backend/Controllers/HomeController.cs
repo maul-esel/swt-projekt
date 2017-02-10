@@ -54,6 +54,14 @@ namespace Lingvo.Backend.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
+		[Route("workbooks/{id}/delete")]
+		public IActionResult DeleteWorkbook([FromServices] DatabaseService db, int id)
+		{
+			var workbook = db.Find<Workbook>(id);
+			db.Delete(workbook);
+			return RedirectToAction(nameof(Index));
+		}
+
 		[Route("workbooks/{workbookId}/pages/add")]
 		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
 		{
