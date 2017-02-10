@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Lingvo.Backend.ViewModels;
 using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend.Controllers
@@ -51,17 +51,20 @@ namespace Lingvo.Backend.Controllers
 			ViewData["Title"] = "Neue Seite erstellen";
 
 			var workbook = db.Find<Workbook>(workbookId);
-			return View(new Tuple<Workbook, Page>(workbook, null));
+			return View(new PageModel() { Workbook = workbook });
 		}
 
 		[Route("pages/edit/{id}")]
-		public IActionResult EditPage([FromServices] DatabaseService db, int id)
+		public async Task<IActionResult> EditPage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id)
 		{
 			ViewData["Title"] = "Seite bearbeiten";
 
-			var page = db.Find<Page>(id);
-			var workbook = db.Find<Workbook>(page.workbookId);
-			return View("AddPage", Tuple.Create(workbook, page));
+			var page = db.FindPageWithRecording(id);
+			var workbook = await db.FindAsync<Workbook>(page.workbookId);
+			var recordingUrl = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
+
+			var model = new PageModel(page, recordingUrl) { Workbook = workbook };
+			return View("AddPage", model);
 		}
 
 		[Route("workbooks/{id}")]
@@ -91,7 +94,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, ViewModels.PageModel model)
+		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model)
 		{
 			var page = db.FindPageWithRecording(id);
 
@@ -111,7 +114,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, ViewModels.PageModel model)
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, PageModel model)
 		{
 			var recording = await SaveRecording(db, storage, model);
 			db.Save(new Page()
@@ -124,7 +127,7 @@ namespace Lingvo.Backend.Controllers
 			return RedirectToAction(nameof(Workbook), model.WorkbookID);
 		}
 
-		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, ViewModels.PageModel model)
+		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, PageModel model)
 		{
 			var file = model.RecordedFile ?? model.UploadedFile;
 			if (file == null)
