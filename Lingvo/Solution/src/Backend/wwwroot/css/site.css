@@ -2,8 +2,11 @@
     html, body {
       font-size:20px;
       width: 100%;
-      padding: 30px 0;
+      padding: 0;
       height: 100%;
+    }
+    body {
+        padding: 60px 0 50px 0;
     }
     .navbar-inverse {
       background-color: #4280D0 !important;
@@ -34,8 +37,6 @@
 
     .wrapper {
         min-height: 100%;
-        height: auto !important;
-        height: 100%;
         margin: 0 auto;
     }
 
