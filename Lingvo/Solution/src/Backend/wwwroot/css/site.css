@@ -55,6 +55,10 @@
       padding: 15px;
     }
 
+    .lingvo-header-pages {
+      background-color: #295ea3 !important;
+    }
+
     .lingvo-header {
       background-color: #4280D0; 
       color: white;
@@ -84,6 +88,10 @@
       color: gray;
     }
 
+    .glyphicon-play-pages{
+        color: #295ea3;
+    }
+
     .workbook-title {
       font-size: 24px;
       margin: 0px;
@@ -98,11 +106,16 @@
       font-size: 20px;
     }
 
+    .pages-table {
+        background-color: #f2f2f2;
+        border-radius: 5px;
+    }
+
     p { margin:0; }
 
     .glyphicon-button {
       border: 0;
-      background: white;
+      background: transparent;
       cursor: pointer;
     }
 

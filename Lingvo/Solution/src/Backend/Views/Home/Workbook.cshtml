@@ -1,13 +1,13 @@
 @model Workbook
 
 <div class="container container-fluid">
-    <div class="lingvo-header container-fluid">
+    <div class="lingvo-header-pages lingvo-header container-fluid">
         <h3>
             <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @Model.Title
         </h3>
         <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
     </div>
-    <table id="workbooks" class="table">
+    <table id="workbooks" class="table pages-table">
         <tbody>
             @foreach (var page in Model.Pages)
             {
@@ -24,7 +24,7 @@
                     </td>
                     <td>
                         <a title="Seite abspielen">
-                            <span class="glyphicon glyphicon-play"></span>
+                            <span class="glyphicon glyphicon-play glyphicon-play-pages"></span>
                         </a>
                     </td>
                     <td>
