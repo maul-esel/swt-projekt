@@ -34,9 +34,9 @@
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Seite löschen">
+                        <a class="glyphicon-button" title="Seite löschen" asp-controller="Home" asp-action="DeletePage" asp-route-id="@page.Id">
                             <span class="glyphicon glyphicon-trash"></span>
-                        </button>
+                        </a>
                     </td>
                 </tr>}
         </tbody>

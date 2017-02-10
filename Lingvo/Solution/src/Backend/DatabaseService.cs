@@ -176,9 +176,10 @@ namespace Lingvo.Backend
 				return;
 			}
 
-			if (page.TeacherTrack != null)
+			var r = Recordings.Find(page.teacherTrackId);
+			if (r != null)
 			{
-				Delete(page.TeacherTrack);
+				Recordings.Remove(r);
 			}
 
 			Pages.Remove(p);
