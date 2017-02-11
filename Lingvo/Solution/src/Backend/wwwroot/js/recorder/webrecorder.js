@@ -37,11 +37,11 @@
   }
 
   function prepareRecording() {
+    $("#conversion-modal").modal()
     recorder.exportMP3(function(blob){
         current_recording = blob;
         setNewRecordingDisplay(URL.createObjectURL(blob));
-      //Functions for displaying the current recording could be called here
-      //Playback function could be set up here
+        $("#conversion-modal").modal("hide")
     });
   }
 
@@ -93,10 +93,11 @@
 
     function setNewRecordingDisplay(blobUrl)
     {
-        var now = new Date();
-        $("#newRecordingName").attr("value", "Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr");
+        const now = new Date();
+        const name = "Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr"
+        $("#newRecordingName").val(name)
         $("#newRecordingAudio").attr("src", blobUrl)
-        $("#newRecordingDownload").attr('href', blobUrl)
+        $("#newRecordingDownload").attr('href', blobUrl).attr('download', name + ".mp3")
         $("#noNewRecordingWarning").hide();
         $("#newRecording").removeClass('hidden')
     }

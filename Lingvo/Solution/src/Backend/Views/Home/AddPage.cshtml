@@ -59,7 +59,7 @@
                             <audio id="newRecordingAudio" controls class="vcenter" style="width:100%;" src="@Model.CurrentRecordingUrl"></audio>
                         </div>
                         <div class="col-md-1 text-center" style="position:relative">
-                            <a id="newRecordingDownload" href="@Model.CurrentRecordingUrl" class="vcenter" download="@Model.CurrentRecordingName">
+                            <a id="newRecordingDownload" class="vcenter" download>
                                 <span class="glyphicon glyphicon-download-alt" style="font-size: 125%" title="Herunterladen"></span>
                             </a>
                         </div>
@@ -127,6 +127,19 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Schließen</a>
+                </div>
+            </div>
+        </div>
+    </div>>
+    <div class="modal fade" id="conversion-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-info">
+                    <h4 class="modal-title">Aufnahme wird verarbeitet</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Ihre Aufnahme wird in das MP3-Format konvertiert. Bitte gedulden Sie sich einen Moment.</p>
+                    <div class="loader"></div>
                 </div>
             </div>
         </div>
