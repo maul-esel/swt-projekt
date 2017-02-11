@@ -85,8 +85,9 @@ namespace Lingvo.Backend.Controllers
 		public IActionResult DeletePage([FromServices] DatabaseService db, int id)
 		{
 			var page = db.Find<Page>(id);
+			var workbookID = page.workbookId;
 			db.Delete(page);
-			return RedirectToAction(nameof(Workbook));
+			return Redirect("/workbooks/" + workbookID);
 		}
 
 		[Route("workbooks/{id}")]

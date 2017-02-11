@@ -155,3 +155,20 @@
         font-weight: bold;
         color: red;
     }
+
+    .modal-header-error {
+        background-color: #cc0000;
+        color:white !important;
+        font-weight: bold;
+    }
+
+    .modal-header-warning {
+        background-color: #ff8c1a;
+        color:white !important;
+        font-weight: bold;
+    }
+
+    .btn-warn {
+        background-color: #ff8c1a;
+        color:white !important;
+    }
