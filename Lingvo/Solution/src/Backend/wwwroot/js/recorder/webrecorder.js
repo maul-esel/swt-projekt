@@ -57,22 +57,39 @@
 
         var formData = new FormData(form);
         formData.append("RecordedFile", current_recording);
-        var request = new XMLHttpRequest();
 
-        request.onload = () => {
+        // ugly hack for accessing xhr and responseURL
+        var xhr;
+        var _orgAjax = jQuery.ajaxSettings.xhr;
+        jQuery.ajaxSettings.xhr = function () {
+            xhr = _orgAjax();
+            return xhr;
+        };
+
+        $.ajax({
+            url: action,
+            processData: false,
+            contentType: false,
+            data: formData,
+            method: 'POST'
+        })
+
+        .done(() => {
             $("#submit-modal").modal("hide")
-        }
+            window.location.replace(xhr.responseURL)
+        })
 
-        request.open("POST", action);
-        request.send(formData);
-        return false;
+        .fail((jq, s, err) => {
+            $("#submit-modal").modal("hide")
+            $("#submit-error-modal").modal()
+        })
   }
   
   window.onload = function init() {
     audioRecorder.requestDevice(function(recorderObject){
       recorder = recorderObject;
     });
-    };
+  };
 
     function setNewRecordingDisplay(blobUrl)
     {
