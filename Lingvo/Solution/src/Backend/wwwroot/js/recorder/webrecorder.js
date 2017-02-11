@@ -12,6 +12,7 @@
     recorder && recorder.record();
     button.disabled = true;
     button.nextElementSibling.disabled = false;
+    resetElapsedTime()
     elapsed_time_display = setInterval(displayElapsedTime,1000);
   }
   
@@ -19,13 +20,13 @@
     recorder && recorder.stop();
     button.disabled = true;
     button.previousElementSibling.disabled = false;
-    clearInterval(elapsed_time_display);
+    clearInterval(elapsed_time_display)
     prepareRecording();
   }
   
   function displayElapsedTime() {
     
-    $("#seconds").html(padTimeCode(++elapsed_time%60));
+    $("#seconds").html(padTimeCode(elapsed_time++%60));
     $("#minutes").html(padTimeCode(parseInt(elapsed_time/60,10)));
     
   }
