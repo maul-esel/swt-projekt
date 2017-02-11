@@ -77,11 +77,18 @@
         float: right;
         margin: 0px;
     }
+
     .glyphicon.glyphicon-eye-open {
       color: #4280D0;
     }
-    .glyphicon-pencil, .glyphicon-trash, .glyphicon-eye-close {
-      color: gray;
+	.glyphicon.glyphicon-eye-open:hover {
+		color: #295ea3;
+	}
+	.glyphicon-download-alt, .glyphicon-pencil, .glyphicon-trash, .glyphicon-eye-close {
+		color: gray;
+	}
+    .glyphicon-download-alt:hover, .glyphicon-pencil:hover, .glyphicon-trash:hover, .glyphicon-eye-close {
+        color: #555;
     }
 
     .workbook-title {
@@ -172,3 +179,13 @@
         background-color: #ff8c1a;
         color:white !important;
     }
+
+.page-play-button .glyphicon {
+    margin: 0;
+    padding: 10%;
+    display: inline-block;
+    font-size: 150%;
+    text-align: center;
+    border-radius: 50%;
+    border: solid 4px;
+}

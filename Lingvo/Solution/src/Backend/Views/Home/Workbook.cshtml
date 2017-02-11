@@ -1,6 +1,10 @@
 @model Workbook
 @inject IStorage storage
 
+@section Scripts {
+    <script src="~/js/page-list-audio.js"></script>
+}
+
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>
@@ -12,7 +16,14 @@
         <tbody>
             @foreach (var page in Model.Pages)
             {
+                var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
                 <tr>
+                    <td class="text-center">
+                        <a href="#" class="page-play-button" title="Seite abspielen">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </a>
+                        <audio src="@url" class="page-play-audio"></audio>
+                    </td>
                     <td>
                         <h3 class="workbook-title">Seite @page.Number</h3>
                         <span class="workbook-subtitle">@page.Description</span>
@@ -24,12 +35,7 @@
                         </a>
                     </td>
                     <td>
-                        <a title="Seite abspielen">
-                            <span class="glyphicon glyphicon-play"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <a title="Aufnahme herunterladen" href="@await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)" target="_blank" download>
+                        <a title="Aufnahme herunterladen" href="@url" target="_blank" download>
                             <span class="glyphicon glyphicon-download-alt"></span>
                         </a>
                     </td>
