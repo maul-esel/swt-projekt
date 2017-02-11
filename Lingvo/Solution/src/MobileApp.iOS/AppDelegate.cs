@@ -5,6 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using System.IO;
+using ObjCRuntime;
 
 namespace Lingvo.MobileApp.iOS
 {
@@ -32,6 +33,7 @@ namespace Lingvo.MobileApp.iOS
 			//var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			//var filePath = Path.Combine(documentsDirPath, "page1.mp3");
 			var bundleFileUrl = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/page1.mp3");
+			ObjCRuntime.Class.ThrowOnInitFailure = false;
 
 			var bundleFileBytes = File.ReadAllBytes(bundleFileUrl);
 

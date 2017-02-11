@@ -45,6 +45,23 @@ namespace Lingvo.Backend.Controllers
 			return View("AddWorkbook", workbook);
 		}
 
+		[Route("workbooks/{id}/publish")]
+		public IActionResult PublishWorkbook([FromServices] DatabaseService db, int id)
+		{
+			var workbook = db.Find<Workbook>(id);
+			workbook.IsPublished = !workbook.IsPublished;
+			db.Save(workbook);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Route("workbooks/{id}/delete")]
+		public IActionResult DeleteWorkbook([FromServices] DatabaseService db, int id)
+		{
+			var workbook = db.Find<Workbook>(id);
+			db.Delete(workbook);
+			return RedirectToAction(nameof(Index));
+		}
+
 		[Route("workbooks/{workbookId}/pages/add")]
 		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
 		{
@@ -65,6 +82,15 @@ namespace Lingvo.Backend.Controllers
 
 			var model = new PageModel(page, recordingUrl) { Workbook = workbook };
 			return View("AddPage", model);
+		}
+
+		[Route("pages/delete/{id}")]
+		public IActionResult DeletePage([FromServices] DatabaseService db, int id)
+		{
+			var page = db.Find<Page>(id);
+			var workbookID = page.workbookId;
+			db.Delete(page);
+			return Redirect("/workbooks/" + workbookID);
 		}
 
 		[Route("workbooks/{id}")]

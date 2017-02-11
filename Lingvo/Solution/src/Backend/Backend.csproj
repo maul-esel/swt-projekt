@@ -87,12 +87,6 @@
       <Version>8.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\ViewModels.CreateUserModel.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ViewModels.CreateUserModel.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" Condition="Exists('..\Common\Common.projitems')" />
   <!--Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /-->
   <!--
