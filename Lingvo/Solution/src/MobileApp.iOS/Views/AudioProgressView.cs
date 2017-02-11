@@ -32,6 +32,10 @@ namespace Lingvo.MobileApp.iOS
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
 			btn.SetTitleColor(teacherColor, UIControlState.Normal);
+
+			var btnImage = new UIImage("ic_volume_up");
+			btn.SetImage(btnImage, UIControlState.Normal);
+
 			btn.SetTitle("Mute", UIControlState.Normal);
 			return btn;
 		})();
