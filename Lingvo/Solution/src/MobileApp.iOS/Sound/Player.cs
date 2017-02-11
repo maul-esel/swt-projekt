@@ -30,8 +30,9 @@ namespace Lingvo.MobileApp.iOS.Sound
 			timer.Elapsed += (sender, e) => OnProgress();
 			State = PlayerState.IDLE;
 
-			//Initialize audio session
 			ActivateAudioSession();
+
+
 		}
 
 		#region Public properties
@@ -208,11 +209,15 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void ActivateAudioSession()
 		{
-			var session = AVAudioSession.SharedInstance();
+			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
+			AVAudioSession session = AVAudioSession.SharedInstance();
 			session.SetCategory(AVAudioSessionCategory.Ambient);
 			session.SetActive(true);
+			if (status == AVAuthorizationStatus.NotDetermined) {
+				session.RequestRecordPermission((granted) => { });
+			}
+		
 		}
-
 		public void DeactivateAudioSession()
 		{
 			var session = AVAudioSession.SharedInstance();
