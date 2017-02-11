@@ -107,7 +107,7 @@
     function setNewRecordingDisplay(blob)
     {
         const now = new Date();
-        const name = "Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr"
+        const name = "Aufgenommen um " + padTimeCode(now.getHours()) + ":" + padTimeCode(now.getMinutes()) + " Uhr"
         updateNewTrackUI(name, blob)
     }
 
