@@ -77,13 +77,17 @@
         float: right;
         margin: 0px;
     }
-    .glyphicon.glyphicon-globe.published {
+
+    .glyphicon.glyphicon-eye-open {
       color: #4280D0;
     }
-.glyphicon-download-alt, .glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
-    color: gray;
-}
-    .glyphicon-download-alt:hover, .glyphicon-pencil:hover, .glyphicon-trash:hover, .glyphicon-globe.unpublished:hover {
+	.glyphicon.glyphicon-eye-open:hover {
+		color: #295ea3;
+	}
+	.glyphicon-download-alt, .glyphicon-pencil, .glyphicon-trash, .glyphicon-eye-close {
+		color: gray;
+	}
+    .glyphicon-download-alt:hover, .glyphicon-pencil:hover, .glyphicon-trash:hover, .glyphicon-eye-close {
         color: #555;
     }
 
@@ -157,6 +161,23 @@
         font-size: 70%;
         font-weight: bold;
         color: red;
+    }
+
+    .modal-header-error {
+        background-color: #cc0000;
+        color:white !important;
+        font-weight: bold;
+    }
+
+    .modal-header-warning {
+        background-color: #ff8c1a;
+        color:white !important;
+        font-weight: bold;
+    }
+
+    .btn-warn {
+        background-color: #ff8c1a;
+        color:white !important;
     }
 
 .page-play-button .glyphicon {

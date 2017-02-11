@@ -40,9 +40,29 @@
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Seite löschen">
+                        <a class="glyphicon-button" title="Seite löschen" data-toggle="modal" href="#page-delete-warning-@page.Id">
                             <span class="glyphicon glyphicon-trash"></span>
-                        </button>
+                        </a>
+
+						<div class="modal fade" id="page-delete-warning-@page.Id" role="dialog">
+						    <div class="modal-dialog">
+
+						      <div class="modal-content">
+						        <div class="modal-header modal-header-error">
+						          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+						          	<h4 class="modal-title">Warnung</h4>
+						        </div>
+						        <div class="modal-body">
+						          	<p>Möchten Sie diese Seite wirklich löschen?</p>
+						        </div>
+						        <div class="modal-footer">
+									<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+						          	<a type="button" class="btn btn-danger" asp-controller="Home" asp-action="DeletePage" asp-route-id="@page.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+						        </div>
+						      </div>
+						      
+						    </div>
+						</div>
                     </td>
                 </tr>}
         </tbody>
