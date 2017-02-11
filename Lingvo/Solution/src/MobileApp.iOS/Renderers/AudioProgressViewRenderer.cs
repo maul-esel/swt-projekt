@@ -69,7 +69,16 @@ namespace Lingvo.MobileApp.iOS
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
-                case LingvoAudioProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
+                case LingvoAudioProgressView.LabelTypeValue.Percentual:
+					if (element.MaxProgress == 0)
+					{
+						progressView.Text = "±∞";
+					}
+					else
+					{
+						progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
+					}
+					break;
                 case LingvoAudioProgressView.LabelTypeValue.Time:
                     {
 						string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0,2);
