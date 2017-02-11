@@ -1,6 +1,7 @@
 
   var elapsed_time = 0;
   var elapsed_time_display;
+  var on_air_display;
   var audio_context;
   var recorder;
   var current_recording;
@@ -14,6 +15,7 @@
     button.nextElementSibling.disabled = false;
     resetElapsedTime()
     elapsed_time_display = setInterval(displayElapsedTime,1000);
+    on_air_display = setInterval(displayOnAir,1000);
   }
   
   function stopRecording(button) {
@@ -21,6 +23,8 @@
     button.disabled = true;
     button.previousElementSibling.disabled = false;
     clearInterval(elapsed_time_display)
+    clearInterval(on_air_display);
+    resetDisplayOnAir();
     prepareRecording();
   }
   
@@ -31,9 +35,18 @@
     
   }
 
+  function displayOnAir() {
+    var dotCount = elapsed_time%4;
+    $("#onair").html("Aufnahme läuft" + ".".repeat(dotCount));
+  }
+
   function resetElapsedTime() {
     elapsed_time = 0;
     displayElapsedTime();
+  }
+
+  function resetDisplayOnAir() {
+    $("#onair").html("");
   }
 
   function prepareRecording() {

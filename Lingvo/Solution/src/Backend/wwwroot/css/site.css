@@ -245,3 +245,9 @@
     border-radius: 50%;
     border: solid 4px;
 }
+
+    #meter
+    {
+        display: inline-block !important;
+        border:1px solid #000000;
+    }

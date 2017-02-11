@@ -1,3 +1,11 @@
+var audio_context = null;
+var meter = null;
+var canvasContext = null;
+var WIDTH=100;
+var HEIGHT=20;
+var rafID = null;
+var mediaStreamSource = null;
+
 (function(window){
 
   var WORKER_PATH = '/js/recorder/recorderWorker.js';
@@ -138,9 +146,21 @@
 		  audio_context = new AudioContext;
 
 
-		  navigator.getUserMedia({audio: true}, function(stream){
+		  navigator.getUserMedia(
+			  {
+				  "audio": {
+                		"mandatory": {
+							"googEchoCancellation": "true",
+							"googAutoGainControl": "true",
+							"googNoiseSuppression": "true",
+							"googHighpassFilter": "false"
+                	},
+                	"optional": []
+				},
+            }, function(stream){
 
 			  callback(new RecorderObject(audio_context.createMediaStreamSource(stream), cfg));
+			  createVisualizer(stream);
 
 		  }, function(e) {
 
@@ -163,3 +183,34 @@
 
 
 })(window);
+
+
+function didntGetStream() {
+    alert('Stream generation failed.');
+}
+
+
+function createVisualizer(stream) {
+	canvasContext = document.getElementById( "meter" ).getContext("2d");
+    // Create an AudioNode from the stream.
+    mediaStreamSource = audio_context.createMediaStreamSource(stream);
+
+    // Create a new volume meter and connect it.
+    meter = createAudioMeter(audio_context);
+    mediaStreamSource.connect(meter);
+
+    // kick off the visual updating
+    drawLoop();
+}
+
+function drawLoop( time ) {
+    // clear the background
+    canvasContext.clearRect(0,0,WIDTH,HEIGHT);
+    canvasContext.fillStyle = "blue";
+
+    // draw a bar based on the current volume
+    canvasContext.fillRect(0, 0, meter.volume*WIDTH*3.5, HEIGHT);
+
+    // set up the next visual callback
+    rafID = window.requestAnimationFrame( drawLoop );
+}
