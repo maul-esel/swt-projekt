@@ -80,8 +80,11 @@
     .glyphicon.glyphicon-globe.published {
       color: #4280D0;
     }
-    .glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
-      color: gray;
+.glyphicon-download-alt, .glyphicon-pencil, .glyphicon-trash, .glyphicon-globe.unpublished {
+    color: gray;
+}
+    .glyphicon-download-alt:hover, .glyphicon-pencil:hover, .glyphicon-trash:hover, .glyphicon-globe.unpublished:hover {
+        color: #555;
     }
 
     .workbook-title {
