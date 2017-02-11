@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS Pages (
   number INT,
   description TEXT,
   teacherTrackId INT NOT NULL REFERENCES Recordings,
-  studentTrackId INT REFERENCES Recordings
+  studentTrackId INT REFERENCES Recordings, 
+  
+  UNIQUE (workbookID, number)
 );
 
 CREATE TABLE IF NOT EXISTS TeacherMemos (

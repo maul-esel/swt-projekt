@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS Pages (
   description TEXT,
   teacherTrackId INT NOT NULL,
   studentTrackId INT, /* always NULL on server */
+  
+  UNIQUE (workbookID, number),
 
   FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id),
   FOREIGN KEY ttfk(teacherTrackId) REFERENCES Recordings(id),
