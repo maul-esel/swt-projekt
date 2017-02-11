@@ -90,7 +90,7 @@ namespace Lingvo.Backend.Controllers
 			var page = db.Find<Page>(id);
 			var workbookID = page.workbookId;
 			db.Delete(page);
-			return Redirect("/workbooks/" + workbookID);
+			return RedirectToAction(nameof(Workbook), new { id = workbookID });
 		}
 
 		[Route("workbooks/{id}")]
@@ -136,7 +136,7 @@ namespace Lingvo.Backend.Controllers
 			page.Number = model.PageNumber;
 			db.Save(page);
 
-			return RedirectToAction(nameof(Workbook), model.WorkbookID);
+			return RedirectToAction(nameof(Workbook), new { id = model.WorkbookID });
 		}
 
 		[HttpPost]
@@ -150,7 +150,7 @@ namespace Lingvo.Backend.Controllers
 				workbookId = model.WorkbookID,
 				teacherTrackId = recording.Id
 			});
-			return RedirectToAction(nameof(Workbook), model.WorkbookID);
+			return RedirectToAction(nameof(Workbook), new { id = model.WorkbookID });
 		}
 
 		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, PageModel model)
