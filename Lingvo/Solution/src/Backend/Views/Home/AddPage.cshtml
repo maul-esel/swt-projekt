@@ -69,7 +69,7 @@
                     <div class="col-md-6">
                         <h3>Audiodatei hochladen</h3>
                         <div>
-                            <input type="file" name="file" id="file2" class="inputfile" accept="audio/*" />
+                            <input type="file" name="uploadedFile" id="file2" class="inputfile" accept="audio/*" />
                             <label for="file2" style="border-style: solid; border-color:#4280D0; border-radius:10px; text-align:center; border-width:2px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="25" viewBox="0 0 20 17">
                                     <path class="hover-blue" d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
@@ -79,10 +79,13 @@
                         </div>
                     </div>
                     <div class="col-md-6" style="text-align: right;">
+                        <input type="file" name="recordedFile" id="file2" class="hidden" accept="audio/*" />
                         <h3>Audiospur jetzt direkt aufnehmen</h3>
-                        <input type="image" src="~/images/record_button.png" onclick="startRecording(this);" />
-                        <input type="image" src="~/images/stop_button.png" onclick="stopRecording(this);" />
-                        <input type="image" src="~/images/upload_button.png" onclick="sendBlobToServer(this);" />
+                        <button type="button" onclick="startRecording(this)"; return false;>Start</button> 
+                        <button type="button" onclick="stopRecording(this)"; return false;>Stop</button> 
+                        
+                        <label id="minutes">00</label>:<label id="seconds">00</label>
+                        
                     </div>
                 </div>
             </div>
@@ -117,69 +120,10 @@
         </div-->
         <div class="form-group" style="text-align: center">
             <a class="btn btn-lg btn-danger" style="border:none" asp-controller="Home" asp-action="Workbook" asp-route-id="@Model.WorkbookID">Abbrechen</a>
-            <input type="submit" class="btn-lg btn-success" style="border:none" value="Speichern" />
+            <input type="submit" class="btn-lg btn-success" style="border:none" value="Speichern" onclick="sendBlobToServer(event);"/>
         </div>
     </form>
 </div>
-<script>
- 
-  var audio_context;
-  var recorder;
-  var current_recording;
-  var recording = 0;
-  function startRecording(button) {
-    recording = recording + 1;
-    recorder.clear();
-    recorder && recorder.record();
-    button.disabled = true;
-    button.nextElementSibling.disabled = false;
-  }
-  function stopRecording(button) {
-    recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
-    
-    prepareRecording();
-  }
-  function prepareRecording() {
-    recorder.exportMP3(function(blob){
-        current_recording = blob;
-
-        setNewRecordingDisplay(URL.createObjectURL(blob));
-      //Functions for displaying the current recording could be called here
-      //Playback function could be set up here
-    });
-  }
-  function sendBlobToServer() {
-        if(current_recording == null){
-          return;}
-       
-        var formData = new FormData($("#pageForm")[0]);
-        formData.append("RecordedFile", current_recording);
-        var request = new XMLHttpRequest();
-        request.open("POST", "/Home/CreatePage"); //Not sure which method exactly should be called? Do we have to call a method???
-        request.send(formData);
-  }
-  window.onload = function init() {
-    audioRecorder.requestDevice(function(recorderObject){
-      recorder = recorderObject;
-    });
-    };
-
-    function setNewRecordingDisplay(blobUrl)
-    {
-        var now = new Date();
-        $("#newRecordingName").text("Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr");
-        $("#newRecordingAudio").attr("src", blobUrl)
-        $("#noNewRecordingWarning").hide();
-        $("#newRecording").show();
-    }
-
-    function setUploadedFileDisplay()
-    {
-
-
-    }
-</script>	
+<script src="~/js/recorder/webrecorder.js" asp-append-version="true"></script>
 <script src="~/js/recorder/audioRecord.js"></script>
 <script src="~/js/custom-file-input.js"></script>
