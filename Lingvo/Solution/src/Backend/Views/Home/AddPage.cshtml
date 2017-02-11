@@ -108,7 +108,29 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="submit-error-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-error">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
+                    <h4 class="modal-title">Fehler</h4>
+                </div>
+                <div class="modal-body text-justify" style="font-size:85%">
+                    <p>
+                        Seite konnte nicht erfolgreich gespeichert werden.
+                        Überprüfen Sie Ihre Eingabe auf eventuelle Fehler und speichern Sie erneut.
+                    </p>
+                    <hr/>
+                    <p>
+                        Sie können Ihre Aufnahme herunterladen und lokal sichern, um Datenverlust zu vermeiden.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Schließen</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="~/js/recorder/webrecorder.js" asp-append-version="true"></script>
 <script src="~/js/recorder/audioRecord.js"></script>
