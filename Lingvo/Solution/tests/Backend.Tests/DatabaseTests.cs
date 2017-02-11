@@ -157,7 +157,7 @@ namespace Lingvo.Backend.Tests
 			var db = DatabaseService.Connect(ConnectionString);
 
 			var page1 = db.FindPageWithRecording(1);
-			var page2 = db.FindPathWithRecording(2);
+			var page2 = db.FindPageWithRecording(2);
 
 			Assert.Equal(1, page1.TeacherTrack.Id);
 			Assert.Equal(2, page2.TeacherTrack.Id);
