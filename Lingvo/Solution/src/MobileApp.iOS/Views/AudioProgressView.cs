@@ -32,11 +32,8 @@ namespace Lingvo.MobileApp.iOS
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
 			btn.SetTitleColor(teacherColor, UIControlState.Normal);
-
 			var btnImage = new UIImage("ic_volume_up");
 			btn.SetImage(btnImage, UIControlState.Normal);
-
-			btn.SetTitle("Mute", UIControlState.Normal);
 			return btn;
 		})();
 		UILabel timeLabel = new UILabel()
@@ -105,6 +102,11 @@ namespace Lingvo.MobileApp.iOS
 			muteBtn.AddTarget((object sender, EventArgs e) =>
 			{
 				studentMuted = !studentMuted;
+
+				var buttonImageName = studentMuted ? "ic_volume_off" : "ic_volume_up";
+				var buttonImage = new UIImage(buttonImageName);
+				muteBtn.SetImage(buttonImage, UIControlState.Normal);
+
 				StudentTrackMuted?.Invoke(studentMuted);
 				muteBtn.SetTitle("Unmute", UIControlState.Normal);
 
