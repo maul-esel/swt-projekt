@@ -182,3 +182,37 @@
     top: 50%;
     transform: translateY(25%);
 }
+
+.loader {
+    margin: auto;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+
+    background: repeating-linear-gradient(
+        0deg,
+        black,
+        black 40px,
+        red 40px,
+        red 80px,
+        yellow 80px,
+        yellow 120px
+    );
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.modal-header-info {
+    background-color: #4280D0;
+    color: white !important;
+    font-weight: bold;
+}

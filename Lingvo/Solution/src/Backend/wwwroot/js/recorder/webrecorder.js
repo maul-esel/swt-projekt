@@ -45,9 +45,12 @@
     });
   }
 
-  function sendBlobToServer() {
+  function sendBlobToServer(event) {
         if(current_recording == null){
-          return;}
+          return;
+      }
+      $("#submit-modal").modal()
+      event.preventDefault()
        
         var form = $("#pageForm")[0];
         var action = form.getAttribute("action")
@@ -56,8 +59,13 @@
         formData.append("RecordedFile", current_recording);
         var request = new XMLHttpRequest();
 
-        request.open("POST", action); //Not sure which method exactly should be called? Do we have to call a method???
+        request.onload = () => {
+            $("#submit-modal").modal("hide")
+        }
+
+        request.open("POST", action);
         request.send(formData);
+        return false;
   }
   
   window.onload = function init() {
@@ -69,15 +77,16 @@
     function setNewRecordingDisplay(blobUrl)
     {
         var now = new Date();
-        $("#newRecordingName").text("Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr");
+        $("#newRecordingName").attr("value", "Aufgenommen um " + now.getHours() + ":" + now.getMinutes() + " Uhr");
         $("#newRecordingAudio").attr("src", blobUrl)
+        $("#newRecordingDownload").attr('href', blobUrl)
         $("#noNewRecordingWarning").hide();
-        $("#newRecording").show();
+        $("#newRecording").removeClass('hidden')
     }
 
     function setUploadedFileDisplay()
     {
-
+        //$("#newRecordingName").attr("value", 
     }
 
     function padTimeCode ( val ) {
