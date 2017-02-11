@@ -8,48 +8,25 @@ using Xunit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
+using Microsoft.AspNetCore.Mvc;
+using Lingvo.Backend.Controllers;
+
 namespace Lingvo.Backend.Tests
 {
-	public class TestsFixture : IDisposable
-	{
-		public TestsFixture()
-		{
-			var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
-				.AddJsonFile("appsettings.json")
-				.AddJsonFile($"appsettings.{environmentName}.json", optional: true)
-				.AddEnvironmentVariables();
-			var config = builder.Build();
-
-			DatabaseTests.ConnectionString = config["MYSQLCONNSTR_localdb"];
-			var db = DatabaseService.Connect(DatabaseTests.ConnectionString);
-			db.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
-		}
-
-		public void Dispose()
-		{
-		}
-	}
-
-    public class DatabaseTests : IClassFixture<TestsFixture>
+    public class DatabaseTests 
     {
-		public static string ConnectionString { get; set; }
-
 		public DatabaseTests()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			TestsFixture.Setup();
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
 		}
 
-		public void SetFixture(TestsFixture data)
-		{
-		}
 
         [Fact]
         public void TestLoadTables()
         {
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Assert.Equal(4, Database.Pages.Count());
 			Assert.Equal(4, Database.Recordings.Count());
 			Assert.Equal(2, Database.Workbooks.Count());
@@ -58,7 +35,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindWorkbooks()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Assert.NotNull(Database.Workbooks.Find(1));
 			Assert.NotNull(Database.Workbooks.Find(2));
 			Assert.Null(Database.Workbooks.Find(3));
@@ -67,7 +44,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindPages()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Assert.NotNull(Database.Pages.Find(1));
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Pages.Find(5));
@@ -76,7 +53,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindRecordings()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Assert.NotNull(Database.Recordings.Find(1));
 			Assert.NotNull(Database.Recordings.Find(4));
 			Assert.Null(Database.Recordings.Find(5));
@@ -85,7 +62,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookPages()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			var dbWorkbook = Database.GetWorkbooksWithReferences().Find(w => w.Id == 1);
 			Assert.Equal(2, dbWorkbook.Pages.Count);
 
@@ -100,7 +77,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveWorkbook()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			var testWorkbook = new Workbook()
 			{
 				Title = "Test",
@@ -115,7 +92,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSavePage()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			var testPage = new Page()
 			{
 				Number = 5,
@@ -136,7 +113,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveRecording()
 		{
-			DatabaseService Database = DatabaseService.Connect(ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			var testRecording = new Recording()
 			{
 				Duration = 12 /* milliseconds */,
@@ -149,6 +126,159 @@ namespace Lingvo.Backend.Tests
 			var savedRecording = Database.Recordings.Find(testRecording.Id);
 			Assert.NotNull(savedRecording);
 			Assert.Equal(12, savedRecording.Duration);
+		}
+
+		[Fact]
+		public void TestSaveWorkbookWithPagesAndRecording()
+		{
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var testWorkbook = new Workbook()
+			{
+				Title = "Test",
+				Subtitle = "Test"
+			};
+
+			var testRecording = new Recording()
+			{
+				Duration = 12 /* milliseconds */,
+				LocalPath = "test"
+			};
+
+			var testPage = new Page()
+			{
+				Number = 5,
+				workbookId = 1,
+				Workbook = testWorkbook,
+				Description = "Test",
+				TeacherTrack = testRecording,
+				teacherTrackId = 1
+			};
+
+			testWorkbook.Pages.Add(testPage);
+
+			Database.Save(testWorkbook);
+
+			var savedWorkbook = Database.FindWorkbookWithReferences(testWorkbook.Id);
+			Assert.NotNull(savedWorkbook);
+			Assert.Equal(savedWorkbook.Subtitle, "Test");
+			Assert.Equal(savedWorkbook.Pages.Count, 1);
+
+			Assert.Equal(((Page) savedWorkbook.Pages.ElementAt(0)).Number, 5);
+			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Description, "Test");
+			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Workbook.Id, testWorkbook.Id);
+			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).TeacherTrack.LocalPath, "test");
+		}
+
+		[Fact]
+		public void TestDeleteRecording()
+		{
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			var testRecording = new Recording()
+			{
+				Duration = 12 /* milliseconds */,
+				LocalPath = "test"
+			};
+
+			Database.Save(testRecording);
+			Assert.Equal(5, Database.Recordings.Count());
+
+			Database.Delete(Database.Recordings.Find(testRecording.Id));
+
+			Assert.Equal(Database.Recordings.Count(), 4);
+			Assert.Null(Database.Recordings.Find(testRecording.Id));
+		}
+
+		[Fact]
+		public void TestDeletePage()
+		{
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			var v = Database.Pages.Find(1);
+			Database.Delete(v);
+
+			Assert.Null(Database.Pages.Find(1));
+			Assert.NotNull(Database.Pages.Find(2));
+			Assert.NotNull(Database.Pages.Find(3));
+			Assert.NotNull(Database.Pages.Find(4));
+			Assert.Null(Database.Recordings.Find(1));
+		}
+
+		[Fact]
+		public void TestDeleteWorkbook()
+		{
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			var deletionWorkbook = Database.FindWorkbookWithReferences(1);
+			Database.Delete(deletionWorkbook);
+
+			Assert.Equal(Database.Workbooks.Count(), 1);
+			Assert.Null(Database.Pages.Find(1));
+			Assert.Null(Database.Pages.Find(2));
+			Assert.Null(Database.Recordings.Find(1));
+			Assert.Null(Database.Recordings.Find(2));
+		}
+
+		[Fact]
+		public void TestLoadBackend()
+		{
+			var controller = new HomeController(null);
+
+			var result = controller.Index(DatabaseService.Connect(TestsFixture.ConnectionString));
+
+			Assert.IsType<ViewResult>(result);
+		}
+
+		[Fact]
+		public void TestWorkbookPublishingAndUnpublishing()
+		{
+			var controller = new HomeController(null);
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			controller.PublishWorkbook(db, 1);
+			Assert.Equal(db.FindWorkbookWithReferences(1).IsPublished, false);
+
+			controller.PublishWorkbook(db, 1);
+			Assert.Equal(db.FindWorkbookWithReferences(1).IsPublished, true);
+
+			db.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "DummyDataForServer.sql")));
+
+			Assert.NotNull(db.Pages.Find(1));
+			Assert.NotNull(db.Pages.Find(2));
+			Assert.NotNull(db.Pages.Find(3));
+			Assert.NotNull(db.Pages.Find(4));
+		}
+
+		[Fact]
+		public void TestWorkbookDeletion()
+		{
+			var controller = new HomeController(null);
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			Assert.NotNull(db.FindWorkbookWithReferences(1));
+			Assert.NotNull(db.Pages.Find(1));
+			Assert.NotNull(db.Recordings.Find(1));
+
+			controller.DeleteWorkbook(db, 1);
+			Assert.Null(db.FindWorkbookWithReferences(1));
+			Assert.Null(db.Pages.Find(1));
+			Assert.Null(db.Recordings.Find(1));
+
+		}
+
+		[Fact]
+		public void TestPageDeletion()
+		{
+			var controller = new HomeController(null);
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+
+			Assert.NotNull(db.Pages.Find(1));
+			Assert.NotNull(db.Recordings.Find(1));
+
+			controller.DeletePage(db, 1);
+			Assert.Null(db.Pages.Find(1));
+			Assert.Null(db.Recordings.Find(1));
+
 		}
     }
 }

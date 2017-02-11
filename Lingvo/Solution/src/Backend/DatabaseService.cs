@@ -71,7 +71,7 @@ namespace Lingvo.Backend
 
 		public Page FindPageWithRecording(int id)
 		{
-			var page = Find<Page>(id);
+			var page = Pages.Find(id);
 			if (page == null)
 				return null;
 
@@ -86,13 +86,7 @@ namespace Lingvo.Backend
 		/// <param name="recording">Recording.</param>
 		public void Save(Recording recording)
 		{
-			if (Recordings.Find(recording.Id) != null)
-			{
-				var r = Recordings.Find(recording.Id);
-				r.Duration = recording.Duration;
-				r.LocalPath = recording.LocalPath;
-			}
-			else
+			if (Recordings.Find(recording.Id) == null)
 			{
 				Recordings.Add(recording);
 			}
@@ -106,19 +100,7 @@ namespace Lingvo.Backend
 		/// <param name="page">Page.</param>
 		public void Save(Page page)
 		{
-			if (Pages.Find(page.Id) != null)
-			{
-				var p = Pages.Find(page.Id);
-				p.Description = page.Description;
-				p.Number = page.Number;
-				p.StudentTrack = page.StudentTrack;
-				p.studentTrackId = page.studentTrackId;
-				p.teacherTrackId = page.teacherTrackId;
-				p.TeacherTrack = page.TeacherTrack;
-				p.workbookId = page.workbookId;
-				p.Workbook = page.Workbook;
-			}
-			else
+			if (Pages.Find(page.Id) == null)
 			{
 				Pages.Add(page);
 			}
@@ -132,15 +114,7 @@ namespace Lingvo.Backend
 		/// <param name="workbook">Workbook.</param>
 		public void Save(Workbook workbook)
 		{
-			if (Workbooks.Find(workbook.Id) != null)
-			{
-				var w = Workbooks.Find(workbook.Id);
-				w.Title = workbook.Title;
-				w.Subtitle = workbook.Subtitle;
-				w.Pages = workbook.Pages;
-				w.TotalPages = workbook.TotalPages;
-			}
-			else
+			if (Workbooks.Find(workbook.Id) == null)
 			{
 				Workbooks.Add(workbook);
 			}
@@ -176,13 +150,13 @@ namespace Lingvo.Backend
 				return;
 			}
 
-			var r = Recordings.Find(page.teacherTrackId);
+			var r = Recordings.Find(p.teacherTrackId);
 			if (r != null)
 			{
 				Recordings.Remove(r);
 			}
 
-			Pages.Remove(p);
+			Pages.Remove(page);
 			SaveChanges();
 		}
 
@@ -197,7 +171,9 @@ namespace Lingvo.Backend
 
 			if (w != null)
 			{
-				foreach (var p in workbook.Pages)
+				var pages = w.Pages.ToList();
+
+				foreach (var p in pages)
 				{
 					Delete((Page) p);
 				}
