@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Pages (
   id INT PRIMARY KEY AUTO_INCREMENT,
   workbookID INT,
   number INT,
-  description TEXT NOT NULL,
+  description TEXT,
   teacherTrackId INT NOT NULL,
   studentTrackId INT, /* always NULL on server */
 
