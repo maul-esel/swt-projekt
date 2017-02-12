@@ -24,6 +24,7 @@ namespace Lingvo.Backend.Controllers
 		{
 			return Json(from w in db.Workbooks
 						where w.IsPublished
+			            orderby w.Id
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
 
@@ -51,6 +52,7 @@ namespace Lingvo.Backend.Controllers
 		{
 			return Json(from p in db.Pages
 						where p.workbookId == workbookId
+			            orderby p.Id
 						select new { p.Id, p.workbookId, p.Number, p.Description });
 		}
 
