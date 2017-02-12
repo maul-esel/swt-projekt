@@ -12,18 +12,10 @@ namespace Lingvo.MobileApp.Pages
     {
         private Workbook workbook;
 
-        private Command downloadAction;
-
         public DownloadPagesPage(Workbook workbook)
         {
             this.workbook = workbook;
             Title = workbook.Title;
-
-            downloadAction = new Command(async (param) =>
-            {
-                PageProxy page = (PageProxy)workbook.Pages.Find((p) => p.Number == (int)param);
-                await page?.Resolve();
-            });
 
             string seite = ((Span)App.Current.Resources["text_seite"]).Text;
 
@@ -85,7 +77,6 @@ namespace Lingvo.MobileApp.Pages
         {
             if (e.SelectedItem == null)
                 return;
-            downloadAction.Execute(((IPage)e.SelectedItem).Number);
             Handle_ItemEvent(sender, e);
         }
 

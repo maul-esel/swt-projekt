@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Entities;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -13,6 +14,7 @@ namespace Lingvo.MobileApp.Templates
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
         private LingvoRoundImageButton downloadButton;
+        private CancellationTokenSource cancellationToken;
 
         public LingvoDownloadWorkbookViewCell() : base()
         {
@@ -21,7 +23,7 @@ namespace Lingvo.MobileApp.Templates
                 Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = DownloadButtonSize,
-				MinimumWidthRequest = DownloadButtonSize,
+                MinimumWidthRequest = DownloadButtonSize,
                 HeightRequest = DownloadButtonSize,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
@@ -29,7 +31,7 @@ namespace Lingvo.MobileApp.Templates
 
             downloadButton.OnClicked += (o, e) => DownloadWorkbook();
 
-			((Grid)View).Children.Add(downloadButton, 1, 0);
+            ((Grid)View).Children.Add(downloadButton, 1, 0);
         }
 
         protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
@@ -52,7 +54,30 @@ namespace Lingvo.MobileApp.Templates
 
         private async void DownloadWorkbook()
         {
-            await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id);
+            if (cancellationToken == null)
+            {
+                cancellationToken = new CancellationTokenSource();
+                cancellationToken.Token.Register(() => Device.BeginInvokeOnMainThread(() =>
+                {
+                    downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
+                    OnBindingContextChanged();
+                }));
+                downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
+
+                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, new Progress<double>(OnProgressUpdate), cancellationToken.Token);
+            }
+            else
+            {
+                cancellationToken.Cancel();
+                OnBindingContextChanged();
+            }
+            cancellationToken = null;
+            Device.BeginInvokeOnMainThread(() => downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"));
+        }
+
+        private void OnProgressUpdate(double progress)
+        {
+            Device.BeginInvokeOnMainThread(() => ProgressView.Progress = (int)progress);
         }
 
         protected override void OnBindingContextChanged()
@@ -63,10 +88,10 @@ namespace Lingvo.MobileApp.Templates
 
             List<Workbook> currentWorkbooks = new List<Workbook>(LocalCollection.Instance.Workbooks);
 
-            int progress = (currentWorkbooks.Find(w => w.Id.Equals(workbook.Id))?.Pages.Count).GetValueOrDefault(0);
-            string color = progress == workbook.TotalPages ? "secondaryColor" : "primaryColor";
+            int progress = 100 * (currentWorkbooks.Find(w => w.Id.Equals(workbook.Id))?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages;
+            string color = progress == 100 ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
-            ProgressView.MaxProgress = workbook.TotalPages;
+            ProgressView.MaxProgress = 100;
             ProgressView.Progress = progress;
             ProgressView.InnerProgressEnabled = false;
             ProgressView.TextSize = 20;

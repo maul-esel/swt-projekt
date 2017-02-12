@@ -4,6 +4,7 @@ using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
@@ -13,6 +14,7 @@ namespace Lingvo.MobileApp.Templates
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
         private LingvoRoundImageButton downloadButton;
+        private CancellationTokenSource cancellationToken;
 
         public LingvoDownloadPageViewCell() : base()
         {
@@ -26,14 +28,36 @@ namespace Lingvo.MobileApp.Templates
                 VerticalOptions = LayoutOptions.Center
             };
 
-            downloadButton.OnClicked += (o, e) => DownloadPage();
+            downloadButton.OnClicked += (o, e) => DownloadButton_Clicked();
 
             ((StackLayout)View).Children.Add(downloadButton);
         }
 
-        private async void DownloadPage()
+        private async void DownloadButton_Clicked()
         {
-            await ((PageProxy)BindingContext).Resolve();
+            if (cancellationToken == null)
+            {
+                cancellationToken = new CancellationTokenSource();
+                cancellationToken.Token.Register(() => Device.BeginInvokeOnMainThread(() =>
+                {
+                    downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
+                    OnBindingContextChanged();
+                }));
+                downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
+
+                await ((PageProxy)BindingContext).Resolve(new Progress<double>(OnProgressUpdate), cancellationToken.Token);
+            }
+            else
+            {
+                cancellationToken.Cancel();
+            }
+            cancellationToken = null;
+            Device.BeginInvokeOnMainThread(() => downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"));
+        }
+
+        private void OnProgressUpdate(double progress)
+        {
+            Device.BeginInvokeOnMainThread(() => ProgressView.Progress = (int)progress);
         }
 
         protected override void OnBindingContextChanged()
