@@ -6,13 +6,13 @@
 }
 
 <div class="container container-fluid">
-    <div class="lingvo-header-pages lingvo-header container-fluid">
+    <div class="lingvo-header container-fluid">
         <h3>
             <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @Model.Title
         </h3>
         <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
     </div>
-    <table id="workbooks" class="table pages-table">
+    <table id="workbooks" class="table">
         <tbody>
             @foreach (var page in Model.Pages)
             {
