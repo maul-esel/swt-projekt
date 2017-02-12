@@ -120,35 +120,17 @@ namespace Lingvo.MobileApp.iOS
 		}
 		private void OnMuteButtonClicked(object sender, EventArgs e)
 		{
-
-		
 			innerProgressEnabled = !innerProgressEnabled;
 			StudentTrackMuted?.Invoke(!innerProgressEnabled);
-
-
 
 			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
 			var image = new UIImage(imageName);
 			muteBtn.SetImage(image, UIControlState.Normal);
 
 
+			studentProgressBar.Muted = !innerProgressEnabled;
+			studentProgressBar.render();
 
-			if (innerProgressEnabled)
-			{
-				studentProgressBar.Muted = false;
-				//studentProgressBar.Hidden = false;
-				studentProgressBar.render();
-			}
-			else
-			{
-				studentProgressBar.Muted = true;
-				studentProgressBar.render();
-			}
-
-
-
-
-			//StudentTrackMuted?.Invoke(studentMuted);
 		}
 		public bool MuteEnabled
 		{
@@ -168,17 +150,17 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-					var modValue = Math.Min(MaxProgress, value);
-					progress = modValue;
-					teacherProgressBar.Progress = modValue;
+				var modValue = Math.Min(MaxProgress, value);
+				progress = modValue;
+				teacherProgressBar.Progress = modValue;
 
 				if (innerProgressEnabled)
-					{
-						studentProgressBar.Progress = modValue;
-						studentProgressBar.strokeLayer.SetNeedsDisplay();
-						studentProgressBar.SetNeedsDisplay();
+				{
+					studentProgressBar.Progress = modValue;
+					studentProgressBar.strokeLayer.SetNeedsDisplay();
+					studentProgressBar.SetNeedsDisplay();
 
-					}
+				}
 			}
 		}
 
@@ -246,17 +228,8 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				
 				innerProgressEnabled = value;
-
-				if (innerProgressEnabled)
-				{
-					studentProgressBar.Muted = false;
-				}
-				else
-				{
-					studentProgressBar.Muted = true;
-				}
+				studentProgressBar.Muted = !innerProgressEnabled;
 			}
 		}
 
