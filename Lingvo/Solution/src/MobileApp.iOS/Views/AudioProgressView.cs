@@ -103,9 +103,7 @@ namespace Lingvo.MobileApp.iOS
 			//subscribe to click events of button in the middle
 			muteBtn.AddTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
 
-			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
-			var image = new UIImage(imageName);
-			muteBtn.SetImage(image, UIControlState.Normal);
+			updateMuteButtonImage();
 
 
 			//layout stack view using Autolayout
@@ -123,14 +121,17 @@ namespace Lingvo.MobileApp.iOS
 			innerProgressEnabled = !innerProgressEnabled;
 			StudentTrackMuted?.Invoke(!innerProgressEnabled);
 
-			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
-			var image = new UIImage(imageName);
-			muteBtn.SetImage(image, UIControlState.Normal);
-
+			updateMuteButtonImage();
 
 			studentProgressBar.Muted = !innerProgressEnabled;
 			studentProgressBar.render();
 
+		}
+		private void updateMuteButtonImage()
+		{
+			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
+			var image = new UIImage(imageName);
+			muteBtn.SetImage(image, UIControlState.Normal);
 		}
 		public bool MuteEnabled
 		{
