@@ -1,4 +1,12 @@
 @model PageModel
+
+@section Scripts {
+    <script src="~/js/recorder/audioRecord.js" asp-append-version="true"></script>
+    <script src="~/js/recorder/webrecorder.js" asp-append-version="true"></script>
+    <script src="~/js/microphone/volume-meter.js" asp-append-version="true"></script>
+    <script src="~/js/custom-file-input.js" asp-append-version="true"></script>
+}
+
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>
@@ -154,7 +162,3 @@
         </div>
     </div>
 </div>
-<script src="~/js/recorder/audioRecord.js"></script>
-<script src="~/js/recorder/webrecorder.js" asp-append-version="true"></script>
-<script src="~/js/microphone/volume-meter.js" asp-append-version="true"></script>
-<script src="~/js/custom-file-input.js"></script>
