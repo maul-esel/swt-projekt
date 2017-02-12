@@ -151,13 +151,15 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 				teacherTrack.CurrentTime = 0;
 				studentTrack.CurrentTime = 0;
+
+				studentTrack.Volume = 0.0f;
 			}
 			else
 			{
 				teacherTrack.Stop();
 				teacherTrack.CurrentTime = 0;
 			}
-			studentTrack.Volume = 0.0f;
+	
 			OnStateChange();
 			//workaround: kill audio session because AVAudioPlayer keeps playing when you call .Stop()
 			Task.Run(() => AVAudioSession.SharedInstance().SetActive(false));
