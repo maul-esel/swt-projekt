@@ -59,9 +59,6 @@
   }
 
   function sendBlobToServer(event) {
-        if(current_recording == null){
-          return;
-      }
       $("#submit-modal").modal()
       event.preventDefault()
        
@@ -69,7 +66,10 @@
         var action = form.getAttribute("action")
 
         var formData = new FormData(form);
-        formData.append("RecordedFile", current_recording);
+
+        if (current_recording != null) {
+            formData.append("RecordedFile", current_recording);
+        }
 
         // ugly hack for accessing xhr and responseURL
         var xhr;
