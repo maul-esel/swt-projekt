@@ -125,7 +125,6 @@ namespace Lingvo.MobileApp.iOS
 			innerProgressEnabled = !innerProgressEnabled;
 			StudentTrackMuted?.Invoke(!innerProgressEnabled);
 
-			Console.WriteLine("ONMute =====> innerProgressEnabled = " + innerProgressEnabled);
 
 
 			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
@@ -242,33 +241,22 @@ namespace Lingvo.MobileApp.iOS
 		{
 			get
 			{
-				//AudioProgressView.ProgressMutex.WaitOne();
 				var readValue = innerProgressEnabled;
-				//AudioProgressView.ProgressMutex.ReleaseMutex();
 				return readValue;
 			}
 			set
 			{
 				
 				innerProgressEnabled = value;
-				Console.WriteLine("innerProgressEnabled = " + innerProgressEnabled);
 
 				if (innerProgressEnabled)
 				{
 					studentProgressBar.Muted = false;
-					//render();
 				}
 				else
 				{
 					studentProgressBar.Muted = true;
 				}
-
-
-
-
-
-				//studentProgressBar.Muted = studentMuted;
-				//muteBtn.Hidden = studentMuted;
 			}
 		}
 
