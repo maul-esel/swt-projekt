@@ -36,6 +36,7 @@ namespace Lingvo.MobileApp.iOS
 				strokeLayer.RemoveFromSuperLayer();
 				renderBackgroundLayer();
 				strokeLayer = drawCircle(backgroundLayerColor, -100);
+				strokeLayer.Hidden = muted;
 				drawStroke(angle);
 			}
 		}
@@ -63,6 +64,7 @@ namespace Lingvo.MobileApp.iOS
 				strokeLayer.RemoveFromSuperLayer();
 				renderBackgroundLayer();
 				strokeLayer = drawCircle(backgroundLayerColor, -100);
+				strokeLayer.Hidden = muted;
 				drawStroke(angle);
 			}
 		}
@@ -92,8 +94,10 @@ namespace Lingvo.MobileApp.iOS
 				muted = value;
 				if (muted)
 				{
-					progress = 0;
-					drawStroke(0);
+					backgroundLayer.Hidden = true;
+					strokeLayer.Hidden = true;
+					/*progress = 0;
+					drawStroke(0);*/
 				}
 				else
 				{
@@ -171,6 +175,7 @@ namespace Lingvo.MobileApp.iOS
 		//render arc fragments
 		public void drawStroke(float endAngle)
 		{
+
 			var startAngle = correctAngle(0.0f);
 			var end = correctAngle(endAngle);
 			var circleFragment = new UIBezierPath();
@@ -180,12 +185,19 @@ namespace Lingvo.MobileApp.iOS
 			strokeLayer.Path = circleFragment.CGPath;
 			strokeLayer.SetNeedsDisplay();
 
+			if (muted)
+			{
+				strokeLayer.Hidden = true;
+				return;
+			}
+
 		}
 
 		public CircleProgressBar(CGRect frame) : base(frame)
 		{
 			renderBackgroundLayer();
 			strokeLayer = drawCircle(backgroundLayerColor, -100);
+			strokeLayer.Hidden = muted;
 		}
 
 		public void render()
@@ -195,12 +207,15 @@ namespace Lingvo.MobileApp.iOS
 
 			renderBackgroundLayer();
 			strokeLayer = drawCircle(backgroundLayerColor, -100);
+			strokeLayer.Hidden = muted;
 			drawStroke(angle);
 		}
 
 		protected CAShapeLayer drawCircle(UIColor fillColor, int zPosition)
 		{
-			return drawArc(fillColor, 0.0f, (float)(2.0 * Math.PI), zPosition);
+			var circleLayer =  drawArc(fillColor, 0.0f, (float)(2.0 * Math.PI), zPosition);
+
+			return circleLayer;
 		}
 		private CAShapeLayer drawArc(UIColor fillColor, float startAngle, float endAngle, int zPosition)
 		{
@@ -243,10 +258,9 @@ namespace Lingvo.MobileApp.iOS
 
 		private void renderBackgroundLayer()
 		{
-			if (!muted) {
-				backgroundLayer?.RemoveFromSuperLayer();
-				backgroundLayer = drawCircle(backgroundLayerColor, -100);
-			}
+			backgroundLayer?.RemoveFromSuperLayer();
+			backgroundLayer = drawCircle(backgroundLayerColor, -100);
+			backgroundLayer.Hidden = muted;
 		}
 	}
 }

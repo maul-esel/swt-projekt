@@ -36,6 +36,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 
 				e.NewElement.PropertyChanged += updateView;
+
 				progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
 				e.NewElement.SizeChanged += NewElementOnSizeChanged;
 			}
@@ -65,11 +66,21 @@ namespace Lingvo.MobileApp.iOS
 				progressView.MuteEnabled = element.MuteEnabled;
 			if (progressView.TextSize != element.TextSize)
 				progressView.TextSize = element.TextSize;
+	
 
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
-                case LingvoAudioProgressView.LabelTypeValue.Percentual: progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %"; break;
+                case LingvoAudioProgressView.LabelTypeValue.Percentual:
+					if (element.MaxProgress == 0)
+					{
+						progressView.Text = "±∞";
+					}
+					else
+					{
+						progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
+					}
+					break;
                 case LingvoAudioProgressView.LabelTypeValue.Time:
                     {
 						string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0,2);

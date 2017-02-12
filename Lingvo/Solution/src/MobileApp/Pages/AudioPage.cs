@@ -381,6 +381,7 @@ namespace Lingvo.MobileApp.Pages
 
         private void ProgressView_StudentTrackMuted(bool muted)
         {
+			ProgressView.InnerProgressEnabled = !muted;
             StudentAudioController.Instance.IsMuted = muted;
         }
 
