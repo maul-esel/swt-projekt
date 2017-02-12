@@ -13,7 +13,6 @@ namespace Lingvo.MobileApp.iOS
 {
 	public class AudioProgressView : UIView
 	{
-		public static Mutex ProgressMutex = new Mutex();
 
 		public CircleProgressBar teacherProgressBar;
 		public CircleProgressBar studentProgressBar;
@@ -125,7 +124,7 @@ namespace Lingvo.MobileApp.iOS
 		private void OnMuteButtonClicked(object sender, EventArgs e)
 		{
 
-			//AudioProgressView.ProgressMutex.WaitOne();
+		
 			innerProgressEnabled = !innerProgressEnabled;
 			StudentTrackMuted?.Invoke(!innerProgressEnabled);
 
@@ -147,12 +146,10 @@ namespace Lingvo.MobileApp.iOS
 			else
 			{
 				studentProgressBar.Muted = true;
-				//studentProgressBar.Hidden = true;
 				studentProgressBar.render();
 			}
 
 
-			//AudioProgressView.ProgressMutex.ReleaseMutex();
 
 
 			//StudentTrackMuted?.Invoke(studentMuted);

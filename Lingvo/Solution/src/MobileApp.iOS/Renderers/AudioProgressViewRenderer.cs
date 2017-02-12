@@ -50,7 +50,8 @@ namespace Lingvo.MobileApp.iOS
 			}
 			LingvoAudioProgressView element = (LingvoAudioProgressView)sender;
 		
-
+			if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
+				progressView.InnerProgressEnabled = element.InnerProgressEnabled;
 			if (progressView.Size != element.Size)
 				progressView.Size = element.Size;
 			if (!progressView.OuterProgressColor.Equals(element.OuterProgressColor.ToUIColor()))
@@ -66,12 +67,6 @@ namespace Lingvo.MobileApp.iOS
 			if (progressView.TextSize != element.TextSize)
 				progressView.TextSize = element.TextSize;
 	
-			if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
-			{
-				progressView.InnerProgressEnabled = element.InnerProgressEnabled;
-			}
-
-				
 
             switch (element.LabelType)
             {
