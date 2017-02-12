@@ -18,9 +18,11 @@ CREATE TABLE IF NOT EXISTS Pages (
   id INT PRIMARY KEY,
   workbookID INT REFERENCES Workbooks ON DELETE CASCADE,
   number INT,
-  description TEXT NOT NULL,
+  description TEXT,
   teacherTrackId INT NOT NULL REFERENCES Recordings,
-  studentTrackId INT REFERENCES Recordings
+  studentTrackId INT REFERENCES Recordings, 
+  
+  UNIQUE (workbookID, number)
 );
 
 CREATE TABLE IF NOT EXISTS TeacherMemos (

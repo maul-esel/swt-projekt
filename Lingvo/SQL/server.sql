@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Workbooks (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
-  totalPages INT NOT NULL,
+  totalPages INT NOT NULL DEFAULT 0,
   lastModified TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   isPublished BOOLEAN NOT NULL
 );
@@ -20,9 +20,11 @@ CREATE TABLE IF NOT EXISTS Pages (
   id INT PRIMARY KEY AUTO_INCREMENT,
   workbookID INT,
   number INT,
-  description TEXT NOT NULL,
+  description TEXT,
   teacherTrackId INT NOT NULL,
   studentTrackId INT, /* always NULL on server */
+  
+  UNIQUE (workbookID, number),
 
   FOREIGN KEY wbid(workbookID) REFERENCES Workbooks(id) ON DELETE CASCADE,
   FOREIGN KEY ttfk(teacherTrackId) REFERENCES Recordings(id),
@@ -30,7 +32,6 @@ CREATE TABLE IF NOT EXISTS Pages (
 );
 
 -- only on server --
-
 CREATE TABLE IF NOT EXISTS Editors (
   name varchar(30) PRIMARY KEY,
   passwordHash TEXT NOT NULL
@@ -38,7 +39,6 @@ CREATE TABLE IF NOT EXISTS Editors (
 
 DROP TRIGGER IF EXISTS updateTotalPages;
 CREATE TRIGGER updateTotalPages
-AFTER INSERT ON Pages FOR EACH ROW
-BEGIN
-  UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
-END;
+AFTER INSERT ON Pages
+FOR EACH ROW
+UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
