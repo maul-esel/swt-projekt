@@ -1,17 +1,16 @@
 ﻿using System;
 using UIKit;
-using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
 using CoreAnimation;
 using CoreFoundation;
-using ObjCRuntime;
 
 
 namespace Lingvo.MobileApp.iOS
 {
 	public class AudioProgressView : UIView
 	{
+
 		public CircleProgressBar teacherProgressBar;
 		public CircleProgressBar studentProgressBar;
 
@@ -19,7 +18,8 @@ namespace Lingvo.MobileApp.iOS
 		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
 
 		private float lineWidth = 10.0f;
-		private bool studentMuted = false;
+		public bool innerProgressEnabled = true;
+
 		private int progress = 0;
 		int maxProgress = 100;
 
@@ -32,7 +32,8 @@ namespace Lingvo.MobileApp.iOS
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
 			btn.SetTitleColor(teacherColor, UIControlState.Normal);
-			btn.SetTitle("Mute", UIControlState.Normal);
+			var btnImage = new UIImage("ic_volume_up");
+			btn.SetImage(btnImage, UIControlState.Normal);
 			return btn;
 		})();
 		UILabel timeLabel = new UILabel()
@@ -40,6 +41,11 @@ namespace Lingvo.MobileApp.iOS
 			Text = "00:00",
 			TextColor = teacherColor,
 			Font = UIFont.SystemFontOfSize(28)
+		};
+		UIStackView stackView = new UIStackView()
+		{
+			Axis = UILayoutConstraintAxis.Vertical,
+			Alignment = UIStackViewAlignment.Center
 		};
 
 		public AudioProgressView(CGRect frame) : base(frame)
@@ -66,6 +72,7 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.MaxProgress = maxProgress;
 			studentProgressBar.Progress = progress;
 			studentProgressBar.LineWidth = lineWidth;
+			studentProgressBar.Hidden = !innerProgressEnabled;
 			AddSubview(studentProgressBar);
 
 			//layout views programatically
@@ -88,33 +95,43 @@ namespace Lingvo.MobileApp.iOS
 
 
 			//Wrap label in vertical stack view to avoid repositioning the label programatically
-			var stackView = new UIStackView()
-			{
-				Axis = UILayoutConstraintAxis.Vertical,
-				Alignment = UIStackViewAlignment.Center
-			};
+		
 			AddSubview(stackView);
 			stackView.AddArrangedSubview(timeLabel);
 			stackView.AddArrangedSubview(muteBtn);
 
 			//subscribe to click events of button in the middle
-			muteBtn.AddTarget((object sender, EventArgs e) =>
-			{
-				studentMuted = !studentMuted;
-				StudentTrackMuted?.Invoke(studentMuted);
-				muteBtn.SetTitle("Unmute", UIControlState.Normal);
+			muteBtn.AddTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
 
-			}, UIControlEvent.TouchUpInside);
+			updateMuteButtonImage();
+
 
 			//layout stack view using Autolayout
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
 
-			if (studentMuted)
+			if (!innerProgressEnabled)
 			{
-				studentProgressBar.Hidden = true;
+				studentProgressBar.Muted = true;
 			}
+		}
+		private void OnMuteButtonClicked(object sender, EventArgs e)
+		{
+			innerProgressEnabled = !innerProgressEnabled;
+			StudentTrackMuted?.Invoke(!innerProgressEnabled);
+
+			updateMuteButtonImage();
+
+			studentProgressBar.Muted = !innerProgressEnabled;
+			studentProgressBar.render();
+
+		}
+		private void updateMuteButtonImage()
+		{
+			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
+			var image = new UIImage(imageName);
+			muteBtn.SetImage(image, UIControlState.Normal);
 		}
 		public bool MuteEnabled
 		{
@@ -134,17 +151,17 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-					var modValue = Math.Min(MaxProgress, value);
-					progress = modValue;
-					teacherProgressBar.Progress = modValue;
+				var modValue = Math.Min(MaxProgress, value);
+				progress = modValue;
+				teacherProgressBar.Progress = modValue;
 
-					if (!studentMuted)
-					{
-						studentProgressBar.Progress = modValue;
-						studentProgressBar.strokeLayer.SetNeedsDisplay();
-						studentProgressBar.SetNeedsDisplay();
+				if (innerProgressEnabled)
+				{
+					studentProgressBar.Progress = modValue;
+					studentProgressBar.strokeLayer.SetNeedsDisplay();
+					studentProgressBar.SetNeedsDisplay();
 
-					}
+				}
 			}
 		}
 
@@ -207,22 +224,13 @@ namespace Lingvo.MobileApp.iOS
 		{
 			get
 			{
-				return !studentMuted;
+				var readValue = innerProgressEnabled;
+				return readValue;
 			}
 			set
 			{
-				
-				studentMuted = !value;
-
-				if (value)
-				{
-					studentProgressBar.Hidden = false;
-					render();
-				}
-
-			
-				//studentProgressBar.Muted = studentMuted;
-				muteBtn.Hidden = studentMuted;
+				innerProgressEnabled = value;
+				studentProgressBar.Muted = !innerProgressEnabled;
 			}
 		}
 
@@ -289,8 +297,14 @@ namespace Lingvo.MobileApp.iOS
 		}
 		public void render()
 		{
+			stackView.RemoveFromSuperview();
+			stackView.RemoveArrangedSubview(muteBtn);
+			stackView.RemoveArrangedSubview(timeLabel);
+			muteBtn.RemoveTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
 			teacherProgressBar?.RemoveFromSuperview();
 			studentProgressBar?.RemoveFromSuperview();
+
+
 
 			setupViews();
 		}
