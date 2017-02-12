@@ -36,6 +36,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 
 				e.NewElement.PropertyChanged += updateView;
+
 				progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
 				e.NewElement.SizeChanged += NewElementOnSizeChanged;
 			}
@@ -65,6 +66,7 @@ namespace Lingvo.MobileApp.iOS
 				progressView.MuteEnabled = element.MuteEnabled;
 			if (progressView.TextSize != element.TextSize)
 				progressView.TextSize = element.TextSize;
+	
 
             switch (element.LabelType)
             {

@@ -95,33 +95,33 @@ namespace Lingvo.Backend.Tests
 			            json);
 		}
 
-		[Fact]
-		public async Task TestGetTeacherTrack()
-		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
-			var controller = new AppController();
+		//[Fact]
+		//public async Task TestGetTeacherTrack()
+		//{
+		//	DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+		//	var controller = new AppController();
 
-			var result = await controller.GetTeacherTrack(db, new AzureStorage(), 1);
-			Assert.IsType<JsonResult>(result);
+		//	var result = await controller.GetTeacherTrack(db, new AzureStorage(), 1);
+		//	Assert.IsType<JsonResult>(result);
 
-			var json = JsonConvert.SerializeObject(((JsonResult)result).Value);
+		//	var json = JsonConvert.SerializeObject(((JsonResult)result).Value);
 
-			Assert.Equal("{\"duration\":127000,\"creationTime\":\"",
-			             json.Substring(0, 35));
-			Assert.Equal("\",\"url\"",
-						 json.Substring(54, 7));
+		//	Assert.Equal("{\"duration\":127000,\"creationTime\":\"",
+		//	             json.Substring(0, 35));
+		//	Assert.Equal("\",\"url\"",
+		//				 json.Substring(54, 7));
 
-			result = await controller.GetTeacherTrack(db, new AzureStorage(), 4);
-			Assert.IsType<JsonResult>(result);
+		//	result = await controller.GetTeacherTrack(db, new AzureStorage(), 4);
+		//	Assert.IsType<JsonResult>(result);
 
-			json = JsonConvert.SerializeObject(((JsonResult)result).Value);
+		//	json = JsonConvert.SerializeObject(((JsonResult)result).Value);
 
-			Assert.Equal("{\"duration\":368000,\"creationTime\":\"",
-						 json.Substring(0, 35));
-			Assert.Equal("\",\"url\"",
-						 json.Substring(54, 7));
+		//	Assert.Equal("{\"duration\":368000,\"creationTime\":\"",
+		//				 json.Substring(0, 35));
+		//	Assert.Equal("\",\"url\"",
+		//				 json.Substring(54, 7));
 
 
-		}
+		//}
 	}
 }

@@ -9,13 +9,15 @@ using Lingvo.Common.Services;
 using Lingvo.MobileApp.iOS.Sound;
 using Xamarin.Forms;
 using System.Timers;
+using CoreFoundation;
+using System.Threading.Tasks;
 
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.iOS.Sound
 {
 	public class Player : IPlayer
 	{
-		
+
 		private AVAudioPlayer teacherTrack;
 		private AVAudioPlayer studentTrack;
 		private Timer timer;
@@ -30,23 +32,24 @@ namespace Lingvo.MobileApp.iOS.Sound
 			timer.Elapsed += (sender, e) => OnProgress();
 			State = PlayerState.IDLE;
 
-			//Initialize audio session
 			ActivateAudioSession();
+
+
 		}
 
 		#region Public properties
 
 		public PlayerState State
-		{ 
-			get 
-			{ 
-				return state; 
-			}  
-			private set 
+		{
+			get
+			{
+				return state;
+			}
+			private set
 			{
 				state = value;
 				OnStateChange();
-			} 
+			}
 		}
 
 		public bool IsStudentTrackMuted
@@ -102,8 +105,10 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void Play()
 		{
+			AVAudioSession.SharedInstance().SetActive(true);
 			if (studentTrack != null)
 			{
+				studentTrack.Volume = 1.0f;
 				teacherTrack.Play();
 				studentTrack.Play();
 			}
@@ -138,17 +143,28 @@ namespace Lingvo.MobileApp.iOS.Sound
 			State = PlayerState.STOPPED;
 			if (studentTrack != null)
 			{
+
 				teacherTrack.Stop();
 				studentTrack.Stop();
+
+
+
 				teacherTrack.CurrentTime = 0;
 				studentTrack.CurrentTime = 0;
+
+				studentTrack.Volume = 0.0f;
 			}
 			else
 			{
 				teacherTrack.Stop();
 				teacherTrack.CurrentTime = 0;
 			}
-				
+	
+			OnStateChange();
+			//workaround: kill audio session because AVAudioPlayer keeps playing when you call .Stop()
+			Task.Run(() => AVAudioSession.SharedInstance().SetActive(false));
+
+
 
 		}
 
@@ -171,7 +187,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			}
 			else
 			{
-				teacherTrack.CurrentTime += (double)seconds;	
+				teacherTrack.CurrentTime += (double)seconds;
 			}
 			OnProgress();
 		}
@@ -208,11 +224,16 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void ActivateAudioSession()
 		{
-			var session = AVAudioSession.SharedInstance();
+			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
+			AVAudioSession session = AVAudioSession.SharedInstance();
 			session.SetCategory(AVAudioSessionCategory.Ambient);
 			session.SetActive(true);
-		}
+			if (status == AVAuthorizationStatus.NotDetermined)
+			{
+				session.RequestRecordPermission((granted) => { });
+			}
 
+		}
 		public void DeactivateAudioSession()
 		{
 			var session = AVAudioSession.SharedInstance();
