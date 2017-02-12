@@ -1,12 +1,9 @@
 ﻿using System;
 using UIKit;
-using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
 using CoreAnimation;
 using CoreFoundation;
-using ObjCRuntime;
-using System.Threading;
 
 
 namespace Lingvo.MobileApp.iOS
