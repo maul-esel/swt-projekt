@@ -230,7 +230,6 @@ namespace Lingvo.MobileApp.iOS
 			set
 			{
 				innerProgressEnabled = value;
-				//studentProgressBar.Muted = !innerProgressEnabled;
 				render();
 			}
 		}
