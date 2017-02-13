@@ -33,7 +33,7 @@ namespace Lingvo.Backend.Controllers
 		public IActionResult AddWorkbook() 
 		{
 			ViewData["Title"] = "Neues Arbeitsheft erstellen";
-			return View();
+			return View(new WorkbookModel());
 		}
 
 		[Route("workbooks/{id}/edit")]
@@ -42,7 +42,7 @@ namespace Lingvo.Backend.Controllers
 			ViewData["Title"] = "Arbeitsheft bearbeiten";
 
 			var workbook = db.Find<Workbook>(id);
-			return View("AddWorkbook", workbook);
+			return View("AddWorkbook", new WorkbookModel(workbook));
 		}
 
 		[Route("workbooks/{id}/publish")]
