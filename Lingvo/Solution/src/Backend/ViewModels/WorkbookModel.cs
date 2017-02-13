@@ -13,6 +13,9 @@ namespace Lingvo.Backend.ViewModels
 		public WorkbookModel(Workbook workbook)
 		{
 			Workbook = workbook;
+			Id = workbook.Id;
+			Title = workbook.Title;
+			Subtitle = workbook.Subtitle;
 		}
 
 		[BindNever]
@@ -20,7 +23,10 @@ namespace Lingvo.Backend.ViewModels
 
 		public int? Id { get; set; }
 
-		[Required, Remote(action: nameof(Controllers.HomeController.UniqueWorkbookTitle), controller: "Home", AdditionalFields = nameof(Id))]
+		[Required(ErrorMessage = "Es muss ein Titel angegeben werden.")]
+		[Remote(action: nameof(Controllers.HomeController.UniqueWorkbookTitle), controller: "Home",
+			AdditionalFields = nameof(Id),
+			ErrorMessage = "Ein Arbeitsheft mit diesem Titel existiert bereits.")]
 		public string Title { get; }
 
 		public string Subtitle { get; }
