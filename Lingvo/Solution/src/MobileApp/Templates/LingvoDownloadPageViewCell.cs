@@ -4,6 +4,7 @@ using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Xamarin.Forms;
 
@@ -66,7 +67,7 @@ namespace Lingvo.MobileApp.Templates
 
             IPage page = (IPage)BindingContext;
 
-            Workbook localWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
+            Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
             bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
 
             string color = downloaded ? "secondaryColor" : "primaryColor";

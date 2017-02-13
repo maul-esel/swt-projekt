@@ -88,7 +88,7 @@ namespace Lingvo.MobileApp
             reqState.FileStream = File.Create(reqState.FilePath);
 
             // Begin reading contents of the response data
-            IAsyncResult ar = responseStream.BeginRead(reqState.BufferRead, 0, BufferSize, new AsyncCallback(ReadCallback), reqState);
+            responseStream.BeginRead(reqState.BufferRead, 0, BufferSize, new AsyncCallback(ReadCallback), reqState);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Lingvo.MobileApp
                 reqState.FileStream.Write(reqState.BufferRead, 0, bytesRead);
 
                 // Kick off another read
-                IAsyncResult ar = responseStream.BeginRead(reqState.BufferRead, 0, BufferSize, new AsyncCallback(ReadCallback), reqState);
+                responseStream.BeginRead(reqState.BufferRead, 0, BufferSize, new AsyncCallback(ReadCallback), reqState);
                 return;
             }
 

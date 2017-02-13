@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Lingvo.Common;
 using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
-using static Lingvo.MobileApp.APIService;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -112,7 +111,7 @@ namespace Lingvo.MobileApp.Proxies
         {
             if (p.Id.Equals(Id))
             {
-                IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(Id));
+                IPage local = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(Id));
                 if (local != null)
                 {
                     original = (Page)local;

@@ -6,6 +6,7 @@ using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Entities;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -86,9 +87,9 @@ namespace Lingvo.MobileApp.Templates
 
             Workbook workbook = (Workbook)BindingContext;
 
-            List<Workbook> currentWorkbooks = new List<Workbook>(LocalCollection.Instance.Workbooks);
+            Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
-            int progress = 100 * (currentWorkbooks.Find(w => w.Id.Equals(workbook.Id))?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages;
+            int progress = 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages;
             string color = progress == 100 ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;

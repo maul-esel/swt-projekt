@@ -3,6 +3,7 @@ using Lingvo.MobileApp.Entities;
 using Xamarin.Forms;
 using System.Collections.Generic;
 using Lingvo.MobileApp.Pages;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -115,7 +116,7 @@ namespace Lingvo.MobileApp.Templates
             TeacherMemo memo = (TeacherMemo)BindingContext;
             if (t.Id.Equals(memo.Id))
             {
-                TeacherMemo local = new List<TeacherMemo>(LocalCollection.Instance.TeacherMemos).Find(tm => tm.Id.Equals(t.Id));
+                TeacherMemo local = LocalCollection.Instance.TeacherMemos.FirstOrDefault(tm => tm.Id.Equals(t.Id));
 
                 BindingContext = local != null ? local : t;
             }

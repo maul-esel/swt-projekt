@@ -4,6 +4,7 @@ using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Templates;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -44,9 +45,9 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
-                List<Workbook> newWorkbooks = new List<Workbook>(await CloudLibraryProxy.Instance.FetchAllWorkbooks());
+                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
 
-                workbook = newWorkbooks.Find(w => w.Id.Equals(workbook.Id));
+                workbook = newWorkbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
