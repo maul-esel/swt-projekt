@@ -108,7 +108,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void Play()
 		{
-
+			AVAudioSession session = AVAudioSession.SharedInstance();
+			adjustAudioOutputPort(session);
 			AVAudioSession.SharedInstance().SetActive(true);
 			if (studentTrack != null)
 			{
@@ -233,11 +234,10 @@ namespace Lingvo.MobileApp.iOS.Sound
 			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
 			AVAudioSession session = AVAudioSession.SharedInstance();
 			session.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-			NSError err;
 
 
-			AVAudioSessionPortOverride outputPort = isHeadphonePluggedIn() ? AVAudioSessionPortOverride.None : AVAudioSessionPortOverride.Speaker;
-			session.OverrideOutputAudioPort(outputPort, out err);
+			adjustAudioOutputPort(session);
+
 
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
@@ -245,6 +245,12 @@ namespace Lingvo.MobileApp.iOS.Sound
 				session.RequestRecordPermission((granted) => { });
 			}
 
+		}
+		private void adjustAudioOutputPort(AVAudioSession session)
+		{
+			NSError err;
+			AVAudioSessionPortOverride outputPort = isHeadphonePluggedIn() ? AVAudioSessionPortOverride.None : AVAudioSessionPortOverride.Speaker;
+			session.OverrideOutputAudioPort(outputPort, out err);
 		}
 		private bool isHeadphonePluggedIn()
 		{
