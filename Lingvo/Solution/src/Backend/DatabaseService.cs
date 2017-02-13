@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Lingvo.Backend
 {
@@ -33,7 +34,6 @@ namespace Lingvo.Backend
 			modelBuilder.Entity<Workbook>().Property(w => w.LastModified).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMP").HasComputedColumnSql("CURRENT_TIMESTAMP");
 			modelBuilder.Entity<Workbook>().HasMany(w => (IEnumerable<Page>) w.Pages).WithOne(p => p.Workbook).HasForeignKey(p => p.workbookId);
 
-			modelBuilder.Entity<Page>().Property(p => p.Description).IsRequired();
 			modelBuilder.Entity<Page>().HasOne(p => p.StudentTrack).WithMany().HasForeignKey(p => p.studentTrackId);
 			modelBuilder.Entity<Page>().HasOne(p => p.TeacherTrack).WithMany().HasForeignKey(p => p.teacherTrackId);
 
@@ -87,9 +87,14 @@ namespace Lingvo.Backend
 		{
 			if (Recordings.Find(recording.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(recording.Id));
+				var r = Recordings.Find(recording.Id);
+				r.Duration = recording.Duration;
+				r.LocalPath = recording.LocalPath;
 			}
-			Recordings.Add(recording);
+			else
+			{
+				Recordings.Add(recording);
+			}
 			SaveChanges();
 		}
 
@@ -102,9 +107,20 @@ namespace Lingvo.Backend
 		{
 			if (Pages.Find(page.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(page.Id));
+				var p = Pages.Find(page.Id);
+				p.Description = page.Description;
+				p.Number = page.Number;
+				p.StudentTrack = page.StudentTrack;
+				p.studentTrackId = page.studentTrackId;
+				p.teacherTrackId = page.teacherTrackId;
+				p.TeacherTrack = page.TeacherTrack;
+				p.workbookId = page.workbookId;
+				p.Workbook = page.Workbook;
 			}
-			Pages.Add(page);
+			else
+			{
+				Pages.Add(page);
+			}
 			SaveChanges();
 		}
 
@@ -117,12 +133,77 @@ namespace Lingvo.Backend
 		{
 			if (Workbooks.Find(workbook.Id) != null)
 			{
-				Recordings.Remove(Recordings.Find(workbook.Id));
+				var w = Workbooks.Find(workbook.Id);
+				w.Title = workbook.Title;
+				w.Subtitle = workbook.Subtitle;
+				w.Pages = workbook.Pages;
+				w.TotalPages = workbook.TotalPages;
 			}
-			Workbooks.Add(workbook);
+			else
+			{
+				Workbooks.Add(workbook);
+			}
 			SaveChanges();
 		}
 
+		/// <summary>
+		/// Delete the specified recording.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="recording">Recording.</param>
+		public void Delete(Recording recording)
+		{
+			var r = Recordings.Find(recording.Id);
+			if (r != null)
+			{
+				Recordings.Remove(r);
+				SaveChanges();
+			}
+		}
 
+		/// <summary>
+		/// Delete the specified page and the recording belonging to it.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="page">Page.</param>
+		public void Delete(Page page)
+		{
+			var p = Pages.Find(page.Id);
+
+			if (p == null)
+			{
+				return;
+			}
+
+			var r = Recordings.Find(page.teacherTrackId);
+			if (r != null)
+			{
+				Recordings.Remove(r);
+			}
+
+			Pages.Remove(p);
+			SaveChanges();
+		}
+
+		/// <summary>
+		/// Delete the specified workbook and all corresponding pages.
+		/// </summary>
+		/// <returns>The delete.</returns>
+		/// <param name="workbook">Workbook.</param>
+		public void Delete(Workbook workbook)
+		{
+			var w = Workbooks.Find(workbook.Id);
+
+			if (w != null)
+			{
+				foreach (var p in workbook.Pages)
+				{
+					Delete((Page) p);
+				}
+
+				Workbooks.Remove(w); 
+				SaveChanges();
+			}
+		}
     }
 }

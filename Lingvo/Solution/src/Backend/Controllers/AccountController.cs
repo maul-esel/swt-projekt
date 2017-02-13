@@ -39,7 +39,7 @@ namespace Lingvo.Backend.Controllers
 				return View();
 			}
 
-			var signinResult = await _signInManager.PasswordSignInAsync(editor, password, false, false);
+			var signinResult = await _signInManager.PasswordSignInAsync(editor, password, true, false);
 			if (!signinResult.Succeeded)
 			{
 				ModelState.AddModelError(nameof(password), "Falsches Passwort");

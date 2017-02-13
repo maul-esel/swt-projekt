@@ -150,5 +150,23 @@ namespace Lingvo.Backend.Tests
 			Assert.NotNull(savedRecording);
 			Assert.Equal(12, savedRecording.Duration);
 		}
+
+		[Fact]
+		public void TestTeacherTrackChange()
+		{
+			var db = DatabaseService.Connect(ConnectionString);
+
+			var page1 = db.FindPageWithRecording(1);
+			var page2 = db.FindPageWithRecording(2);
+
+			Assert.Equal(1, page1.TeacherTrack.Id);
+			Assert.Equal(2, page2.TeacherTrack.Id);
+
+			page1.TeacherTrack = page2.TeacherTrack;
+			db.Save(page1);
+
+			page1 = db.FindPageWithRecording(1);
+			Assert.Equal(2, page1.TeacherTrack.Id);
+		}
     }
 }

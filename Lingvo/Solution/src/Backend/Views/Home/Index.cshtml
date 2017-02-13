@@ -26,14 +26,78 @@
                         </a>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Arbeitsheft veröffentlichen">
-                            <span class="glyphicon glyphicon-globe @(workbook.IsPublished ? "" : "unpublished")"></span>
-                        </button>
+                        <a class="glyphicon-button" title="Arbeitsheft veröffentlichen" data-toggle="modal" href="#publish-warning-@workbook.Id">
+                        @if (workbook.IsPublished)
+						{
+  							<span class="glyphicon glyphicon-eye-open"></span>
+  						}
+						else
+						{
+  							<span class="glyphicon glyphicon-eye-close"></span>
+						}
+                        </a>
+						<div class="modal fade" id="publish-warning-@workbook.Id" role="dialog">
+						    <div class="modal-dialog">
+
+								@if (!workbook.IsPublished)
+								{
+	  								<div class="modal-content">
+								        <div class="modal-header modal-header-warning">
+								          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+								          	<h4 class="modal-title">Warnung</h4>
+								        </div>
+								        <div class="modal-body">
+								          	<p>Möchten Sie dieses Arbeitsheft wirklich veröffentlichen?</p>
+								        </div>
+								        <div class="modal-footer">
+											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+								          	<a type="button" class="btn btn-warn" asp-controller="Home" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> Veröffentlichen</a>
+								        </div>
+									</div>
+	  							}
+								else
+								{
+	  								<div class="modal-content">
+								        <div class="modal-header modal-header-warning">
+								          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+								          	<h4 class="modal-title">Warnung</h4>
+								        </div>
+								        <div class="modal-body">
+								          	<p>Möchten Sie dieses Arbeitsheft wirklich zurücknehmen?</p>
+								        </div>
+								        <div class="modal-footer">
+											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+								          	<a type="button" class="btn btn-warn" asp-controller="Home" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-close" style="color:white"></span> Zurücknehmen</a>
+								        </div>
+									</div>
+								}
+						      
+						    </div>
+						</div>
                     </td>
                     <td>
-                        <button type="button" class="glyphicon-button" title="Arbeitsheft löschen">
+                        <a class="glyphicon-button" title="Arbeitsheft löschen" data-toggle="modal" href="#delete-warning-@workbook.Id">
                             <span class="glyphicon glyphicon-trash"></span>
-                        </button>
+                        </a>
+						<div class="modal fade" id="delete-warning-@workbook.Id" role="dialog">
+						    <div class="modal-dialog">
+
+						      <div class="modal-content">
+						        <div class="modal-header modal-header-error">
+						          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+						          	<h4 class="modal-title">Warnung</h4>
+						        </div>
+						        <div class="modal-body">
+						          	<p>Möchten Sie dieses Arbeitsheft wirklich löschen?</p>
+						        </div>
+						        <div class="modal-footer">
+									<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+						          	<a type="button" class="btn btn-danger" asp-controller="Home" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+						        </div>
+						      </div>
+						      
+						    </div>
+						</div>
                     </td>
                 </tr>}
         </tbody>
