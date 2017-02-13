@@ -182,5 +182,15 @@ namespace Lingvo.Backend.Controllers
 
 			return recording;
 		}
+
+		#region remote validation methods
+
+		public async Task<IActionResult> UniqueWorkbookTitle([FromServices] DatabaseService db, int? id, string title)
+		{
+			var workbook = await db.FindWorkbookByTitleAsync(title);
+			return Json(data: workbook == null || workbook.Id == id);
+		}
+
+		#endregion
 	}
 }

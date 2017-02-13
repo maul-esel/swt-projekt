@@ -2,7 +2,7 @@
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Threading.Tasks;
 
 namespace Lingvo.Backend
 {
@@ -204,6 +204,11 @@ namespace Lingvo.Backend
 				Workbooks.Remove(w); 
 				SaveChanges();
 			}
+		}
+
+		public Task<Workbook> FindWorkbookByTitleAsync(string title)
+		{
+			return Workbooks.FirstOrDefaultAsync(w => w.Title == title);
 		}
     }
 }
