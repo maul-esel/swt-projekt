@@ -6,7 +6,9 @@
   var recorder;
   var current_recording;
   var recording = 0;
-  
+  var isSubmit = false;
+  var isCancel = false;
+
   function startRecording(button) {
     recording = recording + 1;
     recorder.clear();
@@ -58,7 +60,14 @@
     });
   }
 
-  function sendBlobToServer(event) {
+    function leavePage(event) {
+        
+        isCancel = true
+    
+    }
+
+
+   function sendBlobToServer(event) {
       $("#submit-modal").modal()
       event.preventDefault()
        
@@ -99,6 +108,7 @@
             $("#submit-modal").modal("hide")
             $("#submit-error-modal").modal()
         })
+       isSubmit = true
   }
   
   window.onload = function init() {
@@ -133,3 +143,9 @@
     function padTimeCode ( val ) {
      return val > 9 ? val : "0" + val; 
    }
+
+    window.onbeforeunload = function() {
+        if (!isSubmit && current_recording != null || !isCancel && !isSubmit) {
+            return "Die erstellte Aufnahme wurde noch nicht gespeichert. Möchten Sie diese Seite wirklich verlassen?";
+        }
+    }
