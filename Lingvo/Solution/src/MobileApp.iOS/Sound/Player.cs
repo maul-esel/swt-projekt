@@ -234,13 +234,29 @@ namespace Lingvo.MobileApp.iOS.Sound
 			AVAudioSession session = AVAudioSession.SharedInstance();
 			session.SetCategory(AVAudioSessionCategory.PlayAndRecord);
 			NSError err;
-			session.OverrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, out err);
+
+
+			AVAudioSessionPortOverride outputPort = isHeadphonePluggedIn() ? AVAudioSessionPortOverride.None : AVAudioSessionPortOverride.Speaker;
+			session.OverrideOutputAudioPort(outputPort, out err);
+
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
 			{
 				session.RequestRecordPermission((granted) => { });
 			}
 
+		}
+		private bool isHeadphonePluggedIn()
+		{
+			AVAudioSessionPortDescription[] availableOutputs = AVAudioSession.SharedInstance().CurrentRoute.Outputs;
+			foreach (AVAudioSessionPortDescription desc in availableOutputs)
+			{
+				if (desc.PortType == AVAudioSession.PortHeadphones)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		public void DeactivateAudioSession()
 		{
