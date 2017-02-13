@@ -16,11 +16,6 @@ namespace Lingvo.MobileApp.Pages
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
 
-            Command downloadCommand = new Command(async (param) =>
-            {
-                await CloudLibraryProxy.Instance.DownloadWorkbook((int)param);
-            });
-
             ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemTemplate = new DataTemplate(typeof(LingvoDownloadWorkbookViewCell)),

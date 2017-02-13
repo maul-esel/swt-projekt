@@ -175,7 +175,7 @@ namespace Lingvo.Backend.Controllers
 
 			var recording = new Recording()
 			{
-				Duration = 10,
+				Duration = model.Duration,
 				LocalPath = fileName
 			};
 			db.Save(recording);

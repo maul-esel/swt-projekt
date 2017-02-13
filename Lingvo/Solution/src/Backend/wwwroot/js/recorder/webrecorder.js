@@ -71,6 +71,9 @@
             formData.append("RecordedFile", current_recording);
         }
 
+        const duration = Math.ceil($("#newRecordingAudio")[0].duration * 1000)
+        formData.append("Duration", duration)
+
         // ugly hack for accessing xhr and responseURL
         var xhr;
         var _orgAjax = jQuery.ajaxSettings.xhr;

@@ -57,6 +57,8 @@ namespace Lingvo.Backend.ViewModels
 
 		public IFormFile RecordedFile { get; set; }
 
+		public int Duration { get; set; }
+
 		private string FormatRecordingName(string filename)
 		{
 			return filename; // TODO: proper display name, uploaded date, ...

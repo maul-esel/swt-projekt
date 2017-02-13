@@ -4,6 +4,7 @@ using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Templates;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -12,18 +13,10 @@ namespace Lingvo.MobileApp.Pages
     {
         private Workbook workbook;
 
-        private Command downloadAction;
-
         public DownloadPagesPage(Workbook workbook)
         {
             this.workbook = workbook;
             Title = workbook.Title;
-
-            downloadAction = new Command(async (param) =>
-            {
-                PageProxy page = (PageProxy)workbook.Pages.Find((p) => p.Number == (int)param);
-                await page?.Resolve();
-            });
 
             string seite = ((Span)App.Current.Resources["text_seite"]).Text;
 
@@ -52,9 +45,9 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
-                List<Workbook> newWorkbooks = new List<Workbook>(await CloudLibraryProxy.Instance.FetchAllWorkbooks());
+                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
 
-                workbook = newWorkbooks.Find(w => w.Id.Equals(workbook.Id));
+                workbook = newWorkbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -85,7 +78,6 @@ namespace Lingvo.MobileApp.Pages
         {
             if (e.SelectedItem == null)
                 return;
-            downloadAction.Execute(((IPage)e.SelectedItem).Number);
             Handle_ItemEvent(sender, e);
         }
 

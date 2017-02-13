@@ -2,6 +2,7 @@
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
@@ -40,7 +41,7 @@ namespace Lingvo.MobileApp.Templates
             {
                 Size = Device.OnPlatform(iOS: 50, Android: 120, WinPhone: 240),
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None,
-				TextSize = 15
+                TextSize = 15
             };
 
             LocalCollection.Instance.PageChanged += Event_PageChanged;
@@ -63,7 +64,7 @@ namespace Lingvo.MobileApp.Templates
             deleteAction.Clicked += (o, e) =>
             {
                 Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
-                Workbook workbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(page.workbookId));
+                Workbook workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
                 LocalCollection.Instance.DeletePage((Lingvo.Common.Entities.Page)workbook.Pages.Find(p => p.Id.Equals(page.Id)));
             };
 
@@ -102,7 +103,7 @@ namespace Lingvo.MobileApp.Templates
             IPage page = (IPage)BindingContext;
             if (p.Id.Equals(page.Id))
             {
-                IPage local = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+                IPage local = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
 
                 BindingContext = local != null ? local : p;
             }
