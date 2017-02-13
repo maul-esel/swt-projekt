@@ -8,6 +8,7 @@ using System.Text;
 using Xamarin.Forms;
 using System.Collections;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -183,8 +184,7 @@ namespace Lingvo.MobileApp.Pages
 
         private async Task<bool> checkNameExists(string name)
         {
-            List<TeacherMemo> memos = new List<TeacherMemo>(LocalCollection.Instance.TeacherMemos);
-            if (memos.Find(m => m.Name.Equals(Name.Text)) != null)
+            if (LocalCollection.Instance.TeacherMemos.FirstOrDefault(m => m.Name.Equals(Name.Text)) != null)
             {
                 string title = ((Span)App.Current.Resources["label_nameAlreadyExists"]).Text;
                 string desc = ((Span)App.Current.Resources["desc_teacherTrackNameAlreadyExists"]).Text;

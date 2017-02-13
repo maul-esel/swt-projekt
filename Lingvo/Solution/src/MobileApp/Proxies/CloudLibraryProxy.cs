@@ -5,6 +5,8 @@ using Lingvo.Common;
 using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
 using System;
+using static Lingvo.MobileApp.APIService;
+using System.Threading;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -33,9 +35,9 @@ namespace Lingvo.MobileApp.Proxies
 		/// </summary>
 		/// <returns>The page.</returns>
 		/// <param name="proxy">A proxy for the page that is downloaded</param>
-		internal Task<Page> DownloadSinglePage(PageProxy proxy)
+		internal async Task<Page> DownloadSinglePage(PageProxy proxy, IProgress<double> progress, CancellationToken cancellationToken)
 		{
-			return service.FetchPage(proxy);
+			return await service.FetchPage(proxy, progress, cancellationToken);
 		}
 
 		/// <summary>
@@ -43,9 +45,9 @@ namespace Lingvo.MobileApp.Proxies
 		/// </summary>
 		/// <returns>The workbook.</returns>
 		/// <param name="workbookID">Workbook identifier.</param>
-		public async Task<Workbook> DownloadWorkbook(int workbookID)
+		public async Task<Workbook> DownloadWorkbook(int workbookID, IProgress<double> progress, CancellationToken cancellationToken)
 		{
-			var workbook = await service.FetchWorkbook(workbookID);
+			var workbook = await service.FetchWorkbook(workbookID, progress, cancellationToken);
 
             LocalCollection.Instance.AddWorkbook(workbook);
 
