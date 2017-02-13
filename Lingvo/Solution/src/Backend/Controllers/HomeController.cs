@@ -205,6 +205,12 @@ namespace Lingvo.Backend.Controllers
 			return Json(data: workbook == null || workbook.Id == id);
 		}
 
+		public async Task<IActionResult> UniquePageNumber([FromServices] DatabaseService db, int? id, int workbookId, int pageNumber)
+		{
+			var page = await db.FindPageByNumberAsync(workbookId, pageNumber);
+			return Json(data: page == null || page.Id == id);
+		}
+
 		#endregion
 	}
 }

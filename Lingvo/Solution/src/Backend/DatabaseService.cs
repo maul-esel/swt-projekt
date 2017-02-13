@@ -210,5 +210,10 @@ namespace Lingvo.Backend
 		{
 			return Workbooks.FirstOrDefaultAsync(w => w.Title == title);
 		}
-    }
+
+		public Task<Page> FindPageByNumberAsync(int workbookId, int pageNumber)
+		{
+			return Pages.FirstOrDefaultAsync(p => p.workbookId == workbookId && p.Number == pageNumber);
+		}
+	}
 }
