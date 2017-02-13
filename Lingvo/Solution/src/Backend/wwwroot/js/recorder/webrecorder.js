@@ -6,7 +6,8 @@
   var recorder;
   var current_recording;
   var recording = 0;
-  
+  var isSubmit = false;
+
   function startRecording(button) {
     recording = recording + 1;
     recorder.clear();
@@ -60,6 +61,7 @@
 
   function sendBlobToServer(event) {
       $("#submit-modal").modal()
+      isSubmit = true
       event.preventDefault()
        
         var form = $("#pageForm")[0];
@@ -133,3 +135,9 @@
     function padTimeCode ( val ) {
      return val > 9 ? val : "0" + val; 
    }
+
+    window.onbeforeunload = function() {
+        if (!isSubmit && current_recording != null) {
+            return "Die erstellte Aufnahme wurde noch nicht gespeichert. Möchten Sie diese Seite wirklich verlassen?";
+        }
+    }
