@@ -60,8 +60,7 @@ namespace Lingvo.MobileApp
             reqState.CancellationToken = cancellationToken;
 
             // Start the asynchronous request.
-            IAsyncResult result =
-              (IAsyncResult)req.BeginGetResponse(new AsyncCallback(RespCallback), reqState);
+            req.BeginGetResponse(new AsyncCallback(RespCallback), reqState);
 
             return reqState.TaskSource.Task;
         }
@@ -211,12 +210,11 @@ namespace Lingvo.MobileApp
             Workbook localWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id == workbookID);
 
             //Register for updates of local Workbook instance
-            Action<Workbook> onLocalRegistered = onLocalRegistered = delegate (Workbook w)
+            Action<Workbook> onLocalRegistered = delegate (Workbook w)
             {
                 if (w.Id == workbookID)
                 {
-                    localWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(wb => wb.Id == workbookID);
-
+                    localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(wb => wb.Id == workbookID);
                 }
             }; ;
 
