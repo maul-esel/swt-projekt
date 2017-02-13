@@ -105,6 +105,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void Play()
 		{
+
 			AVAudioSession.SharedInstance().SetActive(true);
 			if (studentTrack != null)
 			{
@@ -226,7 +227,9 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
 			AVAudioSession session = AVAudioSession.SharedInstance();
-			session.SetCategory(AVAudioSessionCategory.Ambient);
+			session.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+			NSError err;
+			session.OverrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, out err);
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
 			{
