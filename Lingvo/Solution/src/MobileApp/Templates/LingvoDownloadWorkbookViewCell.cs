@@ -7,6 +7,8 @@ using Lingvo.MobileApp.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using Lingvo.MobileApp.Services;
+using Lingvo.MobileApp.Util;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -55,8 +57,13 @@ namespace Lingvo.MobileApp.Templates
 
         private async void DownloadWorkbook()
         {
+
             if (cancellationToken == null)
             {
+                if (!await AlertHelper.DisplayWarningIfWifiConnected())
+                {
+                    return;
+                }
                 cancellationToken = new CancellationTokenSource();
                 cancellationToken.Token.Register(() => Device.BeginInvokeOnMainThread(() =>
                 {
@@ -89,7 +96,7 @@ namespace Lingvo.MobileApp.Templates
 
             Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
-            int progress = 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages;
+            int progress = Math.Min(100, 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages);
             string color = progress == 100 ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
             ProgressView.MaxProgress = 100;
@@ -98,12 +105,19 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.TextSize = 20;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
-            if (ContextActions.Count > 0)
+            try
             {
-                ContextActions.Clear();
+                if (ContextActions.Count > 0)
+                {
+                    ContextActions.Clear();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
             }
 
-            downloadButton.IsEnabled = progress != workbook.TotalPages;
+            downloadButton.IsEnabled = progress < 100;
         }
     }
 }

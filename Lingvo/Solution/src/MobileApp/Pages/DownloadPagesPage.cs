@@ -47,12 +47,12 @@ namespace Lingvo.MobileApp.Pages
             {
                 Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
 
-                workbook = newWorkbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
+                workbook = newWorkbooks?.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    errorLabel.IsVisible = workbook.Pages.Count == 0;
-                    listView.ItemsSource = workbook.Pages;
+                    errorLabel.IsVisible = workbook == null ? true : workbook.Pages.Count == 0;
+                    listView.ItemsSource = workbook?.Pages;
                     listView.IsRefreshing = false;
                 });
             });

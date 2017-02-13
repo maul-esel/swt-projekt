@@ -1,5 +1,7 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
+using Lingvo.MobileApp.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
@@ -57,10 +59,7 @@ namespace Lingvo.MobileApp.Templates
                 IsDestructive = true
             };
 
-            deleteAction.Clicked += (o, e) =>
-            {
-                LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
-            };
+            deleteAction.Clicked += DeleteAction_Clicked;
 
             ContextActions.Add(deleteAction);
 
@@ -69,13 +68,6 @@ namespace Lingvo.MobileApp.Templates
             grid.RowDefinitions.Add(new RowDefinition());
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = DownloadButtonSize });
-
-
-
-
-
-
-
 
             var stackLayout = new StackLayout
             {
@@ -103,6 +95,22 @@ namespace Lingvo.MobileApp.Templates
 
             grid.Children.Add(stackLayout, 0, 0);
             View = grid;
+        }
+
+        private async void DeleteAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeleteWorkbook())
+                {
+                    LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
+                    ContextActions.Remove(deleteAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
         }
 
         protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)

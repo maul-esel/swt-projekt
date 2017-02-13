@@ -2,6 +2,8 @@
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
+using Lingvo.MobileApp.Services;
+using Lingvo.MobileApp.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +38,13 @@ namespace Lingvo.MobileApp.Templates
 
         private async void DownloadButton_Clicked()
         {
+
             if (cancellationToken == null)
             {
+                if (!await AlertHelper.DisplayWarningIfWifiConnected())
+                {
+                    return;
+                }
                 cancellationToken = new CancellationTokenSource();
                 cancellationToken.Token.Register(() => Device.BeginInvokeOnMainThread(() =>
                 {
@@ -77,9 +84,16 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
-            if (ContextActions.Count > 0)
+            try
             {
-                ContextActions.Clear();
+                if (ContextActions.Count > 0)
+                {
+                    ContextActions.Clear();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
             }
 
             downloadButton.IsEnabled = !downloaded;

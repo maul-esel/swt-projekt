@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Linq;
+using Lingvo.MobileApp.Util;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -186,10 +187,7 @@ namespace Lingvo.MobileApp.Pages
         {
             if (LocalCollection.Instance.TeacherMemos.FirstOrDefault(m => m.Name.Equals(Name.Text)) != null)
             {
-                string title = ((Span)App.Current.Resources["label_nameAlreadyExists"]).Text;
-                string desc = ((Span)App.Current.Resources["desc_teacherTrackNameAlreadyExists"]).Text;
-                string ok = ((Span)App.Current.Resources["label_ok"]).Text;
-                await DisplayAlert(title, desc, ok);
+                await AlertHelper.DisplayInfoTeacherMemoNameExists();
                 return true;
             }
             return false;
@@ -214,12 +212,7 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (TeacherMemoController.Instance.CurrentMemo != null)
                 {
-                    string title = ((Span)App.Current.Resources["label_warning"]).Text;
-                    string desc = ((Span)App.Current.Resources["desc_teacherMemoAlreadyExists"]).Text;
-                    string accept = ((Span)App.Current.Resources["label_overwrite"]).Text;
-                    string cancel = ((Span)App.Current.Resources["label_cancel"]).Text;
-
-                    if (!await DisplayAlert(title, desc, accept, cancel))
+                    if (!await AlertHelper.DisplayWarningTeacherMemoExists())
                     {
                         return;
                     }

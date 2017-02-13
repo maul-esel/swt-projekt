@@ -4,6 +4,7 @@ using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
+using Lingvo.MobileApp.Util;
 using System;
 using Xamarin.Forms;
 
@@ -393,12 +394,7 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (exercisable.StudentTrack != null)
                 {
-                    string title = ((Span)App.Current.Resources["label_warning"]).Text;
-                    string desc = ((Span)App.Current.Resources["desc_studentTrackAlreadyExists"]).Text;
-                    string accept = ((Span)App.Current.Resources["label_overwrite"]).Text;
-                    string cancel = ((Span)App.Current.Resources["label_cancel"]).Text;
-
-                    if (!await DisplayAlert(title, desc, accept, cancel))
+                    if(!await AlertHelper.DisplayWarningStudentTrackExists())
                     {
                         return;
                     }

@@ -1,6 +1,8 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Proxies;
+using Lingvo.MobileApp.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
@@ -61,18 +63,9 @@ namespace Lingvo.MobileApp.Templates
                 Icon = "ic_mic_off.png"
             };
 
-            deleteAction.Clicked += (o, e) =>
-            {
-                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
-                Workbook workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
-                LocalCollection.Instance.DeletePage((Lingvo.Common.Entities.Page)workbook.Pages.Find(p => p.Id.Equals(page.Id)));
-            };
+            deleteAction.Clicked += DeleteAction_Clicked;
 
-            deleteStudentAction.Clicked += (o, e) =>
-            {
-                Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
-                LocalCollection.Instance.DeleteStudentRecording(page);
-            };
+            deleteStudentAction.Clicked += DeleteStudentAction_Clicked;
 
             View = new StackLayout
             {
@@ -96,6 +89,41 @@ namespace Lingvo.MobileApp.Templates
                                 }
 
             };
+        }
+
+        private async void DeleteStudentAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeleteStudentTrack())
+                {
+                    Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
+                    LocalCollection.Instance.DeleteStudentRecording(page);
+                    ContextActions.Remove(deleteStudentAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
+        }
+
+        private async void DeleteAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeletePage(((IPage)BindingContext).StudentTrack != null))
+                {
+                    Lingvo.Common.Entities.Page page = (Lingvo.Common.Entities.Page)BindingContext;
+                    Workbook workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
+                    LocalCollection.Instance.DeletePage((Lingvo.Common.Entities.Page)workbook.Pages.Find(p => p.Id.Equals(page.Id)));
+                    ContextActions.Remove(deleteAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
         }
 
         protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
@@ -123,9 +151,16 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
             ProgressView.MuteEnabled = false;
 
-            if (page.StudentTrack != null && !ContextActions.Contains(deleteStudentAction))
+            try
             {
-                ContextActions.Add(deleteStudentAction);
+                if (page.StudentTrack != null && !ContextActions.Contains(deleteStudentAction))
+                {
+                    ContextActions.Add(deleteStudentAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
             }
 
             subtitleLabel.IsVisible = page.Description?.Length > 0;

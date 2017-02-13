@@ -22,16 +22,25 @@
             <Span x:Key="label_save">Speichern</Span>
             <Span x:Key="text_teacherTrack">Lehrerspur</Span>
             <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
-            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen! Bitte wähle einen anderen.</Span>
+            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrermemo mit diesem Namen! Bitte wähle einen anderen.</Span>
             <Span x:Key="label_edit">Bearbeiten</Span>
             <Span x:Key="label_warning">Warnung</Span>
             <Span x:Key="desc_studentTrackAlreadyExists">Es existiert bereits eine aufgenommene Schülerspur! Möchtest Du sie überschreiben?</Span>
-            <Span x:Key="desc_teacherMemoAlreadyExists">Es existiert bereits eine aufgenommene Lehrerspur! Möchtest Du sie überschreiben?</Span>
+            <Span x:Key="desc_teacherMemoAlreadyExists">Es existiert bereits eine aufgenommenes Lehrermemo! Möchtest Du es überschreiben?</Span>
             <Span x:Key="label_overwrite">Überschreiben</Span>
             <Span x:Key="label_cancel">Abbrechen</Span>
             <Span x:Key="label_ok">Ok</Span>
             <Span x:Key="label_download">Herunterladen</Span>
             <Span x:Key="desc_notConnectedToWlan">Du bist nicht mit einem WLAN-Netz verbunden. Möchtest Du trotzdem herunterladen?</Span>
+            <Span x:Key="desc_deletePageQuestion">Möchtest Du die Seite wirklich löschen?</Span>
+            <Span x:Key="desc_deleteTeacherMemoQuestion">Möchtest Du das Lehrermemo wirklich löschen?</Span>
+            <Span x:Key="desc_deleteWorkbookQuestion">Möchtest Du das Arbeitsheft wirklich löschen? Die Seiten des Heftes mit Schülerspuren werden ebenfalls gelöscht!</Span>
+            <Span x:Key="desc_deletePageWithStudentTrackQuestion">Möchtest Du die Seite wirklich löschen? Die zugehörige Schülerspur wird ebenfalls gelöscht!</Span>
+            <Span x:Key="desc_deleteTeacherMemoWithStudentTrackQuestion">Möchtest Du das Lehrermemo wirklich löschen? Die zugehörige Schülerspur wird ebenfalls gelöscht!</Span>
+            <Span x:Key="desc_deleteStudentTrackQuestion">Möchtest Du die aufgenommene Schülerspur wirklich löschen?</Span>
+            <Span x:Key="label_error">Fehler</Span>
+            <Span x:Key="label_fetchPageError">Beim Herunterladen der Seite ist ein Fehler aufgetreten.</Span>
+            <Span x:Key="label_fetchWorkbookError">Beim Herunterladen des Arbeitshefts ist ein Fehler aufgetreten.</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

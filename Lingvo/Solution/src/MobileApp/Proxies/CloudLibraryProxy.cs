@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-using Lingvo.Common;
 using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
 using System;
-using Lingvo.MobileApp.Services;
-using Xamarin.Forms;
-using static Lingvo.MobileApp.APIService;
 using System.Threading;
 
 namespace Lingvo.MobileApp.Proxies
@@ -32,35 +27,31 @@ namespace Lingvo.MobileApp.Proxies
         /// <returns>The instance.</returns>
         public static CloudLibraryProxy Instance => instance ?? (instance = new CloudLibraryProxy());
 
-		/// <summary>
-		/// Downloads a single page.
-		/// </summary>
-		/// <returns>The page.</returns>
-		/// <param name="proxy">A proxy for the page that is downloaded</param>
-		internal async Task<Page> DownloadSinglePage(PageProxy proxy, IProgress<double> progress, CancellationToken cancellationToken)
-		{if (DisplayWarningIfNotWifiConnected())
+        /// <summary>
+        /// Downloads a single page.
+        /// </summary>
+        /// <returns>The page.</returns>
+        /// <param name="proxy">A proxy for the page that is downloaded</param>
+        internal async Task<Page> DownloadSinglePage(PageProxy proxy, IProgress<double> progress, CancellationToken cancellationToken)
+        {
+            return await service.FetchPage(proxy, progress, cancellationToken);
+        }
+
+        /// <summary>
+        /// Downloads a workbook and adds it to the local collection
+        /// </summary>
+        /// <returns>The workbook.</returns>
+        /// <param name="workbookID">Workbook identifier.</param>
+        public async Task<Workbook> DownloadWorkbook(int workbookID, IProgress<double> progress, CancellationToken cancellationToken)
+        {
+            var workbook = await service.FetchWorkbook(workbookID, progress, cancellationToken);
+
+            if (workbook != null)
             {
-			return await service.FetchPage(proxy, progress, cancellationToken);
-}
-return null;
-		}
-
-		/// <summary>
-		/// Downloads a workbook and adds it to the local collection
-		/// </summary>
-		/// <returns>The workbook.</returns>
-		/// <param name="workbookID">Workbook identifier.</param>
-		public async Task<Workbook> DownloadWorkbook(int workbookID, IProgress<double> progress, CancellationToken cancellationToken)
-		{if (DisplayWarningIfNotWifiConnected())
-            {
-			var workbook = await service.FetchWorkbook(workbookID, progress, cancellationToken);
-
-
                 LocalCollection.Instance.AddWorkbook(workbook);
-
-                return workbook;
             }
-            return null;
+
+            return workbook;
         }
 
         /// <summary>
