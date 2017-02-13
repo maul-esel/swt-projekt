@@ -25,6 +25,9 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public event Action<int> Update;
 		public event Action<PlayerState> StateChange;
 
+		private const float teacherTrackVolume = 0.7f;
+		private const float studentTrackVolume = 1.0f;
+
 		public Player()
 		{
 			timer = new Timer(100);
@@ -68,7 +71,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				if (studentTrack != null)
 				{
-					studentTrack.Volume = value ? 0.0f : 1.0f;
+					studentTrack.Volume = value ? 0.0f : studentTrackVolume;
 				}
 
 			}
@@ -109,7 +112,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			AVAudioSession.SharedInstance().SetActive(true);
 			if (studentTrack != null)
 			{
-				studentTrack.Volume = 1.0f;
+				studentTrack.Volume = studentTrackVolume;
 				teacherTrack.Play();
 				studentTrack.Play();
 			}
@@ -197,6 +200,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			teacherTrack = AVAudioPlayer.FromUrl(url);
+			teacherTrack.Volume = studentTrackVolume;
+
 			teacherTrack.PrepareToPlay();
 			teacherTrack.FinishedPlaying += (sender, e) => Stop();
 			State = PlayerState.STOPPED;
