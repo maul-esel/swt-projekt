@@ -129,7 +129,9 @@ namespace Lingvo.MobileApp.Controllers
             {
                 recorder.PrepareToRecord();
             }
-            audioPlayer.IsStudentTrackMuted = true;
+			//This is to reset the studentRecording as an already existing recording 
+			//should not be played while recording a new one
+			audioPlayer.PrepareStudentTrack(null); 
             recorder.Start();
             PlayPage();
 
