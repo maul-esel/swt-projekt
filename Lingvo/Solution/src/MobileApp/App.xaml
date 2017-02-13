@@ -22,8 +22,16 @@
             <Span x:Key="label_save">Speichern</Span>
             <Span x:Key="text_teacherTrack">Lehrerspur</Span>
             <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
-            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen. Bitte wählen Sie einen anderen.</Span>
+            <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen! Bitte wähle einen anderen.</Span>
             <Span x:Key="label_edit">Bearbeiten</Span>
+            <Span x:Key="label_warning">Warnung</Span>
+            <Span x:Key="desc_studentTrackAlreadyExists">Es existiert bereits eine aufgenommene Schülerspur! Möchtest Du sie überschreiben?</Span>
+            <Span x:Key="desc_teacherMemoAlreadyExists">Es existiert bereits eine aufgenommene Lehrerspur! Möchtest Du sie überschreiben?</Span>
+            <Span x:Key="label_overwrite">Überschreiben</Span>
+            <Span x:Key="label_cancel">Abbrechen</Span>
+            <Span x:Key="label_ok">Ok</Span>
+            <Span x:Key="label_download">Herunterladen</Span>
+            <Span x:Key="desc_notConnectedToWlan">Du bist nicht mit einem WLAN-Netz verbunden. Möchtest Du trotzdem herunterladen?</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

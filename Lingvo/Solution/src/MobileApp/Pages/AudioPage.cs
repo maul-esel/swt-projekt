@@ -381,19 +381,32 @@ namespace Lingvo.MobileApp.Pages
 
         private void ProgressView_StudentTrackMuted(bool muted)
         {
-			ProgressView.InnerProgressEnabled = !muted;
+            ProgressView.InnerProgressEnabled = !muted;
             StudentAudioController.Instance.IsMuted = muted;
         }
 
-        private void RecordStopButton_OnClicked(object sender, EventArgs e)
+        private async void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
 
             if (currentState == PlayerState.STOPPED)
             {
+                if (exercisable.StudentTrack != null)
+                {
+                    string title = ((Span)App.Current.Resources["label_warning"]).Text;
+                    string desc = ((Span)App.Current.Resources["desc_studentTrackAlreadyExists"]).Text;
+                    string accept = ((Span)App.Current.Resources["label_overwrite"]).Text;
+                    string cancel = ((Span)App.Current.Resources["label_cancel"]).Text;
+
+                    if (!await DisplayAlert(title, desc, accept, cancel))
+                    {
+                        return;
+                    }
+                }
 
                 StudentAudioController.Instance.StartStudentRecording();
                 ProgressView.InnerProgressEnabled = true;
+
                 return;
             }
             if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)

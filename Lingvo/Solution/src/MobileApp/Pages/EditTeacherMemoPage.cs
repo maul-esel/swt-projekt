@@ -188,7 +188,8 @@ namespace Lingvo.MobileApp.Pages
             {
                 string title = ((Span)App.Current.Resources["label_nameAlreadyExists"]).Text;
                 string desc = ((Span)App.Current.Resources["desc_teacherTrackNameAlreadyExists"]).Text;
-                await DisplayAlert(title, desc, "Ok");
+                string ok = ((Span)App.Current.Resources["label_ok"]).Text;
+                await DisplayAlert(title, desc, ok);
                 return true;
             }
             return false;
@@ -213,7 +214,12 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (TeacherMemoController.Instance.CurrentMemo != null)
                 {
-                    if (!await DisplayAlert("Overwrite", "Overwrite?", "Yeah", "Nope"))
+                    string title = ((Span)App.Current.Resources["label_warning"]).Text;
+                    string desc = ((Span)App.Current.Resources["desc_teacherMemoAlreadyExists"]).Text;
+                    string accept = ((Span)App.Current.Resources["label_overwrite"]).Text;
+                    string cancel = ((Span)App.Current.Resources["label_cancel"]).Text;
+
+                    if (!await DisplayAlert(title, desc, accept, cancel))
                     {
                         return;
                     }

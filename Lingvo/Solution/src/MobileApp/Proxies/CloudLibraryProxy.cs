@@ -5,6 +5,8 @@ using Lingvo.Common;
 using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
 using System;
+using Lingvo.MobileApp.Services;
+using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Proxies
 {
@@ -12,61 +14,69 @@ namespace Lingvo.MobileApp.Proxies
     /// Cloud library proxy.
     /// </summary>
     public class CloudLibraryProxy
-	{
-		private static CloudLibraryProxy instance;
+    {
+        private static CloudLibraryProxy instance;
 
-		private APIService service;
+        private APIService service;
 
-		private CloudLibraryProxy()
-		{
-			service = APIService.Instance;
-		}
+        private CloudLibraryProxy()
+        {
+            service = APIService.Instance;
+        }
 
-		/// <summary>
-		/// Gets the instance of cloud library proxy (singleton pattern).
-		/// </summary>
-		/// <returns>The instance.</returns>
-		public static CloudLibraryProxy Instance => instance ?? (instance = new CloudLibraryProxy());
+        /// <summary>
+        /// Gets the instance of cloud library proxy (singleton pattern).
+        /// </summary>
+        /// <returns>The instance.</returns>
+        public static CloudLibraryProxy Instance => instance ?? (instance = new CloudLibraryProxy());
 
-		/// <summary>
-		/// Downloads a single page.
-		/// </summary>
-		/// <returns>The page.</returns>
-		/// <param name="proxy">A proxy for the page that is downloaded</param>
-		internal Task<Page> DownloadSinglePage(PageProxy proxy)
-		{
-			return service.FetchPage(proxy);
-		}
+        /// <summary>
+        /// Downloads a single page.
+        /// </summary>
+        /// <returns>The page.</returns>
+        /// <param name="proxy">A proxy for the page that is downloaded</param>
+        internal Task<Page> DownloadSinglePage(PageProxy proxy)
+        {
+            if (DisplayWarningIfNotWifiConnected())
+            {
+                return service.FetchPage(proxy);
+            }
+            return null;
+        }
 
-		/// <summary>
-		/// Downloads a workbook and adds it to the local collection
-		/// </summary>
-		/// <returns>The workbook.</returns>
-		/// <param name="workbookID">Workbook identifier.</param>
-		public async Task<Workbook> DownloadWorkbook(int workbookID)
-		{
-			var workbook = await service.FetchWorkbook(workbookID);
+        /// <summary>
+        /// Downloads a workbook and adds it to the local collection
+        /// </summary>
+        /// <returns>The workbook.</returns>
+        /// <param name="workbookID">Workbook identifier.</param>
+        public async Task<Workbook> DownloadWorkbook(int workbookID)
+        {
+            if (DisplayWarningIfNotWifiConnected())
+            {
+                var workbook = await service.FetchWorkbook(workbookID);
 
-            LocalCollection.Instance.AddWorkbook(workbook);
+                LocalCollection.Instance.AddWorkbook(workbook);
 
-			return workbook;
-		}
+                return workbook;
+            }
+            return null;
+        }
 
-		/// <summary>
-		/// Returns a list of all workbooks, with page proxy objects for all existing pages on server
-		/// </summary>
-		/// <returns>The all workbooks.</returns>
-		public async Task<Workbook[]> FetchAllWorkbooks()
-		{
-			var workbooks =  await service.FetchWorkbooks();
+        /// <summary>
+        /// Returns a list of all workbooks, with page proxy objects for all existing pages on server
+        /// </summary>
+        /// <returns>The all workbooks.</returns>
+        public async Task<Workbook[]> FetchAllWorkbooks()
+        {
+            var workbooks = await service.FetchWorkbooks();
 
-			foreach (var w in workbooks)
-			{
-				await service.FetchPages(w);
-				w.IsPublished = true;
-			}
+            foreach (var w in workbooks)
+            {
+                await service.FetchPages(w);
+                w.IsPublished = true;
+            }
 
-			return workbooks;
-		}
-	}
+            return workbooks;
+        }
+    }
 }
