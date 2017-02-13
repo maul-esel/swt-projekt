@@ -4,7 +4,8 @@
     <div class="lingvo-header">
         <h3><a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @ViewData["Title"]</h3>
     </div>
-    <form asp-controller="Home" asp-action="CreateWorkbook" method="post" style="padding-top: 40px">
+    <form asp-controller="Home" asp-action="@(Model == null ? "CreateWorkbook" : "UpdateWorkbook")" method="post" style="padding-top: 40px">
+        <input type="hidden" name="id" value="@Model?.Id"/>
         <div class="form-group">
             <label for="workbook-title-name">Titel</label>
             <input name="title" class="form-control input-lg" id="workbook-title-name" placeholder="z.B. Thannhauser Band 1" value="@Model?.Title">

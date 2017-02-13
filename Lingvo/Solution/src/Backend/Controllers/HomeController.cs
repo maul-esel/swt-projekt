@@ -120,6 +120,20 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
+		public async Task<IActionResult> UpdateWorkbook([FromServices] DatabaseService db, int id, string title, string subtitle)
+		{
+			var workbook = await db.Workbooks.FindAsync(id);
+			if (workbook == null)
+				return NotFound();
+
+			workbook.Title = title;
+			workbook.Subtitle = subtitle;
+			db.Save(workbook);
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		[HttpPost]
 		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model)
 		{
 			var page = db.FindPageWithRecording(id);
