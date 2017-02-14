@@ -25,6 +25,9 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public event Action<int> Update;
 		public event Action<PlayerState> StateChange;
 
+		private const float teacherTrackVolume = 0.7f;
+		private const float studentTrackVolume = 1.0f;
+
 		public Player()
 		{
 			timer = new Timer(100);
@@ -68,7 +71,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				if (studentTrack != null)
 				{
-					studentTrack.Volume = value ? 0.0f : 1.0f;
+					studentTrack.Volume = value ? 0.0f : studentTrackVolume;
 				}
 
 			}
@@ -105,10 +108,12 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		public void Play()
 		{
+			AVAudioSession session = AVAudioSession.SharedInstance();
+			adjustAudioOutputPort(session);
 			AVAudioSession.SharedInstance().SetActive(true);
 			if (studentTrack != null)
 			{
-				studentTrack.Volume = 1.0f;
+				studentTrack.Volume = studentTrackVolume;
 				teacherTrack.Play();
 				studentTrack.Play();
 			}
@@ -196,6 +201,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			teacherTrack = AVAudioPlayer.FromUrl(url);
+			teacherTrack.Volume = studentTrackVolume;
+
 			teacherTrack.PrepareToPlay();
 			teacherTrack.FinishedPlaying += (sender, e) => Stop();
 			State = PlayerState.STOPPED;
@@ -226,13 +233,36 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
 			AVAudioSession session = AVAudioSession.SharedInstance();
-			session.SetCategory(AVAudioSessionCategory.Ambient);
+			session.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+
+
+			adjustAudioOutputPort(session);
+
+
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
 			{
 				session.RequestRecordPermission((granted) => { });
 			}
 
+		}
+		private void adjustAudioOutputPort(AVAudioSession session)
+		{
+			NSError err;
+			AVAudioSessionPortOverride outputPort = isHeadphonePluggedIn() ? AVAudioSessionPortOverride.None : AVAudioSessionPortOverride.Speaker;
+			session.OverrideOutputAudioPort(outputPort, out err);
+		}
+		private bool isHeadphonePluggedIn()
+		{
+			AVAudioSessionPortDescription[] availableOutputs = AVAudioSession.SharedInstance().CurrentRoute.Outputs;
+			foreach (AVAudioSessionPortDescription desc in availableOutputs)
+			{
+				if (desc.PortType == AVAudioSession.PortHeadphones)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		public void DeactivateAudioSession()
 		{
