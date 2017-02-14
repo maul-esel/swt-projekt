@@ -55,8 +55,9 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
-                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
+                Device.BeginInvokeOnMainThread(() => listView.IsRefreshing = true);
 
+                Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
 
                 Device.BeginInvokeOnMainThread(() =>
                 {

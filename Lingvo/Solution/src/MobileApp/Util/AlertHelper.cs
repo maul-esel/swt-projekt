@@ -14,7 +14,7 @@ namespace Lingvo.MobileApp.Util
         /// Displays a warning if not connected to wifi
         /// <returns>true if download should start, false otherwise</returns>
         /// </summary>
-        public static async Task<bool> DisplayWarningIfWifiConnected()
+        public static async Task<bool> DisplayWarningIfNotWifiConnected()
         {
             INetworkService networkService = DependencyService.Get<INetworkService>();
             if (!networkService.IsWifiConnected())

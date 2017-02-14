@@ -60,7 +60,7 @@ namespace Lingvo.MobileApp.Templates
 
             if (cancellationToken == null)
             {
-                if (!await AlertHelper.DisplayWarningIfWifiConnected())
+                if (!await AlertHelper.DisplayWarningIfNotWifiConnected())
                 {
                     return;
                 }

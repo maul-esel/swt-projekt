@@ -62,10 +62,13 @@ namespace Lingvo.MobileApp.Proxies
         {
             var workbooks = await service.FetchWorkbooks();
 
-            foreach (var w in workbooks)
+            if (workbooks != null)
             {
-                await service.FetchPages(w);
-                w.IsPublished = true;
+                foreach (var w in workbooks)
+                {
+                    await service.FetchPages(w);
+                    w.IsPublished = true;
+                }
             }
 
             return workbooks;
