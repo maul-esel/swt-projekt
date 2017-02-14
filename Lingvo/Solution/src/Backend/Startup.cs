@@ -80,7 +80,7 @@ namespace Lingvo.Backend
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Workbook}/{action=Index}/{id?}");
             });
         }
     }

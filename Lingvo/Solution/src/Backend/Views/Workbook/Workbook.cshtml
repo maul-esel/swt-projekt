@@ -8,9 +8,9 @@
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>
-            <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> > @Model.Title
+            <a asp-controller="Workbook" asp-action="Index">Arbeitshefte</a> > @Model.Title
         </h3>
-        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
+        <a class="create-button btn btn-success btn-md" asp-controller="Page" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
     </div>
     <table id="workbooks" class="table">
         <tbody>
@@ -30,7 +30,7 @@
                     </td>
                     <td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td>
                     <td>
-                        <a asp-controller="Home" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
+                        <a asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     </td>
@@ -57,7 +57,7 @@
 						        </div>
 						        <div class="modal-footer">
 									<a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-						          	<a class="btn btn-danger" asp-controller="Home" asp-action="DeletePage" asp-route-id="@page.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+						          	<a class="btn btn-danger" asp-controller="Page" asp-action="DeletePage" asp-route-id="@page.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
 						        </div>
 						      </div>
 						      

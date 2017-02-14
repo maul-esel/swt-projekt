@@ -28,7 +28,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestLoadBackend()
 		{
-			var controller = new HomeController(null);
+			var controller = new WorkbookController();
 
 			var result = controller.Index(DatabaseService.Connect(TestsFixture.ConnectionString));
 
@@ -38,7 +38,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookPublishingAndUnpublishing()
 		{
-			var controller = new HomeController(null);
+			var controller = new WorkbookController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			controller.PublishWorkbook(db, 1);
@@ -58,7 +58,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookDeletion()
 		{
-			var controller = new HomeController(null);
+			var controller = new WorkbookController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			Assert.NotNull(db.FindWorkbookWithReferences(1));
@@ -75,7 +75,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestPageDeletion()
 		{
-			var controller = new HomeController(null);
+			var controller = new PageController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			Assert.NotNull(db.Pages.Find(1));
@@ -90,7 +90,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestEditPage()
 		{
-			var controller = new HomeController(null);
+			var controller = new PageController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			var result = await controller.EditPage(db, new StorageMock(), 1);
@@ -105,7 +105,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestCreateWorkbook()
 		{
-			var controller = new HomeController(null);
+			var controller = new WorkbookController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			var result = controller.CreateWorkbook(db, "NeuesWorkbook", "Nur zum Testen");
@@ -121,7 +121,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestUpdatePage()
 		{
-			var controller = new HomeController(null);
+			var controller = new PageController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			var p = new PageModel
@@ -139,7 +139,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestCreatePage()
 		{
-			var controller = new HomeController(null);
+			var controller = new PageController();
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
 			var p = new PageModel
