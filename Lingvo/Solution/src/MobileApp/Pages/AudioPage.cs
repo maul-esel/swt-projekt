@@ -180,19 +180,7 @@ namespace Lingvo.MobileApp.Pages
                 ProgressView.MaxProgress = exercisable.TeacherTrack.Duration;
             }
 
-            if (exercisable is IPage)
-            {
-                LocalCollection.Instance.PageChanged += Event_PageChanged;
-            }
-            else
-            {
-                LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
-            }
 
-            ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
-
-            StudentAudioController.Instance.Update += RedrawProgressBar;
-            StudentAudioController.Instance.StateChange += SetButtonsAccordingToState;
 
             RewindButton = new LingvoRoundImageButton()
             {
@@ -308,9 +296,44 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (Exercisable is IPage)
+            {
+                LocalCollection.Instance.PageChanged += Event_PageChanged;
+            }
+            else
+            {
+                LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
+            }
+
+            ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
+
+            StudentAudioController.Instance.Update += RedrawProgressBar;
+            StudentAudioController.Instance.StateChange += SetButtonsAccordingToState;
+            StudentAudioController.Instance.Error += OnError;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            if (Exercisable is IPage)
+            {
+                LocalCollection.Instance.PageChanged -= Event_PageChanged;
+            }
+            else
+            {
+                LocalCollection.Instance.TeacherMemoChanged -= Event_TeacherMemoChanged;
+            }
+
+            ProgressView.StudentTrackMuted -= ProgressView_StudentTrackMuted;
+
+            StudentAudioController.Instance.Update -= RedrawProgressBar;
+            StudentAudioController.Instance.StateChange -= SetButtonsAccordingToState;
+            StudentAudioController.Instance.Error -= OnError;
+
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
             if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
             {
@@ -343,8 +366,10 @@ namespace Lingvo.MobileApp.Pages
                 ProgressView.MuteEnabled = exercisable.StudentTrack != null;
                 NextPageButton.IsVisible = exercisable is IPage;
                 PreviousPageButton.IsVisible = exercisable is IPage;
-                NextPageButton.IsEnabled = workbook != null && NextPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) < workbook.Pages.Count - 1;
-                PreviousPageButton.IsEnabled = workbook != null && PreviousPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) > 0;
+
+                int index = exercisable is IPage ? workbook.Pages.FindIndex(p => p.Id.Equals(exercisable.Id)) : -1;
+                NextPageButton.IsEnabled = workbook != null && NextPageButton.IsVisible && index < workbook.Pages.Count - 1 && index >= -1;
+                PreviousPageButton.IsEnabled = workbook != null && PreviousPageButton.IsVisible && index > 0;
             });
         }
 
@@ -394,13 +419,14 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (exercisable.StudentTrack != null)
                 {
-                    if(!await AlertHelper.DisplayWarningStudentTrackExists())
+                    if (!await AlertHelper.DisplayWarningStudentTrackExists())
                     {
                         return;
                     }
                 }
 
                 StudentAudioController.Instance.StartStudentRecording();
+                ProgressView.MuteEnabled = false;
                 ProgressView.InnerProgressEnabled = true;
 
                 return;
@@ -411,6 +437,13 @@ namespace Lingvo.MobileApp.Pages
                 RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
                 return;
             }
+        }
+
+        private async void OnError()
+        {
+            RedrawProgressBar(0);
+            SetButtonsAccordingToState(PlayerState.STOPPED);
+            await AlertHelper.DisplayAudioError();
         }
 
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)

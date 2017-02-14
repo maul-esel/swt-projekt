@@ -41,6 +41,9 @@
             <Span x:Key="label_error">Fehler</Span>
             <Span x:Key="label_fetchPageError">Beim Herunterladen der Seite ist ein Fehler aufgetreten.</Span>
             <Span x:Key="label_fetchWorkbookError">Beim Herunterladen des Arbeitshefts ist ein Fehler aufgetreten.</Span>
+            <Span x:Key="desc_audioError">Beim Abspielen oder Aufnehmen ist ein Fehler aufgetreten.</Span>
+            <Span x:Key="desc_noTeacherMemoName">Bitte gebe einen Namen für das Lehrermemo ein!</Span>
+            <Span x:Key="desc_noTeacherMemoRecording">Bitte nehme ein Lehrermemo auf!</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

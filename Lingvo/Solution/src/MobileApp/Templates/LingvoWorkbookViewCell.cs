@@ -48,10 +48,6 @@ namespace Lingvo.MobileApp.Templates
                 InnerProgressEnabled = false
             };
 
-            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
-            LocalCollection.Instance.PageChanged += Event_PageChanged;
-
-
             deleteAction = new MenuItem
             {
                 Text = ((Span)App.Current.Resources["label_delete"]).Text,
@@ -95,6 +91,20 @@ namespace Lingvo.MobileApp.Templates
 
             grid.Children.Add(stackLayout, 0, 0);
             View = grid;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged += Event_PageChanged;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.WorkbookChanged -= Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged -= Event_PageChanged;
         }
 
         private async void DeleteAction_Clicked(object sender, EventArgs e)

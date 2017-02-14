@@ -125,5 +125,30 @@ namespace Lingvo.MobileApp.Util
             string ok = ((Span)App.Current.Resources["label_ok"]).Text;
             await App.Current.MainPage.DisplayAlert(title, desc, ok);
         }
+
+        public static async Task DisplayAudioError()
+        {
+            string title = ((Span)App.Current.Resources["label_error"]).Text;
+            string desc = ((Span)App.Current.Resources["desc_audioError"]).Text;
+            string ok = ((Span)App.Current.Resources["label_ok"]).Text;
+            await App.Current.MainPage.DisplayAlert(title, desc, ok);
+        }
+
+
+        public static async Task DisplayNoTeacherMemoNameError()
+        {
+            string title = ((Span)App.Current.Resources["label_error"]).Text;
+            string desc = ((Span)App.Current.Resources["desc_noTeacherMemoName"]).Text;
+            string ok = ((Span)App.Current.Resources["label_ok"]).Text;
+            await App.Current.MainPage.DisplayAlert(title, desc, ok);
+        }
+
+        public static async Task DisplayNoTeacherMemoRecordingError()
+        {
+            string title = ((Span)App.Current.Resources["label_error"]).Text;
+            string desc = ((Span)App.Current.Resources["desc_noTeacherMemoRecording"]).Text;
+            string ok = ((Span)App.Current.Resources["label_ok"]).Text;
+            await App.Current.MainPage.DisplayAlert(title, desc, ok);
+        }
     }
 }

@@ -46,8 +46,6 @@ namespace Lingvo.MobileApp.Templates
                 TextSize = 15
             };
 
-            LocalCollection.Instance.PageChanged += Event_PageChanged;
-
             deleteAction = new MenuItem
             {
                 Text = ((Span)App.Current.Resources["label_delete"]).Text,
@@ -89,6 +87,19 @@ namespace Lingvo.MobileApp.Templates
                                 }
 
             };
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.PageChanged += Event_PageChanged;
+
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.PageChanged -= Event_PageChanged;
         }
 
         private async void DeleteStudentAction_Clicked(object sender, EventArgs e)

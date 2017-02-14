@@ -9,12 +9,14 @@ namespace Lingvo.MobileApp.Pages
 {
     public partial class LocalCollectionPage : ContentPage
     {
+        private ListView listView;
+
         public LocalCollectionPage()
         {
             Title = ((Span)App.Current.Resources["page_title_localCollection"]).Text;
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_book.png");
 
-            ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
+            listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = LocalCollection.Instance.Workbooks,
                 ItemTemplate = new DataTemplate(typeof(LingvoWorkbookViewCell)),
@@ -45,8 +47,6 @@ namespace Lingvo.MobileApp.Pages
                 listView.IsVisible = newSource.Length > 0;
             }));
 
-            LocalCollection.Instance.WorkbookChanged += (w) => listView.RefreshCommand.Execute(null);
-
             Content = new StackLayout
             {
                 Children = {
@@ -54,6 +54,23 @@ namespace Lingvo.MobileApp.Pages
                 errorLabel
                 }
             };
+        }
+
+        private void OnWorkbookChanged(Workbook workbook)
+        {
+            listView.RefreshCommand.Execute(null);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.WorkbookChanged += OnWorkbookChanged;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.WorkbookChanged -= OnWorkbookChanged;
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
