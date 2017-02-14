@@ -42,3 +42,4 @@ CREATE TRIGGER updateTotalPages
 AFTER INSERT ON Pages
 FOR EACH ROW
 UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
+
