@@ -3,9 +3,9 @@ DELETE FROM Workbooks;
 DELETE FROM Recordings;
 DELETE FROM Editors;
 
-INSERT INTO Workbooks(id, title, subtitle, totalPages, isPublished) VALUES
-(1, 'Deutschkurs für Asylbewerber', 'Thannhauser Modell', 2, 1),
-(2, 'Willkommen! Die deutsche Sprache - erste Schritte', 'Flüchtlingshilfe München e.V.', 2, 1);
+INSERT INTO Workbooks(id, title, subtitle, isPublished) VALUES
+(1, 'Deutschkurs für Asylbewerber', 'Thannhauser Modell', 1),
+(2, 'Willkommen! Die deutsche Sprache - erste Schritte', 'Flüchtlingshilfe München e.V.', 1);
 
 INSERT INTO Recordings (id, duration, localPath) VALUES
 (1, 127000, 'audios/diktat_seite_01.mp3'),
