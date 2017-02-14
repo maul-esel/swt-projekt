@@ -176,8 +176,7 @@ namespace Lingvo.MobileApp.Droid.Sound
                 player?.Reset();
                 var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 player?.SetDataSource(fileDesriptor.FileDescriptor);
-                //var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
-                //player?.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
+
                 player?.Prepare();
             }
         }
@@ -189,16 +188,8 @@ namespace Lingvo.MobileApp.Droid.Sound
             audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
             audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
 
-           // if (recording.LocalPath.Length > 0)
-            //{
 			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
-            //}
-            //else
-            //{
-            //   var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
-            //    mediaPlayer.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
-            //}
 
             mediaPlayer.SetAudioStreamType(audioManager.WiredHeadsetOn ? Stream.Music : Stream.VoiceCall);
             mediaPlayer.SetVolume(1.0f, 1.0f);

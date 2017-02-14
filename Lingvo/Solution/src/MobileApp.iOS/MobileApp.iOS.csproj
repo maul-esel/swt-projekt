@@ -127,6 +127,7 @@
     <Compile Include="Sound\Player.cs" />
     <Compile Include="Renderers\RoundImageButtonRenderer.cs" />
     <Compile Include="Sound\Recorder.cs" />
+    <Compile Include="Services\NetworkService.cs" />
 
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +267,7 @@
 		
     <Folder Include="Content\" />
 
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />

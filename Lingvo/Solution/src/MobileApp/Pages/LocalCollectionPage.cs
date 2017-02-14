@@ -65,6 +65,7 @@ namespace Lingvo.MobileApp.Pages
         {
             base.OnAppearing();
             LocalCollection.Instance.WorkbookChanged += OnWorkbookChanged;
+            listView.RefreshCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
