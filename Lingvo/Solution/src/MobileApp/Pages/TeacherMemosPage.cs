@@ -51,10 +51,10 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
             {
-                List<TeacherMemo> newSource = new List<TeacherMemo>(LocalCollection.Instance.TeacherMemos);
+                TeacherMemo[] newSource = LocalCollection.Instance.TeacherMemos.ToArray();
                 listView.ItemsSource = newSource;
-                errorLabel.IsVisible = newSource.Count == 0;
-                listView.IsVisible = newSource.Count > 0;
+                errorLabel.IsVisible = newSource.Length == 0;
+                listView.IsVisible = newSource.Length > 0;
             }));
 
             LocalCollection.Instance.TeacherMemoChanged += (t) => listView.RefreshCommand.Execute(null);
