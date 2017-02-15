@@ -6,10 +6,16 @@
   var recorder;
   var current_recording;
   var recording = 0;
+
   var isSubmit = false;
   var isCancel = false;
 
   function toggleRecording(toggle) {
+      if (recorder == null && toggle.checked) {
+          toggle.checked = false
+          $("#no-microphone-access").modal();
+          return;
+      }
       if (toggle.checked) {
           startRecording()
       } else {
