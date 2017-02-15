@@ -170,13 +170,7 @@ namespace Lingvo.Backend
 
 			if (w != null)
 			{
-				var pages = w.Pages.ToList();
-
-				foreach (var p in pages)
-				{
-					Delete((Page) p);
-				}
-
+				// pages are deleted cascadingly
 				Workbooks.Remove(w); 
 				SaveChanges();
 			}
