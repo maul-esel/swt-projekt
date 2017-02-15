@@ -35,5 +35,9 @@
 	<string>Die App benötigt Zugriff auf dein Mikrofon, damit du deine Aussprache verbessern kannst.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIStatusBarHidden</key>
+	<true/>
 </dict>
 </plist>
