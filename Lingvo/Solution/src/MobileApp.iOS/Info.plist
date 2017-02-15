@@ -37,5 +37,7 @@
 	<string>1.0</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIStatusBarHidden</key>
+	<true/>
 </dict>
 </plist>

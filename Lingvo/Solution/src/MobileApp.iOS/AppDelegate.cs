@@ -25,6 +25,7 @@ namespace Lingvo.MobileApp.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
             UIApplication.SharedApplication.IdleTimerDisabled = true;
+			UIApplication.SharedApplication.SetStatusBarHidden(false, UIStatusBarAnimation.None);
 
             global::Xamarin.Forms.Forms.Init ();
 
@@ -39,8 +40,10 @@ namespace Lingvo.MobileApp.iOS
 				Font = UIFont.FromName("Georgia-Bold", 20)
 			});
 			UINavigationBar.Appearance.BarStyle = UIBarStyle.Black;
+		
 
 			LoadApplication (new MobileApp.App ());
+
 
 
 
