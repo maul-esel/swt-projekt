@@ -41,32 +41,7 @@ namespace Lingvo.MobileApp.iOS
 			});
 			UINavigationBar.Appearance.BarStyle = UIBarStyle.Black;
 		
-
 			LoadApplication (new MobileApp.App ());
-
-
-
-
-
-			/*
-			UINavigationBar.appearance().barStyle = .black
-        
-        UINavigationBar.appearance().barTintColor = .appGreen
-        UINavigationBar.appearance().titleTextAttributes = [
-            NSForegroundColorAttributeName: UIColor.white,
-            NSFontAttributeName: UIFont(name: "Georgia-Bold", size: 20)!
-        ]
-        UINavigationBar.appearance().tintColor = .white
-        
-        
-        UIBarButtonItem.appearance().setTitleTextAttributes([
-            NSForegroundColorAttributeName: UIColor.white,
-            NSFontAttributeName: UIFont(name: "OpenSans-Semibold", size: 18)!
-            
-        ], for: .normal)
-
-			*/
-
 			return base.FinishedLaunching (app, options);
 		}
 	}
