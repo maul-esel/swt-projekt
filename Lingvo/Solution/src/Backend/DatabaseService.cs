@@ -2,7 +2,7 @@
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Threading.Tasks;
 
 namespace Lingvo.Backend
 {
@@ -175,5 +175,10 @@ namespace Lingvo.Backend
 				SaveChanges();
 			}
 		}
-    }
+
+		public Task<Page> FindPageByNumberAsync(int workbookId, int pageNumber)
+		{
+			return Pages.FirstOrDefaultAsync(p => p.workbookId == workbookId && p.Number == pageNumber);
+		}
+}
 }

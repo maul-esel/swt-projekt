@@ -77,12 +77,12 @@
     }
 
 
-   function sendBlobToServer(event) {
+   function sendBlobToServer(button, event) {
       $("#submit-modal").modal()
       event.preventDefault()
        
         var form = $("#pageForm")[0];
-        var action = form.getAttribute("action")
+        var action = button.getAttribute("formaction") || form.getAttribute("action")
 
         var formData = new FormData(form);
 
