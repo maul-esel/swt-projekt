@@ -247,3 +247,45 @@
         display: inline-block !important;
         border:1px solid #000000;
     }
+
+
+    #record-btn {
+        width: 185px;
+        text-align: left;
+    }
+    .toggle-button-toggle {
+        display: none;
+    }
+    .toggle-button-toggle:checked + .toggle-action-button .toggle-button-state1 {
+        display: none;
+    }
+    .toggle-button-toggle:not(:checked) + .toggle-action-button .toggle-button-state2 {
+        display: none;
+    }
+    .toggle-button-state1, .toggle-button-state2 {
+        line-height: 25px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+.record-btn-circle, .record-btn-box {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    margin-right: 5px;
+    border: solid #d83629 2px;
+    border-radius: 50%;
+}
+.record-btn-circle {
+    background-color: #d83629;
+}
+.record-btn-box {
+    text-align: center;
+}
+.record-btn-box:after {
+    display: inline-block;
+    background-color: #d83629;
+    width: 15px;
+    height: 15px;
+    content: "";
+}

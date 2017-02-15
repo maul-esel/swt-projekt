@@ -78,11 +78,19 @@
                         <h3>Audiospur jetzt direkt aufnehmen</h3>
                         <div class="panel row">
                             <div class="panel-content">
-                                <button type="button" onclick="startRecording(this); return false;">Start</button>
-                                <button type="button" onclick="stopRecording(this); return false;">Stop</button>
+                                <input type="checkbox" class="toggle-button-toggle" id="record-btn-toggle" onchange="toggleRecording(this)" checked="false"/>
+                                <label class="toggle-action-button btn btn-default" id="record-btn" for="record-btn-toggle">
+                                    <span class="toggle-button-state1 record-btn-record">
+                                        <span class="record-btn-circle"></span>
+                                        Aufnahme starten
+                                    </span>
+                                    <span class="toggle-button-state2">
+                                        <span class="record-btn-box"></span>
+                                        Aufnahme beenden
+                                    </span>
+                                </label>
                             
-                                <label id="minutes">00</label>:<label id="seconds">00</label>
-                            
+                                <label id="minutes">00</label>:<label id="seconds">00</label>                            
                                 <canvas class="label" id="meter" width="100" height="20" style="margin-top: 10px " ></canvas>
                             </div>        
                         </div>
@@ -157,6 +165,30 @@
                 <div class="modal-body">
                     <p>Ihre Aufnahme wird in das MP3-Format konvertiert. Bitte gedulden Sie sich einen Moment.</p>
                     <div class="loader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dialog displaying that microphone access needs to be granted-->
+    <div class="modal fade" id="no-microphone-access" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-error">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
+                    <h4 class="modal-title">Warnung</h4>
+                </div>
+                <div class="modal-body text-justify" style="font-size:85%">
+                    <p>
+                        Das Redaktionssystem kann nicht auf Ihr Mikrofon zugreifen.
+                    </p>
+                    <hr />
+                    <p>
+                        Um Aufnahmen direkt im Redaktionssystem aufnehmen zu können, müssen Sie den Zugriff auf ihr Mikrofon
+                        erlauben. Laden Sie diese Seite erneut, und bestätigen Sie bitte den Zugriff auf Ihr Mikrofon.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Schließen</a>
                 </div>
             </div>
         </div>

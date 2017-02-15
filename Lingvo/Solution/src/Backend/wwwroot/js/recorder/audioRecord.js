@@ -164,7 +164,7 @@ var mediaStreamSource = null;
 
 		  }, function(e) {
 
-			  console.log("An error occurred"); //Null if something goes wrong
+			  $("#no-microphone-access").modal();
 			  callback(null);
 
 		  });
