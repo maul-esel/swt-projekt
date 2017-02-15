@@ -78,11 +78,19 @@
                         <h3>Audiospur jetzt direkt aufnehmen</h3>
                         <div class="panel row">
                             <div class="panel-content">
-                                <button type="button" onclick="startRecording(this); return false;">Start</button>
-                                <button type="button" onclick="stopRecording(this); return false;">Stop</button>
+                                <input type="checkbox" class="toggle-button-toggle" id="record-btn-toggle" onchange="toggleRecording(this)" checked="false"/>
+                                <label class="toggle-action-button btn btn-default" id="record-btn" for="record-btn-toggle">
+                                    <span class="toggle-button-state1 record-btn-record">
+                                        <span class="record-btn-circle"></span>
+                                        Aufnahme starten
+                                    </span>
+                                    <span class="toggle-button-state2">
+                                        <span class="record-btn-box"></span>
+                                        Aufnahme beenden
+                                    </span>
+                                </label>
                             
-                                <label id="minutes">00</label>:<label id="seconds">00</label>
-                            
+                                <label id="minutes">00</label>:<label id="seconds">00</label>                            
                                 <canvas class="label" id="meter" width="100" height="20" style="margin-top: 10px " ></canvas>
                             </div>        
                         </div>
