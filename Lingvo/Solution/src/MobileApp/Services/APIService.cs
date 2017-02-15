@@ -26,7 +26,7 @@ namespace Lingvo.MobileApp
                         // Android Simulator forwards development localhost to IP 10.0.2.2
                         private const string URL = "http://10.0.2.2:5000/api/app/";
 #elif __IOS__
-        private const string URL = "http://localhost:5000/api/app/";
+        private const string URL = "https://lingvo.azurewebsites.net/api/app/";
 #endif
 #else
         private const string URL = "https://lingvo.azurewebsites.net/api/app/";

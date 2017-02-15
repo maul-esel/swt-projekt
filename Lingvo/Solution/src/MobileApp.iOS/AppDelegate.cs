@@ -27,20 +27,42 @@ namespace Lingvo.MobileApp.iOS
             UIApplication.SharedApplication.IdleTimerDisabled = true;
 
             global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new MobileApp.App ());
 
-			////write a samle file to the documents dir
-			//var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			//var filePath = Path.Combine(documentsDirPath, "page1.mp3");
-			var bundleFileUrl = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/page1.mp3");
 			ObjCRuntime.Class.ThrowOnInitFailure = false;
 
-			var bundleFileBytes = File.ReadAllBytes(bundleFileUrl);
+			//configure app colors
+			UINavigationBar.Appearance.BarTintColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
+			UINavigationBar.Appearance.TintColor = UIColor.White;
+			UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes
+			{
+				TextColor = UIColor.White,
+				Font = UIFont.FromName("Georgia-Bold", 20)
+			});
+			UINavigationBar.Appearance.BarStyle = UIBarStyle.Black;
+
+			LoadApplication (new MobileApp.App ());
 
 
-			////Now write to the documents directory
-			//File.WriteAllBytes(filePath, bundleFileBytes);
-			//Console.WriteLine("filePath = " + filePath);
+
+
+			/*
+			UINavigationBar.appearance().barStyle = .black
+        
+        UINavigationBar.appearance().barTintColor = .appGreen
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont(name: "Georgia-Bold", size: 20)!
+        ]
+        UINavigationBar.appearance().tintColor = .white
+        
+        
+        UIBarButtonItem.appearance().setTitleTextAttributes([
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont(name: "OpenSans-Semibold", size: 18)!
+            
+        ], for: .normal)
+
+			*/
 
 			return base.FinishedLaunching (app, options);
 		}
