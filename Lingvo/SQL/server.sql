@@ -37,9 +37,25 @@ CREATE TABLE IF NOT EXISTS Editors (
   passwordHash TEXT NOT NULL
 );
 
-DROP TRIGGER IF EXISTS updateTotalPages;
-CREATE TRIGGER updateTotalPages
+DROP TRIGGER IF EXISTS increaseTotalPages;
+CREATE TRIGGER increaseTotalPages
 AFTER INSERT ON Pages
 FOR EACH ROW
 UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
 
+DROP TRIGGER IF EXISTS decreaseTotalPages;
+CREATE TRIGGER decreaseTotalPages
+AFTER DELETE ON Pages
+FOR EACH ROW
+UPDATE Workbooks SET totalPages = totalPages - 1 WHERE id = OLD.workbookID;
+
+DROP TRIGGER IF EXISTS updateTotalPages;
+delimiter $
+CREATE TRIGGER updateTotalPages
+AFTER UPDATE ON Pages
+FOR EACH ROW
+IF OLD.workbookID != NEW.workbookID THEN
+  UPDATE Workbooks SET totalPages = totalPages - 1 WHERE id = OLD.workbookID;
+  UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
+END IF;$
+delimiter ;
