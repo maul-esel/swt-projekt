@@ -191,7 +191,7 @@ namespace Lingvo.Backend
 			if (w != null)
 			{
 				// pages must be deleted explicitly in order to also delete recordings and their files
-				foreach (var page in w.Pages)
+				foreach (var page in w.Pages.ToList())
 					Delete((Page)page);
 
 				Workbooks.Remove(w); 
