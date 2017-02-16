@@ -82,7 +82,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public Recording Stop()
 		{
 			recorder.Pause();
-			int recordingDuration = (int) recorder.currentTime;
+			int recordingDuration = (int) (recorder.currentTime * 1000);
 			recorder.Stop();
 
 			recorder = null;
