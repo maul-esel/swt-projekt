@@ -37,7 +37,7 @@ namespace Lingvo.Backend.Controllers
 			var page = db.Find<Page>(id);
 			var workbookID = page.workbookId;
 			db.Delete(page);
-			return RedirectToAction(nameof(Workbook), new { id = workbookID });
+			return Redirect("/workbooks/" + workbookID);
 		}
 
 		[HttpPost]
@@ -57,7 +57,7 @@ namespace Lingvo.Backend.Controllers
 			page.Number = model.PageNumber;
 			db.Save(page);
 
-			return RedirectToAction(nameof(Workbook), new { id = model.WorkbookID });
+			return Redirect("/workbooks/" + model.WorkbookID);
 		}
 
 		[HttpPost]
@@ -71,7 +71,7 @@ namespace Lingvo.Backend.Controllers
 				workbookId = model.WorkbookID,
 				teacherTrackId = recording.Id
 			});
-			return RedirectToAction(nameof(Workbook), new { id = model.WorkbookID });
+			return Redirect("/workbooks/" + model.WorkbookID);
 		}
 
 		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, PageModel model)
@@ -104,5 +104,13 @@ namespace Lingvo.Backend.Controllers
 			return recording;
 		}
 	
+		[Route("workbooks/{workbookId}/pages/add")]
+		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
+		{
+			ViewData["Title"] = "Neue Seite erstellen";
+
+			var workbook = db.Find<Workbook>(workbookId);
+			return View(new PageModel() { Workbook = workbook });
+		}
 	}
 }

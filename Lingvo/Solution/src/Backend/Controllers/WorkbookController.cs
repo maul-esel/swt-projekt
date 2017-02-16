@@ -56,15 +56,6 @@ namespace Lingvo.Backend.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		[Route("workbooks/{workbookId}/pages/add")]
-		public IActionResult AddPage([FromServices] DatabaseService db, int workbookId)
-		{
-			ViewData["Title"] = "Neue Seite erstellen";
-
-			var workbook = db.Find<Workbook>(workbookId);
-			return View(new PageModel() { Workbook = workbook });
-		}
-
 		[Route("workbooks/{id}")]
 		public IActionResult Workbook([FromServices] DatabaseService db, int id)
 		{
