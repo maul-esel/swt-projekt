@@ -16,6 +16,9 @@ namespace Lingvo.MobileApp.Templates
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
+        private static readonly FileImageSource cancelImage = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
+        private static readonly FileImageSource downloadImage = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
+
         private LingvoRoundImageButton downloadButton;
         private CancellationTokenSource cancellationToken;
 
@@ -23,7 +26,6 @@ namespace Lingvo.MobileApp.Templates
         {
             downloadButton = new LingvoRoundImageButton()
             {
-                Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = DownloadButtonSize,
                 MinimumWidthRequest = DownloadButtonSize,
@@ -37,7 +39,7 @@ namespace Lingvo.MobileApp.Templates
             ((Grid)View).Children.Add(downloadButton, 1, 0);
         }
 
-        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        protected override void Event_PageChanged(IPage p)
         {
             Workbook workbook = (Workbook)BindingContext;
             if (p.workbookId.Equals(workbook.Id))
@@ -55,10 +57,22 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ProgressHolder.Instance.SetWorkbookProgressListener((Workbook)BindingContext, OnProgressUpdate);
+        }
+
+        protected override void OnDisappearing()
+        {
+            ProgressHolder.Instance.UnsetWorkbookProgressListener((Workbook)BindingContext);
+            base.OnDisappearing();
+        }
+
         private async void DownloadWorkbook()
         {
 
-            if (cancellationToken == null)
+            if (!ProgressHolder.Instance.HasWorkbookProgress(((Workbook)BindingContext).Id))
             {
                 if (!await AlertHelper.DisplayWarningIfNotWifiConnected())
                 {
@@ -72,11 +86,11 @@ namespace Lingvo.MobileApp.Templates
                 }));
                 downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
 
-                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, new Progress<double>(OnProgressUpdate), cancellationToken.Token);
+                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, cancellationToken.Token);
             }
             else
             {
-                cancellationToken.Cancel();
+                cancellationToken?.Cancel();
                 OnBindingContextChanged();
             }
             cancellationToken = null;
@@ -99,8 +113,9 @@ namespace Lingvo.MobileApp.Templates
             int progress = Math.Min(100, 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages);
             string color = progress == 100 ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+            
             ProgressView.MaxProgress = 100;
-            ProgressView.Progress = progress;
+
             ProgressView.InnerProgressEnabled = false;
             ProgressView.TextSize = 20;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
@@ -117,7 +132,23 @@ namespace Lingvo.MobileApp.Templates
                 Console.WriteLine("Context Actions null");
             }
 
-            downloadButton.IsEnabled = progress < 100;
+            if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id))
+            {
+                progress = (int)ProgressHolder.Instance.GetWorkbookProgress(workbook.Id).CurrentProgress;
+            }
+
+            if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) && cancellationToken != null)
+            {
+                downloadButton.Image = cancelImage;
+            }
+            else
+            {
+                downloadButton.Image = downloadImage;
+            }
+
+            ProgressView.Progress = progress;
+
+            downloadButton.IsEnabled = progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || cancellationToken != null);
         }
     }
 }

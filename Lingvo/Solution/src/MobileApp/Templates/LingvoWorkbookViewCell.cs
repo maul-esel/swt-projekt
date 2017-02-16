@@ -27,7 +27,7 @@ namespace Lingvo.MobileApp.Templates
             {
                 FontAttributes = FontAttributes.Bold,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                LineBreakMode = LineBreakMode.WordWrap
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             titleLabel.SetBinding(Label.TextProperty, "Title");
@@ -35,7 +35,8 @@ namespace Lingvo.MobileApp.Templates
             subtitleLabel = new Label()
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                IsVisible = false
+                IsVisible = false,
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             subtitleLabel.SetBinding(Label.TextProperty, "Subtitle");
@@ -68,7 +69,7 @@ namespace Lingvo.MobileApp.Templates
             var stackLayout = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-                HeightRequest = Device.OnPlatform(iOS: 70, Android: 72, WinPhone: 260),
+                HeightRequest = Device.OnPlatform(iOS: 70, Android: 80, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -123,7 +124,7 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
-        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        protected virtual void Event_PageChanged(IPage p)
         {
             Workbook workbook = (Workbook)BindingContext;
             if (p.workbookId.Equals(workbook.Id))
@@ -153,9 +154,10 @@ namespace Lingvo.MobileApp.Templates
 
             int completed = 0;
             workbook.Pages.ForEach((p) => { if (p.StudentTrack != null) completed++; });
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
             ProgressView.MaxProgress = workbook.Pages.Count;
             ProgressView.Progress = completed;
+
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
             ProgressView.InnerProgressEnabled = false;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
 

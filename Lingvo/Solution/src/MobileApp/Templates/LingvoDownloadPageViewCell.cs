@@ -16,6 +16,9 @@ namespace Lingvo.MobileApp.Templates
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
 
+        private static readonly FileImageSource cancelImage = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
+        private static readonly FileImageSource downloadImage = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
+
         private LingvoRoundImageButton downloadButton;
         private CancellationTokenSource cancellationToken;
 
@@ -23,7 +26,6 @@ namespace Lingvo.MobileApp.Templates
         {
             downloadButton = new LingvoRoundImageButton()
             {
-                Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"),
                 HorizontalOptions = LayoutOptions.End,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = DownloadButtonSize,
@@ -53,7 +55,7 @@ namespace Lingvo.MobileApp.Templates
                 }));
                 downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
 
-                await ((PageProxy)BindingContext).Resolve(new Progress<double>(OnProgressUpdate), cancellationToken.Token);
+                await ((PageProxy)BindingContext).Resolve(cancellationToken.Token);
             }
             else
             {
@@ -63,9 +65,24 @@ namespace Lingvo.MobileApp.Templates
             Device.BeginInvokeOnMainThread(() => downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"));
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ProgressHolder.Instance.SetPageProgressListener((IPage)BindingContext, OnProgressUpdate);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ProgressHolder.Instance.UnsetPageProgressListener((IPage)BindingContext);
+        }
+
         private void OnProgressUpdate(double progress)
         {
-            Device.BeginInvokeOnMainThread(() => ProgressView.Progress = (int)progress);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ProgressView.Progress = (int)progress;
+            });
         }
 
         protected override void OnBindingContextChanged()
@@ -78,10 +95,10 @@ namespace Lingvo.MobileApp.Templates
             bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
 
             string color = downloaded ? "secondaryColor" : "primaryColor";
-            ProgressView.InnerProgressEnabled = false;
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+
+            ProgressView.InnerProgressEnabled = false;
             ProgressView.MaxProgress = 100;
-            ProgressView.Progress = downloaded ? 100 : 0;
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
             try
@@ -96,10 +113,26 @@ namespace Lingvo.MobileApp.Templates
                 Console.WriteLine("Context Actions null");
             }
 
-            downloadButton.IsEnabled = !downloaded;
+            int progress = 0;
+            if (ProgressHolder.Instance.HasPageProgress(page.Id))
+            {
+                progress = (int)ProgressHolder.Instance.GetPageProgress(page.Id).CurrentProgress;
+            }
+
+            if (ProgressHolder.Instance.HasPageProgress(page.Id) && cancellationToken != null)
+            {
+                downloadButton.Image = cancelImage;
+            }
+            else
+            {
+                downloadButton.Image = downloadImage;
+            }
+
+            ProgressView.Progress = downloaded ? 100 : progress;
+            downloadButton.IsEnabled = !downloaded && (!ProgressHolder.Instance.HasPageProgress(page.Id) || cancellationToken != null);
         }
 
-        protected override void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        protected override void Event_PageChanged(IPage p)
         {
             IPage page = (IPage)BindingContext;
             if (p.Id.Equals(page.Id))

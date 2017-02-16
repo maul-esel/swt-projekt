@@ -79,7 +79,7 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
-        private void OnPageChanged(Lingvo.Common.Entities.Page p)
+        private void OnPageChanged(IPage p)
         {
             if (workbook.Id.Equals(p.workbookId))
             {

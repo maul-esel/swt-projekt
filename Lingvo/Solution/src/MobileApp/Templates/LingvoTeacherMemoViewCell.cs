@@ -26,7 +26,8 @@ namespace Lingvo.MobileApp.Templates
                 FontAttributes = FontAttributes.Bold,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             ProgressView = new LingvoAudioProgressView()
@@ -72,7 +73,7 @@ namespace Lingvo.MobileApp.Templates
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-                HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 240),
+                HeightRequest = Device.OnPlatform(iOS: 60, Android: 80, WinPhone: 240),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {

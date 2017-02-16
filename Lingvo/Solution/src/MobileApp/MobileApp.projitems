@@ -39,8 +39,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TeacherMemo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\StudentAudioController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\APIService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\DownloadRequestState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\PageDownloadState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\INetworkService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ProgressHolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Progress\PageProgress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Progress\WorkbookProgress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoDownloadPageViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoTeacherMemoViewCell.cs" />

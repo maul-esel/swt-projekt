@@ -45,7 +45,7 @@ namespace Lingvo.MobileApp.Pages
             }
             else if (workbook != null)
             {
-                return ((Span)App.Current.Resources["text_seite"]).Text + " " + ((IPage)Exercisable).Number + " / " + workbook.TotalPages;
+                return ((Span)App.Current.Resources["text_seite"]).Text + " " + ((IPage)Exercisable).Number;
             }
             return null;
         }
@@ -350,7 +350,7 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
-        private void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        private void Event_PageChanged(IPage p)
         {
             if (exercisable is IPage && p.Id.Equals(exercisable.Id))
             {

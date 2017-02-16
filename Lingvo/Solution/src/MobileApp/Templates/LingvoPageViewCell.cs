@@ -25,7 +25,8 @@ namespace Lingvo.MobileApp.Templates
             Label titleLabel = new Label()
             {
                 FontAttributes = FontAttributes.Bold,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             string seite = ((Span)App.Current.Resources["text_seite"]).Text;
@@ -34,7 +35,8 @@ namespace Lingvo.MobileApp.Templates
             subtitleLabel = new Label()
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                IsVisible = false
+                IsVisible = false,
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             subtitleLabel.SetBinding(Label.TextProperty, "Description");
@@ -68,7 +70,7 @@ namespace Lingvo.MobileApp.Templates
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-                HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 260),
+                HeightRequest = Device.OnPlatform(iOS: 60, Android: 80, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -137,12 +139,13 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
-        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        protected virtual void Event_PageChanged(IPage p)
         {
             IPage page = (IPage)BindingContext;
             if (p.Id.Equals(page.Id))
             {
-                IPage local = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(page.Id));
+                Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId));
+                IPage local = localWorkbook?.Pages.Find(lp => lp.Id.Equals(page.Id));
 
                 BindingContext = local != null ? local : p;
             }
@@ -156,6 +159,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
             ProgressView.InnerProgressEnabled = page.StudentTrack != null;
+
             ProgressView.InnerProgressColor = Color.Red;
             ProgressView.Progress = 1;
             ProgressView.MaxProgress = 1;
