@@ -50,12 +50,14 @@ FOR EACH ROW
 UPDATE Workbooks SET totalPages = totalPages - 1 WHERE id = OLD.workbookID;
 
 DROP TRIGGER IF EXISTS updateTotalPages;
-delimiter $
 CREATE TRIGGER updateTotalPages
 AFTER UPDATE ON Pages
 FOR EACH ROW
-IF OLD.workbookID != NEW.workbookID THEN
-  UPDATE Workbooks SET totalPages = totalPages - 1 WHERE id = OLD.workbookID;
-  UPDATE Workbooks SET totalPages = totalPages + 1 WHERE id = NEW.workbookID;
-END IF;$
-delimiter ;
+UPDATE Workbooks SET totalPages = totalPages + (
+	CASE id
+	WHEN OLD.workbookID THEN -1
+	WHEN NEW.workbookID THEN +1
+	ELSE 0
+	END
+)
+WHERE OLD.workbookID != NEW.workbookID AND (id = OLD.workbookID OR id = NEW.workbookID);
