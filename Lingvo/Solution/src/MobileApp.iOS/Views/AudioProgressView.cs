@@ -39,7 +39,7 @@ namespace Lingvo.MobileApp.iOS
 		UILabel timeLabel = new UILabel()
 		{
 			Text = "00:00",
-			TextColor = teacherColor,
+			TextColor = UIColor.DarkGray,
 			Font = UIFont.SystemFontOfSize(28, UIFontWeight.Thin)
 		};
 		UIStackView stackView = new UIStackView()

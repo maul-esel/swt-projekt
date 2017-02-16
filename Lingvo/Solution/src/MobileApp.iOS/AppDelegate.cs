@@ -37,7 +37,7 @@ namespace Lingvo.MobileApp.iOS
 			UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes
 			{
 				TextColor = UIColor.White,
-				Font = UIFont.FromName("Georgia-Bold", 20)
+				Font = UIFont.SystemFontOfSize(20, UIFontWeight.Bold)
 			});
 			UINavigationBar.Appearance.BarStyle = UIBarStyle.Black;
 		
