@@ -26,6 +26,8 @@
                         </a>
                     </td>
                     <td>
+                        @if (workbook.TotalPages > 0)
+                        {
                         <a class="glyphicon-button" title="Arbeitsheft veröffentlichen" data-toggle="modal" href="#publish-warning-@workbook.Id">
                         @if (workbook.IsPublished)
 						{
@@ -74,6 +76,7 @@
 						      
 						    </div>
 						</div>
+                        }
                     </td>
                     <td>
                         <a class="glyphicon-button" title="Arbeitsheft löschen" data-toggle="modal" href="#delete-warning-@workbook.Id">

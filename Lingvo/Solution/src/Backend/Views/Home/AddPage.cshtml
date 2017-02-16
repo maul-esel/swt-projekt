@@ -20,7 +20,7 @@
             <div class="panel-body">
                 <div class="form-group col-md-3" style=" padding-left:0px;">
                     <label for="page-number">Seitenzahl</label>
-                    <input name="pageNumber" type="number" min="1" class="form-control input-lg" id="page-number" placeholder="1" value="@Model.Page?.Number" />
+                    <input name="pageNumber" type="number" min="1" class="form-control input-lg" id="page-number" placeholder="1" value="@(Model.Page?.Number ?? ViewData["pageNumber"])" />
                 </div>
                 <div class="form-group col-md-9" style="padding-right:0">
                     <label for="page-name">Thema der Lektion</label>
@@ -112,7 +112,12 @@
         </div>
         <div class="form-group" style="text-align: center">
             <a class="btn btn-lg btn-danger" style="border:none" onclick="leavePage(event);" asp-controller="Home" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">Abbrechen</a>
-            <input type="submit" class="btn-lg btn-success" style="border:none" value="Speichern" onclick="sendBlobToServer(event);"/>
+            <input type="submit" class="btn-lg btn-success" style="border:none" value="Speichern" onclick="sendBlobToServer(this, event);"/>
+
+            <button class="btn-lg btn-warning" style="border:none" onclick="sendBlobToServer(this, event)"
+                     asp-controller="Home" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-nextPage="true" asp-route-id="@Model.Page?.Id">
+                Speichern &amp; Nächste Seite
+            </button>
         </div>
     </form>
     <div class="modal fade" id="submit-modal" role="dialog" data-backdrop="static" data-keyboard="false">
