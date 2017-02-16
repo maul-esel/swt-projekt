@@ -3,7 +3,7 @@
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>Arbeitshefte</h3>
-        <a class="create-button btn btn-success btn-md" asp-controller="Home" asp-action="AddWorkbook">Neues Arbeitsheft</a>
+        <a class="create-button btn btn-success btn-md" asp-controller="Workbook" asp-action="AddWorkbook">Neues Arbeitsheft</a>
     </div>
     <table id="workbooks" class="table">
         <tbody>
@@ -13,7 +13,7 @@
                     <td>
                         <div>
                             <h3 class="workbook-title">
-                                <a asp-area="" asp-controller="Home" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a>
+                                <a asp-area="" asp-controller="Workbook" asp-action="Workbook" asp-route-id="@workbook.Id">@workbook.Title</a>
                             </h3>
                             <span class="workbook-subtitle">@workbook.Subtitle</span>
                         </div>
@@ -21,7 +21,7 @@
                     <td>@workbook.TotalPages Seiten</td>
                     <td>Ge&auml;ndert: @workbook.LastModified.ToString("dd. MM. yyyy")</td>
                     <td>
-                        <a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Home" asp-action="EditWorkbook" asp-route-id="@workbook.Id">
+                        <a class="glyphicon-button" title="Arbeitsheft bearbeiten" asp-controller="Workbook" asp-action="EditWorkbook" asp-route-id="@workbook.Id">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     </td>
@@ -53,7 +53,7 @@
 								        </div>
 								        <div class="modal-footer">
 											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-								          	<a type="button" class="btn btn-warn" asp-controller="Home" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> Veröffentlichen</a>
+								          	<a type="button" class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> Veröffentlichen</a>
 								        </div>
 									</div>
 	  							}
@@ -69,7 +69,7 @@
 								        </div>
 								        <div class="modal-footer">
 											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-								          	<a type="button" class="btn btn-warn" asp-controller="Home" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-close" style="color:white"></span> Zurücknehmen</a>
+								          	<a type="button" class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-close" style="color:white"></span> Zurücknehmen</a>
 								        </div>
 									</div>
 								}
@@ -95,7 +95,7 @@
 						        </div>
 						        <div class="modal-footer">
 									<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-						          	<a type="button" class="btn btn-danger" asp-controller="Home" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+						          	<a type="button" class="btn btn-danger" asp-controller="Workbook" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
 						        </div>
 						      </div>
 						      

@@ -10,11 +10,11 @@
 <div class="container container-fluid">
     <div class="lingvo-header container-fluid">
         <h3>
-            <a asp-controller="Home" asp-action="Index">Arbeitshefte</a> &gt; <a asp-controller="Home" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">@Model.Workbook.Title</a> &gt; @ViewData["Title"]
+            <a asp-controller="Workbook" asp-action="Index">Arbeitshefte</a> &gt; <a asp-controller="Workbook" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">@Model.Workbook.Title</a> &gt; @ViewData["Title"]
         </h3>
     </div>
     <form style="padding-top:20px;" id="pageForm" enctype="multipart/form-data"
-          method="post" asp-controller="Home" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-id="@Model.Page?.Id">
+          method="post" asp-controller="Page" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-id="@Model.Page?.Id">
         <input type="hidden" name="workbookID" value="@Model.Workbook.Id"/>
         <div class="panel panel-default">
             <div class="panel-body">
@@ -111,11 +111,11 @@
                     </div>
         </div>
         <div class="form-group" style="text-align: center">
-            <a class="btn btn-lg btn-danger" style="border:none" onclick="leavePage(event);" asp-controller="Home" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">Abbrechen</a>
+            <a class="btn btn-lg btn-danger" style="border:none" onclick="leavePage(event);" asp-controller="Workbook" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">Abbrechen</a>
             <input type="submit" class="btn-lg btn-success" style="border:none" value="Speichern" onclick="sendBlobToServer(this, event);"/>
 
             <button class="btn-lg btn-warning" style="border:none" onclick="sendBlobToServer(this, event)"
-                     asp-controller="Home" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-nextPage="true" asp-route-id="@Model.Page?.Id">
+                     asp-controller="Page" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-nextPage="true" asp-route-id="@Model.Page?.Id">
                 Speichern &amp; Nächste Seite
             </button>
         </div>
