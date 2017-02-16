@@ -14,7 +14,7 @@
     </div>
     <table id="workbooks" class="table">
         <tbody>
-            @foreach (var page in Model.Pages)
+            @foreach (var page in Model.Pages.OrderBy(p => p.Number))
             {
                 var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
                 <tr>

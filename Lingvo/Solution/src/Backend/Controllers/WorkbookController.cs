@@ -81,5 +81,6 @@ namespace Lingvo.Backend.Controllers
 			db.Save(w);
 			return RedirectToAction(nameof(Index));
 		}
+
 	}
 }

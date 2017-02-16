@@ -18,6 +18,7 @@ namespace Lingvo.Backend.Controllers
 	[Authorize]
 	public class PageController : Controller
 	{
+
 		[Route("pages/edit/{id}")]
 		public async Task<IActionResult> EditPage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id)
 		{
@@ -41,7 +42,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model)
+		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model, bool nextPage = false)
 		{
 			var page = db.FindPageWithRecording(id);
 
@@ -57,11 +58,15 @@ namespace Lingvo.Backend.Controllers
 			page.Number = model.PageNumber;
 			db.Save(page);
 
-			return Redirect("/workbooks/" + model.WorkbookID);
+
+			if (nextPage)
+				return await RedirectToNextPage(db, page.workbookId, page.Number);
+			else
+				return Redirect("/workbooks/" + model.WorkbookID);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, PageModel model)
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, PageModel model, bool nextPage = false)
 		{
 			var recording = await SaveRecording(db, storage, model);
 			db.Save(new Page()
@@ -71,7 +76,19 @@ namespace Lingvo.Backend.Controllers
 				workbookId = model.WorkbookID,
 				teacherTrackId = recording.Id
 			});
-			return Redirect("/workbooks/" + model.WorkbookID);
+
+			if (nextPage)
+				return await RedirectToNextPage(db, model.WorkbookID, model.PageNumber);
+			else
+				return Redirect("/workbooks/" + model.WorkbookID);
+		}
+
+		private async Task<IActionResult> RedirectToNextPage(DatabaseService db, int workbookId, int pageNumber)
+		{
+			var page = await db.FindPageByNumberAsync(workbookId, pageNumber + 1);
+			if (page == null)
+				return RedirectToAction(nameof(AddPage), new { workbookId, pageNumber = pageNumber + 1 });
+			return RedirectToAction(nameof(EditPage), new { id = page.Id });
 		}
 
 		private async Task<Recording> SaveRecording(DatabaseService db, IStorage storage, PageModel model)

@@ -73,8 +73,13 @@ namespace Lingvo.Backend
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseCookieAuthentication(new CookieAuthenticationOptions()
+			{
+				ExpireTimeSpan = TimeSpan.FromDays(7),
+				SlidingExpiration = true
+			});
 			app.UseIdentity();
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
