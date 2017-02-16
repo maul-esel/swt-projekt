@@ -43,8 +43,11 @@ namespace Lingvo.Backend.Controllers
 		public IActionResult PublishWorkbook([FromServices] DatabaseService db, int id)
 		{
 			var workbook = db.Find<Workbook>(id);
-			workbook.IsPublished = !workbook.IsPublished;
-			db.Save(workbook);
+			if (workbook.IsPublished || workbook.TotalPages > 0) // only publish non-empty workbooks (unpublish any)
+			{
+				workbook.IsPublished = !workbook.IsPublished;
+				db.Save(workbook);
+			}
 			return RedirectToAction(nameof(Index));
 		}
 
