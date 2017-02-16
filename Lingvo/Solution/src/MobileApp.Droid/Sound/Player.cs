@@ -47,9 +47,9 @@ namespace Lingvo.MobileApp.Droid.Sound
             State = PlayerState.IDLE;
         }
 
-        private void OnProgress(double elapsedMilliseconds)
+        private void OnProgress(int elapsedMilliseconds)
         {
-			Update?.Invoke((int)elapsedMilliseconds);
+			Update?.Invoke(elapsedMilliseconds);
 
         }
 
@@ -146,6 +146,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 				OnProgress(teacherTrack.Duration);
 			};
             State = PlayerState.STOPPED;
+			OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void SeekTo(int seconds)
