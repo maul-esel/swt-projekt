@@ -66,7 +66,6 @@ namespace Lingvo.MobileApp.Pages
             });
 
             listView.RefreshCommand.Execute(null);
-			NavigationPage.SetBackButtonTitle(this, "Zurück");
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
