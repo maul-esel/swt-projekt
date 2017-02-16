@@ -61,16 +61,16 @@ namespace Lingvo.Backend.Controllers
 		/// </summary>
 		/// <returns>The teacher track.</returns>
 		[Route("pages/{pageId}")]
-		public async Task<IActionResult> GetTeacherTrack([FromServices] DatabaseService db, [FromServices] IStorage storage, int pageId)
+		public async Task<IActionResult> GetTeacherTrack([FromServices] CloudLibrary cl, int pageId)
 		{
-			var page = db.FindPageWithRecording(pageId);
+			var page = cl.FindPageWithRecording(pageId);
 			if (page == null)
 				return NotFound();
 
 			return Json(new {
 				duration = page.TeacherTrack.Duration,
 				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-				url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
+				url = await cl.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
 			});
 		}
     }

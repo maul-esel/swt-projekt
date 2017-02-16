@@ -18,9 +18,9 @@ namespace Lingvo.Backend.Controllers
 	public class WorkbookController : Controller
 	{
 
-		public IActionResult Index([FromServices] DatabaseService db)
+		public IActionResult Index([FromServices] CloudLibrary cl)
 		{
-			return View(db.Workbooks);
+			return View(cl.FindWorkbooksWithReferences());
 		}
 
 		[Route("workbooks/add")]
@@ -31,35 +31,35 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[Route("workbooks/{id}/edit")]
-		public IActionResult EditWorkbook([FromServices] DatabaseService db, int id)
+		public IActionResult EditWorkbook([FromServices] CloudLibrary cl, int id)
 		{
 			ViewData["Title"] = "Arbeitsheft bearbeiten";
 
-			var workbook = db.Find<Workbook>(id);
+			var workbook = cl.FindWorkbookWithReferences(id);
 			return View("AddWorkbook", workbook);
 		}
 
 		[Route("workbooks/{id}/publish")]
-		public IActionResult PublishWorkbook([FromServices] DatabaseService db, int id)
+		public async Task<IActionResult> PublishWorkbook([FromServices] CloudLibrary cl, int id)
 		{
-			var workbook = db.Find<Workbook>(id);
+			var workbook = cl.FindWorkbookWithReferences(id);
 			workbook.IsPublished = !workbook.IsPublished;
-			db.Save(workbook);
+			await cl.Save(workbook);
 			return RedirectToAction(nameof(Index));
 		}
 
 		[Route("workbooks/{id}/delete")]
-		public IActionResult DeleteWorkbook([FromServices] DatabaseService db, int id)
+		public async Task<IActionResult> DeleteWorkbook([FromServices] CloudLibrary cl, int id)
 		{
-			var workbook = db.Workbooks.Find(id);
-			db.Delete(workbook);
+			var workbook = cl.FindWorkbookWithReferences(id);
+			await cl.Delete(workbook);
 			return RedirectToAction(nameof(Index));
 		}
 
 		[Route("workbooks/{id}")]
-		public IActionResult Workbook([FromServices] DatabaseService db, int id)
+		public IActionResult Workbook([FromServices] CloudLibrary cl, int id)
 		{
-			var workbook = db.FindWorkbookWithReferences(id);
+			var workbook = cl.FindWorkbookWithReferences(id);
 			return View(workbook);
 		}
 
@@ -70,7 +70,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult CreateWorkbook([FromServices] DatabaseService db, string title, string subtitle)
+		public async Task<IActionResult> CreateWorkbook([FromServices] CloudLibrary cl, string title, string subtitle)
 		{
 			var w = new Workbook()
 			{
@@ -78,7 +78,7 @@ namespace Lingvo.Backend.Controllers
 				Subtitle = subtitle
 			};
 
-			db.Save(w);
+			await cl.Save(w);
 			return RedirectToAction(nameof(Index));
 		}
 

@@ -20,7 +20,7 @@ namespace Lingvo.Backend.Tests
 		public HomeControllerTests()
 		{
 			TestsFixture.Setup();
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "DummyDataForServer.sql")));
 		}
 
@@ -30,60 +30,61 @@ namespace Lingvo.Backend.Tests
 		{
 			var controller = new WorkbookController();
 
-			var result = controller.Index(DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock()));
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
+			var result = controller.Index(cl);
 
 			Assert.IsType<ViewResult>(result);
 		}
 
 		[Fact]
-		public void TestWorkbookPublishingAndUnpublishing()
+		public async Task TestWorkbookPublishingAndUnpublishing()
 		{
 			var controller = new WorkbookController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
-			controller.PublishWorkbook(db, 1);
-			Assert.Equal(db.FindWorkbookWithReferences(1).IsPublished, false);
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			controller.PublishWorkbook(db, 1);
-			Assert.Equal(db.FindWorkbookWithReferences(1).IsPublished, true);
+			await controller.PublishWorkbook(cl, 1);
+			Assert.Equal(cl.FindWorkbookWithReferences(1).IsPublished, false);
 
-			db.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "DummyDataForServer.sql")));
+			await controller.PublishWorkbook(cl, 1);
+			Assert.Equal(cl.FindWorkbookWithReferences(1).IsPublished, true);
 
-			Assert.NotNull(db.Pages.Find(1));
-			Assert.NotNull(db.Pages.Find(2));
-			Assert.NotNull(db.Pages.Find(3));
-			Assert.NotNull(db.Pages.Find(4));
+			Assert.NotNull(cl.FindPageWithRecording(1));
+			Assert.NotNull(cl.FindPageWithRecording(2));
+			Assert.NotNull(cl.FindPageWithRecording(3));
+			Assert.NotNull(cl.FindPageWithRecording(4));
 		}
 
 		[Fact]
-		public void TestWorkbookDeletion()
+		public async Task TestWorkbookDeletion()
 		{
 			var controller = new WorkbookController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			Assert.NotNull(db.FindWorkbookWithReferences(1));
-			Assert.NotNull(db.Pages.Find(1));
-			Assert.NotNull(db.Recordings.Find(1));
+			Assert.NotNull(cl.FindWorkbookWithReferences(1));
+			Assert.NotNull(cl.FindPageWithRecording(1));
+			Assert.NotNull(cl.FindRecording(1));
 
-			controller.DeleteWorkbook(db, 1);
-			Assert.Null(db.FindWorkbookWithReferences(1));
-			Assert.Null(db.Pages.Find(1));
-			Assert.Null(db.Recordings.Find(1));
+			await controller.DeleteWorkbook(cl, 1);
+			Assert.Null(cl.FindWorkbookWithReferences(1));
+			Assert.Null(cl.FindPageWithRecording(1));
+			Assert.Null(cl.FindRecording(1));
 
 		}
 
 		[Fact]
-		public void TestPageDeletion()
+		public async Task TestPageDeletion()
 		{
 			var controller = new PageController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			Assert.NotNull(db.Pages.Find(1));
-			Assert.NotNull(db.Recordings.Find(1));
+			Assert.NotNull(cl.FindPageWithRecording(1));
+			Assert.NotNull(cl.FindRecording(1));
 
-			controller.DeletePage(db, 1);
-			Assert.Null(db.Pages.Find(1));
-			Assert.Null(db.Recordings.Find(1));
+			await controller.DeletePage(cl, 1);
+
+			Assert.Null(cl.FindPageWithRecording(1));
+			Assert.Null(cl.FindRecording(1));
 
 		}
 
@@ -91,9 +92,9 @@ namespace Lingvo.Backend.Tests
 		public async Task TestEditPage()
 		{
 			var controller = new PageController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			var result = await controller.EditPage(db, new StorageMock(), 1);
+			var result = await controller.EditPage(cl, 1);
 
 			var viewResult = Assert.IsType<ViewResult>(result);
 			var model = Assert.IsType<PageModel>(viewResult.ViewData.Model);
@@ -106,23 +107,20 @@ namespace Lingvo.Backend.Tests
 		public void TestCreateWorkbook()
 		{
 			var controller = new WorkbookController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			var result = controller.CreateWorkbook(db, "NeuesWorkbook", "Nur zum Testen");
+			var result = controller.CreateWorkbook(cl, "NeuesWorkbook", "Nur zum Testen");
 
-			var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-			Assert.Equal("Index", redirectToActionResult.ActionName);
-
-			Assert.Equal(3, db.Workbooks.Count());
-			Assert.Equal("NeuesWorkbook", db.Workbooks.Last().Title);
-			Assert.Equal("Nur zum Testen", db.Workbooks.Last().Subtitle);
+			Assert.Equal(3, cl.FindWorkbooksWithReferences().Count());
+			Assert.Equal("NeuesWorkbook", cl.FindWorkbooksWithReferences().Last().Title);
+			Assert.Equal("Nur zum Testen", cl.FindWorkbooksWithReferences().Last().Subtitle);
 		}
 
 		[Fact]
 		public async Task TestUpdatePage()
 		{
 			var controller = new PageController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
 			var p = new PageModel
 			{
@@ -130,17 +128,17 @@ namespace Lingvo.Backend.Tests
 				PageNumber = 11
 			};
 
-			var result = await controller.UpdatePage(db, new StorageMock(), 1, p);
+			var result = await controller.UpdatePage(cl, 1, p);
 
-			Assert.Equal("new", db.FindPageWithRecording(1).Description);
-			Assert.Equal(11, db.FindPageWithRecording(1).Number);
+			Assert.Equal("new", cl.FindPageWithRecording(1).Description);
+			Assert.Equal(11, cl.FindPageWithRecording(1).Number);
 		}
 
 		[Fact]
 		public async Task TestCreatePage()
 		{
 			var controller = new PageController();
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
 			var p = new PageModel
 			{
@@ -150,10 +148,9 @@ namespace Lingvo.Backend.Tests
 				UploadedFile = new FileMock()
 			};
 
-			var result = await controller.CreatePage(db, new StorageMock(), p);
+			var result = await controller.CreatePage(cl, p);
 
-			var w = db.FindWorkbookWithReferences(1);
-			Assert.Equal(5, db.Pages.Count());
+			var w = cl.FindWorkbookWithReferences(1);
 
 			foreach (var page in w.Pages)
 			{
