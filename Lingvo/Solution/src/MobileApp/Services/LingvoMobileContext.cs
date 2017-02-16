@@ -284,11 +284,11 @@ namespace Lingvo.MobileApp.Services
         /// </summary>
         /// <returns>The delete.</returns>
         /// <param name="recording">Recording.</param>
-        public void Delete(Recording recording)
+        public async void Delete(Recording recording)
         {
             database.Delete(recording);
 
-            File.Delete(FileUtil.getAbsolutePath(recording.LocalPath));
+            await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(recording.LocalPath))).ConfigureAwait(false);
 
             RecordingChanged?.Invoke(recording);
         }

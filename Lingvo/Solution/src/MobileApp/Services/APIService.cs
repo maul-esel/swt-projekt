@@ -78,8 +78,6 @@ namespace Lingvo.MobileApp
             PageDownloadState reqState = ((PageDownloadState)(asyncResult.AsyncState));
             WebRequest req = reqState.Request;
 
-            reqState.CancellationToken.ThrowIfCancellationRequested();
-
             WebResponse resp = req.EndGetResponse(asyncResult);
             reqState.Response = resp;
             reqState.TotalBytes = reqState.Response.ContentLength;
@@ -230,6 +228,7 @@ namespace Lingvo.MobileApp
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
+                        workbook.Pages.ForEach(p => ProgressHolder.Instance.DeletePageProgress(p));
                         break;
                     }
 

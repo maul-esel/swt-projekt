@@ -6,6 +6,7 @@ using System;
 using Xamarin.Forms;
 using System.IO;
 using Lingvo.MobileApp.Entities;
+using System.Threading.Tasks;
 
 namespace Lingvo.MobileApp.Controllers
 {
@@ -231,7 +232,7 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
-        private void StopRecorderIfNecessary()
+        private async void StopRecorderIfNecessary()
         {
             if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
             {
@@ -254,7 +255,7 @@ namespace Lingvo.MobileApp.Controllers
                 //deleting the old recording
                 if (exercisable.StudentTrack != null)
                 {
-                    File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack));
+                    await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack))).ConfigureAwait(false);
                 }
 
                 if (recording != null)

@@ -14,25 +14,34 @@ namespace Lingvo.MobileApp.Services.Progress
             get; private set;
         }
 
-        private List<PageProgress> currentPageProgresses;
-        private Workbook workbook;
+        public event Action<WorkbookProgress> Cancelled;
 
-        public int PageProgressCount => currentPageProgresses.Count;
+        public List<PageProgress> CurrentPageProgresses
+        {
+            get; private set;
+        }
+
+        public Workbook Workbook
+        {
+            get; private set;
+        }
+
+        public int PageProgressCount => CurrentPageProgresses.Count;
 
         public WorkbookProgress(Workbook workbook) : base()
         {
-            this.workbook = workbook;
+            this.Workbook = workbook;
 
-            currentPageProgresses = new List<PageProgress>();
+            CurrentPageProgresses = new List<PageProgress>();
 
             SubProgressChanged(null, 0);
         }
 
         protected override void OnReport(double value)
         {
-            if (ProgressHolder.Instance.WorkbookListener.ContainsKey(workbook.Id))
+            if (ProgressHolder.Instance.WorkbookListener.ContainsKey(Workbook.Id))
             {
-                ProgressHolder.Instance.WorkbookListener[workbook.Id].Invoke(value);
+                ProgressHolder.Instance.WorkbookListener[Workbook.Id].Invoke(value);
             }
 
             base.OnReport(value);
@@ -40,7 +49,7 @@ namespace Lingvo.MobileApp.Services.Progress
 
         private void SubProgressChanged(object sender, double p)
         {
-            Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
+            Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(Workbook.Id));
 
             double finishedProgress = 0.0f;
             if (localWorkbook != null)
@@ -49,7 +58,7 @@ namespace Lingvo.MobileApp.Services.Progress
             }
 
             double oldProgress = CurrentProgress;
-            CurrentProgress = finishedProgress + p / workbook.TotalPages;
+            CurrentProgress = finishedProgress + p / Workbook.TotalPages;
 
             if ((int)(CurrentProgress) > (int)(oldProgress))
             {
@@ -57,21 +66,28 @@ namespace Lingvo.MobileApp.Services.Progress
             }
         }
 
+        private void SubProgressCancelled()
+        {
+            Cancelled?.Invoke(this);
+        }
+
         public void RegisterPageProgress(PageProgress progress)
         {
-            if (!currentPageProgresses.Contains(progress))
+            if (!CurrentPageProgresses.Contains(progress))
             {
-                currentPageProgresses.Add(progress);
+                CurrentPageProgresses.Add(progress);
                 progress.ProgressChanged += SubProgressChanged;
+                progress.Cancelled += SubProgressCancelled;
             }
         }
 
         public void UnregisterPageProgress(PageProgress progress)
         {
-            if (currentPageProgresses.Contains(progress))
+            if (CurrentPageProgresses.Contains(progress))
             {
-                currentPageProgresses.Remove(progress);
+                CurrentPageProgresses.Remove(progress);
                 progress.ProgressChanged -= SubProgressChanged;
+                progress.Cancelled -= SubProgressCancelled;
             }
         }
     }

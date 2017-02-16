@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Lingvo.Common.Entities;
 using System.IO;
 using Lingvo.Common.Services;
+using System.Threading.Tasks;
 
 namespace Lingvo.MobileApp.Entities
 {
@@ -144,7 +145,6 @@ namespace Lingvo.MobileApp.Entities
         [Obsolete]
         public void DeleteStudentRecording(IExercise exercise)
         {
-            File.Delete(FileUtil.getAbsolutePath(exercise.StudentTrack.LocalPath));
             App.Database.Delete(exercise.StudentTrack);
             exercise.DeleteStudentRecording();
 

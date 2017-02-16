@@ -11,6 +11,8 @@ namespace Lingvo.MobileApp.Services.Progress
             get; private set;
         }
 
+        public event Action Cancelled;
+
         internal int PageId
         {
             get; private set;
