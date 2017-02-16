@@ -31,6 +31,7 @@ namespace Lingvo.MobileApp.iOS
 		UIButton muteBtn = new Func<UIButton>(() =>
 		{
 			var btn = new UIButton(new CGRect(0, 0, 50, 50));
+			btn.TranslatesAutoresizingMaskIntoConstraints = false;
 			btn.SetTitleColor(teacherColor, UIControlState.Normal);
 			var btnImage = new UIImage("ic_volume_up");
 			btn.SetImage(btnImage, UIControlState.Normal);
@@ -39,8 +40,8 @@ namespace Lingvo.MobileApp.iOS
 		UILabel timeLabel = new UILabel()
 		{
 			Text = "00:00",
-			TextColor = teacherColor,
-			Font = UIFont.SystemFontOfSize(28)
+			TextColor = teacherColor.ColorWithAlpha(0.8f),
+			Font = UIFont.SystemFontOfSize(28, UIFontWeight.Thin)
 		};
 		UIStackView stackView = new UIStackView()
 		{
@@ -102,6 +103,8 @@ namespace Lingvo.MobileApp.iOS
 
 			//subscribe to click events of button in the middle
 			muteBtn.AddTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
+			muteBtn.WidthAnchor.ConstraintEqualTo(48).Active = true;
+			muteBtn.HeightAnchor.ConstraintEqualTo(48).Active = true;
 
 			updateMuteButtonImage();
 
@@ -173,7 +176,7 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				timeLabel.Font = UIFont.SystemFontOfSize(value, UIFontWeight.Regular);
+				timeLabel.Font = UIFont.SystemFontOfSize(value, UIFontWeight.Thin);
 			}
 		}
 
