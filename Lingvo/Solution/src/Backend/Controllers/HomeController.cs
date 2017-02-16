@@ -124,7 +124,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model, bool nextPage)
+		public async Task<IActionResult> UpdatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, int id, PageModel model, bool nextPage = false)
 		{
 			var page = db.FindPageWithRecording(id);
 
@@ -147,7 +147,7 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, PageModel model, bool nextPage)
+		public async Task<IActionResult> CreatePage([FromServices] DatabaseService db, [FromServices] IStorage storage, PageModel model, bool nextPage = false)
 		{
 			var recording = await SaveRecording(db, storage, model);
 			db.Save(new Page()
