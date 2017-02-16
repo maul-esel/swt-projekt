@@ -15,15 +15,23 @@ namespace Lingvo.Backend
 		public DbSet<Recording> Recordings { get; set; }
 		public DbSet<Editor> Editors { get; set; }
 
-		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
-    	{ }
+		// HACK: storage management shouldn't be database responsibility
+		private readonly IStorage _storage;
 
-		public static DatabaseService Connect(string connectionString)
+		public DatabaseService(DbContextOptions<DatabaseService> options, IStorage storage) : base(options)
+		{
+			_storage = storage ?? new AzureStorage();
+		}
+
+		public DatabaseService(DbContextOptions<DatabaseService> options) : this(options, null) { }
+
+		public static DatabaseService Connect(string connectionString, IStorage storage)
 		{
 			return new DatabaseService(
 				new DbContextOptionsBuilder<DatabaseService>()
 					.UseMySql(connectionString)
-					.Options
+					.Options,
+				storage
 			);
 		}
 
@@ -130,6 +138,7 @@ namespace Lingvo.Backend
 			var r = Recordings.Find(recording.Id);
 			if (r != null)
 			{
+				DeleteRecordingFile(r.LocalPath);
 				Recordings.Remove(r);
 				SaveChanges();
 			}
@@ -152,11 +161,21 @@ namespace Lingvo.Backend
 			var r = Recordings.Find(p.teacherTrackId);
 			if (r != null)
 			{
+				DeleteRecordingFile(r.LocalPath);
 				Recordings.Remove(r);
 			}
 
 			Pages.Remove(page);
 			SaveChanges();
+		}
+
+		private void DeleteRecordingFile(string fileName)
+		{
+			// ugliest HACK ever: DatabaseService class is not async
+			Task.Run(async () =>
+			{
+				await _storage.DeleteAsync(fileName);
+			});
 		}
 
 		/// <summary>
@@ -166,11 +185,15 @@ namespace Lingvo.Backend
 		/// <param name="workbook">Workbook.</param>
 		public void Delete(Workbook workbook)
 		{
-			var w = Workbooks.Find(workbook.Id);
+			// load workbook with references in order to delete their pages
+			var w = FindWorkbookWithReferences(workbook.Id);
 
 			if (w != null)
 			{
-				// pages are deleted cascadingly
+				// pages must be deleted explicitly in order to also delete recordings and their files
+				foreach (var page in w.Pages)
+					Delete((Page)page);
+
 				Workbooks.Remove(w); 
 				SaveChanges();
 			}
