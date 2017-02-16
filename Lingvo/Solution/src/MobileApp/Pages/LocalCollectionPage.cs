@@ -54,6 +54,7 @@ namespace Lingvo.MobileApp.Pages
                 errorLabel
                 }
             };
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
