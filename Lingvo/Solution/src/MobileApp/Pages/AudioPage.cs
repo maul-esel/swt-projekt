@@ -171,6 +171,7 @@ namespace Lingvo.MobileApp.Pages
                 InnerProgressColor = Color.Red,
                 InnerProgressEnabled = exercisable.StudentTrack != null,
                 MuteEnabled = exercisable.StudentTrack != null,
+				TextSize = 54,
                 MaxProgress = 95000
             };
 

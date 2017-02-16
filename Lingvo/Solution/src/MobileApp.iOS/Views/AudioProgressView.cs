@@ -40,7 +40,7 @@ namespace Lingvo.MobileApp.iOS
 		{
 			Text = "00:00",
 			TextColor = teacherColor,
-			Font = UIFont.SystemFontOfSize(28)
+			Font = UIFont.SystemFontOfSize(28, UIFontWeight.Thin)
 		};
 		UIStackView stackView = new UIStackView()
 		{
@@ -173,7 +173,7 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				timeLabel.Font = UIFont.SystemFontOfSize(value, UIFontWeight.Regular);
+				timeLabel.Font = UIFont.SystemFontOfSize(value, UIFontWeight.Thin);
 			}
 		}
 
