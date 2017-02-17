@@ -19,7 +19,7 @@ namespace Lingvo.Backend.Tests
 		public DatabaseTests()
 		{
 			TestsFixture.Setup();
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL","DummyDataForServer.sql")));
 		}
 
@@ -27,7 +27,7 @@ namespace Lingvo.Backend.Tests
         [Fact]
         public void TestLoadTables()
         {
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Assert.Equal(4, Database.Pages.Count());
 			Assert.Equal(4, Database.Recordings.Count());
 			Assert.Equal(2, Database.Workbooks.Count());
@@ -36,7 +36,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindWorkbooks()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Assert.NotNull(Database.Workbooks.Find(1));
 			Assert.NotNull(Database.Workbooks.Find(2));
 			Assert.Null(Database.Workbooks.Find(3));
@@ -45,7 +45,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindPages()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Assert.NotNull(Database.Pages.Find(1));
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Pages.Find(5));
@@ -54,7 +54,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestFindRecordings()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Assert.NotNull(Database.Recordings.Find(1));
 			Assert.NotNull(Database.Recordings.Find(4));
 			Assert.Null(Database.Recordings.Find(5));
@@ -63,7 +63,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookPages()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var dbWorkbook = Database.GetWorkbooksWithReferences().Find(w => w.Id == 1);
 			Assert.Equal(2, dbWorkbook.Pages.Count);
 
@@ -78,7 +78,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveWorkbook()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var testWorkbook = new Workbook()
 			{
 				Title = "Test",
@@ -93,7 +93,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSavePage()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var testPage = new Page()
 			{
 				Number = 5,
@@ -114,7 +114,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestSaveRecording()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var testRecording = new Recording()
 			{
 				Duration = 12 /* milliseconds */,
@@ -133,7 +133,7 @@ namespace Lingvo.Backend.Tests
 
 		public void TestSaveWorkbookWithPagesAndRecording()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var testWorkbook = new Workbook()
 			{
 				Title = "Test",
@@ -174,7 +174,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestDeleteRecording()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var testRecording = new Recording()
 			{
@@ -194,7 +194,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestDeletePage()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var v = Database.Pages.Find(1);
 			Database.Delete(v);
@@ -209,7 +209,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestDeleteWorkbook()
 		{
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var deletionWorkbook = Database.FindWorkbookWithReferences(1);
 			Database.Delete(deletionWorkbook);
@@ -224,7 +224,7 @@ namespace Lingvo.Backend.Tests
 
 		public void TestTeacherTrackChange()
 		{
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var page1 = db.FindPageWithRecording(1);
 			var page2 = db.FindPageWithRecording(2);

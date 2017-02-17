@@ -127,6 +127,7 @@ namespace Lingvo.MobileApp.iOS
 			var tintColor = element.IsEnabled ? element.Color.ToUIColor() : UIColor.LightGray;
 			imageView.TintColor = tintColor;
 			button.TintColor = tintColor;
+			label.TextColor = tintColor;
 
 			string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
 			Console.WriteLine("imageName = " + identifier);

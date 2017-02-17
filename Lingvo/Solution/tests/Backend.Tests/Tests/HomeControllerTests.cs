@@ -20,7 +20,7 @@ namespace Lingvo.Backend.Tests
 		public HomeControllerTests()
 		{
 			TestsFixture.Setup();
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "DummyDataForServer.sql")));
 		}
 
@@ -28,9 +28,9 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestLoadBackend()
 		{
-			var controller = new HomeController(null);
+			var controller = new WorkbookController();
 
-			var result = controller.Index(DatabaseService.Connect(TestsFixture.ConnectionString));
+			var result = controller.Index(DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock()));
 
 			Assert.IsType<ViewResult>(result);
 		}
@@ -38,8 +38,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookPublishingAndUnpublishing()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new WorkbookController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			controller.PublishWorkbook(db, 1);
 			Assert.Equal(db.FindWorkbookWithReferences(1).IsPublished, false);
@@ -58,8 +58,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestWorkbookDeletion()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new WorkbookController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			Assert.NotNull(db.FindWorkbookWithReferences(1));
 			Assert.NotNull(db.Pages.Find(1));
@@ -75,8 +75,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestPageDeletion()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new PageController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			Assert.NotNull(db.Pages.Find(1));
 			Assert.NotNull(db.Recordings.Find(1));
@@ -90,8 +90,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestEditPage()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new PageController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var result = await controller.EditPage(db, new StorageMock(), 1);
 
@@ -105,8 +105,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestCreateWorkbook()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new WorkbookController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var result = controller.CreateWorkbook(db, "NeuesWorkbook", "Nur zum Testen");
 
@@ -121,8 +121,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestUpdatePage()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new PageController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var p = new PageModel
 			{
@@ -139,8 +139,8 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestCreatePage()
 		{
-			var controller = new HomeController(null);
-			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var controller = new PageController();
+			var db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 
 			var p = new PageModel
 			{

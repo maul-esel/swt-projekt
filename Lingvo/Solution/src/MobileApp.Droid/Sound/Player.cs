@@ -40,17 +40,16 @@ namespace Lingvo.MobileApp.Droid.Sound
             {
                 if (State == PlayerState.PLAYING)
                 {
-                    OnProgress();
+                    OnProgress(teacherTrack.CurrentPosition);
                     progressHandler.PostDelayed(progressUpdate, 100);
                 }
             });
             State = PlayerState.IDLE;
         }
 
-        private void OnProgress()
+        private void OnProgress(int elapsedMilliseconds)
         {
-            var milliseconds = teacherTrack.CurrentPosition;
-            Update?.Invoke((int)milliseconds);
+			Update?.Invoke(elapsedMilliseconds);
 
         }
 
@@ -141,8 +140,13 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             teacherRecording = recording;
             teacherTrack = CreateNewPlayer(recording);
-            teacherTrack.Completion += (o, e) => Stop();
+			teacherTrack.Completion += (o, e) =>
+			{
+				Stop();
+				OnProgress(teacherTrack.Duration);
+			};
             State = PlayerState.STOPPED;
+			OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void SeekTo(int seconds)
@@ -150,7 +154,7 @@ namespace Lingvo.MobileApp.Droid.Sound
             if (teacherTrack?.CurrentPosition + seconds * 1000 >= teacherTrack?.Duration)
             {
                 teacherTrack?.SeekTo(teacherTrack.Duration);
-                OnProgress();
+                OnProgress(teacherTrack.CurrentPosition);
                 Stop();
                 return;
             }
@@ -170,7 +174,7 @@ namespace Lingvo.MobileApp.Droid.Sound
                 }
             }
 
-            OnProgress();
+            OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void Stop()

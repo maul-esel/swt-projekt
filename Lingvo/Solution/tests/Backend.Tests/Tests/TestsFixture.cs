@@ -25,7 +25,7 @@ namespace Lingvo.Backend.Tests
 				var config = builder.Build();
 
 				ConnectionString = config["MYSQLCONNSTR_localdb"];
-				var db = DatabaseService.Connect(ConnectionString);
+				var db = DatabaseService.Connect(ConnectionString, new StorageMock());
 				db.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "server.sql")));
 
 				isExecuted = true;

@@ -102,7 +102,7 @@ namespace Lingvo.MobileApp.iOS
 			{
 				var frame = new CGRect(audioProgressView.X, audioProgressView.X, audioProgressView.Width, audioProgressView.Height);
 				var squareMeasure = Math.Min(audioProgressView.Width, audioProgressView.Height);
-				var lineWidth = squareMeasure * 0.075;
+				var lineWidth = squareMeasure * 0.0625;
 				progressView.LineWidth = (float)lineWidth;
 				progressView.Frame = frame;
 				progressView.render();

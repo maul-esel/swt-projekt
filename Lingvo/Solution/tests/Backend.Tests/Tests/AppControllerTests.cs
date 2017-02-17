@@ -16,7 +16,7 @@ namespace Lingvo.Backend.Tests
 		public AppControllerTests()
 		{
 			TestsFixture.Setup();
-			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			Database.Database.ExecuteSqlCommand(File.ReadAllText(Path.Combine("bin", "Debug", "netcoreapp1.0", "SQL", "DummyDataForServer.sql")));
 
 		}
@@ -24,7 +24,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestGetWorkbooks()
 		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var controller = new AppController();
 
 			var result = controller.GetWorkbooks(db);
@@ -46,7 +46,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestGetWorkbook()
 		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var controller = new AppController();
 
 			var result = controller.GetWorkbook(db, 1);
@@ -75,7 +75,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public void TestGetPages()
 		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var controller = new AppController();
 
 			var result = controller.GetPages(db, 1);
@@ -98,7 +98,7 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestGetTeacherTrack()
 		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString, new StorageMock());
 			var controller = new AppController();
 
 			var result = await controller.GetTeacherTrack(db, new StorageMock(), 1);

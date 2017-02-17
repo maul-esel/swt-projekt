@@ -50,6 +50,10 @@ namespace Lingvo.MobileApp.Pages
                 listView
                 }
             };
+
+			#if __IOS__
+				NavigationPage.SetBackButtonTitle(this, "Zurück");
+			#endif
         }
 
         protected override void OnAppearing()
