@@ -55,6 +55,7 @@ namespace Lingvo.Backend
 
 			// custom services
 			services.AddScoped<IStorage, AzureStorage>();
+			services.AddScoped<CloudLibrary, CloudLibrary>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
