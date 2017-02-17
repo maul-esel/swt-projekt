@@ -15,6 +15,7 @@
             <Span x:Key="label_no_teacher_memos">Noch keine Lehrerspuren aufgenommen!</Span>
             <Span x:Key="page_title_pagesDownload">Seiten Download</Span>
             <Span x:Key="label_no_local_pages">Für dieses Arbeitsheft sind lokal keine Seiten verfügbar!</Span>
+            <Span x:Key="label_no_pages">Für dieses Arbeitsheft existieren keine Seiten!</Span>
             <Span x:Key="page_title_recordTeacherMemo">Neue Lehrerspur</Span>
             <Span x:Key="label_delete">Löschen</Span>
             <Span x:Key="label_delete_studentTrack">Aufnahme löschen</Span>

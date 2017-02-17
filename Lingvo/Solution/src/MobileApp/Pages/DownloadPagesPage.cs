@@ -33,7 +33,7 @@ namespace Lingvo.MobileApp.Pages
 
             Label errorLabel = new Label
             {
-                Text = ((Span)App.Current.Resources["label_sync_error"]).Text,
+                Text = ((Span)App.Current.Resources["label_no_pages"]).Text,
                 TextColor = (Color)App.Current.Resources["primaryColor"],
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
