@@ -38,7 +38,7 @@ namespace Lingvo.MobileApp.Services
         {
             if (!pageProgresses.ContainsKey(page.Id))
             {
-                PageProgress pageProgress = new PageProgress(page.Id);
+                PageProgress pageProgress = new PageProgress(page);
 
                 if (!workbookProgresses.ContainsKey(page.workbookId))
                 {
@@ -60,13 +60,10 @@ namespace Lingvo.MobileApp.Services
         {
             for (int idx = progress.CurrentPageProgresses.Count - 1; idx >= 0; idx--)
             {
-                PageProgress pageProgress = progress.CurrentPageProgresses[idx];
-
-                pageProgresses.Remove(pageProgress.PageId);
-                progress.UnregisterPageProgress(pageProgress);
+                DeletePageProgress(progress.CurrentPageProgresses[idx].Page);
             }
 
-            workbookProgresses.Remove(progress.Workbook.Id);
+            LocalCollection.Instance.OnWorkbookChanged(progress.Workbook);
         }
 
         internal void DeletePageProgress(IPage page)
@@ -76,6 +73,8 @@ namespace Lingvo.MobileApp.Services
                 WorkbookProgress workbookProgress = workbookProgresses[page.workbookId];
 
                 workbookProgress.UnregisterPageProgress(pageProgresses[page.Id]);
+
+                pageProgresses.Remove(page.Id);
 
                 if (workbookProgress.PageProgressCount == 0)
                 {

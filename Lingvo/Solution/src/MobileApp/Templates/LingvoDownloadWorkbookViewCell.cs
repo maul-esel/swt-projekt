@@ -86,7 +86,7 @@ namespace Lingvo.MobileApp.Templates
                 }));
                 downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
 
-                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, cancellationToken.Token);
+                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, cancellationToken.Token).ConfigureAwait(false);
             }
             else
             {
@@ -102,18 +102,14 @@ namespace Lingvo.MobileApp.Templates
             Device.BeginInvokeOnMainThread(() => ProgressView.Progress = (int)progress);
         }
 
-        protected override void OnBindingContextChanged()
+        protected override void BindViewCell(Workbook workbook)
         {
-            base.OnBindingContextChanged();
-
-            Workbook workbook = (Workbook)BindingContext;
-
             Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
             int progress = Math.Min(100, 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages);
             string color = progress == 100 ? "secondaryColor" : "primaryColor";
             ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
-            
+
             ProgressView.MaxProgress = 100;
 
             ProgressView.InnerProgressEnabled = false;
@@ -137,7 +133,9 @@ namespace Lingvo.MobileApp.Templates
                 progress = (int)ProgressHolder.Instance.GetWorkbookProgress(workbook.Id).CurrentProgress;
             }
 
-            if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) && cancellationToken != null)
+            bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
+
+            if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) && hasRunningToken)
             {
                 downloadButton.Image = cancelImage;
             }
@@ -148,7 +146,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView.Progress = progress;
 
-            downloadButton.IsEnabled = progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || cancellationToken != null);
+            downloadButton.IsEnabled = progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || hasRunningToken);
         }
     }
 }

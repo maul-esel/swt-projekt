@@ -49,7 +49,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             Color color = element.IsEnabled ? element.Color.ToAndroid() : Color.LightGray;
 
-            string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
+            string identifier = element.Image?.Length > 0 ? element.Image.Substring(0, element.Image.LastIndexOf('.')) : null;
             int resourceId = 0;
             if (identifier != null)
             {

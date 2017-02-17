@@ -58,7 +58,10 @@ namespace Lingvo.MobileApp.Templates
 
             deleteAction.Clicked += DeleteAction_Clicked;
 
-            ContextActions.Add(deleteAction);
+            if (GetType().Equals(typeof(LingvoWorkbookViewCell)))
+            {
+                ContextActions.Add(deleteAction);
+            }
 
             var grid = new Grid();
 
@@ -146,22 +149,31 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
-        protected override void OnBindingContextChanged()
+        protected virtual void BindViewCell(Workbook workbook)
         {
-            base.OnBindingContextChanged();
-
-            Workbook workbook = (Workbook)BindingContext;
-
             int completed = 0;
             workbook.Pages.ForEach((p) => { if (p.StudentTrack != null) completed++; });
             ProgressView.MaxProgress = workbook.Pages.Count;
             ProgressView.Progress = completed;
 
             ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
-            ProgressView.InnerProgressEnabled = false;
-            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
 
-            subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Workbook workbook = (Workbook)BindingContext;
+
+                ProgressView.InnerProgressEnabled = false;
+                subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
+
+                BindViewCell(workbook);
+            });
         }
 
     }

@@ -232,7 +232,7 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
-        private async void StopRecorderIfNecessary()
+        private void StopRecorderIfNecessary()
         {
             if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
             {
@@ -255,7 +255,7 @@ namespace Lingvo.MobileApp.Controllers
                 //deleting the old recording
                 if (exercisable.StudentTrack != null)
                 {
-                    await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack))).ConfigureAwait(false);
+                    Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack)));
                 }
 
                 if (recording != null)

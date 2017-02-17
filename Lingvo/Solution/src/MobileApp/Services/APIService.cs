@@ -110,7 +110,7 @@ namespace Lingvo.MobileApp
                 reqState.FileStream.Close();
                 File.Delete(reqState.FilePath);
 
-                ProgressHolder.Instance.DeletePageProgress(reqState.Page);
+                ProgressHolder.Instance.GetPageProgress(reqState.Page.Id)?.Cancel();
             }
 
             reqState.CancellationToken.ThrowIfCancellationRequested();
@@ -228,7 +228,7 @@ namespace Lingvo.MobileApp
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        workbook.Pages.ForEach(p => ProgressHolder.Instance.DeletePageProgress(p));
+                        ProgressHolder.Instance.GetWorkbookProgress(workbook.Id).Cancel();
                         break;
                     }
 

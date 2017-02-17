@@ -55,8 +55,6 @@ namespace Lingvo.MobileApp.Templates
                 IsDestructive = true
             };
 
-            ContextActions.Add(deleteAction);
-
             deleteStudentAction = new MenuItem
             {
                 Text = ((Span)App.Current.Resources["label_delete_studentTrack"]).Text,
@@ -66,6 +64,11 @@ namespace Lingvo.MobileApp.Templates
             deleteAction.Clicked += DeleteAction_Clicked;
 
             deleteStudentAction.Clicked += DeleteStudentAction_Clicked;
+
+            if (GetType().Equals(typeof(LingvoPageViewCell)))
+            {
+                ContextActions.Add(deleteAction);
+            }
 
             View = new StackLayout
             {
@@ -151,20 +154,23 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        protected virtual void BindViewCell(IPage page)
+        {
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
+            ProgressView.InnerProgressEnabled = page.StudentTrack != null;
+
+            ProgressView.InnerProgressColor = Color.Red;
+
+            ProgressView.Progress = 1;
+            ProgressView.MaxProgress = 1;
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
 
             IPage page = (IPage)BindingContext;
-
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
-            ProgressView.InnerProgressEnabled = page.StudentTrack != null;
-
-            ProgressView.InnerProgressColor = Color.Red;
-            ProgressView.Progress = 1;
-            ProgressView.MaxProgress = 1;
-            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
-            ProgressView.MuteEnabled = false;
 
             try
             {
@@ -178,7 +184,14 @@ namespace Lingvo.MobileApp.Templates
                 Console.WriteLine("Context Actions null");
             }
 
-            subtitleLabel.IsVisible = page.Description?.Length > 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ProgressView.MuteEnabled = false;
+
+                subtitleLabel.IsVisible = page.Description?.Length > 0;
+
+                BindViewCell(page);
+            });
         }
     }
 }

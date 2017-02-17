@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lingvo.Common.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,22 +14,22 @@ namespace Lingvo.MobileApp.Services.Progress
 
         public event Action Cancelled;
 
-        internal int PageId
+        internal IPage Page
         {
             get; private set;
         }
 
-        public PageProgress(int pageId) : base()
+        public PageProgress(IPage page) : base()
         {
-            PageId = pageId;
+            Page = page;
             CurrentProgress = 0;
         }
 
         protected override void OnReport(double value)
         {
-            if (ProgressHolder.Instance.PageListener.ContainsKey(PageId))
+            if (ProgressHolder.Instance.PageListener.ContainsKey(Page.Id))
             {
-                ProgressHolder.Instance.PageListener[PageId].Invoke(value);
+                ProgressHolder.Instance.PageListener[Page.Id].Invoke(value);
             }
 
             CurrentProgress = value;
@@ -39,6 +40,11 @@ namespace Lingvo.MobileApp.Services.Progress
         public void Report(double progress)
         {
             OnReport(progress);
+        }
+
+        public void Cancel()
+        {
+            Cancelled?.Invoke();
         }
     }
 }

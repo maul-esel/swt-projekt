@@ -10,7 +10,7 @@ using Lingvo.Common.Services;
 using System.IO;
 
 #if __ANDROID__
-		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
+using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
 #elif __IOS__
 using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 #endif
@@ -284,11 +284,11 @@ namespace Lingvo.MobileApp.Services
         /// </summary>
         /// <returns>The delete.</returns>
         /// <param name="recording">Recording.</param>
-        public async void Delete(Recording recording)
+        public void Delete(Recording recording)
         {
             database.Delete(recording);
 
-            await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(recording.LocalPath))).ConfigureAwait(false);
+            Task.Run(() => File.Delete(FileUtil.getAbsolutePath(recording.LocalPath)));
 
             RecordingChanged?.Invoke(recording);
         }

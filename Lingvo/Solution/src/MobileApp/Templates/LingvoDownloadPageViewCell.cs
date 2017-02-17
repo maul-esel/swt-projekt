@@ -85,12 +85,8 @@ namespace Lingvo.MobileApp.Templates
             });
         }
 
-        protected override void OnBindingContextChanged()
+        protected override void BindViewCell(IPage page)
         {
-            base.OnBindingContextChanged();
-
-            IPage page = (IPage)BindingContext;
-
             Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
             bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
 
@@ -119,7 +115,9 @@ namespace Lingvo.MobileApp.Templates
                 progress = (int)ProgressHolder.Instance.GetPageProgress(page.Id).CurrentProgress;
             }
 
-            if (ProgressHolder.Instance.HasPageProgress(page.Id) && cancellationToken != null)
+            bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
+
+            if (ProgressHolder.Instance.HasPageProgress(page.Id) && hasRunningToken)
             {
                 downloadButton.Image = cancelImage;
             }
@@ -129,7 +127,7 @@ namespace Lingvo.MobileApp.Templates
             }
 
             ProgressView.Progress = downloaded ? 100 : progress;
-            downloadButton.IsEnabled = !downloaded && (!ProgressHolder.Instance.HasPageProgress(page.Id) || cancellationToken != null);
+            downloadButton.IsEnabled = !downloaded && (!ProgressHolder.Instance.HasPageProgress(page.Id) || hasRunningToken);
         }
 
         protected override void Event_PageChanged(IPage p)

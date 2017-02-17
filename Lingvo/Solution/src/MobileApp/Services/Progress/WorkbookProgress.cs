@@ -71,6 +71,11 @@ namespace Lingvo.MobileApp.Services.Progress
             Cancelled?.Invoke(this);
         }
 
+        public void Cancel()
+        {
+            Cancelled?.Invoke(this);
+        }
+
         public void RegisterPageProgress(PageProgress progress)
         {
             if (!CurrentPageProgresses.Contains(progress))
