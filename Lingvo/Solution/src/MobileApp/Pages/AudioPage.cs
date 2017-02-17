@@ -340,6 +340,7 @@ namespace Lingvo.MobileApp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
+				ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
                 ProgressView.MuteEnabled = exercisable.StudentTrack != null;
                 NextPageButton.IsVisible = exercisable is IPage;
                 PreviousPageButton.IsVisible = exercisable is IPage;
