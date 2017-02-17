@@ -11,7 +11,7 @@ namespace Lingvo.MobileApp.Pages
 {
     class AudioPage : ContentPage
     {
-        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 35, Android: 35, WinPhone: 50);
+        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 35, WinPhone: 50);
         private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
@@ -340,6 +340,7 @@ namespace Lingvo.MobileApp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
+				ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
                 ProgressView.MuteEnabled = exercisable.StudentTrack != null;
                 NextPageButton.IsVisible = exercisable is IPage;
                 PreviousPageButton.IsVisible = exercisable is IPage;
