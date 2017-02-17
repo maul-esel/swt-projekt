@@ -43,8 +43,11 @@ namespace Lingvo.Backend.Controllers
 		public async Task<IActionResult> PublishWorkbook([FromServices] CloudLibrary cl, int id)
 		{
 			var workbook = cl.FindWorkbookWithReferences(id);
-			workbook.IsPublished = !workbook.IsPublished;
-			await cl.Save(workbook);
+			if (workbook.IsPublished || workbook.TotalPages > 0) // only publish non-empty workbooks (unpublish any)
+			{
+				workbook.IsPublished = !workbook.IsPublished;
+				await cl.Save(workbook);
+			}
 			return RedirectToAction(nameof(Index));
 		}
 

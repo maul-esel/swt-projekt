@@ -18,7 +18,6 @@ namespace Lingvo.Backend.Controllers
 	[Authorize]
 	public class PageController : Controller
 	{
-
 		[Route("pages/edit/{id}")]
 		public async Task<IActionResult> EditPage([FromServices] CloudLibrary cl, int id)
 		{
@@ -102,11 +101,12 @@ namespace Lingvo.Backend.Controllers
 
 			return await cl.SaveRecordingToStorage(file, fileName, model.Duration);
 		}
-	
+
 		[Route("workbooks/{workbookId}/pages/add")]
-		public IActionResult AddPage([FromServices] CloudLibrary cl, int workbookId)
+		public IActionResult AddPage([FromServices] CloudLibrary cl, int workbookId, int? pageNumber)
 		{
 			ViewData["Title"] = "Neue Seite erstellen";
+			ViewData["pageNumber"] = pageNumber;
 
 			var workbook = cl.FindWorkbookWithReferences(workbookId);
 			return View(new PageModel() { Workbook = workbook });

@@ -25,14 +25,14 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public event Action<int> Update;
 		public event Action<PlayerState> StateChange;
 
-		private const float teacherTrackVolume = 0.7f;
+		private const float teacherTrackVolume = 0.6f;
 		private const float studentTrackVolume = 1.0f;
 
 		public Player()
 		{
 			timer = new Timer(100);
 			timer.AutoReset = true;
-			timer.Elapsed += (sender, e) => OnProgress();
+			timer.Elapsed += (sender, e) => OnProgress(teacherTrack.CurrentTime);
 			State = PlayerState.IDLE;
 
 			ActivateAudioSession();
@@ -162,9 +162,10 @@ namespace Lingvo.MobileApp.iOS.Sound
 			else
 			{
 				teacherTrack.Stop();
+
 				teacherTrack.CurrentTime = 0;
 			}
-	
+
 			OnStateChange();
 			//workaround: kill audio session because AVAudioPlayer keeps playing when you call .Stop()
 			Task.Run(() => AVAudioSession.SharedInstance().SetActive(false));
@@ -180,7 +181,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				seconds = (int)teacherTrack.Duration;
 				teacherTrack.CurrentTime = seconds;
-				OnProgress();
+				OnProgress(teacherTrack.CurrentTime);
 				Stop();
 				return;
 			}
@@ -194,7 +195,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				teacherTrack.CurrentTime += (double)seconds;
 			}
-			OnProgress();
+			OnProgress(teacherTrack.CurrentTime);
 		}
 
 		public void PrepareTeacherTrack(Recording recording)
@@ -204,8 +205,12 @@ namespace Lingvo.MobileApp.iOS.Sound
 			teacherTrack.Volume = studentTrackVolume;
 
 			teacherTrack.PrepareToPlay();
-			teacherTrack.FinishedPlaying += (sender, e) => Stop();
+			teacherTrack.FinishedPlaying += (sender, e) => {
+				Stop();
+				OnProgress(teacherTrack.Duration);
+			};
 			State = PlayerState.STOPPED;
+			OnProgress(teacherTrack.CurrentTime);
 		}
 
 		public void PrepareStudentTrack(Recording recording)
@@ -282,11 +287,12 @@ namespace Lingvo.MobileApp.iOS.Sound
 		/// This method is called via the elapsed timer to create a DrawUpdate for the view
 		/// with the current playback progess in milliseconds
 		/// </summary>
-		private void OnProgress()
+		private void OnProgress(double currentProgress)
 		{
-			var milliseconds = teacherTrack.CurrentTime * 1000;
+			var milliseconds = (int)(currentProgress * 1000);
 
-			Update?.Invoke((int)milliseconds);
+			Console.WriteLine("PROGRESS: " + milliseconds + " / " + teacherTrack.Duration * 1000);
+			Update?.Invoke(milliseconds);
 
 		}
 
