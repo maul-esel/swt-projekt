@@ -101,8 +101,6 @@ var mediaStreamSource = null;
 
 		};
 
-
-
 		this.node.onaudioprocess = function(e){
 			if (!recording) return;
 
@@ -117,9 +115,6 @@ var mediaStreamSource = null;
 
 		source.connect(this.node);
 		this.node.connect(this.context.destination);    //this should not be necessary
-
-
-
 
 	}
 
@@ -176,10 +171,6 @@ var mediaStreamSource = null;
 
 
 	window.audioRecorder = audioRecorder;
-
-
-
-
 
 
 })(window);
