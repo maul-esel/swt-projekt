@@ -43,7 +43,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView = new LingvoAudioProgressView()
             {
-                Size = Device.OnPlatform(iOS: 80, Android: 120, WinPhone: 240),
+                Size = Device.OnPlatform(iOS: 80, Android: 72, WinPhone: 240),
                 LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM,
                 MuteEnabled = false,
                 InnerProgressEnabled = false

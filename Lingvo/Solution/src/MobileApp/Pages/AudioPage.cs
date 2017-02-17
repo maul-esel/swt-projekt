@@ -6,14 +6,15 @@ using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Util;
 using System;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
     class AudioPage : ContentPage
     {
-        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 35, WinPhone: 50);
-        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
+        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 45, WinPhone: 50);
+        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 75, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 5;
@@ -74,7 +75,6 @@ namespace Lingvo.MobileApp.Pages
             }
             if (state == PlayerState.PAUSED)
             {
-                //TODO: @Phlilip: MAAAYBEE, toggle that pause Button for God's sake :P 
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
                 RecordStopButton.Image = LingvoRoundImageButton.StopImage;
                 SetSeekingButtonsAccordingly();
@@ -87,7 +87,6 @@ namespace Lingvo.MobileApp.Pages
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
                 return;
             }
-            //no default needed...
         }
 
         private void SetSeekingButtonsAccordingly()
@@ -172,7 +171,7 @@ namespace Lingvo.MobileApp.Pages
                 InnerProgressColor = Color.Red,
                 InnerProgressEnabled = exercisable.StudentTrack != null,
                 MuteEnabled = exercisable.StudentTrack != null,
-				TextSize = 54,
+                TextSize = 54,
                 MaxProgress = 95000
             };
 
@@ -364,7 +363,7 @@ namespace Lingvo.MobileApp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
-				ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
+                ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
                 ProgressView.MuteEnabled = exercisable.StudentTrack != null;
                 NextPageButton.IsVisible = exercisable is IPage;
                 PreviousPageButton.IsVisible = exercisable is IPage;
@@ -401,6 +400,8 @@ namespace Lingvo.MobileApp.Pages
                 StudentAudioController.Instance.Stop();
                 RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
             }
+
+            workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
 
             NextPageButton.IsEnabled = nextIndex + 1 < workbook.Pages.Count;
             PreviousPageButton.IsEnabled = nextIndex > 0;
