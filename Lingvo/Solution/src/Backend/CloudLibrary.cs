@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 
 namespace Lingvo.Backend
 {
@@ -37,44 +36,36 @@ namespace Lingvo.Backend
 
 		public async Task Delete(Recording recording)
 		{
-			var r = _dbservice.Recordings.Find(recording.Id);
+			recording = await _dbservice.Recordings.FindAsync(recording.Id);
+			if (recording == null)
+				return;
 
-			if (r != null)
-			{
-				await DeleteRecordingFile(r.LocalPath);
-				_dbservice.Recordings.Remove(r);
-				_dbservice.SaveChanges();
-			}
-
+			await _storage.DeleteAsync(recording.LocalPath);
 			_dbservice.Delete(recording);
 		}
 
 		public async Task Delete(Page page)
 		{
-
-			var p = _dbservice.Pages.Find(page.Id);
-
-			if (p == null)
-			{
+			page = await _dbservice.Pages.FindAsync(page.Id);
+			if (page == null)
 				return;
-			}
-			var r = _dbservice.Recordings.Find(page.teacherTrackId);
 
-			if ( r != null)
-			{
-				await DeleteRecordingFile(r.LocalPath);
-			}
+			await Delete(page.TeacherTrack);
 			_dbservice.Delete(page);
 		}
 
 		public async Task Delete(Workbook workbook)
 		{
-			_dbservice.Delete(workbook);
-		}
+			workbook = _dbservice.FindWorkbookWithReferences(workbook.Id);
+			if (workbook == null)
+				return;
 
-		private async Task DeleteRecordingFile(string fileName)
-		{
-			await _storage.DeleteAsync(fileName);
+			// delete pages explicitly here:
+			// also deletes their recordings from storage
+			foreach (var page in workbook.Pages.ToList())
+				await Delete((Page)page);
+
+			_dbservice.Delete(workbook);
 		}
 
 		public Recording FindRecording(int id)
@@ -102,42 +93,20 @@ namespace Lingvo.Backend
 			return _dbservice.GetWorkbooksWithReferences();
 		}
 
-		public async Task<string> GetAccessUrlAsync(string identifier)
+		public async Task<string> GetAccessUrlAsync(Recording recording)
 		{
-			var url = await _storage.GetAccessUrlAsync(identifier);
-
-			return url;
+			return await _storage.GetAccessUrlAsync(recording.LocalPath);
 		}
 
-		public async Task DeleteAsyncFromStorage(string identifier)
+		public async Task<Recording> CreateRecording(Stream content, string fileName, int duration)
 		{
-			await _storage.DeleteAsync(identifier);
-		}
-
-		public async Task SaveAsyncFromStorage(string identifier, Stream content)
-		{
-			await _storage.SaveAsync(identifier, content);
-		}
-
-		public async Task<Recording> SaveRecordingToStorage(IFormFile file, string fileName, int duration)
-		{
-			Stream stream = null;
-			try
-			{
-				stream = file.OpenReadStream();
-				await _storage.SaveAsync(fileName, stream);
-			}
-			finally
-			{
-				stream?.Dispose();
-			}
+			await _storage.SaveAsync(fileName, content);
 
 			var recording = new Recording()
 			{
 				Duration = duration,
 				LocalPath = fileName
 			};
-
 			_dbservice.Save(recording);
 
 			return recording;

@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 using Lingvo.Backend.ViewModels;
@@ -25,7 +24,7 @@ namespace Lingvo.Backend.Controllers
 
 			var page = cl.FindPageWithRecording(id);
 			var workbook = cl.FindWorkbookWithReferences(page.workbookId);
-			var recordingUrl = await cl.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
+			var recordingUrl = await cl.GetAccessUrlAsync(page.TeacherTrack);
 
 			var model = new PageModel(page, recordingUrl) { Workbook = workbook };
 			return View("AddPage", model);
@@ -48,7 +47,6 @@ namespace Lingvo.Backend.Controllers
 			if (model.UploadedFile != null || model.RecordedFile != null)
 			{
 				var recording = await SaveRecording(cl, model);
-				await cl.DeleteAsyncFromStorage(page.TeacherTrack.LocalPath);
 				await cl.Delete(page.TeacherTrack);
 				page.TeacherTrack = recording;
 			}
@@ -99,7 +97,8 @@ namespace Lingvo.Backend.Controllers
 			string prefix = (model.RecordedFile == null) ? "uploaded_" : "recorded_";
 			string fileName = prefix + Guid.NewGuid().ToString();
 
-			return await cl.SaveRecordingToStorage(file, fileName, model.Duration);
+			using (var stream = file.OpenReadStream())
+				return await cl.CreateRecording(stream, fileName, model.Duration);
 		}
 
 		[Route("workbooks/{workbookId}/pages/add")]

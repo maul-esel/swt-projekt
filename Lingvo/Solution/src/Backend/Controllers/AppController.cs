@@ -70,7 +70,7 @@ namespace Lingvo.Backend.Controllers
 			return Json(new {
 				duration = page.TeacherTrack.Duration,
 				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-				url = await cl.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
+				url = await cl.GetAccessUrlAsync(page.TeacherTrack)
 			});
 		}
     }
