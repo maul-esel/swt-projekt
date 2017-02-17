@@ -15,23 +15,17 @@ namespace Lingvo.Backend
 		public DbSet<Recording> Recordings { get; set; }
 		public DbSet<Editor> Editors { get; set; }
 
-		// HACK: storage management shouldn't be database responsibility
-		private readonly IStorage _storage;
 
-		public DatabaseService(DbContextOptions<DatabaseService> options, IStorage storage) : base(options)
+		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
 		{
-			_storage = storage ?? new AzureStorage();
 		}
 
-		public DatabaseService(DbContextOptions<DatabaseService> options) : this(options, null) { }
-
-		public static DatabaseService Connect(string connectionString, IStorage storage)
+		public static DatabaseService Connect(string connectionString)
 		{
 			return new DatabaseService(
 				new DbContextOptionsBuilder<DatabaseService>()
 					.UseMySql(connectionString)
-					.Options,
-				storage
+					.Options
 			);
 		}
 
@@ -138,7 +132,6 @@ namespace Lingvo.Backend
 			var r = Recordings.Find(recording.Id);
 			if (r != null)
 			{
-				DeleteRecordingFile(r.LocalPath);
 				Recordings.Remove(r);
 				SaveChanges();
 			}
@@ -161,21 +154,11 @@ namespace Lingvo.Backend
 			var r = Recordings.Find(p.teacherTrackId);
 			if (r != null)
 			{
-				DeleteRecordingFile(r.LocalPath);
 				Recordings.Remove(r);
 			}
 
 			Pages.Remove(page);
 			SaveChanges();
-		}
-
-		private void DeleteRecordingFile(string fileName)
-		{
-			// ugliest HACK ever: DatabaseService class is not async
-			Task.Run(async () =>
-			{
-				await _storage.DeleteAsync(fileName);
-			});
 		}
 
 		/// <summary>
@@ -199,9 +182,5 @@ namespace Lingvo.Backend
 			}
 		}
 
-		public Task<Page> FindPageByNumberAsync(int workbookId, int pageNumber)
-		{
-			return Pages.FirstOrDefaultAsync(p => p.workbookId == workbookId && p.Number == pageNumber);
-		}
 }
 }
