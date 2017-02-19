@@ -3,6 +3,7 @@ using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Services;
+using Lingvo.MobileApp.Services.Progress;
 using Lingvo.MobileApp.Util;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,7 @@ namespace Lingvo.MobileApp.Templates
 
         private async void DownloadButton_Clicked()
         {
-
-            if (cancellationToken == null)
+            if (!ProgressHolder.Instance.HasPageProgress(((IPage)BindingContext).Id))
             {
                 if (!await AlertHelper.DisplayWarningIfNotWifiConnected())
                 {
@@ -55,7 +55,7 @@ namespace Lingvo.MobileApp.Templates
                 }));
                 downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
 
-                await ((PageProxy)BindingContext).Resolve(cancellationToken.Token);
+                await ((PageProxy)BindingContext).Resolve(cancellationToken);
             }
             else
             {
@@ -110,14 +110,25 @@ namespace Lingvo.MobileApp.Templates
             }
 
             int progress = 0;
+            bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
+            bool hasSubProgress = false;
+
             if (ProgressHolder.Instance.HasPageProgress(page.Id))
             {
-                progress = (int)ProgressHolder.Instance.GetPageProgress(page.Id).CurrentProgress;
+                PageProgress pageProgress = ProgressHolder.Instance.GetPageProgress(page.Id);
+                progress = (int)pageProgress.CurrentProgress;
+                cancellationToken = pageProgress.CancellationToken;
+
+                hasSubProgress = pageProgress.IsSubProgress;
+            }
+            else
+            {
+                cancellationToken = null;
             }
 
-            bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
+            hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
 
-            if (ProgressHolder.Instance.HasPageProgress(page.Id) && hasRunningToken)
+            if (!downloaded && ProgressHolder.Instance.HasPageProgress(page.Id) && hasRunningToken)
             {
                 downloadButton.Image = cancelImage;
             }
@@ -127,7 +138,7 @@ namespace Lingvo.MobileApp.Templates
             }
 
             ProgressView.Progress = downloaded ? 100 : progress;
-            downloadButton.IsEnabled = !downloaded && (!ProgressHolder.Instance.HasPageProgress(page.Id) || hasRunningToken);
+            downloadButton.IsEnabled = !downloaded && !hasSubProgress && (!ProgressHolder.Instance.HasPageProgress(page.Id) || hasRunningToken);
         }
 
         protected override void Event_PageChanged(IPage p)

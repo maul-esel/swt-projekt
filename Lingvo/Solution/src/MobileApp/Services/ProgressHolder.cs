@@ -4,6 +4,7 @@ using Lingvo.MobileApp.Services.Progress;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Lingvo.MobileApp.Services
 {
@@ -34,36 +35,33 @@ namespace Lingvo.MobileApp.Services
             WorkbookListener = new Dictionary<double, Action<double>>();
         }
 
-        internal void CreatePageProgress(IPage page)
+        internal void CreatePageProgress(IPage page, CancellationTokenSource token)
         {
             if (!pageProgresses.ContainsKey(page.Id))
             {
-                PageProgress pageProgress = new PageProgress(page);
+                PageProgress pageProgress = new PageProgress(page, token);
 
                 if (!workbookProgresses.ContainsKey(page.workbookId))
                 {
-                    WorkbookProgress workbookProgress = new WorkbookProgress(page.Workbook);
+                    WorkbookProgress workbookProgress = new WorkbookProgress(page.Workbook, token);
                     workbookProgresses.Add(page.workbookId, workbookProgress);
-                    workbookProgress.Cancelled += OnWorkbookProgressCancelled;
 
                     LocalCollection.Instance.OnWorkbookChanged(page.Workbook);
                 }
 
                 workbookProgresses[page.workbookId].RegisterPageProgress(pageProgress);
 
+                pageProgress.Cancelled += (p) => DeletePageProgress(p.Page);
+
                 pageProgresses.Add(page.Id, pageProgress);
                 LocalCollection.Instance.OnPageChanged(page);
             }
         }
 
-        private void OnWorkbookProgressCancelled(WorkbookProgress progress)
+        internal void CreateSubProgress(IPage page, CancellationTokenSource token)
         {
-            for (int idx = progress.CurrentPageProgresses.Count - 1; idx >= 0; idx--)
-            {
-                DeletePageProgress(progress.CurrentPageProgresses[idx].Page);
-            }
-
-            LocalCollection.Instance.OnWorkbookChanged(progress.Workbook);
+            CreatePageProgress(page, token);
+            pageProgresses[page.Id].MarkAsSubProgress();
         }
 
         internal void DeletePageProgress(IPage page)

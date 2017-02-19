@@ -32,7 +32,7 @@ namespace Lingvo.MobileApp.Proxies
         /// </summary>
         /// <returns>The page.</returns>
         /// <param name="proxy">A proxy for the page that is downloaded</param>
-        internal async Task<Page> DownloadSinglePage(PageProxy proxy, CancellationToken cancellationToken)
+        internal async Task<Page> DownloadSinglePage(PageProxy proxy, CancellationTokenSource cancellationToken)
         {
             return await service.FetchPage(proxy, cancellationToken);
         }
@@ -42,7 +42,7 @@ namespace Lingvo.MobileApp.Proxies
         /// </summary>
         /// <returns>The workbook.</returns>
         /// <param name="workbookID">Workbook identifier.</param>
-        public async Task<Workbook> DownloadWorkbook(int workbookID, CancellationToken cancellationToken)
+        public async Task<Workbook> DownloadWorkbook(int workbookID, CancellationTokenSource cancellationToken)
         {
             var workbook = await service.FetchWorkbook(workbookID, cancellationToken);
 

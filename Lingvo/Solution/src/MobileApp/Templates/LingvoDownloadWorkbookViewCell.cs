@@ -9,6 +9,7 @@ using System.Threading;
 using System.Linq;
 using Lingvo.MobileApp.Services;
 using Lingvo.MobileApp.Util;
+using Lingvo.MobileApp.Services.Progress;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -86,7 +87,7 @@ namespace Lingvo.MobileApp.Templates
                 }));
                 downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_cancel.png");
 
-                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, cancellationToken.Token).ConfigureAwait(false);
+                await CloudLibraryProxy.Instance.DownloadWorkbook(((Workbook)BindingContext).Id, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -146,7 +147,13 @@ namespace Lingvo.MobileApp.Templates
 
             if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id))
             {
-                progress = (int)ProgressHolder.Instance.GetWorkbookProgress(workbook.Id).CurrentProgress;
+                WorkbookProgress workbookProgress = ProgressHolder.Instance.GetWorkbookProgress(workbook.Id);
+                progress = (int)workbookProgress.CurrentProgress;
+                cancellationToken = workbookProgress.CancellationToken;
+            }
+            else
+            {
+                cancellationToken = null;
             }
 
             bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;

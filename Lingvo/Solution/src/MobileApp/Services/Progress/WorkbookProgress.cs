@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Lingvo.MobileApp.Services.Progress
 {
@@ -14,7 +15,10 @@ namespace Lingvo.MobileApp.Services.Progress
             get; private set;
         }
 
-        public event Action<WorkbookProgress> Cancelled;
+        public CancellationTokenSource CancellationToken
+        {
+            get; set;
+        }
 
         public List<PageProgress> CurrentPageProgresses
         {
@@ -28,13 +32,24 @@ namespace Lingvo.MobileApp.Services.Progress
 
         public int PageProgressCount => CurrentPageProgresses.Count;
 
-        public WorkbookProgress(Workbook workbook) : base()
+        public WorkbookProgress(Workbook workbook, CancellationTokenSource token) : base()
         {
-            this.Workbook = workbook;
+            Workbook = workbook;
+
+            CancellationToken = token;
+            CancellationToken.Token.Register(OnCancel);
 
             CurrentPageProgresses = new List<PageProgress>();
 
             SubProgressChanged(null, 0);
+        }
+
+        private void OnCancel()
+        {
+            for (int idx = CurrentPageProgresses.Count - 1; idx >= 0; idx--)
+            {
+                CurrentPageProgresses[idx].CancellationToken.Cancel();
+            }
         }
 
         protected override void OnReport(double value)
@@ -66,23 +81,12 @@ namespace Lingvo.MobileApp.Services.Progress
             }
         }
 
-        private void SubProgressCancelled()
-        {
-            Cancelled?.Invoke(this);
-        }
-
-        public void Cancel()
-        {
-            Cancelled?.Invoke(this);
-        }
-
         public void RegisterPageProgress(PageProgress progress)
         {
             if (!CurrentPageProgresses.Contains(progress))
             {
                 CurrentPageProgresses.Add(progress);
                 progress.ProgressChanged += SubProgressChanged;
-                progress.Cancelled += SubProgressCancelled;
             }
         }
 
@@ -92,7 +96,6 @@ namespace Lingvo.MobileApp.Services.Progress
             {
                 CurrentPageProgresses.Remove(progress);
                 progress.ProgressChanged -= SubProgressChanged;
-                progress.Cancelled -= SubProgressCancelled;
             }
         }
     }

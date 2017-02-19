@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Lingvo.MobileApp.Services.Progress
 {
@@ -12,17 +13,35 @@ namespace Lingvo.MobileApp.Services.Progress
             get; private set;
         }
 
-        public event Action Cancelled;
+        public event Action<PageProgress> Cancelled;
 
         internal IPage Page
         {
             get; private set;
         }
 
-        public PageProgress(IPage page) : base()
+        public CancellationTokenSource CancellationToken
+        {
+            get; private set;
+        }
+
+        public bool IsSubProgress
+        {
+            get; private set;
+        }
+
+        public PageProgress(IPage page, CancellationTokenSource token) : base()
         {
             Page = page;
+            CancellationToken = token;
+            CancellationToken.Token.Register(() => Cancelled?.Invoke(this));
             CurrentProgress = 0;
+            IsSubProgress = false;
+        }
+
+        public void MarkAsSubProgress()
+        {
+            IsSubProgress = true;
         }
 
         protected override void OnReport(double value)
@@ -40,11 +59,6 @@ namespace Lingvo.MobileApp.Services.Progress
         public void Report(double progress)
         {
             OnReport(progress);
-        }
-
-        public void Cancel()
-        {
-            Cancelled?.Invoke();
         }
     }
 }
