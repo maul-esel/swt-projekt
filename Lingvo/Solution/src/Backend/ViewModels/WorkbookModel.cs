@@ -28,8 +28,8 @@ namespace Lingvo.Backend.ViewModels
 		[Remote(action: nameof(Controllers.WorkbookController.UniqueWorkbookTitle), controller: "Workbook",
 			AdditionalFields = nameof(Id),
 			ErrorMessage = "Ein Arbeitsheft mit diesem Titel existiert bereits.")]
-		public string Title { get; }
+		public string Title { get; set; }
 
-		public string Subtitle { get; }
+		public string Subtitle { get; set; }
 	}
 }
