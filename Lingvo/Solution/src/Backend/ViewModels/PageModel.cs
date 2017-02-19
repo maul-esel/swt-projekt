@@ -55,7 +55,7 @@ namespace Lingvo.Backend.ViewModels
 		public string Description { get; set; }
 
 		[Required(ErrorMessage = "Es muss eine Seitennummer angegeben werden.")]
-		[Remote(action: nameof(Controllers.HomeController.UniquePageNumber), controller: "Home",
+		[Remote(action: nameof(Controllers.PageController.UniquePageNumber), controller: "Page",
 			AdditionalFields = "WorkbookID,Id",
 			ErrorMessage = "Eine Seite mit dieser Seitenzahl existiert bereits.")]
 		public int PageNumber { get; set; }

@@ -24,7 +24,7 @@ namespace Lingvo.Backend.ViewModels
 		public int? Id { get; set; }
 
 		[Required(ErrorMessage = "Es muss ein Titel angegeben werden.")]
-		[Remote(action: nameof(Controllers.HomeController.UniqueWorkbookTitle), controller: "Home",
+		[Remote(action: nameof(Controllers.WorkbookController.UniqueWorkbookTitle), controller: "Workbook",
 			AdditionalFields = nameof(Id),
 			ErrorMessage = "Ein Arbeitsheft mit diesem Titel existiert bereits.")]
 		public string Title { get; }
