@@ -14,18 +14,16 @@ namespace Lingvo.MobileApp.Proxies
 
         public delegate void OnPageChanged(int id);
 
-        private int number;
-        private String description;
-        public DateTime CreationTime
-        {
-            get; set;
-        }
-
         private Page original;
 
         public Workbook Workbook { get; set; }
 
         public int workbookId { get; set; }
+
+        public DateTime CreationTime
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the page number.
@@ -33,14 +31,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The number.</value>
         public int Number
         {
-            get
-            {
-                return number;
-            }
-            set
-            {
-                number = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -49,14 +40,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The description.</value>
         public String Description
         {
-            get
-            {
-                return description;
-            }
-            set
-            {
-                description = value;
-            }
+            get; set;
         }
 
         /// <summary>

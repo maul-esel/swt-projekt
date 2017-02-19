@@ -15,6 +15,7 @@ using System.Threading;
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Services;
 using Lingvo.MobileApp.Services.Progress;
+using Newtonsoft.Json.Converters;
 
 namespace Lingvo.MobileApp
 {
@@ -23,10 +24,10 @@ namespace Lingvo.MobileApp
     /// </summary>
     public class APIService
     {
-#if !DEBUG
+#if DEBUG
 #if __ANDROID__
-                // Android Simulator forwards development localhost to IP 10.0.2.2
-                private const string URL = "http://10.0.2.2:5000/api/app/";
+        // Android Simulator forwards development localhost to IP 10.0.2.2
+        private const string URL = "http://10.0.2.2:5000/api/app/";
 #elif __IOS__
                 private const string URL = "http://localhost:5000/api/app/";
 #endif
@@ -287,20 +288,17 @@ namespace Lingvo.MobileApp
             try
             {
                 var responseFromServer = await FetchTextFromURLAsync($"{URL}workbooks/{workbook.Id}/pages");
-                List<PageProxy> proxies = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer);
 
-                foreach (var page in proxies)
+                workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer, new IsoDateTimeConverter()
+                {
+                    DateTimeFormat = "dd.MM.yyyy HH:mm:ss"
+                }));
+
+
+                foreach (var page in workbook.Pages)
                 {
                     page.Workbook = workbook;
-
-                    var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                        await FetchTextFromURLAsync($"{URL}pages/{page.Id}")
-                    );
-
-                    page.CreationTime = DateTime.ParseExact(json["creationTime"], "dd.MM.yyyy HH:mm:ss", null);
                 }
-
-                workbook.Pages.AddRange(proxies);
             }
             catch
             {
