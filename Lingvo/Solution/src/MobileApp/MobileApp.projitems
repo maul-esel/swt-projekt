@@ -22,6 +22,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Pages\EditTeacherMemoPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\LegalPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\WorkbookPagesPage.cs">
       <SubType>Code</SubType>
     </Compile>

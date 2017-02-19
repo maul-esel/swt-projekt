@@ -24,6 +24,9 @@
             <Span x:Key="label_nameAlreadyExists">Name schon vergeben</Span>
             <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrerspur mit diesem Namen. Bitte wählen Sie einen anderen.</Span>
             <Span x:Key="label_edit">Bearbeiten</Span>
+            <Span x:Key="label_legal">Impressum</Span>
+            <Span x:Key="app_name">Lingvo</Span>
+            <Span x:Key="legal_content">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
