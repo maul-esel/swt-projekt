@@ -49,6 +49,7 @@ namespace Lingvo.MobileApp.Templates
             {
                 Size = Device.OnPlatform(iOS: 50, Android: 72, WinPhone: 240),
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None,
+				MuteEnabled = false,
                 TextSize = 15
             };
 
