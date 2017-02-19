@@ -127,10 +127,22 @@ namespace Lingvo.MobileApp.Templates
                 ProgressView.MaxProgress = 0;
             }
 
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+            if (NewerVersionExists(workbook))
+            {
+                ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Error;
+                ProgressView.OuterProgressColor = Color.Red;
+                SubtitleLabel.Text = ((Span)App.Current.Resources["label_newer_version"]).Text;
+                SubtitleLabel.IsVisible = true;
+                progress = 0;
+            }
+            else
+            {
+                ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+                ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+            }
+
             ProgressView.InnerProgressEnabled = false;
             ProgressView.TextSize = 20;
-            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
             try
             {
@@ -163,6 +175,18 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.Progress = progress;
 
             downloadButton.IsEnabled = progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || hasRunningToken);
+        }
+
+        private bool NewerVersionExists(Workbook workbook)
+        {
+            foreach (IPage page in workbook.Pages)
+            {
+                if (((PageProxy)page).NewerVersionExists())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -16,6 +16,10 @@ namespace Lingvo.MobileApp.Proxies
 
         private int number;
         private String description;
+        public DateTime CreationTime
+        {
+            get; set;
+        }
 
         private Page original;
 
@@ -130,9 +134,15 @@ namespace Lingvo.MobileApp.Proxies
         /// <returns>The resolve.</returns>
         public async Task Resolve(CancellationToken cancellationToken)
         {
+            if (NewerVersionExists())
+            {
+                IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+                LocalCollection.Instance.DeletePage((Page)localPage);
+                original = null;
+            }
+
             if (original == null)
             {
-
                 var p = App.Database.FindPage(this.Id);
                 if (p != null)
                 {
@@ -156,6 +166,7 @@ namespace Lingvo.MobileApp.Proxies
             }
 
             original = page;
+            CreationTime = page.TeacherTrack.CreationTime;
 
             App.Database.Save(original.TeacherTrack);
             App.Database.Save(original);
@@ -170,6 +181,18 @@ namespace Lingvo.MobileApp.Proxies
             {
                 original.DeleteStudentRecording();
             }
+        }
+
+        public bool NewerVersionExists()
+        {
+            IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+
+            if (localPage != null)
+            {
+                return CreationTime.CompareTo(localPage.TeacherTrack.CreationTime) > 0;
+            }
+
+            return false;
         }
     }
 }

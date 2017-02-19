@@ -287,12 +287,20 @@ namespace Lingvo.MobileApp
             try
             {
                 var responseFromServer = await FetchTextFromURLAsync($"{URL}workbooks/{workbook.Id}/pages");
-                workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer));
+                List<PageProxy> proxies = JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer);
 
-                foreach (var page in workbook.Pages)
+                foreach (var page in proxies)
                 {
                     page.Workbook = workbook;
+
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+                        await FetchTextFromURLAsync($"{URL}pages/{page.Id}")
+                    );
+
+                    page.CreationTime = DateTime.ParseExact(json["creationTime"], "dd.MM.yyyy HH:mm:ss", null);
                 }
+
+                workbook.Pages.AddRange(proxies);
             }
             catch
             {

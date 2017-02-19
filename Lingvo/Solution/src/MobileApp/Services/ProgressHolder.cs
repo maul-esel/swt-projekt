@@ -87,7 +87,7 @@ namespace Lingvo.MobileApp.Services
         {
             if (progress != null)
             {
-                PageListener.Remove(page.Id);
+                UnsetPageProgressListener(page);
                 PageListener.Add(page.Id, progress);
             }
         }
@@ -101,6 +101,7 @@ namespace Lingvo.MobileApp.Services
         {
             if (progress != null)
             {
+                UnsetWorkbookProgressListener(workbook);
                 WorkbookListener.Add(workbook.Id, progress);
             }
         }
