@@ -31,7 +31,7 @@ namespace Lingvo.Backend.ViewModels
 		public int? Id { get; set; }
 
 		[BindNever]
-		public Page Page { get; }
+		public Page Page { get; set; }
 
 		[BindNever]
 		public Workbook Workbook { get; set; }

@@ -11,60 +11,43 @@ using Lingvo.Common.Entities;
 
 namespace Lingvo.Backend.Controllers
 {
+	/// <summary>
+	/// Controller responsible for working with pages in a workbook.
+	/// </summary>
 	#if !DEBUG
 		[RequireHttps]
 	#endif
 	[Authorize]
 	public class PageController : Controller
 	{
-		[Route("pages/edit/{id}")]
-		public async Task<IActionResult> EditPage([FromServices] CloudLibrary cl, int id)
+		/// <summary>
+		/// Displays the view for adding a page to the workbook indicated by <paramref name="workbookId"/>.
+		/// If <paramref name="pageNumber"/> is specified, this is shown as default.
+		/// </summary>
+		[Route("workbooks/{workbookId}/pages/add")]
+		public IActionResult AddPage([FromServices] CloudLibrary cl, int workbookId, int? pageNumber)
 		{
-			ViewData["Title"] = "Seite bearbeiten";
+			var workbook = cl.FindWorkbookWithReferences(workbookId);
+			if (workbook == null)
+				return NotFound();
 
-			var page = cl.FindPageWithRecording(id);
-			var workbook = cl.FindWorkbookWithReferences(page.workbookId);
-			var recordingUrl = await cl.GetAccessUrlAsync(page.TeacherTrack);
+			ViewData["Title"] = "Neue Seite erstellen";
+			ViewData["pageNumber"] = pageNumber;
 
-			var model = new PageModel(page, recordingUrl) { Workbook = workbook };
-			return View("AddPage", model);
+			return View(new PageModel() { Workbook = workbook });
 		}
 
-		[Route("pages/delete/{id}")]
-		public async Task<IActionResult> DeletePage([FromServices] CloudLibrary cl, int id)
+		/// <summary>
+		/// Adds a page with the data given in <paramref name="model"/> to a workbook.
+		/// If <paramref name="nextPage"/> is <c>true</c>, redirects to the add / edit view
+		/// for the next page.
+		/// </summary>
+		[HttpPost, Route("workbooks/{workbookId}/pages/add")]
+		public async Task<IActionResult> AddPage([FromServices] CloudLibrary cl, PageModel model, bool nextPage = false)
 		{
-			var page = cl.FindPageWithRecording(id);
-			var workbookID = page.workbookId;
-			await cl.Delete(page);
-			return Redirect("/workbooks/" + workbookID);
-		}
+			if (!ModelState.IsValid)
+				return View(model);
 
-		[HttpPost]
-		public async Task<IActionResult> UpdatePage([FromServices] CloudLibrary cl, int id, PageModel model, bool nextPage = false)
-		{
-			var page = cl.FindPageWithRecording(id);
-
-			if (model.UploadedFile != null || model.RecordedFile != null)
-			{
-				var recording = await SaveRecording(cl, model);
-				await cl.Delete(page.TeacherTrack);
-				page.TeacherTrack = recording;
-			}
-
-			page.Description = model.Description;
-			page.Number = model.PageNumber;
-			await cl.Save(page);
-
-
-			if (nextPage)
-				return await RedirectToNextPage(cl, page.workbookId, page.Number);
-			else
-				return Redirect("/workbooks/" + model.WorkbookID);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> CreatePage([FromServices] CloudLibrary cl, PageModel model, bool nextPage = false)
-		{
 			var recording = await SaveRecording(cl, model);
 			await cl.Save(new Page()
 			{
@@ -80,6 +63,79 @@ namespace Lingvo.Backend.Controllers
 				return Redirect("/workbooks/" + model.WorkbookID);
 		}
 
+		/// <summary>
+		/// Displays the view for editing the existing page wit the given <paramref name="id"/>.
+		/// </summary>
+		[Route("pages/edit/{id}")]
+		public async Task<IActionResult> EditPage([FromServices] CloudLibrary cl, int id)
+		{
+			ViewData["Title"] = "Seite bearbeiten";
+
+			var page = cl.FindPageWithRecording(id);
+			if (page == null)
+				return NotFound();
+
+			var workbook = cl.FindWorkbookWithReferences(page.workbookId);
+			var recordingUrl = await cl.GetAccessUrlAsync(page.TeacherTrack);
+
+			var model = new PageModel(page, recordingUrl) { Workbook = workbook };
+			return View(nameof(AddPage), model);
+		}
+
+		/// <summary>
+		/// Updates a page with the data in the given <paramref name="model"/>.
+		/// If <paramref name="nextPage"/> is <c>true</c>, redirects to the add / edit view
+		/// for the next page.
+		/// </summary>
+		[HttpPost, Route("pages/edit/{id}")]
+		public async Task<IActionResult> EditPage([FromServices] CloudLibrary cl, int id, PageModel model, bool nextPage = false)
+		{
+			var page = cl.FindPageWithRecording(id);
+			if (page == null)
+				return NotFound();
+
+			if (!ModelState.IsValid)
+			{
+				model.Page = page;
+				return View(nameof(AddPage), model);
+			}
+
+			if (model.UploadedFile != null || model.RecordedFile != null)
+			{
+				var recording = await SaveRecording(cl, model);
+				await cl.Delete(page.TeacherTrack);
+				page.TeacherTrack = recording;
+			}
+
+			page.Description = model.Description;
+			page.Number = model.PageNumber;
+			await cl.Save(page);
+
+			if (nextPage)
+				return await RedirectToNextPage(cl, page.workbookId, page.Number);
+			else
+				return Redirect("/workbooks/" + model.WorkbookID);
+		}
+
+		/// <summary>
+		/// Deletes the page with the given <paramref name="id"/>.
+		/// Redirects to the workbook view for the workbook containing the page.
+		/// </summary>
+		[Route("pages/{id}/delete")]
+		public async Task<IActionResult> DeletePage([FromServices] CloudLibrary cl, int id)
+		{
+			var page = cl.FindPageWithRecording(id);
+			if (page == null)
+				return NotFound();
+
+			var workbookID = page.workbookId;
+			await cl.Delete(page);
+			return Redirect("/workbooks/" + workbookID);
+		}
+
+		/// <summary>
+		/// Helper method for redirecting to the add / edit view for the next page.
+		/// </summary>
 		private async Task<IActionResult> RedirectToNextPage([FromServices] CloudLibrary cl, int workbookId, int pageNumber)
 		{
 			var page = await cl.FindPageByNumberAsync(workbookId, pageNumber + 1);
@@ -88,6 +144,9 @@ namespace Lingvo.Backend.Controllers
 			return RedirectToAction(nameof(EditPage), new { id = page.Id });
 		}
 
+		/// <summary>
+		/// Helper method for saving an uploaded recording.
+		/// </summary>
 		private async Task<Recording> SaveRecording([FromServices] CloudLibrary cl, PageModel model)
 		{
 			var file = model.RecordedFile ?? model.UploadedFile;
@@ -101,16 +160,10 @@ namespace Lingvo.Backend.Controllers
 				return await cl.CreateRecording(stream, fileName, model.Duration);
 		}
 
-		[Route("workbooks/{workbookId}/pages/add")]
-		public IActionResult AddPage([FromServices] CloudLibrary cl, int workbookId, int? pageNumber)
-		{
-			ViewData["Title"] = "Neue Seite erstellen";
-			ViewData["pageNumber"] = pageNumber;
-
-			var workbook = cl.FindWorkbookWithReferences(workbookId);
-			return View(new PageModel() { Workbook = workbook });
-		}
-
+		/// <summary>
+		/// Remote validation method to verify page numbers are unique in a workbook.
+		/// </summary>
+		[Route("pages/validate/unique")]
 		public async Task<IActionResult> UniquePageNumber([FromServices] CloudLibrary cl, int? id, int workbookId, int pageNumber)
 		{
 			var page = await cl.FindPageByNumberAsync(workbookId, pageNumber);

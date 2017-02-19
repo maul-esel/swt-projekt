@@ -19,8 +19,9 @@ namespace Lingvo.Backend.ViewModels
 		}
 
 		[BindNever]
-		public Workbook Workbook { get; }
+		public Workbook Workbook { get; set; }
 
+		[BindNever]
 		public int? Id { get; set; }
 
 		[Required(ErrorMessage = "Es muss ein Titel angegeben werden.")]
