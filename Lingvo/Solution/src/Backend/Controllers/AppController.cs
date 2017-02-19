@@ -24,6 +24,7 @@ namespace Lingvo.Backend.Controllers
 		{
 			return Json(from w in db.Workbooks
 						where w.IsPublished
+			            orderby w.Id
 						select new { w.Id, w.Title, w.Subtitle, w.LastModified, w.TotalPages });
 		}
 
@@ -51,6 +52,7 @@ namespace Lingvo.Backend.Controllers
 		{
 			return Json(from p in db.Pages
 						where p.workbookId == workbookId
+			            orderby p.Id
 						select new { p.Id, p.workbookId, p.Number, p.Description });
 		}
 
@@ -59,16 +61,16 @@ namespace Lingvo.Backend.Controllers
 		/// </summary>
 		/// <returns>The teacher track.</returns>
 		[Route("pages/{pageId}")]
-		public async Task<IActionResult> GetTeacherTrack([FromServices] DatabaseService db, [FromServices] IStorage storage, int pageId)
+		public async Task<IActionResult> GetTeacherTrack([FromServices] CloudLibrary cl, int pageId)
 		{
-			var page = db.FindPageWithRecording(pageId);
+			var page = cl.FindPageWithRecording(pageId);
 			if (page == null)
 				return NotFound();
 
 			return Json(new {
 				duration = page.TeacherTrack.Duration,
 				creationTime = page.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-				url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath)
+				url = await cl.GetAccessUrlAsync(page.TeacherTrack)
 			});
 		}
     }

@@ -15,8 +15,10 @@ namespace Lingvo.Backend
 		public DbSet<Recording> Recordings { get; set; }
 		public DbSet<Editor> Editors { get; set; }
 
+
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
-    	{ }
+		{
+		}
 
 		public static DatabaseService Connect(string connectionString)
 		{
@@ -70,7 +72,7 @@ namespace Lingvo.Backend
 
 		public Page FindPageWithRecording(int id)
 		{
-			var page = Find<Page>(id);
+			var page = Pages.Find(id);
 			if (page == null)
 				return null;
 
@@ -85,13 +87,7 @@ namespace Lingvo.Backend
 		/// <param name="recording">Recording.</param>
 		public void Save(Recording recording)
 		{
-			if (Recordings.Find(recording.Id) != null)
-			{
-				var r = Recordings.Find(recording.Id);
-				r.Duration = recording.Duration;
-				r.LocalPath = recording.LocalPath;
-			}
-			else
+			if (Recordings.Find(recording.Id) == null)
 			{
 				Recordings.Add(recording);
 			}
@@ -105,19 +101,7 @@ namespace Lingvo.Backend
 		/// <param name="page">Page.</param>
 		public void Save(Page page)
 		{
-			if (Pages.Find(page.Id) != null)
-			{
-				var p = Pages.Find(page.Id);
-				p.Description = page.Description;
-				p.Number = page.Number;
-				p.StudentTrack = page.StudentTrack;
-				p.studentTrackId = page.studentTrackId;
-				p.teacherTrackId = page.teacherTrackId;
-				p.TeacherTrack = page.TeacherTrack;
-				p.workbookId = page.workbookId;
-				p.Workbook = page.Workbook;
-			}
-			else
+			if (Pages.Find(page.Id) == null)
 			{
 				Pages.Add(page);
 			}
@@ -131,15 +115,7 @@ namespace Lingvo.Backend
 		/// <param name="workbook">Workbook.</param>
 		public void Save(Workbook workbook)
 		{
-			if (Workbooks.Find(workbook.Id) != null)
-			{
-				var w = Workbooks.Find(workbook.Id);
-				w.Title = workbook.Title;
-				w.Subtitle = workbook.Subtitle;
-				w.Pages = workbook.Pages;
-				w.TotalPages = workbook.TotalPages;
-			}
-			else
+			if (Workbooks.Find(workbook.Id) == null)
 			{
 				Workbooks.Add(workbook);
 			}
@@ -175,13 +151,13 @@ namespace Lingvo.Backend
 				return;
 			}
 
-			var r = Recordings.Find(page.teacherTrackId);
+			var r = Recordings.Find(p.teacherTrackId);
 			if (r != null)
 			{
 				Recordings.Remove(r);
 			}
 
-			Pages.Remove(p);
+			Pages.Remove(page);
 			SaveChanges();
 		}
 
@@ -192,28 +168,18 @@ namespace Lingvo.Backend
 		/// <param name="workbook">Workbook.</param>
 		public void Delete(Workbook workbook)
 		{
-			var w = Workbooks.Find(workbook.Id);
+			// load workbook with references in order to delete their pages
+			var w = FindWorkbookWithReferences(workbook.Id);
 
 			if (w != null)
 			{
-				foreach (var p in workbook.Pages)
-				{
-					Delete((Page) p);
-				}
+				// pages must be deleted explicitly in order to also delete recordings and their files
+				foreach (var page in w.Pages.ToList())
+					Delete((Page)page);
 
 				Workbooks.Remove(w); 
 				SaveChanges();
 			}
-		}
-
-		public Task<Workbook> FindWorkbookByTitleAsync(string title)
-		{
-			return Workbooks.FirstOrDefaultAsync(w => w.Title == title);
-		}
-
-		public Task<Page> FindPageByNumberAsync(int workbookId, int pageNumber)
-		{
-			return Pages.FirstOrDefaultAsync(p => p.workbookId == workbookId && p.Number == pageNumber);
 		}
 	}
 }

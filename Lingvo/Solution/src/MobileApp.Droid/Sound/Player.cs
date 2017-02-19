@@ -40,17 +40,16 @@ namespace Lingvo.MobileApp.Droid.Sound
             {
                 if (State == PlayerState.PLAYING)
                 {
-                    OnProgress();
+                    OnProgress(teacherTrack.CurrentPosition);
                     progressHandler.PostDelayed(progressUpdate, 100);
                 }
             });
             State = PlayerState.IDLE;
         }
 
-        private void OnProgress()
+        private void OnProgress(int elapsedMilliseconds)
         {
-            var milliseconds = teacherTrack.CurrentPosition;
-            Update?.Invoke((int)milliseconds);
+			Update?.Invoke(elapsedMilliseconds);
 
         }
 
@@ -141,8 +140,13 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             teacherRecording = recording;
             teacherTrack = CreateNewPlayer(recording);
-            teacherTrack.Completion += (o, e) => Stop();
+			teacherTrack.Completion += (o, e) =>
+			{
+				Stop();
+				OnProgress(teacherTrack.Duration);
+			};
             State = PlayerState.STOPPED;
+			OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void SeekTo(int seconds)
@@ -150,13 +154,13 @@ namespace Lingvo.MobileApp.Droid.Sound
             if (teacherTrack?.CurrentPosition + seconds * 1000 >= teacherTrack?.Duration)
             {
                 teacherTrack?.SeekTo(teacherTrack.Duration);
-                OnProgress();
+                OnProgress(teacherTrack.CurrentPosition);
                 Stop();
                 return;
             }
             teacherTrack?.SeekTo(teacherTrack.CurrentPosition + seconds * 1000);
             studentTrack?.SeekTo(studentTrack.CurrentPosition + seconds * 1000);
-            OnProgress();
+            OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void Stop()
@@ -189,17 +193,10 @@ namespace Lingvo.MobileApp.Droid.Sound
             audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
             audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
 
-           // if (recording.LocalPath.Length > 0)
-            //{
+
 			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
-            //}
-            //else
-            //{
-            //   var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
-            //    mediaPlayer.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
-            //}
-
+           
             mediaPlayer.SetAudioStreamType(audioManager.WiredHeadsetOn ? Stream.Music : Stream.VoiceCall);
             mediaPlayer.SetVolume(1.0f, 1.0f);
             mediaPlayer.Prepare();

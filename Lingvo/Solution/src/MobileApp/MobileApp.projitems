@@ -45,7 +45,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoWorkbookViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\LingvoPageViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LingvoMobileContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\FileUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\FileUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DownloadRequestState.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">

@@ -25,7 +25,7 @@ namespace Lingvo.Backend.ViewModels
 			Id = page.Id;
 			Workbook = page.Workbook;
 			CurrentRecordingUrl = recordingUrl;
-			CurrentRecordingName = FormatRecordingName(page.TeacherTrack.LocalPath);
+			CurrentRecordingName = FormatRecordingName(page.TeacherTrack);
 		}
 
 		public int? Id { get; set; }
@@ -66,9 +66,18 @@ namespace Lingvo.Backend.ViewModels
 
 		public int Duration { get; set; }
 
-		private string FormatRecordingName(string filename)
+		private string FormatRecordingName(Recording recording)
 		{
-			return filename; // TODO: proper display name, uploaded date, ...
+			string time = recording.CreationTime.ToString("dd. MM. yyyy u\\m HH:mm U\\hr");
+			if (recording.LocalPath.StartsWith("uploaded_"))
+			{
+				return "Hochgeladen am " + time;
+			}
+			else if (recording.LocalPath.StartsWith("recorded_"))
+			{
+				return "Aufgenommen am " + time;
+			}
+			return recording.LocalPath;
 		}
 	}
 }

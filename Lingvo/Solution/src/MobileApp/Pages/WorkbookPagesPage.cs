@@ -2,6 +2,7 @@
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Templates;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
@@ -29,7 +30,7 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(async () =>
              {
-                 Workbook newWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id.Equals(workbook.Id));
+                 Workbook newWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
                  if (newWorkbook != null && newWorkbook.Pages.Count > 0)
                  {
                      listView.ItemsSource = newWorkbook.Pages;
@@ -62,6 +63,9 @@ namespace Lingvo.MobileApp.Pages
                 listView
                 }
             };
+			#if __IOS__
+				NavigationPage.SetBackButtonTitle(this, "Zurück");
+			#endif
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)

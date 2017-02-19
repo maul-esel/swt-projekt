@@ -37,11 +37,12 @@ namespace Lingvo.MobileApp.Pages
             listView.ItemTapped += Handle_ItemTapped;
             listView.ItemSelected += Handle_ItemSelected;
 
-            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() => {
-                List<Workbook> newSource = new List<Workbook>(LocalCollection.Instance.Workbooks);
+            listView.RefreshCommand = new Command(() => Device.BeginInvokeOnMainThread(() =>
+            {
+                Workbook[] newSource = LocalCollection.Instance.Workbooks.ToArray();
                 listView.ItemsSource = newSource;
-                errorLabel.IsVisible = newSource.Count == 0;
-                listView.IsVisible = newSource.Count > 0;
+                errorLabel.IsVisible = newSource.Length == 0;
+                listView.IsVisible = newSource.Length > 0;
             }));
 
             LocalCollection.Instance.WorkbookChanged += (w) => listView.RefreshCommand.Execute(null);

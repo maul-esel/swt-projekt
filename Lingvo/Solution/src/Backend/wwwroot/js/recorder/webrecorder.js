@@ -6,22 +6,34 @@
   var recorder;
   var current_recording;
   var recording = 0;
-  
-  function startRecording(button) {
+
+  var isSubmit = false;
+  var isCancel = false;
+
+  function toggleRecording(toggle) {
+      if (recorder == null && toggle.checked) {
+          toggle.checked = false
+          $("#no-microphone-access").modal();
+          return;
+      }
+      if (toggle.checked) {
+          startRecording()
+      } else {
+          stopRecording()
+      }
+  }
+
+  function startRecording() {
     recording = recording + 1;
     recorder.clear();
     recorder && recorder.record();
-    button.disabled = true;
-    button.nextElementSibling.disabled = false;
     resetElapsedTime()
     elapsed_time_display = setInterval(displayElapsedTime,1000);
     on_air_display = setInterval(displayOnAir,1000);
   }
   
-  function stopRecording(button) {
+  function stopRecording() {
     recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
     clearInterval(elapsed_time_display)
     clearInterval(on_air_display);
     resetDisplayOnAir();
@@ -58,7 +70,14 @@
     });
   }
 
-  function sendBlobToServer(event) {
+    function leavePage(event) {
+        
+        isCancel = true
+    
+    }
+
+
+   function sendBlobToServer(button, event) {
       event.preventDefault()
 
       // check if teacher track required && !available
@@ -73,7 +92,7 @@
       $("#submit-modal").modal()
        
         var form = $("#pageForm")[0];
-        var action = form.getAttribute("action")
+        var action = button.getAttribute("formaction") || form.getAttribute("action")
 
         var formData = new FormData(form);
 
@@ -109,9 +128,11 @@
             $("#submit-modal").modal("hide")
             $("#submit-error-modal").modal()
         })
+       isSubmit = true
   }
   
-  window.onload = function init() {
+   window.onload = function init() {
+       $("#record-btn-toggle").attr('checked', false)
     audioRecorder.requestDevice(function(recorderObject){
       recorder = recorderObject;
     });
@@ -143,3 +164,9 @@
     function padTimeCode ( val ) {
      return val > 9 ? val : "0" + val; 
    }
+
+    window.onbeforeunload = function() {
+        if (!isSubmit && current_recording != null || !isCancel && !isSubmit) {
+            return "Die erstellte Aufnahme wurde noch nicht gespeichert. Möchten Sie diese Seite wirklich verlassen?";
+        }
+    }
