@@ -1,7 +1,7 @@
 var audio_context = null;
 var meter = null;
 var canvasContext = null;
-var WIDTH=100;
+var WIDTH=175;
 var HEIGHT=20;
 var rafID = null;
 var mediaStreamSource = null;

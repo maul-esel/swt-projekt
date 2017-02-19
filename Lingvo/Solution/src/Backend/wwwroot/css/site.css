@@ -238,8 +238,10 @@
 
     #meter
     {
-        display: inline-block !important;
-        border:1px solid #000000;
+        display: inline !important;
+        border: 1px solid #000000;
+        vertical-align: middle !important;
+        margin-left: 30px;
     }
 
 

@@ -78,8 +78,8 @@
                 <div class="col-md-6" >
                         <input type="file" name="recordedFile" id="recordedFile" class="hidden" accept="audio/*" />
                         <h3>Audiospur jetzt direkt aufnehmen</h3>
-                        <div class="panel row">
-                            <div class="panel-content">
+                        <div>
+                            <div class="panel-content row">
                                 <input type="checkbox" class="toggle-button-toggle" id="record-btn-toggle" onchange="toggleRecording(this)" checked="false"/>
                                 <label class="toggle-action-button btn btn-default" id="record-btn" for="record-btn-toggle">
                                     <span class="toggle-button-state1 record-btn-record">
@@ -92,11 +92,11 @@
                                     </span>
                                 </label>
                             
-                                <label id="minutes">00</label>:<label id="seconds">00</label>                            
-                                <canvas class="label" id="meter" width="100" height="20" style="margin-top: 10px " ></canvas>
+                                <label style="padding-left:30px" id="minutes">00</label>:<label id="seconds">00</label>                            
+                                <canvas id="meter" width="175" height="20"></canvas>
                             </div>        
                         </div>
-                        <label id="onair" style="color:red; text-align: left"></label>            
+                        <label id="onair" style="color:red; text-align: left"></label>
                     </div>
                 <div class="row" style="text-align: right;">
                     <div class="col-md-6">
