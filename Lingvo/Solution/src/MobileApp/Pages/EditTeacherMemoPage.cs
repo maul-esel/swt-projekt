@@ -62,7 +62,6 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (Name.Text.Length > 0 && !await checkNameExists(Name.Text))
                 {
-                    //TODO: SIMPLY CREATE A FUCKIN' WORKING DATABASE ACCESS ARCHITECTURE.
                     memo.Name = Name.Text;
                     App.Database.Save(memo);
                     await Navigation.PopAsync();
@@ -110,7 +109,7 @@ namespace Lingvo.MobileApp.Pages
 
             Name = new Entry()
             {
-                Placeholder = "Name der Lehrerspur",
+                Placeholder = ((Span)App.Current.Resources["desc_teacherMemoName"]).Text,
                 PlaceholderColor = Color.Gray,
                 TextColor = (Color)App.Current.Resources["primaryColor"],
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
