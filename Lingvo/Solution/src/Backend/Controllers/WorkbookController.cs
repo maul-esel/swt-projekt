@@ -23,6 +23,13 @@ namespace Lingvo.Backend.Controllers
 			return View(cl.FindWorkbooksWithReferences());
 		}
 
+		[Route("about")]
+		public IActionResult About()
+		{
+			ViewData["Title"] = "About";
+			return View();
+		}
+
 		[Route("workbooks/add")]
 		public IActionResult AddWorkbook()
 		{
