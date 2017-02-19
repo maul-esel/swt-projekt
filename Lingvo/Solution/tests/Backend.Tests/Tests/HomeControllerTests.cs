@@ -44,10 +44,10 @@ namespace Lingvo.Backend.Tests
 			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
 			await controller.PublishWorkbook(cl, 1);
-			Assert.Equal(cl.FindWorkbookWithReferences(1).IsPublished, false);
+			Assert.Equal(false, cl.FindWorkbookWithReferences(1).IsPublished);
 
 			await controller.PublishWorkbook(cl, 1);
-			Assert.Equal(cl.FindWorkbookWithReferences(1).IsPublished, true);
+			Assert.Equal(true, cl.FindWorkbookWithReferences(1).IsPublished);
 
 			Assert.NotNull(cl.FindPageWithRecording(1));
 			Assert.NotNull(cl.FindPageWithRecording(2));
