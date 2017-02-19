@@ -49,7 +49,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         private void OnProgress(int elapsedMilliseconds)
         {
-			Update?.Invoke(elapsedMilliseconds);
+            Update?.Invoke(elapsedMilliseconds);
 
         }
 
@@ -140,13 +140,13 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             teacherRecording = recording;
             teacherTrack = CreateNewPlayer(recording);
-			teacherTrack.Completion += (o, e) =>
-			{
-				Stop();
-				OnProgress(teacherTrack.Duration);
-			};
+            teacherTrack.Completion += (o, e) =>
+            {
+                Stop();
+                OnProgress(teacherTrack.Duration);
+            };
             State = PlayerState.STOPPED;
-			OnProgress(teacherTrack.CurrentPosition);
+            OnProgress(teacherTrack.CurrentPosition);
         }
 
         public void SeekTo(int seconds)
@@ -181,6 +181,7 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             teacherTrack?.Stop();
             studentTrack?.Stop();
+            OnProgress(teacherTrack.CurrentPosition);
             ReinitializePlayer(teacherTrack, teacherRecording);
             ReinitializePlayer(studentTrack, studentRecording);
             State = PlayerState.STOPPED;
@@ -189,7 +190,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         private void ReinitializePlayer(MediaPlayer player, Recording recording)
         {
-            if (recording != null)
+            if (recording != null && player != null)
             {
                 player?.Reset();
                 var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
