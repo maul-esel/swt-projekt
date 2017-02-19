@@ -30,12 +30,12 @@
                     </td>
                     <td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td>
                     <td>
-                        <a asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
+                        <a class="glyphicon-button" asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     </td>
                     <td>
-                        <a title="Aufnahme herunterladen" href="@url" target="_blank" download>
+                        <a class="glyphicon-button" title="Aufnahme herunterladen" href="@url" target="_blank" download>
                             <span class="glyphicon glyphicon-download-alt"></span>
                         </a>
                     </td>
