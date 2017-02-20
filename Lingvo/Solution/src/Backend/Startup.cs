@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Lingvo.Backend
 {
+	using Services;
+
     public class Startup
 	{
 		private const string ConnectionStringVariable = "MYSQLCONNSTR_localdb";

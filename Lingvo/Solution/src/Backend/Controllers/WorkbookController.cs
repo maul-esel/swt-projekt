@@ -3,11 +3,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Lingvo.Backend.ViewModels;
-using Lingvo.Common.Entities;
-
 namespace Lingvo.Backend.Controllers
 {
+	using Common.Entities;
+	using ViewModels;
+	using Services;
+
 	/// <summary>
 	/// Controller responsible for working with workbooks.
 	/// </summary>

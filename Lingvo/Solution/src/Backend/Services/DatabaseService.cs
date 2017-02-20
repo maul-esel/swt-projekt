@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Lingvo.Backend
+namespace Lingvo.Backend.Services
 {
 	using Common.Entities;
 

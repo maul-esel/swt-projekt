@@ -1,20 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Lingvo.Common.Entities;
-
 using Xunit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
-using Lingvo.Backend.ViewModels;
 
 namespace Lingvo.Backend.Tests
 {
+	using Controllers;
+	using ViewModels;
+	using Services;
+
 	public class HomeControllerTests
 	{
 		public HomeControllerTests()

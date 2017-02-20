@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Lingvo.Backend.ViewModels;
-using Lingvo.Common.Entities;
-
-
 namespace Lingvo.Backend.Controllers
 {
+	using Common.Entities;
+	using ViewModels;
+	using Services;
+
 	/// <summary>
 	/// Controller responsible for working with pages in a workbook.
 	/// </summary>
