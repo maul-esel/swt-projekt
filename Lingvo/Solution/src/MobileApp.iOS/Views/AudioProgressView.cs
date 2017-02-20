@@ -15,9 +15,10 @@ namespace Lingvo.MobileApp.iOS
 		public CircleProgressBar studentProgressBar;
 
 		private static UIColor studentColor = UIColor.Red;
-		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f); //blue
+		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
 
-		private float lineWidth = 10.0f; //width of circle fragment
+		//width of circle fragment
+		private float lineWidth = 10.0f;
 		private bool innerProgressEnabled = true;
 
 		private int progress = 0;
@@ -168,13 +169,14 @@ namespace Lingvo.MobileApp.iOS
 			}
 			set
 			{
-				var modValue = Math.Min(MaxProgress, value);
-				progress = modValue;
-				teacherProgressBar.Progress = modValue;
+				//make sure we don't go over the max progress
+				var minimum = Math.Min(MaxProgress, value);
+				progress = minimum;
+				teacherProgressBar.Progress = minimum;
 
 				if (innerProgressEnabled)
 				{
-					studentProgressBar.Progress = modValue;
+					studentProgressBar.Progress = minimum;
 					studentProgressBar.strokeLayer.SetNeedsDisplay();
 					studentProgressBar.SetNeedsDisplay();
 
@@ -324,6 +326,5 @@ namespace Lingvo.MobileApp.iOS
 
 			setupViews();
 		}
-
 	}
 }

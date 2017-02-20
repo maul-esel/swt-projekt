@@ -15,7 +15,10 @@ namespace Lingvo.MobileApp.iOS
 	class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
 	{
 		AudioProgressView progressView;
-
+		/// <summary>
+		/// Called when a platform specific view is rendered or destroyed
+		/// </summary>
+		/// <param name="e">Event arguments</param>
 		protected override void OnElementChanged(ElementChangedEventArgs<LingvoAudioProgressView> e)
 		{
 			base.OnElementChanged(e);
@@ -41,7 +44,11 @@ namespace Lingvo.MobileApp.iOS
 				e.NewElement.SizeChanged += NewElementOnSizeChanged;
 			}
 		}
-
+		/// <summary>
+		/// Called whenever a bindable property has changed
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">Event Args</param>
 		private void updateView(object sender, EventArgs e)
 		{
 			if (Control == null)
@@ -130,11 +137,6 @@ namespace Lingvo.MobileApp.iOS
 			progressView.studentProgressBar.Frame = layer.Bounds;
 			progressView.teacherProgressBar.render();
 			progressView.studentProgressBar.render();
-
-		}
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
 
 		}
 	}
