@@ -186,15 +186,22 @@ namespace Lingvo.MobileApp.iOS.Sound
 				return;
 			}
 
-			if (studentTrack != null)
+			teacherTrack.CurrentTime += (double)seconds;
+
+			if (studentTrack?.CurrentTime + seconds >= studentTrack?.Duration)
 			{
-				teacherTrack.CurrentTime += (double)seconds;
-				studentTrack.CurrentTime += (double)seconds;
-			}
+				studentTrack?.Pause();
+            }
 			else
-			{
-				teacherTrack.CurrentTime += (double)seconds;
+            {
+				Sync();
+
+				if (studentTrack != null && !studentTrack.Playing && teacherTrack.Playing)
+				{
+					studentTrack.Play();
+				}
 			}
+
 			OnProgress(teacherTrack.CurrentTime);
 		}
 
@@ -205,7 +212,8 @@ namespace Lingvo.MobileApp.iOS.Sound
 			teacherTrack.Volume = studentTrackVolume;
 
 			teacherTrack.PrepareToPlay();
-			teacherTrack.FinishedPlaying += (sender, e) => {
+			teacherTrack.FinishedPlaying += (sender, e) =>
+			{
 				Stop();
 				OnProgress(teacherTrack.Duration);
 			};
@@ -240,9 +248,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 			AVAudioSession session = AVAudioSession.SharedInstance();
 			session.SetCategory(AVAudioSessionCategory.PlayAndRecord);
 
-
 			adjustAudioOutputPort(session);
-
 
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
