@@ -166,13 +166,15 @@ namespace Lingvo.MobileApp.iOS
 				{
 					return (float)(2 * Math.PI);
 				}
-				//var modValue = progress % maxProgress;
 				float percentage = (float)progress / (float)maxProgress;
 				return (float)(percentage * (2 * Math.PI));
 			}
 		}
 
-		//render arc fragments
+		/// <summary>
+		/// Draws the circle fragments
+		/// </summary>
+		/// <param name="endAngle">End angle.</param>
 		public void drawStroke(float endAngle)
 		{
 
@@ -199,7 +201,9 @@ namespace Lingvo.MobileApp.iOS
 			strokeLayer = drawCircle(backgroundLayerColor, -100);
 			strokeLayer.Hidden = muted;
 		}
-
+		/// <summary>
+		/// Renders the entire view
+		/// </summary>
 		public void render()
 		{
 			BackgroundColor = UIColor.Clear;
@@ -210,13 +214,27 @@ namespace Lingvo.MobileApp.iOS
 			strokeLayer.Hidden = muted;
 			drawStroke(angle);
 		}
-
+		/// <summary>
+		/// Renders a circle in a CAShapeLayer
+		/// </summary>
+		/// <returns>The CAShapeLayer object</returns>
+		/// <param name="fillColor">The color of the circle</param>
+		/// <param name="zPosition">z position of the circle</param>
 		protected CAShapeLayer drawCircle(UIColor fillColor, int zPosition)
 		{
 			var circleLayer =  drawArc(fillColor, 0.0f, (float)(2.0 * Math.PI), zPosition);
 
 			return circleLayer;
 		}
+
+		/// <summary>
+		/// Drawa a circle fragment from a start angle to an end angle
+		/// </summary>
+		/// <returns>A CAShapeLayer with a circular path</returns>
+		/// <param name="fillColor">The arc's fill color</param>
+		/// <param name="startAngle">The arc's start angle</param>
+		/// <param name="endAngle">The arc's end angle</param>
+		/// <param name="zPosition">The arc's z position</param>
 		private CAShapeLayer drawArc(UIColor fillColor, float startAngle, float endAngle, int zPosition)
 		{
 			var adjustedStartAngle = correctAngle(startAngle);
@@ -236,8 +254,14 @@ namespace Lingvo.MobileApp.iOS
 			Layer.AddSublayer(circleLayer);
 			return circleLayer;
 		}
-		//CoreGraphics starts its rendering at 3 o'clock.
-		//In order to start at 12 o'clock we always have to subtract PI/2
+
+
+		/// <summary>
+		/// Adds offset to a circle so that drawing can be started at 12 o' clock
+		/// CoreGraphics starts its rendering at 3 o'clock.
+		/// </summary>
+		/// <returns>The angle with the offset</returns>
+		/// <param name="oldAngle">The angle to be corrected</param>
 		private float correctAngle(float oldAngle)
 		{
 			return oldAngle - (float)(Math.PI / 2.0);
@@ -255,7 +279,9 @@ namespace Lingvo.MobileApp.iOS
 				}
 			}
 		}
-
+		/// <summary>
+		/// Render a background layer with a low alpha value
+		/// </summary>
 		private void renderBackgroundLayer()
 		{
 			backgroundLayer?.RemoveFromSuperLayer();

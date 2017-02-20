@@ -203,7 +203,7 @@
             <div class="modal-content">
                 <div class="modal-header modal-header-error">
                     <button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
-                    <h4 class="modal-title">Warnung</h4>
+                    <h4 class="modal-title">Fehler</h4>
                 </div>
                 <div class="modal-body text-justify" style="font-size:85%">
                     <p>
@@ -217,6 +217,28 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Schließen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dialog warning when overwriting recording -->
+    <div class="modal fade" id="recording-overwrite-warning" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-warning">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
+                    <h4 class="modal-title">Warnung</h4>
+                </div>
+                <div class="modal-body text-justify" style="font-size:85%">
+                    <p>
+                        Es existiert bereits eine Aufnahme. Um eine Datei auszuwählen oder
+                        eine neuen Aufnahme zu erstellen, müssen Sie die bisherige zuerst verwerfen.
+                        Sind Sie sicher, dass Sie die Aufnahme verwerfen wollen?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+                    <a class="btn btn-warning" href="javascript:resetRecording()"><span class="glyphicon glyphicon-trash"></span> Aufnahme verwerfen</a>
                 </div>
             </div>
         </div>

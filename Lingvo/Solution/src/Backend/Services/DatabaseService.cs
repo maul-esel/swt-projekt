@@ -2,24 +2,52 @@
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Lingvo.Backend.Services
 {
 	using Common.Entities;
 
+	/// <summary>
+	/// Encapsulates access to the database used for storing
+	/// <see cref="Workbook"/>s, <see cref="Page"/>s, <see cref="Rec"/>s
+	/// and <see cref="Editor"/>s.
+	/// </summary>
 	public class DatabaseService : DbContext
     {
+		/// <summary>
+		/// Exposes the list of <see cref="Workbook"/>s stored in the database.
+		/// </summary>
 		public DbSet<Workbook> Workbooks { get; set; }
+
+		/// <summary>
+		/// Exposes the list of <see cref="Page"/>s stored in the database.
+		/// </summary>
 		public DbSet<Page> Pages { get; set; }
+
+		/// <summary>
+		/// Exposes the list of <see cref="Recording"/>s stored in the database.
+		/// </summary>
 		public DbSet<Recording> Recordings { get; set; }
+
+		/// <summary>
+		/// Exposes the list of <see cref="Editor"/>s stored in the database.
+		/// </summary>
 		public DbSet<Editor> Editors { get; set; }
 
-
+		/// <summary>
+		/// Creates a new instance. The <paramref name="options"/> are configured
+		/// in <see cref="Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)"/>
+		/// and supplied by dependency injection.
+		/// </summary>
 		public DatabaseService(DbContextOptions<DatabaseService> options) : base(options)
 		{
 		}
 
+		/// <summary>
+		/// Manually creates an instance of the class with the given <paramref name="connectionString"/>.
+		/// Typically, instances are not created manually but supplied by dependency injection.
+		/// </summary>
+		/// <param name="connectionString"></param>
 		public static DatabaseService Connect(string connectionString)
 		{
 			return new DatabaseService(
@@ -47,16 +75,26 @@ namespace Lingvo.Backend.Services
 			modelBuilder.Entity<Editor>().HasKey(e => e.Name);
 		}
 
+		/// <summary>
+		/// Loads all workbooks, their pages and the associated recordings from the database.
+		/// </summary>
 		public List<Workbook> GetWorkbooksWithReferences()
 		{
 			return Workbooks.Include(w => w.Pages).ThenInclude(p => p.TeacherTrack).ToList();
 		}
 
+		/// <summary>
+		/// Loads all pages with their associated recordings from the database.
+		/// </summary>
 		public List<Page> GetPagesWithReferences()
 		{
 			return Pages.Include(p => p.TeacherTrack).ToList();
 		}
 
+		/// <summary>
+		/// Finds the workbook with the given <paramref name="id"/> and loads it from
+		/// the database, including its pages and their associated recordings.
+		/// </summary>
 		public Workbook FindWorkbookWithReferences(int id)
 		{
 			var workbook = Find<Workbook>(id);
@@ -70,6 +108,10 @@ namespace Lingvo.Backend.Services
 			return workbook;
 		}
 
+		/// <summary>
+		/// Finds the page with the given <paramref name="id"/>
+		/// and loads it from the database, including the associated <see cref="Page.TeacherTrack"/>.
+		/// </summary>
 		public Page FindPageWithRecording(int id)
 		{
 			var page = Pages.Find(id);
@@ -81,10 +123,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Save the specified recording, updates it if it already exists.
+		/// Saves the specified <paramref name="recording"/>, updates it if it already exists.
 		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="recording">Recording.</param>
 		public void Save(Recording recording)
 		{
 			if (Recordings.Find(recording.Id) == null)
@@ -95,10 +135,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Save the specified page, updates it if it already exists.
+		/// Saves the specified <paramref name="page"/>, updates it if it already exists.
 		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="page">Page.</param>
 		public void Save(Page page)
 		{
 			if (Pages.Find(page.Id) == null)
@@ -109,10 +147,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Save the specified workbook, updates it if it already exists.
+		/// Saves the specified <paramref name="workbook"/>, updates it if it already exists.
 		/// </summary>
-		/// <returns>The save.</returns>
-		/// <param name="workbook">Workbook.</param>
 		public void Save(Workbook workbook)
 		{
 			if (Workbooks.Find(workbook.Id) == null)
@@ -123,10 +159,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Delete the specified recording.
+		/// Deletes the specified <paramref name="recording"/>.
 		/// </summary>
-		/// <returns>The delete.</returns>
-		/// <param name="recording">Recording.</param>
 		public void Delete(Recording recording)
 		{
 			var r = Recordings.Find(recording.Id);
@@ -138,10 +172,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Delete the specified page and the recording belonging to it.
+		/// Deletes the specified <paramref name="page"/> and the associated recording.
 		/// </summary>
-		/// <returns>The delete.</returns>
-		/// <param name="page">Page.</param>
 		public void Delete(Page page)
 		{
 			var p = Pages.Find(page.Id);
@@ -162,10 +194,8 @@ namespace Lingvo.Backend.Services
 		}
 
 		/// <summary>
-		/// Delete the specified workbook and all corresponding pages.
+		/// Delete the specified <paramref name="workbook"/> and all corresponding pages.
 		/// </summary>
-		/// <returns>The delete.</returns>
-		/// <param name="workbook">Workbook.</param>
 		public void Delete(Workbook workbook)
 		{
 			// load workbook with references in order to delete their pages

@@ -20,7 +20,10 @@ namespace Lingvo.MobileApp.iOS
 		UILabel label;
 		UITapGestureRecognizer tapGestureRecognizer;
 
-
+		/// <summary>
+		/// Called whenever a bindable property of the view has changed
+		/// </summary>
+		/// <param name="e">LinvgoRoundImageButton object</param>
 		protected override void OnElementChanged(ElementChangedEventArgs<Lingvo.MobileApp.Forms.LingvoRoundImageButton> e)
 		{
 			base.OnElementChanged(e);
@@ -33,6 +36,7 @@ namespace Lingvo.MobileApp.iOS
 
 			if (e.OldElement != null && e.NewElement == null)
 			{
+				//unregister events
 				e.OldElement.PropertyChanged -= updateView;
 				e.OldElement.SizeChanged -= controlSizeChanged;
 				if (tapGestureRecognizer != null)
@@ -43,8 +47,10 @@ namespace Lingvo.MobileApp.iOS
 			}
 			else if (e.NewElement != null)
 			{
-
+				//register events
 				e.NewElement.PropertyChanged += updateView;
+
+				//make view tappable
 				tapGestureRecognizer = new UITapGestureRecognizer((UITapGestureRecognizer obj) =>
 				{
 					e.NewElement.OnButtonClicked(button, null);
@@ -55,17 +61,22 @@ namespace Lingvo.MobileApp.iOS
 
 			}
 		}
-
+		/// <summary>
+		/// Called whenever the view's frame changes
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="eventArgs">Event arguments</param>
 		private void controlSizeChanged(object sender, EventArgs eventArgs)
 		{
 			var roundedControl = sender as Lingvo.MobileApp.Forms.LingvoRoundImageButton;
 			if (roundedControl != null)
 			{
-				//var frame = new CGRect(roundedControl.X, roundedControl.Y, roundedControl.Width, roundedControl.Height);
-				//button.Frame = frame;
 				button.Layer.CornerRadius = (nfloat)roundedControl.Width / 2.0f;
 			}
 		}
+		/// <summary>
+		/// Creates the view and its Autolayout in code
+		/// </summary>
 		private void setupViews()
 		{
 			button = new UIView()
@@ -91,7 +102,7 @@ namespace Lingvo.MobileApp.iOS
 			imageView.BottomAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
 
 
-			//create label
+			//create text label that is centered in the view
 			label = new UILabel()
 			{
 				TextAlignment = UITextAlignment.Center,
@@ -100,16 +111,12 @@ namespace Lingvo.MobileApp.iOS
 			label.TranslatesAutoresizingMaskIntoConstraints = false;
 			button.AddSubview(label);
 
-			//setup autolayout for label
+			//setup autolayout constraints for label
 			label.LeftAnchor.ConstraintEqualTo(button.LeftAnchor).Active = true;
 			label.RightAnchor.ConstraintEqualTo(button.RightAnchor).Active = true;
 			label.TopAnchor.ConstraintEqualTo(button.TopAnchor).Active = true;
 			label.BottomAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
 	
-		}
-		private void buttonClicked()
-		{
-			Console.WriteLine("button has been clicked");
 		}
 		private void updateView(object sender, EventArgs e)
 		{
@@ -118,8 +125,8 @@ namespace Lingvo.MobileApp.iOS
 				return;
 			}
 			Lingvo.MobileApp.Forms.LingvoRoundImageButton element = (Lingvo.MobileApp.Forms.LingvoRoundImageButton)sender;
-			//set image here)
 
+			//render the image with the respective tint color
 			var tintColor = element.IsEnabled ? element.Color.ToUIColor() : UIColor.LightGray;
 			imageView.TintColor = tintColor;
 			button.TintColor = tintColor;
@@ -131,8 +138,6 @@ namespace Lingvo.MobileApp.iOS
 			}
 
 			string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
-			Console.WriteLine("imageName = " + identifier);
-
 
 			var img = new UIImage(identifier).ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
 			imageView.Image = img;
@@ -142,7 +147,7 @@ namespace Lingvo.MobileApp.iOS
 				label.Text = element.Text;
 			}
 
-			//setup border
+			//setup circular border for this control
 			if (element.Border)
 			{
 				button.Layer.Frame = button.Bounds;
