@@ -3,26 +3,17 @@ using System.Collections.Generic;
 using Lingvo.Common.Entities;
 using System.IO;
 using Lingvo.Common.Services;
+using System.Threading.Tasks;
 
 namespace Lingvo.MobileApp.Entities
 {
     public class LocalCollection
     {
-        public event Action<Workbook> WorkbookChanged
-        {
-            add { App.Database.WorkbookChanged += value; }
-            remove { App.Database.WorkbookChanged -= value; }
-        }
-        public event Action<TeacherMemo> TeacherMemoChanged
-        {
-            add { App.Database.TeacherMemoChanged += value; }
-            remove { App.Database.TeacherMemoChanged -= value; }
-        }
-        public event Action<Page> PageChanged
-        {
-            add { App.Database.PageChanged += value; }
-            remove { App.Database.PageChanged -= value; }
-        }
+        public event Action<Workbook> WorkbookChanged;
+
+        public event Action<TeacherMemo> TeacherMemoChanged;
+
+        public event Action<IPage> PageChanged;
 
         private static LocalCollection instance;
 
@@ -32,10 +23,7 @@ namespace Lingvo.MobileApp.Entities
         /// <value>The teacher memos.</value>
         public IEnumerable<TeacherMemo> TeacherMemos
         {
-            get
-            {
-				return App.Database.FindTeacherMemos();
-            }
+            get; private set;
         }
 
         /// <summary>
@@ -44,16 +32,17 @@ namespace Lingvo.MobileApp.Entities
         /// <value>The workbooks.</value>
         public IEnumerable<Workbook> Workbooks
         {
-            get
-            {
-				return App.Database.FindWorkbooks();
-            }
+            get; private set;
         }
 
 
         private LocalCollection()
         {
-
+            Workbooks = App.Database.FindWorkbooks();
+            TeacherMemos = App.Database.FindTeacherMemos();
+            App.Database.WorkbookChanged += OnWorkbookChanged;
+            App.Database.PageChanged += OnPageChanged;
+            App.Database.TeacherMemoChanged += OnTeacherMemoChanged;
         }
 
         /// <summary>
@@ -62,6 +51,23 @@ namespace Lingvo.MobileApp.Entities
         /// <returns>The instance.</returns>
         public static LocalCollection Instance => instance ?? (instance = new LocalCollection());
 
+        public void OnTeacherMemoChanged(TeacherMemo m)
+        {
+            TeacherMemos = App.Database.FindTeacherMemos();
+            TeacherMemoChanged?.Invoke(m);
+        }
+
+        public void OnWorkbookChanged(Workbook w)
+        {
+            Workbooks = App.Database.FindWorkbooks();
+            WorkbookChanged?.Invoke(w);
+        }
+
+        public void OnPageChanged(IPage p)
+        {
+            Workbooks = App.Database.FindWorkbooks();
+            PageChanged?.Invoke(p);
+        }
 
         /// <summary>
         /// Adds a teacher memo to the collection.
@@ -139,7 +145,6 @@ namespace Lingvo.MobileApp.Entities
         [Obsolete]
         public void DeleteStudentRecording(IExercise exercise)
         {
-            File.Delete(FileUtil.getAbsolutePath(exercise.StudentTrack.LocalPath));
             App.Database.Delete(exercise.StudentTrack);
             exercise.DeleteStudentRecording();
 

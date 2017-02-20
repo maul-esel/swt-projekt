@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Linq;
+using Lingvo.MobileApp.Util;
 
 namespace Lingvo.MobileApp.Pages
 {
@@ -107,8 +108,6 @@ namespace Lingvo.MobileApp.Pages
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
-            TeacherMemoController.Instance.Update += Progress_Update;
-
             Name = new Entry()
             {
                 Placeholder = "Name der Lehrerspur",
@@ -165,6 +164,31 @@ namespace Lingvo.MobileApp.Pages
                 }
             };
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            TeacherMemoController.Instance.Update += Progress_Update;
+            TeacherMemoController.Instance.Error += OnError;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            TeacherMemoController.Instance.Update -= Progress_Update;
+            TeacherMemoController.Instance.Error -= OnError;
+        }
+
+        private async void OnError()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                RecordButton.Image = LingvoRoundImageButton.RecordImage;
+                Progress_Update(0);
+            });
+            await AlertHelper.DisplayAudioError();
+        }
+
         private void EditButton_OnClicked(object sender, EventArgs e)
         {
             NameLabel.IsVisible = false;
@@ -186,9 +210,7 @@ namespace Lingvo.MobileApp.Pages
         {
             if (LocalCollection.Instance.TeacherMemos.FirstOrDefault(m => m.Name.Equals(Name.Text)) != null)
             {
-                string title = ((Span)App.Current.Resources["label_nameAlreadyExists"]).Text;
-                string desc = ((Span)App.Current.Resources["desc_teacherTrackNameAlreadyExists"]).Text;
-                await DisplayAlert(title, desc, "Ok");
+                await AlertHelper.DisplayInfoTeacherMemoNameExists();
                 return true;
             }
             return false;
@@ -196,13 +218,24 @@ namespace Lingvo.MobileApp.Pages
 
         private async void SaveItem_Clicked(object sender, EventArgs e)
         {
-            if (Name.Text.Length > 0 && !await checkNameExists(Name.Text))
+            if (Name.Text.Length > 0)
             {
-                if (TeacherMemoController.Instance.CurrentMemo != null)
+                if (!await checkNameExists(Name.Text))
                 {
-                    TeacherMemoController.Instance.SaveTeacherMemo(Name.Text);
-                    await Navigation.PopAsync();
+                    if (TeacherMemoController.Instance.CurrentMemo != null)
+                    {
+                        TeacherMemoController.Instance.SaveTeacherMemo(Name.Text);
+                        await Navigation.PopAsync();
+                    }
+                    else
+                    {
+                        await AlertHelper.DisplayNoTeacherMemoRecordingError();
+                    }
                 }
+            }
+            else
+            {
+                await AlertHelper.DisplayNoTeacherMemoNameError();
             }
         }
 
@@ -213,7 +246,7 @@ namespace Lingvo.MobileApp.Pages
             {
                 if (TeacherMemoController.Instance.CurrentMemo != null)
                 {
-                    if (!await DisplayAlert("Overwrite", "Overwrite?", "Yeah", "Nope"))
+                    if (!await AlertHelper.DisplayWarningTeacherMemoExists())
                     {
                         return;
                     }

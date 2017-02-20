@@ -1,5 +1,7 @@
 ﻿using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Entities;
+using Lingvo.MobileApp.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
@@ -25,7 +27,7 @@ namespace Lingvo.MobileApp.Templates
             {
                 FontAttributes = FontAttributes.Bold,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                LineBreakMode = LineBreakMode.WordWrap
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             titleLabel.SetBinding(Label.TextProperty, "Title");
@@ -33,22 +35,19 @@ namespace Lingvo.MobileApp.Templates
             subtitleLabel = new Label()
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                IsVisible = false
+                IsVisible = false,
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             subtitleLabel.SetBinding(Label.TextProperty, "Subtitle");
 
             ProgressView = new LingvoAudioProgressView()
             {
-                Size = Device.OnPlatform(iOS: 80, Android: 120, WinPhone: 240),
+                Size = Device.OnPlatform(iOS: 80, Android: 72, WinPhone: 240),
                 LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM,
                 MuteEnabled = false,
                 InnerProgressEnabled = false
             };
-
-            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
-            LocalCollection.Instance.PageChanged += Event_PageChanged;
-
 
             deleteAction = new MenuItem
             {
@@ -57,12 +56,12 @@ namespace Lingvo.MobileApp.Templates
                 IsDestructive = true
             };
 
-            deleteAction.Clicked += (o, e) =>
-            {
-                LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
-            };
+            deleteAction.Clicked += DeleteAction_Clicked;
 
-            ContextActions.Add(deleteAction);
+            if (GetType().Equals(typeof(LingvoWorkbookViewCell)))
+            {
+                ContextActions.Add(deleteAction);
+            }
 
             var grid = new Grid();
 
@@ -70,17 +69,10 @@ namespace Lingvo.MobileApp.Templates
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = DownloadButtonSize });
 
-
-
-
-
-
-
-
             var stackLayout = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-                HeightRequest = Device.OnPlatform(iOS: 70, Android: 72, WinPhone: 260),
+                HeightRequest = Device.OnPlatform(iOS: 70, Android: 80, WinPhone: 260),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -105,7 +97,37 @@ namespace Lingvo.MobileApp.Templates
             View = grid;
         }
 
-        protected virtual void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.WorkbookChanged += Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged += Event_PageChanged;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.WorkbookChanged -= Event_WorkbookChanged;
+            LocalCollection.Instance.PageChanged -= Event_PageChanged;
+        }
+
+        private async void DeleteAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeleteWorkbook())
+                {
+                    LocalCollection.Instance.DeleteWorkbook((Workbook)BindingContext);
+                    ContextActions.Remove(deleteAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
+        }
+
+        protected virtual void Event_PageChanged(IPage p)
         {
             Workbook workbook = (Workbook)BindingContext;
             if (p.workbookId.Equals(workbook.Id))
@@ -127,21 +149,31 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        protected virtual void BindViewCell(Workbook workbook)
+        {
+            int completed = 0;
+            workbook.Pages.ForEach((p) => { if (p.StudentTrack != null) completed++; });
+            ProgressView.MaxProgress = workbook.Pages.Count;
+            ProgressView.Progress = completed;
+
+            ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
+
+            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
 
-            Workbook workbook = (Workbook)BindingContext;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Workbook workbook = (Workbook)BindingContext;
 
-            int completed = 0;
-            workbook.Pages.ForEach((p) => { if (p.StudentTrack != null) completed++; });
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources["secondaryColor"];
-            ProgressView.MaxProgress = workbook.Pages.Count;
-            ProgressView.Progress = completed;
-            ProgressView.InnerProgressEnabled = false;
-            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
+                ProgressView.InnerProgressEnabled = false;
+                subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
 
-            subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
+                BindViewCell(workbook);
+            });
         }
 
     }

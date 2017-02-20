@@ -129,6 +129,11 @@ namespace Lingvo.MobileApp.iOS
 			button.TintColor = tintColor;
 			label.TextColor = tintColor;
 
+			if (element.Image == "")
+			{
+				return;
+			}
+
 			string identifier = element.Image?.Substring(0, element.Image.LastIndexOf('.'));
 			Console.WriteLine("imageName = " + identifier);
 

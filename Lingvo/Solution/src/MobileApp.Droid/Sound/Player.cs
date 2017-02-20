@@ -124,16 +124,16 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void PrepareStudentTrack(Recording recording)
         {
-			if (recording == null)
-			{
-				studentTrack = null;
-			}
-			else
-			{
-				studentRecording = recording;
-				studentTrack = CreateNewPlayer(recording);
-				IsStudentTrackMuted = false;
-			}
+            if (recording == null)
+            {
+                studentTrack = null;
+            }
+            else
+            {
+                studentRecording = recording;
+                studentTrack = CreateNewPlayer(recording);
+                IsStudentTrackMuted = false;
+            }
         }
 
         public void PrepareTeacherTrack(Recording recording)
@@ -159,7 +159,21 @@ namespace Lingvo.MobileApp.Droid.Sound
                 return;
             }
             teacherTrack?.SeekTo(teacherTrack.CurrentPosition + seconds * 1000);
-            studentTrack?.SeekTo(studentTrack.CurrentPosition + seconds * 1000);
+
+            if (studentTrack?.CurrentPosition + seconds * 1000 >= studentTrack?.Duration)
+            {
+                studentTrack?.Pause();
+            }
+            else
+            {
+                studentTrack?.SeekTo(studentTrack.CurrentPosition + seconds * 1000);
+
+                if (studentTrack != null && !studentTrack.IsPlaying && teacherTrack.IsPlaying)
+                {
+                    studentTrack.Start();
+                }
+            }
+
             OnProgress(teacherTrack.CurrentPosition);
         }
 
@@ -180,8 +194,7 @@ namespace Lingvo.MobileApp.Droid.Sound
                 player?.Reset();
                 var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
                 player?.SetDataSource(fileDesriptor.FileDescriptor);
-                //var file = global::Android.App.Application.Context.Resources.OpenRawResourceFd(Resource.Raw.sound);
-                //player?.SetDataSource(file.FileDescriptor, file.StartOffset, file.Length);
+
                 player?.Prepare();
             }
         }
@@ -193,10 +206,9 @@ namespace Lingvo.MobileApp.Droid.Sound
             audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
             audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
 
+            var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
+            mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
 
-			var fileDesriptor = Android.OS.ParcelFileDescriptor.Open(new Java.IO.File(FileUtil.getAbsolutePath(recording)), Android.OS.ParcelFileMode.ReadOnly);
-                mediaPlayer.SetDataSource(fileDesriptor.FileDescriptor);
-           
             mediaPlayer.SetAudioStreamType(audioManager.WiredHeadsetOn ? Stream.Music : Stream.VoiceCall);
             mediaPlayer.SetVolume(1.0f, 1.0f);
             mediaPlayer.Prepare();
