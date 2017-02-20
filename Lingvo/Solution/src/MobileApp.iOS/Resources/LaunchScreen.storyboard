@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X5k-f2-b5h">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="X5k-f2-b5h">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,12 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="startup.png" translatesAutoresizingMaskIntoConstraints="NO" id="23" misplaced="YES" opaque="NO">
+                            <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="startup.png" translatesAutoresizingMaskIntoConstraints="NO" id="23">
                                 <rect key="frame" x="270" y="270" width="60" height="60"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.22352941176470589" green="0.47843137254901963" blue="0.85490196078431369" alpha="1"/>
+                        <color key="backgroundColor" red="0.22352941176470589" green="0.47843137254901963" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="23" firstAttribute="centerY" secondItem="yd7-JS-zBw" secondAttribute="centerY" priority="1" id="39"/>
                             <constraint firstItem="23" firstAttribute="centerX" secondItem="yd7-JS-zBw" secondAttribute="centerX" priority="1" id="41"/>
@@ -34,29 +35,32 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Icon-60.png" width="60" height="60"/>
+        <image name="startup.png" width="144" height="144"/>
         <image name="Default-568h.png" width="320" height="568"/>
         <image name="Default-Portrait.png" width="768" height="1004"/>
         <image name="Default.png" width="320" height="480"/>
-        <image name="Icon-76.png" width="76" height="76"/>
+        <image name="Icon-60.png" width="60" height="60"/>
         <image name="Icon-Small-40.png" width="40" height="40"/>
         <image name="Icon-Small.png" width="29" height="29"/>
         <image name="ic_action_add.png" width="48" height="48"/>
         <image name="ic_action_book.png" width="48" height="48"/>
         <image name="ic_action_cancel.png" width="48" height="48"/>
         <image name="ic_action_download.png" width="48" height="48"/>
-        <image name="ic_action_mic.png" width="48" height="48"/>
+        <image name="ic_action_mic.png" width="48" height="44"/>
         <image name="ic_action_save.png" width="48" height="48"/>
         <image name="ic_action_tick.png" width="48" height="48"/>
-        <image name="ic_fiber_manual_record.png" width="48" height="48"/>
+        <image name="ic_edit.png" width="96" height="96"/>
         <image name="ic_forward.png" width="48" height="48"/>
         <image name="ic_launcher.png" width="72" height="72"/>
         <image name="ic_pause.png" width="48" height="48"/>
-        <image name="ic_play_arrow.png" width="48" height="48"/>
+        <image name="ic_play_arrow.png" width="96" height="96"/>
         <image name="ic_rewind.png" width="48" height="48"/>
         <image name="ic_stop.png" width="48" height="48"/>
-        <image name="ic_volume_off.png" width="48" height="48"/>
-        <image name="ic_volume_up.png" width="48" height="48"/>
-        <image name="startup.png" width="256" height="256"/>
+        <image name="ic_volume_off.png" width="96" height="96"/>
+        <image name="ic_volume_up.png" width="96" height="96"/>
+        <image name="ic_next.png" width="96" height="96"/>
+        <image name="ic_previous.png" width="96" height="96"/>
+        <image name="ic_fiber_manual_record.png" width="96" height="96"/>
+        <image name="ic_info_outline.png" width="24" height="24"/>
     </resources>
 </document>
