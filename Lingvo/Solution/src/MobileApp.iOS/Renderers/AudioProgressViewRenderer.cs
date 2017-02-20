@@ -138,5 +138,4 @@ namespace Lingvo.MobileApp.iOS
 
 		}
 	}
->>>>>>> develop
 }
