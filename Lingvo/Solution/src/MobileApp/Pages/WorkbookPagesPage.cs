@@ -10,6 +10,9 @@ namespace Lingvo.MobileApp.Pages
     public partial class WorkbookPagesPage : ContentPage
     {
         private Workbook workbook;
+
+        private ListView listView;
+
         public WorkbookPagesPage(Workbook workbook)
         {
             this.workbook = workbook;
@@ -18,7 +21,7 @@ namespace Lingvo.MobileApp.Pages
 
             string seite = ((Span)App.Current.Resources["text_seite"]).Text;
 
-            ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
+            listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = workbook.Pages,
                 ItemTemplate = new DataTemplate(typeof(LingvoPageViewCell)),
@@ -41,31 +44,51 @@ namespace Lingvo.MobileApp.Pages
                  }
              }));
 
-            LocalCollection.Instance.WorkbookChanged += (w) =>
-            {
-                if (workbook.Id.Equals(w.Id))
-                {
-                    listView.RefreshCommand.Execute(null);
-                }
-            };
-
-            LocalCollection.Instance.PageChanged += (p) =>
-            {
-                if (workbook.Id.Equals(p.workbookId))
-                {
-                    listView.RefreshCommand.Execute(null);
-                }
-            };
-
             Content = new StackLayout
             {
                 Children = {
                 listView
                 }
             };
+
 			#if __IOS__
 				NavigationPage.SetBackButtonTitle(this, "Zurück");
 			#endif
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            LocalCollection.Instance.WorkbookChanged += OnWorkbookChanged;
+            LocalCollection.Instance.PageChanged += OnPageChanged;
+
+            listView.RefreshCommand.Execute(null);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            LocalCollection.Instance.WorkbookChanged -= OnWorkbookChanged;
+
+            LocalCollection.Instance.PageChanged -= OnPageChanged;
+        }
+
+        private void OnWorkbookChanged(Workbook w)
+        {
+            if (workbook.Id.Equals(w.Id))
+            {
+                listView.RefreshCommand.Execute(null);
+            }
+        }
+
+        private void OnPageChanged(IPage p)
+        {
+            if (workbook.Id.Equals(p.workbookId))
+            {
+                listView.RefreshCommand.Execute(null);
+            }
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
