@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lingvo.Backend.ViewModels
 {
+	/// <summary>
+	/// A View Model used when creating a new user.
+	/// </summary>
     public class CreateUserModel
     {
 		/* While it would be preferrable to store error messages in a resource file instead of code,
