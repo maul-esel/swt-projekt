@@ -23,13 +23,6 @@ namespace Lingvo.Backend.Controllers
 			return View(cl.FindWorkbooksWithReferences());
 		}
 
-		[Route("about"), AllowAnonymous]
-		public IActionResult About()
-		{
-			ViewData["Title"] = "About";
-			return View();
-		}
-
 		[Route("workbooks/add")]
 		public IActionResult AddWorkbook()
 		{
@@ -71,12 +64,6 @@ namespace Lingvo.Backend.Controllers
 		{
 			var workbook = cl.FindWorkbookWithReferences(id);
 			return View(workbook);
-		}
-
-		[AllowAnonymous]
-		public IActionResult Error()
-		{
-			return View();
 		}
 
 		[HttpPost]
