@@ -101,10 +101,12 @@ namespace Lingvo.Backend.Tests
 				teacherTrackId = 1					
 			};
 
+			Assert.Equal(2, Database.Workbooks.Find(1).TotalPages);
 			Console.WriteLine(testPage.StudentTrack);
 			Console.WriteLine(testPage.studentTrackId);
 			Database.Save(testPage);
 			Assert.Equal(5, Database.Pages.Count());
+			Assert.Equal(3, Database.Workbooks.Find(1).TotalPages);
 			Assert.NotNull(Database.Pages.Find(testPage.Id));
 		}
 
@@ -193,6 +195,7 @@ namespace Lingvo.Backend.Tests
 		{
 			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 
+			Assert.Equal(2, Database.Workbooks.Find(1).TotalPages);
 			var v = Database.Pages.Find(1);
 			Database.Delete(v);
 
@@ -201,6 +204,8 @@ namespace Lingvo.Backend.Tests
 			Assert.NotNull(Database.Pages.Find(3));
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Recordings.Find(1));
+
+			Assert.Equal(1, Database.Workbooks.Find(1).TotalPages);
 		}
 
 		[Fact]
@@ -226,11 +231,13 @@ namespace Lingvo.Backend.Tests
 			var page1 = db.FindPageWithRecording(1);
 			var page2 = db.FindPageWithRecording(2);
 
+			Assert.Equal(2, db.Workbooks.Find(1).TotalPages);
 			Assert.Equal(1, page1.TeacherTrack.Id);
 			Assert.Equal(2, page2.TeacherTrack.Id);
 
 			page1.TeacherTrack = page2.TeacherTrack;
 			db.Save(page1);
+			Assert.Equal(2, db.Workbooks.Find(1).TotalPages);
 
 			page1 = db.FindPageWithRecording(1);
 			Assert.Equal(2, page1.TeacherTrack.Id);
