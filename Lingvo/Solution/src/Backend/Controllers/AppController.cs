@@ -8,7 +8,8 @@ namespace Lingvo.Backend.Controllers
 	using Services;
 
 	/// <summary>
-	/// Controller for App accessing the server
+	/// The controller poviding the REST API consumed by the mobile app.
+	/// Data is returned as JSON.
 	/// </summary>
 #if !DEBUG
 	[RequireHttps]
@@ -20,6 +21,7 @@ namespace Lingvo.Backend.Controllers
 		/// <summary>
 		/// Gets all workbooks without pages.
 		/// </summary>
+		/// <param name="db">Supplied by dependency injection.</param>
 		/// <returns>The workbooks.</returns>
 		[Route("workbooks"), HttpGet]
 		public IActionResult GetWorkbooks([FromServices] DatabaseService db)
@@ -33,8 +35,9 @@ namespace Lingvo.Backend.Controllers
 		/// <summary>
 		/// Gets a workbook without pages.
 		/// </summary>
-		/// <returns>The workbook.</returns>
+		/// <param name="db">Supplied by dependency injection.</param>
 		/// <param name="workbookId">Workbook identifier.</param>
+		/// <returns>The workbook.</returns>
 		[Route("workbooks/{workbookId}")]
 		public IActionResult GetWorkbook([FromServices] DatabaseService db, int workbookId)
 		{
@@ -47,8 +50,9 @@ namespace Lingvo.Backend.Controllers
 		/// <summary>
 		/// Gets the pages as proxies for the workbook with the given id.
 		/// </summary>
-		/// <returns>The pages.</returns>
+		/// <param name="db">Supplied by dependency injection.</param>
 		/// <param name="workbookId">Workbook identifier.</param>
+		/// <returns>The pages.</returns>
 		[Route("workbooks/{workbookId}/pages")]
 		public IActionResult GetPages([FromServices] DatabaseService db, int workbookId)
 		{
@@ -61,7 +65,9 @@ namespace Lingvo.Backend.Controllers
 		/// <summary>
 		/// Gets the teacher track from the workbook with the page number.
 		/// </summary>
-		/// <returns>The teacher track.</returns>
+		/// <param name="cl">Supplied by dependency injection.</param>
+		/// <param name="pageId">Page identifier.</param>
+		/// <returns>Data concerning the teacher track, including a download URL.</returns>
 		[Route("pages/{pageId}")]
 		public async Task<IActionResult> GetTeacherTrack([FromServices] CloudLibrary cl, int pageId)
 		{
