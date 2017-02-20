@@ -181,7 +181,7 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView.Progress = progress;
 
-            downloadButton.IsEnabled = progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || hasRunningToken);
+            downloadButton.IsEnabled = hasPages && progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || hasRunningToken);
         }
 
         private bool NewerVersionExists(Workbook workbook)
