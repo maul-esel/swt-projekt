@@ -8,7 +8,7 @@ namespace Lingvo.Backend.ViewModels
 		/* While it would be preferrable to store error messages in a resource file instead of code,
 		 * ASP.NET Core's data annotation localization support failed to work in release mode. */
 
-		[Required]
+		[Required(ErrorMessage = "Es muss ein Nutzername angegeben werden.")]
 		[Remote(action: "VerifyUniqueUsername", controller: "Account",
 			ErrorMessage = "Es existiert bereits ein Benutzer mit diesem Namen.")]
 		public string Username { get; set; }

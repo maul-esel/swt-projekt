@@ -1,7 +1,7 @@
 var audio_context = null;
 var meter = null;
 var canvasContext = null;
-var WIDTH=100;
+var WIDTH=175;
 var HEIGHT=20;
 var rafID = null;
 var mediaStreamSource = null;
@@ -101,8 +101,6 @@ var mediaStreamSource = null;
 
 		};
 
-
-
 		this.node.onaudioprocess = function(e){
 			if (!recording) return;
 
@@ -117,9 +115,6 @@ var mediaStreamSource = null;
 
 		source.connect(this.node);
 		this.node.connect(this.context.destination);    //this should not be necessary
-
-
-
 
 	}
 
@@ -164,7 +159,7 @@ var mediaStreamSource = null;
 
 		  }, function(e) {
 
-			  console.log("An error occurred"); //Null if something goes wrong
+			  $("#no-microphone-access").modal();
 			  callback(null);
 
 		  });
@@ -176,10 +171,6 @@ var mediaStreamSource = null;
 
 
 	window.audioRecorder = audioRecorder;
-
-
-
-
 
 
 })(window);

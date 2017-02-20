@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Lingvo.Backend
 {
+	using Services;
+
     public class Startup
 	{
 		private const string ConnectionStringVariable = "MYSQLCONNSTR_localdb";
@@ -55,6 +56,7 @@ namespace Lingvo.Backend
 
 			// custom services
 			services.AddScoped<IStorage, AzureStorage>();
+			services.AddScoped<CloudLibrary, CloudLibrary>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,14 +75,21 @@ namespace Lingvo.Backend
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseStatusCodePages();
+
+			app.UseCookieAuthentication(new CookieAuthenticationOptions()
+			{
+				ExpireTimeSpan = TimeSpan.FromDays(7),
+				SlidingExpiration = true
+			});
 			app.UseIdentity();
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Workbook}/{action=Index}/{id?}");
             });
         }
     }

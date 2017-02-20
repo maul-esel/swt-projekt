@@ -1,54 +1,39 @@
-
-  var elapsed_time = 0;
-  var elapsed_time_display;
-  var on_air_display;
   var audio_context;
   var recorder;
   var current_recording;
   var recording = 0;
+
   var isSubmit = false;
   var isCancel = false;
 
-  function startRecording(button) {
+  function toggleRecording(toggle) {
+      if (recorder == null && toggle.checked) {
+          toggle.checked = false
+          $("#no-microphone-access").modal();
+          return;
+      }
+      if (toggle.checked) {
+          startRecording()
+      } else {
+          stopRecording()
+      }
+  }
+
+  function startRecording() {
     recording = recording + 1;
     recorder.clear();
     recorder && recorder.record();
-    button.disabled = true;
-    button.nextElementSibling.disabled = false;
     resetElapsedTime()
     elapsed_time_display = setInterval(displayElapsedTime,1000);
     on_air_display = setInterval(displayOnAir,1000);
   }
   
-  function stopRecording(button) {
+  function stopRecording() {
     recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
     clearInterval(elapsed_time_display)
     clearInterval(on_air_display);
     resetDisplayOnAir();
     prepareRecording();
-  }
-  
-  function displayElapsedTime() {
-    
-    $("#seconds").html(padTimeCode(elapsed_time++%60));
-    $("#minutes").html(padTimeCode(parseInt(elapsed_time/60,10)));
-    
-  }
-
-  function displayOnAir() {
-    var dotCount = elapsed_time%4;
-    $("#onair").html("Aufnahme läuft" + ".".repeat(dotCount));
-  }
-
-  function resetElapsedTime() {
-    elapsed_time = 0;
-    displayElapsedTime();
-  }
-
-  function resetDisplayOnAir() {
-    $("#onair").html("");
   }
 
   function prepareRecording() {
@@ -67,12 +52,22 @@
     }
 
 
-   function sendBlobToServer(event) {
-      $("#submit-modal").modal()
+   function sendBlobToServer(button, event) {
       event.preventDefault()
+
+      // check if teacher track required && !available
+      const pageId = $("#pageId").val()[0]
+      const isUpdate = (typeof (pageId) != 'undefined' && pageId != null && pageId != "")
+      const hasTrack = (current_recording != null || $("#uploadedFile")[0].files.length > 0)
+      if (!isUpdate && !hasTrack) {
+          $("#recording-required-modal").modal()
+          return
+      }
+
+      $("#submit-modal").modal()
        
         var form = $("#pageForm")[0];
-        var action = form.getAttribute("action")
+        var action = button.getAttribute("formaction") || form.getAttribute("action")
 
         var formData = new FormData(form);
 
@@ -111,7 +106,8 @@
        isSubmit = true
   }
   
-  window.onload = function init() {
+   window.onload = function init() {
+       $("#record-btn-toggle").attr('checked', false)
     audioRecorder.requestDevice(function(recorderObject){
       recorder = recorderObject;
     });
@@ -139,10 +135,6 @@
         $("#noNewRecordingWarning").hide()
         $("#newRecording").removeClass("hidden")
     }
-
-    function padTimeCode ( val ) {
-     return val > 9 ? val : "0" + val; 
-   }
 
     window.onbeforeunload = function() {
         if (!isSubmit && current_recording != null || !isCancel && !isSubmit) {

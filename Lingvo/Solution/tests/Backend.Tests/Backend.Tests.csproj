@@ -40,7 +40,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Backend\Backend.csproj" />
+    <ProjectReference Include="..\..\src\Backend\Backend.csproj">
+      <Project>{39E6B00D-5BD7-4F7B-B64B-A58AA7068915}</Project>
+      <Name>Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

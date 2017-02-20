@@ -1,15 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Xunit;
+
 using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
-using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+using Xunit;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace Lingvo.Backend.Tests
 {
+	using Controllers;
+	using Services;
+
 	public class AppControllerTests
 	{
 
@@ -98,10 +101,10 @@ namespace Lingvo.Backend.Tests
 		[Fact]
 		public async Task TestGetTeacherTrack()
 		{
-			DatabaseService db = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 			var controller = new AppController();
 
-			var result = await controller.GetTeacherTrack(db, new StorageMock(), 1);
+			var result = await controller.GetTeacherTrack(cl, 1);
 			Assert.IsType<JsonResult>(result);
 
 			var json = JsonConvert.SerializeObject(((JsonResult)result).Value);
@@ -111,7 +114,7 @@ namespace Lingvo.Backend.Tests
 			Assert.Equal("\",\"url\":\"abc\"}",
 						 json.Substring(54));
 
-			result = await controller.GetTeacherTrack(db, new StorageMock(), 4);
+			result = await controller.GetTeacherTrack(cl, 4);
 			Assert.IsType<JsonResult>(result);
 
 			json = JsonConvert.SerializeObject(((JsonResult)result).Value);

@@ -1,0 +1,70 @@
+@model Workbook
+@inject IStorage storage
+
+@section Scripts {
+    <script src="~/js/page-list-audio.js"></script>
+}
+
+<div class="container container-fluid">
+    <div class="lingvo-header container-fluid">
+        <h3>
+            <a asp-controller="Workbook" asp-action="Index">Arbeitshefte</a> > @Model.Title
+        </h3>
+        <a class="create-button btn btn-success btn-md" asp-controller="Page" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite</a>
+    </div>
+    <table id="workbooks" class="table">
+        <tbody>
+            @foreach (var page in Model.Pages.OrderBy(p => p.Number))
+            {
+                var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
+                <tr>
+                    <td class="text-center">
+                        <a href="#" class="page-play-button" title="Seite abspielen">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </a>
+                        <audio src="@url" class="page-play-audio"></audio>
+                    </td>
+                    <td>
+                        <h3 class="workbook-title">Seite @page.Number</h3>
+                        <span class="workbook-subtitle">@page.Description</span>
+                    </td>
+                    <td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td>
+                    <td>
+                        <a class="glyphicon-button" asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="glyphicon-button" title="Aufnahme herunterladen" href="@url" target="_blank" download>
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="glyphicon-button" title="Seite löschen" data-toggle="modal" href="#page-delete-warning-@page.Id">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+
+						<div class="modal fade" id="page-delete-warning-@page.Id" role="dialog">
+						    <div class="modal-dialog">
+
+						      <div class="modal-content">
+						        <div class="modal-header modal-header-error">
+						          	<button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
+						          	<h4 class="modal-title">Warnung</h4>
+						        </div>
+						        <div class="modal-body">
+						          	<p>Möchten Sie diese Seite wirklich löschen?</p>
+						        </div>
+						        <div class="modal-footer">
+									<a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+						          	<a class="btn btn-danger" asp-controller="Page" asp-action="DeletePage" asp-route-id="@page.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+						        </div>
+						      </div>
+						      
+						    </div>
+						</div>
+                    </td>
+                </tr>}
+        </tbody>
+    </table>
+</div>
