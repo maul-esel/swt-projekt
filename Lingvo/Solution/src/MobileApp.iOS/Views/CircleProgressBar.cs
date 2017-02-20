@@ -83,6 +83,10 @@ namespace Lingvo.MobileApp.iOS
 				render();
 			}
 		}
+		/// <summary>
+		/// Indicates if this ProgressBar is muted. If muted, the path stroke will not be visible
+		/// </summary>
+		/// <value>if progress bar is muted</value>
 		public bool Muted
 		{
 			get
@@ -96,8 +100,6 @@ namespace Lingvo.MobileApp.iOS
 				{
 					backgroundLayer.Hidden = true;
 					strokeLayer.Hidden = true;
-					/*progress = 0;
-					drawStroke(0);*/
 				}
 				else
 				{
@@ -105,6 +107,10 @@ namespace Lingvo.MobileApp.iOS
 				}
 			}
 		}
+		/// <summary>
+		/// Level of nesting. The outer circle bar has a nesting of zero, the next progress bar has a nesting level of 1 and so on
+		/// </summary>
+		/// <value>The nesting level</value>
 		public int NestingLevel
 		{
 			get
@@ -156,8 +162,10 @@ namespace Lingvo.MobileApp.iOS
 			}
 		}
 
-		//the angle starting from 12 o'clock to the current progress value
-		//used for arc rendering
+		/// <summary>
+		/// The end angle of the circel fragment depending on the current progress
+		/// </summary>
+		/// <value>The end angle of the stroke layer path from 0 to 2*Math.PI</value>
 		protected float angle
 		{
 			get

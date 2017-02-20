@@ -21,7 +21,7 @@ namespace Lingvo.MobileApp.iOS
 		UITapGestureRecognizer tapGestureRecognizer;
 
 		/// <summary>
-		/// Called whenever a bindable property of the view has changed
+		/// Called when a platform specific view is rendered or destroyed
 		/// </summary>
 		/// <param name="e">LinvgoRoundImageButton object</param>
 		protected override void OnElementChanged(ElementChangedEventArgs<Lingvo.MobileApp.Forms.LingvoRoundImageButton> e)
@@ -118,6 +118,11 @@ namespace Lingvo.MobileApp.iOS
 			label.BottomAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
 	
 		}
+		/// <summary>
+		/// Called whenever a bindable property has changed
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">Event Args</param>
 		private void updateView(object sender, EventArgs e)
 		{
 			if (Control == null)
