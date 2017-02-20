@@ -153,8 +153,7 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             if (teacherTrack?.CurrentPosition + seconds * 1000 >= teacherTrack?.Duration)
             {
-                teacherTrack?.SeekTo(teacherTrack.Duration);
-                OnProgress(teacherTrack.CurrentPosition);
+				OnProgress(teacherTrack.Duration);
                 Stop();
                 return;
             }
@@ -184,8 +183,8 @@ namespace Lingvo.MobileApp.Droid.Sound
             OnProgress(teacherTrack.CurrentPosition);
             ReinitializePlayer(teacherTrack, teacherRecording);
             ReinitializePlayer(studentTrack, studentRecording);
-            State = PlayerState.STOPPED;
             progressHandler.RemoveCallbacks(progressUpdate);
+			State = PlayerState.STOPPED;
         }
 
         private void ReinitializePlayer(MediaPlayer player, Recording recording)
