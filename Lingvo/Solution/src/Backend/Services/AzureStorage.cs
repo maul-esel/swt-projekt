@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Lingvo.Backend
+namespace Lingvo.Backend.Services
 {
 	public class AzureStorage : IStorage
 	{

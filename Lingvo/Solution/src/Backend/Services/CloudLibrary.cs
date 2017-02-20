@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lingvo.Backend
+namespace Lingvo.Backend.Services
 {
 	using Common.Entities;
 
@@ -81,6 +81,11 @@ namespace Lingvo.Backend
 		public Task<Page> FindPageByNumberAsync(int workbookId, int pageNumber)
 		{
 			return _dbservice.Pages.FirstOrDefaultAsync(p => p.workbookId == workbookId && p.Number == pageNumber);
+		}
+
+		public Task<Workbook> FindWorkbookByTitleAsync(string title)
+		{
+			return _dbservice.Workbooks.FirstOrDefaultAsync(w => w.Title == title);
 		}
 
 		public Workbook FindWorkbookWithReferences(int id)

@@ -78,8 +78,18 @@
 
 
    function sendBlobToServer(button, event) {
-      $("#submit-modal").modal()
       event.preventDefault()
+
+      // check if teacher track required && !available
+      const pageId = $("#pageId").val()[0]
+      const isUpdate = (typeof (pageId) != 'undefined' && pageId != null && pageId != "")
+      const hasTrack = (current_recording != null || $("#uploadedFile")[0].files.length > 0)
+      if (!isUpdate && !hasTrack) {
+          $("#recording-required-modal").modal()
+          return
+      }
+
+      $("#submit-modal").modal()
        
         var form = $("#pageForm")[0];
         var action = button.getAttribute("formaction") || form.getAttribute("action")
