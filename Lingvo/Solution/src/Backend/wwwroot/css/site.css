@@ -83,6 +83,7 @@
     .lingvo-header .create-button {
         float: right;
         margin: 0px;
+        width: 15%;
     }
 
     .glyphicon-button .glyphicon {
@@ -90,6 +91,14 @@
     }
     .glyphicon-button:hover .glyphicon {
         color: #555;
+    }
+
+    /* highlight published workbooks */
+    .glyphicon-button .glyphicon-eye-open {
+        color: #4280D0
+    }
+    .glyphicon-button:hover .glyphicon-eye-open {
+        color: #2E6DA4
     }
 
     .workbook-title {
