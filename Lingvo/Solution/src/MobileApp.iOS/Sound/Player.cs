@@ -25,7 +25,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		public event Action<int> Update;
 		public event Action<PlayerState> StateChange;
 
-		private const float teacherTrackVolume = 0.6f;
+		private const float teacherTrackVolume = 0.7f;
 		private const float studentTrackVolume = 1.0f;
 
 		public Player()
@@ -39,8 +39,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 
 		}
-
-		#region Public properties
 
 		public PlayerState State
 		{
@@ -101,16 +99,13 @@ namespace Lingvo.MobileApp.iOS.Sound
 			}
 		}
 
-
-		#endregion
-
-		#region Controls presented by interface
-
 		public void Play()
 		{
+			//Grabbing audio session
 			AVAudioSession session = AVAudioSession.SharedInstance();
 			adjustAudioOutputPort(session);
 			AVAudioSession.SharedInstance().SetActive(true);
+
 			if (studentTrack != null)
 			{
 				studentTrack.Volume = studentTrackVolume;
@@ -160,7 +155,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 			else
 			{
 				teacherTrack.Stop();
-
 				teacherTrack.CurrentTime = 0;
 			}
 
@@ -198,18 +192,24 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 			}
 
-			OnProgress(teacherTrack.CurrentTime);
+			OnProgress(teacherTrack.CurrentTime); //Initiating redraw of UI
 		}
 
+
+		/// <summary>
+		/// Prepares the teacher track, i.e. makes it ready for playback.
+		/// </summary>
+		/// <param name="recording">Recording.</param>
 		public void PrepareTeacherTrack(Recording recording)
 		{
 			NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 			teacherTrack = AVAudioPlayer.FromUrl(url);
-			teacherTrack.Volume = studentTrackVolume;
+			teacherTrack.Volume = teacherTrackVolume;
 
 			teacherTrack.PrepareToPlay();
 			teacherTrack.FinishedPlaying += (sender, e) =>
 			{
+				//we subscribe to the native stop event of the player and call our own stop method
 				Stop();
 				OnProgress(teacherTrack.Duration);
 			};
@@ -217,6 +217,11 @@ namespace Lingvo.MobileApp.iOS.Sound
 			OnProgress(teacherTrack.CurrentTime);
 		}
 
+		/// <summary>
+		/// Prepares the student track, i.e. makes it ready for playback.
+		/// Can be called with a null parameter to reset the student player
+		/// </summary>
+		/// <param name="recording">Recording.</param>
 		public void PrepareStudentTrack(Recording recording)
 		{
 			if (recording == null)
@@ -227,17 +232,15 @@ namespace Lingvo.MobileApp.iOS.Sound
 			{
 				NSUrl url = NSUrl.FromString(FileUtil.getAbsolutePath(recording));
 				studentTrack = AVAudioPlayer.FromUrl(url);
+				studentTrack.Volume = studentTrackVolume;
 				studentTrack.PrepareToPlay();
 			}
 
 		}
 
-		#endregion
-
-		//The following methods manage the correct behaviour for 
-		//the audio playback when the app enters the background 
-		#region Session managing sessions
-
+		/// <summary>
+		/// Requesting permissions and activating the audio session.
+		/// </summary>
 		public void ActivateAudioSession()
 		{
 			var status = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Audio);
@@ -249,16 +252,29 @@ namespace Lingvo.MobileApp.iOS.Sound
 			session.SetActive(true);
 			if (status == AVAuthorizationStatus.NotDetermined)
 			{
-				session.RequestRecordPermission((granted) => { });
+				session.RequestRecordPermission((granted) => {
+					//Nothing to do here.
+				});
 			}
 
 		}
+
+		/// <summary>
+		/// Depending on whether a headset/headphones are plugged in, the audio output is 
+		/// set correctly.
+		/// </summary>
+		/// <param name="session">Session.</param>
 		private void adjustAudioOutputPort(AVAudioSession session)
 		{
 			NSError err;
 			AVAudioSessionPortOverride outputPort = isHeadphonePluggedIn() ? AVAudioSessionPortOverride.None : AVAudioSessionPortOverride.Speaker;
 			session.OverrideOutputAudioPort(outputPort, out err);
 		}
+
+		/// <summary>
+		/// Checks whether a headphone is plugged in the device.
+		/// </summary>
+		/// <returns><c>true</c>, if a headphone is plugged in, <c>false</c> otherwise.</returns>
 		private bool isHeadphonePluggedIn()
 		{
 			AVAudioSessionPortDescription[] availableOutputs = AVAudioSession.SharedInstance().CurrentRoute.Outputs;
@@ -271,19 +287,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 			}
 			return false;
 		}
-		public void DeactivateAudioSession()
-		{
-			var session = AVAudioSession.SharedInstance();
-			session.SetActive(false);
-		}
-
-		public void ReactivateAudioSession()
-		{
-			var session = AVAudioSession.SharedInstance();
-			session.SetActive(true);
-		}
-
-		#endregion
 
 		/// <summary>
 		/// This method is called via the elapsed timer to create a DrawUpdate for the view
@@ -296,11 +299,19 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		}
 
+
+		/// <summary>
+		/// This method notifies all subscribers of the StateChange event.
+		/// </summary>
 		private void OnStateChange()
 		{
 			StateChange?.Invoke(state);
 		}
 
+
+		/// <summary>
+		/// Synchronizing playback time of student and teachertrack.
+		/// </summary>
 		private void Sync()
 		{
                 studentTrack.CurrentTime = teacherTrack.CurrentTime;   
