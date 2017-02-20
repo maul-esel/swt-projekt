@@ -160,13 +160,13 @@ namespace Lingvo.MobileApp.Droid.Sound
             }
             teacherTrack?.SeekTo(teacherTrack.CurrentPosition + seconds * 1000);
 
-            if (studentTrack?.CurrentPosition + seconds * 1000 >= studentTrack?.Duration)
+            if (teacherTrack?.CurrentPosition >= studentTrack?.Duration)
             {
                 studentTrack?.Pause();
             }
             else
             {
-                studentTrack?.SeekTo(studentTrack.CurrentPosition + seconds * 1000);
+                studentTrack?.SeekTo(teacherTrack.CurrentPosition);
 
                 if (studentTrack != null && !studentTrack.IsPlaying && teacherTrack.IsPlaying)
                 {
