@@ -14,6 +14,8 @@ namespace Lingvo.Backend.Tests
 	
     public class DatabaseTests 
     {
+		const int triggerDelay = 500;
+
 		public DatabaseTests()
 		{
 			TestsFixture.Setup();
@@ -108,7 +110,7 @@ namespace Lingvo.Backend.Tests
 			Assert.Equal(3, Database.Workbooks.Find(1).TotalPages);
 			Assert.NotNull(Database.Pages.Find(testPage.Id));
 
-			Thread.Sleep(200); // delay: wait for trigger to run
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
 			Assert.Equal(2, Database.Workbooks.Find(1).TotalPages);
 		}
 
@@ -171,7 +173,7 @@ namespace Lingvo.Backend.Tests
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Workbook.Id, testWorkbook.Id);
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).TeacherTrack.LocalPath, "test");
 
-			Thread.Sleep(200); // delay: wait for trigger to run
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
 			Assert.Equal(1, Database.Workbooks.Find(testWorkbook.Id).TotalPages);
 		}
 
@@ -210,7 +212,7 @@ namespace Lingvo.Backend.Tests
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Recordings.Find(1));
 
-			Thread.Sleep(200); // delay: wait for trigger to run
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
 			Assert.Equal(1, Database.Workbooks.Find(1).TotalPages);
 		}
 
