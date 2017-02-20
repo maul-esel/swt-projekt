@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lingvo.Backend.Controllers
 {
+	using Services;
+
 	/// <summary>
 	/// Controller for App accessing the server
 	/// </summary>

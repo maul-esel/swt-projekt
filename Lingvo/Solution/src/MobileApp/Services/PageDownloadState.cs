@@ -16,7 +16,7 @@ namespace Lingvo.MobileApp.Util
     /// things that track current state of a download, including # bytes transfered,
     /// as well as some async callbacks that will get invoked at various points.
     /// </summary>
-    public class DownloadRequestState
+    public class PageDownloadState
     {
         public int BytesRead;           // # bytes read during current transfer
         public long TotalBytes;            // Total bytes to read
@@ -24,12 +24,6 @@ namespace Lingvo.MobileApp.Util
         public Stream StreamResponse;    // Stream to read from
         public byte[] BufferRead;        // Buffer to read data into
         public DateTime TransferStart;  // Used for tracking xfr rate
-
-        // Callback for Progress
-        public IProgress<double> ProgCB
-        {
-            get; set;
-        }
 
         public string FilePath
         {
@@ -61,7 +55,12 @@ namespace Lingvo.MobileApp.Util
             get; set;
         }
 
-        public DownloadRequestState(int bufferSize)
+        public IPage Page
+        {
+            get; set;
+        }
+
+        public PageDownloadState(int bufferSize)
         {
             TaskSource = new TaskCompletionSource<bool>();
             BytesRead = 0;

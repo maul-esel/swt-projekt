@@ -28,16 +28,18 @@
                     <td>
                         @if (workbook.TotalPages > 0)
                         {
-                        <a class="glyphicon-button" title="Arbeitsheft veröffentlichen" data-toggle="modal" href="#publish-warning-@workbook.Id">
-                        @if (workbook.IsPublished)
-						{
-  							<span class="glyphicon glyphicon-eye-open"></span>
-  						}
-						else
-						{
-  							<span class="glyphicon glyphicon-eye-close"></span>
-						}
-                        </a>
+                            @if (workbook.IsPublished)
+                            {
+                                <a class="glyphicon-button" title="Arbeitsheft zurücknehmen" data-toggle="modal" href="#publish-warning-@workbook.Id">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="glyphicon-button" title="Arbeitsheft veröffentlichen" data-toggle="modal" href="#publish-warning-@workbook.Id">
+                                    <span class="glyphicon glyphicon-eye-close"></span>
+                                </a>
+                            }
 						<div class="modal fade" id="publish-warning-@workbook.Id" role="dialog">
 						    <div class="modal-dialog">
 
@@ -52,8 +54,8 @@
 								          	<p>Möchten Sie dieses Arbeitsheft wirklich veröffentlichen?</p>
 								        </div>
 								        <div class="modal-footer">
-											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-								          	<a type="button" class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> Veröffentlichen</a>
+											<a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+								          	<a class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> Veröffentlichen</a>
 								        </div>
 									</div>
 	  							}
@@ -68,8 +70,8 @@
 								          	<p>Möchten Sie dieses Arbeitsheft wirklich zurücknehmen?</p>
 								        </div>
 								        <div class="modal-footer">
-											<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-								          	<a type="button" class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-close" style="color:white"></span> Zurücknehmen</a>
+											<a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+								          	<a class="btn btn-warn" asp-controller="Workbook" asp-action="PublishWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-eye-close" style="color:white"></span> Zurücknehmen</a>
 								        </div>
 									</div>
 								}
@@ -94,8 +96,8 @@
 						          	<p>Möchten Sie dieses Arbeitsheft wirklich löschen?</p>
 						        </div>
 						        <div class="modal-footer">
-									<a type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
-						          	<a type="button" class="btn btn-danger" asp-controller="Workbook" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
+									<a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+						          	<a class="btn btn-danger" asp-controller="Workbook" asp-action="DeleteWorkbook" asp-route-id="@workbook.Id"><span class="glyphicon glyphicon-trash" style="color:white"></span> Löschen</a>
 						        </div>
 						      </div>
 						      

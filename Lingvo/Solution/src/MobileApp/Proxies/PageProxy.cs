@@ -107,11 +107,12 @@ namespace Lingvo.MobileApp.Proxies
             LocalCollection.Instance.PageChanged += Instance_PageChanged;
         }
 
-        private void Instance_PageChanged(Page p)
+        private void Instance_PageChanged(IPage p)
         {
             if (p.Id.Equals(Id))
             {
-                IPage local = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(Id));
+                Workbook workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId));
+                IPage local = workbook?.Pages.Find(lp => lp.Id.Equals(Id));
                 if (local != null)
                 {
                     original = (Page)local;
@@ -127,7 +128,7 @@ namespace Lingvo.MobileApp.Proxies
         /// Load the real page object for this proxy
         /// </summary>
         /// <returns>The resolve.</returns>
-        public async Task Resolve(IProgress<double> progress, CancellationToken cancellationToken)
+        public async Task Resolve(CancellationTokenSource cancellationToken)
         {
             if (original == null)
             {
@@ -139,15 +140,15 @@ namespace Lingvo.MobileApp.Proxies
                 }
                 else
                 {
-                    await DownloadPage(progress, cancellationToken);
+                    await DownloadPage(cancellationToken);
                 }
             }
 
         }
 
-        private async Task DownloadPage(IProgress<double> progress, CancellationToken cancellationToken)
+        private async Task DownloadPage(CancellationTokenSource cancellationToken)
         {
-            Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, progress, cancellationToken);
+            Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, cancellationToken);
 
             if (App.Database.FindWorkbook(this.Workbook.Id) == null)
             {

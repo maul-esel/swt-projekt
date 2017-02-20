@@ -1,7 +1,3 @@
-
-  var elapsed_time = 0;
-  var elapsed_time_display;
-  var on_air_display;
   var audio_context;
   var recorder;
   var current_recording;
@@ -39,27 +35,6 @@
     resetDisplayOnAir();
     prepareRecording();
   }
-  
-  function displayElapsedTime() {
-    
-    $("#seconds").html(padTimeCode(elapsed_time++%60));
-    $("#minutes").html(padTimeCode(parseInt(elapsed_time/60,10)));
-    
-  }
-
-  function displayOnAir() {
-    var dotCount = elapsed_time%4;
-    $("#onair").html("Aufnahme läuft" + ".".repeat(dotCount));
-  }
-
-  function resetElapsedTime() {
-    elapsed_time = 0;
-    displayElapsedTime();
-  }
-
-  function resetDisplayOnAir() {
-    $("#onair").html("");
-  }
 
   function prepareRecording() {
     $("#conversion-modal").modal()
@@ -78,8 +53,18 @@
 
 
    function sendBlobToServer(button, event) {
-      $("#submit-modal").modal()
       event.preventDefault()
+
+      // check if teacher track required && !available
+      const pageId = $("#pageId").val()[0]
+      const isUpdate = (typeof (pageId) != 'undefined' && pageId != null && pageId != "")
+      const hasTrack = (current_recording != null || $("#uploadedFile")[0].files.length > 0)
+      if (!isUpdate && !hasTrack) {
+          $("#recording-required-modal").modal()
+          return
+      }
+
+      $("#submit-modal").modal()
        
         var form = $("#pageForm")[0];
         var action = button.getAttribute("formaction") || form.getAttribute("action")
@@ -150,10 +135,6 @@
         $("#noNewRecordingWarning").hide()
         $("#newRecording").removeClass("hidden")
     }
-
-    function padTimeCode ( val ) {
-     return val > 9 ? val : "0" + val; 
-   }
 
     window.onbeforeunload = function() {
         if (!isSubmit && current_recording != null || !isCancel && !isSubmit) {

@@ -21,6 +21,8 @@ namespace Lingvo.MobileApp.Controllers
 
         public event OnProgressUpdate Update;
 
+        public event Action Error;
+
         public TeacherMemo CurrentMemo
         {
             get;
@@ -52,24 +54,32 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void StartTeacherMemo()
         {
-            if (audioRecorder.State != RecorderState.PREPARED)
+            try
             {
-                audioRecorder.PrepareToRecord();
-            }
-
-            progressHandler = new Task(async () =>
-            {
-                DateTime begin = DateTime.Now;
-                while (State == RecorderState.RECORDING)
+                if (audioRecorder.State != RecorderState.PREPARED)
                 {
-                    int seconds = (int)new TimeSpan(DateTime.Now.Ticks - begin.Ticks).TotalMilliseconds;
-                    Update?.Invoke(seconds);
-                    await Task.Delay(1000);
+                    audioRecorder.PrepareToRecord();
                 }
-            });
 
-            audioRecorder.Start();
-            progressHandler.Start();
+                progressHandler = new Task(async () =>
+                {
+                    DateTime begin = DateTime.Now;
+                    while (State == RecorderState.RECORDING)
+                    {
+                        int seconds = (int)new TimeSpan(DateTime.Now.Ticks - begin.Ticks).TotalMilliseconds;
+                        Update?.Invoke(seconds);
+                        await Task.Delay(1000);
+                    }
+                });
+
+                audioRecorder.Start();
+                progressHandler.Start();
+            }
+            catch
+            {
+                Reset();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
@@ -77,7 +87,15 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void EndTeacherMemo()
         {
-            CurrentMemo = new TeacherMemo() { TeacherTrack = audioRecorder.Stop() };
+            try
+            {
+                CurrentMemo = new TeacherMemo() { TeacherTrack = audioRecorder.Stop() };
+            }
+            catch
+            {
+                Reset();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
