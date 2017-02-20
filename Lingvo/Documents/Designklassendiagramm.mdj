@@ -82,7 +82,7 @@
 											"containerExtending": false,
 											"left": 1533,
 											"top": 54,
-											"width": 615,
+											"width": 631,
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
@@ -151,7 +151,7 @@
 									"containerExtending": false,
 									"left": 1528,
 									"top": 47,
-									"width": 625,
+									"width": 641,
 									"height": 25,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -208,7 +208,7 @@
 							"containerExtending": false,
 							"left": 1528,
 							"top": 32,
-							"width": 625,
+							"width": 641,
 							"height": 1009,
 							"autoResize": false,
 							"stereotypeDisplay": "label",
@@ -18842,7 +18842,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+editPage(number: int, description: string, file: File, duration: int)",
+											"text": "+editPage(id: int, number: int, description: string, file: File, duration: int)",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -27578,7 +27578,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFaVr/653fpQ78="
 											},
-											"name": "number",
+											"name": "id",
 											"visibility": "public",
 											"isStatic": false,
 											"isLeaf": false,
@@ -27594,6 +27594,22 @@
 											"_parent": {
 												"$ref": "AAAAAAFaVr/653fpQ78="
 											},
+											"name": "number",
+											"visibility": "public",
+											"isStatic": false,
+											"isLeaf": false,
+											"type": "int",
+											"isReadOnly": false,
+											"isOrdered": false,
+											"isUnique": false,
+											"direction": "in"
+										},
+										{
+											"_type": "UMLParameter",
+											"_id": "AAAAAAFaVsCZPXrqeVE=",
+											"_parent": {
+												"$ref": "AAAAAAFaVr/653fpQ78="
+											},
 											"name": "description",
 											"visibility": "public",
 											"isStatic": false,
@@ -27606,7 +27622,7 @@
 										},
 										{
 											"_type": "UMLParameter",
-											"_id": "AAAAAAFaVsCZPXrqeVE=",
+											"_id": "AAAAAAFaW5VyiPbrLpk=",
 											"_parent": {
 												"$ref": "AAAAAAFaVr/653fpQ78="
 											},
@@ -27622,7 +27638,7 @@
 										},
 										{
 											"_type": "UMLParameter",
-											"_id": "AAAAAAFaW5VyiPbrLpk=",
+											"_id": "AAAAAAFaW8JFwQog+5I=",
 											"_parent": {
 												"$ref": "AAAAAAFaVr/653fpQ78="
 											},
