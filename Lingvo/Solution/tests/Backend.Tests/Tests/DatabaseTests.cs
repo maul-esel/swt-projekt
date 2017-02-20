@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -100,14 +101,15 @@ namespace Lingvo.Backend.Tests
 				TeacherTrack = Database.Recordings.Find(1),
 				teacherTrackId = 1					
 			};
-
-			Assert.Equal(2, Database.Workbooks.Find(1).TotalPages);
 			Console.WriteLine(testPage.StudentTrack);
 			Console.WriteLine(testPage.studentTrackId);
 			Database.Save(testPage);
 			Assert.Equal(5, Database.Pages.Count());
 			Assert.Equal(3, Database.Workbooks.Find(1).TotalPages);
 			Assert.NotNull(Database.Pages.Find(testPage.Id));
+
+			Thread.Sleep(200); // delay: wait for trigger to run
+			Assert.Equal(2, Database.Workbooks.Find(1).TotalPages);
 		}
 
 		[Fact]
@@ -168,6 +170,9 @@ namespace Lingvo.Backend.Tests
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Description, "Test");
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Workbook.Id, testWorkbook.Id);
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).TeacherTrack.LocalPath, "test");
+
+			Thread.Sleep(200); // delay: wait for trigger to run
+			Assert.Equal(1, Database.Workbooks.Find(testWorkbook.Id).TotalPages);
 		}
 
 		[Fact]
@@ -205,6 +210,7 @@ namespace Lingvo.Backend.Tests
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Recordings.Find(1));
 
+			Thread.Sleep(200); // delay: wait for trigger to run
 			Assert.Equal(1, Database.Workbooks.Find(1).TotalPages);
 		}
 
