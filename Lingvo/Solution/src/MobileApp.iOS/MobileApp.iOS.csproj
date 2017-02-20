@@ -162,6 +162,7 @@
     <BundleResource Include="Resources\ic_next.png" />
     <BundleResource Include="Resources\ic_previous.png" />
     <BundleResource Include="Resources\ic_fiber_manual_record.png" />
+    <BundleResource Include="Resources\ic_info_outline.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
