@@ -152,8 +152,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 				teacherTrack.Stop();
 				studentTrack.Stop();
 
-
-
 				teacherTrack.CurrentTime = 0;
 				studentTrack.CurrentTime = 0;
 
@@ -170,8 +168,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 			//workaround: kill audio session because AVAudioPlayer keeps playing when you call .Stop()
 			Task.Run(() => AVAudioSession.SharedInstance().SetActive(false));
 
-
-
 		}
 
 
@@ -179,9 +175,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 		{
 			if (teacherTrack.CurrentTime + seconds > teacherTrack.Duration)
 			{
-				seconds = (int)teacherTrack.Duration;
-				teacherTrack.CurrentTime = seconds;
-				OnProgress(teacherTrack.CurrentTime);
+				OnProgress(teacherTrack.Duration);
 				Stop();
 				return;
 			}
@@ -298,8 +292,6 @@ namespace Lingvo.MobileApp.iOS.Sound
 		private void OnProgress(double currentProgress)
 		{
 			var milliseconds = (int)(currentProgress * 1000);
-
-			Console.WriteLine("PROGRESS: " + milliseconds + " / " + teacherTrack.Duration * 1000);
 			Update?.Invoke(milliseconds);
 
 		}
