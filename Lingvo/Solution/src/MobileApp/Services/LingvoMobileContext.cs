@@ -33,7 +33,7 @@ namespace Lingvo.MobileApp.Services
 
         public LingvoMobileContext(string dbPath)
         {
-            database = new SQLiteConnection(new SQLitePlatform(), dbPath);
+            database = new SQLiteConnection(new SQLitePlatform(), dbPath, false);
         }
 
         public void createTables()

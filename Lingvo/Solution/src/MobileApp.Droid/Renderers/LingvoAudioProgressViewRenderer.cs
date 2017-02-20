@@ -62,7 +62,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
                 case LingvoAudioProgressView.LabelTypeValue.Percentual:
                     if (element.MaxProgress == 0)
                     {
-                        progressView.Text = "±∞";
+                        progressView.Text = "0 %";
                     }
                     else
                     {
@@ -79,6 +79,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
                         break;
                     }
                 case LingvoAudioProgressView.LabelTypeValue.None: progressView.Text = ""; break;
+                case LingvoAudioProgressView.LabelTypeValue.Error: progressView.Text = "!"; break;
             }
         }
     }

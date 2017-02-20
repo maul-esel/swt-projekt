@@ -59,7 +59,7 @@ namespace Lingvo.Backend.Controllers
 			return Json(from p in db.Pages
 						where p.workbookId == workbookId
 			            orderby p.Id
-						select new { p.Id, p.workbookId, p.Number, p.Description });
+						select new { p.Id, p.workbookId, p.Number, p.Description , creationTime = p.TeacherTrack.CreationTime.ToString("dd.MM.yyyy HH:mm:ss")});
 		}
 
 		/// <summary>

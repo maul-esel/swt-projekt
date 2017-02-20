@@ -16,7 +16,10 @@ namespace Lingvo.MobileApp.Templates
             get; private set;
         }
 
-        private Label subtitleLabel;
+        internal Label SubtitleLabel
+        {
+            get; private set;
+        }
 
         private MenuItem deleteAction;
 
@@ -32,14 +35,14 @@ namespace Lingvo.MobileApp.Templates
 
             titleLabel.SetBinding(Label.TextProperty, "Title");
 
-            subtitleLabel = new Label()
+            SubtitleLabel = new Label()
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 IsVisible = false,
                 LineBreakMode = LineBreakMode.TailTruncation
             };
 
-            subtitleLabel.SetBinding(Label.TextProperty, "Subtitle");
+            SubtitleLabel.SetBinding(Label.TextProperty, "Subtitle");
 
             ProgressView = new LingvoAudioProgressView()
             {
@@ -88,7 +91,7 @@ namespace Lingvo.MobileApp.Templates
                                         Children =
                                         {
                                             titleLabel,
-                                            subtitleLabel
+                                            SubtitleLabel
                                         }
                                         }
 
@@ -173,7 +176,7 @@ namespace Lingvo.MobileApp.Templates
                 Workbook workbook = (Workbook)BindingContext;
 
                 ProgressView.InnerProgressEnabled = false;
-                subtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
+                SubtitleLabel.IsVisible = workbook.Subtitle?.Length > 0;
 
                 BindViewCell(workbook);
             });

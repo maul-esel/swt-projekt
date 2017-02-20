@@ -88,14 +88,26 @@ namespace Lingvo.MobileApp.Templates
         protected override void BindViewCell(IPage page)
         {
             Workbook localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(page.workbookId));
-            bool downloaded = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id)) != null;
+            IPage localPage = localWorkbook?.Pages.Find(p => p.Id.Equals(page.Id));
+            bool downloaded = localPage != null;
 
-            string color = downloaded ? "secondaryColor" : "primaryColor";
-            ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+            if (downloaded && ((PageProxy)page).NewerVersionExists())
+            {
+                downloaded = false;
+                ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Error;
+                ProgressView.OuterProgressColor = Color.Red;
+                SubtitleLabel.Text = ((Span)App.Current.Resources["label_newer_version"]).Text;
+                SubtitleLabel.IsVisible = true;
+            }
+            else
+            {
+                string color = downloaded ? "secondaryColor" : "primaryColor";
+                ProgressView.OuterProgressColor = (Color)App.Current.Resources[color];
+                ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
+            }
 
             ProgressView.InnerProgressEnabled = false;
             ProgressView.MaxProgress = 100;
-            ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Percentual;
 
             try
             {

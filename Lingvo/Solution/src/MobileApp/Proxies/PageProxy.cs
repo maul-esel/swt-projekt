@@ -14,14 +14,16 @@ namespace Lingvo.MobileApp.Proxies
 
         public delegate void OnPageChanged(int id);
 
-        private int number;
-        private String description;
-
         private Page original;
 
         public Workbook Workbook { get; set; }
 
         public int workbookId { get; set; }
+
+        public DateTime CreationTime
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the page number.
@@ -29,14 +31,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The number.</value>
         public int Number
         {
-            get
-            {
-                return number;
-            }
-            set
-            {
-                number = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -45,14 +40,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The description.</value>
         public String Description
         {
-            get
-            {
-                return description;
-            }
-            set
-            {
-                description = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -130,9 +118,15 @@ namespace Lingvo.MobileApp.Proxies
         /// <returns>The resolve.</returns>
         public async Task Resolve(CancellationTokenSource cancellationToken)
         {
+            if (NewerVersionExists())
+            {
+                IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+                LocalCollection.Instance.DeletePage((Page)localPage);
+                original = null;
+            }
+
             if (original == null)
             {
-
                 var p = App.Database.FindPage(this.Id);
                 if (p != null)
                 {
@@ -156,6 +150,7 @@ namespace Lingvo.MobileApp.Proxies
             }
 
             original = page;
+            CreationTime = page.TeacherTrack.CreationTime;
 
             App.Database.Save(original.TeacherTrack);
             App.Database.Save(original);
@@ -170,6 +165,18 @@ namespace Lingvo.MobileApp.Proxies
             {
                 original.DeleteStudentRecording();
             }
+        }
+
+        public bool NewerVersionExists()
+        {
+            IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+
+            if (localPage != null)
+            {
+                return CreationTime.CompareTo(localPage.TeacherTrack.CreationTime) > 0;
+            }
+
+            return false;
         }
     }
 }
