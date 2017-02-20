@@ -23,7 +23,7 @@ namespace Lingvo.Backend.Controllers
 			return View(cl.FindWorkbooksWithReferences());
 		}
 
-		[Route("about")]
+		[Route("about"), AllowAnonymous]
 		public IActionResult About()
 		{
 			ViewData["Title"] = "About";
