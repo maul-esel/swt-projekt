@@ -26,7 +26,19 @@
             <Span x:Key="label_edit">Bearbeiten</Span>
             <Span x:Key="label_legal">Impressum</Span>
             <Span x:Key="app_name">Lingvo</Span>
-            <Span x:Key="legal_content">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</Span>
+            <Span x:Key="legal_university">Universität Augsburg</Span>
+            <Span x:Key="legal_institute">Institut für Software &amp; Systems Engineering</Span>
+            <Span x:Key="legal_link">www.isse.uni-augsburg.de</Span>
+            <Span x:Key="legal_partners">In Zusammenarbeit mit:</Span>
+            <Span x:Key="legal_maiborn">Maiborn Wolff GmbH</Span>
+            <Span x:Key="legal_tauschring">Tauschring Gelderland e.V.</Span>
+            <Span x:Key="legal_members">Entwicklerteam:</Span>
+            <Span x:Key="legal_jan">Jan Göbel</Span>
+            <Span x:Key="legal_ralph">Ralph Reithmeier</Span>
+            <Span x:Key="legal_dominik">Dominik Klumpp</Span>
+            <Span x:Key="legal_philip">Philip Lenzen</Span>
+            <Span x:Key="legal_katja">Katja Ludwig</Span>
+            <Span x:Key="legal_elite">im Rahmen des Elite-Studiengangs Software Engineering</Span>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
