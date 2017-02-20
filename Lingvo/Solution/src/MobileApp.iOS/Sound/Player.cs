@@ -309,7 +309,10 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		private void Sync()
 		{
-			studentTrack.CurrentTime = teacherTrack.CurrentTime;
+            if (studentTrack != null)
+            {
+                studentTrack.CurrentTime = teacherTrack.CurrentTime;
+            }
 		}
 
 
