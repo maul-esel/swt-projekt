@@ -11,6 +11,7 @@
     .navbar-inverse {
       background-color: #4280D0 !important;
       border-color: white !important;
+      height: 62px;
     }
     .navbar-collapse.collapse li a {
       color: white !important;
@@ -293,4 +294,14 @@
     width: 15px;
     height: 15px;
     content: "";
+}
+#brand { vertical-align: middle; }
+#brand-icon {
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    border-radius: 50%;
+    display: inline;
+    vertical-align: middle;
+    padding: 3px;
 }
