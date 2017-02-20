@@ -4,6 +4,8 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using Lingvo.MobileApp.Pages;
 using System.Linq;
+using Lingvo.MobileApp.Util;
+using System;
 
 namespace Lingvo.MobileApp.Templates
 {
@@ -24,17 +26,16 @@ namespace Lingvo.MobileApp.Templates
                 FontAttributes = FontAttributes.Bold,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
+                LineBreakMode = LineBreakMode.TailTruncation
             };
 
             ProgressView = new LingvoAudioProgressView()
             {
-                Size = Device.OnPlatform(iOS: 50, Android: 120, WinPhone: 240),
+                Size = Device.OnPlatform(iOS: 50, Android: 72, WinPhone: 240),
                 LabelType = LingvoAudioProgressView.LabelTypeValue.None,
                 TextSize = 15
             };
-
-            LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
 
             deleteAction = new MenuItem
             {
@@ -54,11 +55,7 @@ namespace Lingvo.MobileApp.Templates
 
             titleLabel.SetBinding(Label.TextProperty, "Name");
 
-            deleteAction.Clicked += (o, e) =>
-            {
-                TeacherMemo memo = (TeacherMemo)BindingContext;
-                LocalCollection.Instance.DeleteTeacherMemo(memo);
-            };
+            deleteAction.Clicked += DeleteAction_Clicked;
 
             deleteStudentAction = new MenuItem
             {
@@ -66,11 +63,7 @@ namespace Lingvo.MobileApp.Templates
                 Icon = "ic_mic_off.png"
             };
 
-            deleteStudentAction.Clicked += (o, e) =>
-            {
-                TeacherMemo page = (TeacherMemo)BindingContext;
-                LocalCollection.Instance.DeleteStudentRecording(page);
-            };
+            deleteStudentAction.Clicked += DeleteStudentAction_Clicked;
 
             editAction.Clicked += async (o, e) =>
             {
@@ -80,7 +73,7 @@ namespace Lingvo.MobileApp.Templates
             View = new StackLayout
             {
                 Padding = new Thickness(5, 5),
-                HeightRequest = Device.OnPlatform(iOS: 60, Android: 72, WinPhone: 240),
+                HeightRequest = Device.OnPlatform(iOS: 60, Android: 80, WinPhone: 240),
                 Orientation = StackOrientation.Horizontal,
                 Children =
                                 {
@@ -89,6 +82,53 @@ namespace Lingvo.MobileApp.Templates
                                 }
 
             };
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
+
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.TeacherMemoChanged -= Event_TeacherMemoChanged;
+        }
+
+        private async void DeleteStudentAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeleteStudentTrack())
+                {
+                    TeacherMemo page = (TeacherMemo)BindingContext;
+                    LocalCollection.Instance.DeleteStudentRecording(page);
+                    ContextActions.Remove(deleteStudentAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
+        }
+
+        private async void DeleteAction_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (await AlertHelper.DisplayWarningDeleteTeacherMemo(((TeacherMemo)BindingContext).StudentTrack != null))
+                {
+                    TeacherMemo memo = (TeacherMemo)BindingContext;
+                    LocalCollection.Instance.DeleteTeacherMemo(memo);
+                    ContextActions.Remove(deleteAction);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Context Actions null");
+            }
         }
 
         protected override void OnBindingContextChanged()

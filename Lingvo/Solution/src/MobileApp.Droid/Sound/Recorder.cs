@@ -97,6 +97,11 @@ namespace Lingvo.MobileApp.Droid.Sound
             currentRecordingPath = FileUtil.getAbsolutePath(getFileName());
             recorder = new MediaRecorder();
 
+            audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
+            audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
+
+            audioManager.SetStreamVolume(Android.Media.Stream.VoiceCall, audioManager.GetStreamMaxVolume(Android.Media.Stream.VoiceCall), VolumeNotificationFlags.RemoveSoundAndVibrate);
+
             recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
             recorder.SetOutputFormat(OutputFormat.ThreeGpp);
             recorder.SetAudioEncoder(AudioEncoder.AmrNb);
