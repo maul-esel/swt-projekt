@@ -10,6 +10,9 @@ namespace Lingvo.Backend.Controllers
 			return View();
 		}
 
+		/// <summary>
+		/// Displays the internal error view.
+		/// </summary>
 		public IActionResult Error()
 		{
 			ViewData["Title"] = "Fehler";
