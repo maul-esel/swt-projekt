@@ -6,22 +6,32 @@
   var isSubmit = false;
   var isCancel = false;
 
+  var isRecording = false;
+
   function toggleRecording(toggle) {
       if (recorder == null && toggle.checked) {
           toggle.checked = false
           $("#no-microphone-access").modal();
           return;
       }
+
+      // if a recording already exists:
+      if (current_recording && toggle.checked) {
+          toggle.checked = false
+          $("#recording-overwrite-warning").modal() // warn the user
+          return
+      }
+
       if (toggle.checked) {
           startRecording()
-      } else {
+      } else if (isRecording) {
           stopRecording()
       }
   }
 
   function startRecording() {
-    recording = recording + 1;
     recorder.clear();
+    isRecording = true
     recorder && recorder.record();
     resetElapsedTime()
     elapsed_time_display = setInterval(displayElapsedTime,1000);
@@ -30,6 +40,7 @@
   
   function stopRecording() {
     recorder && recorder.stop();
+    isRecording = false
     clearInterval(elapsed_time_display)
     clearInterval(on_air_display);
     resetDisplayOnAir();
@@ -140,4 +151,12 @@
         if (!isSubmit && current_recording != null || !isCancel && !isSubmit) {
             return "Die erstellte Aufnahme wurde noch nicht gespeichert. Möchten Sie diese Seite wirklich verlassen?";
         }
+    }
+
+    function resetRecording() {
+        current_recording = null
+        $("#uploadedFile").val(null)
+        $("#recording-overwrite-warning").modal("hide")
+        $("#newRecording").addClass("hidden")
+        $("#noNewRecordingWarning").show()
     }
