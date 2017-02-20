@@ -15,15 +15,13 @@ namespace Lingvo.MobileApp.iOS
 		public CircleProgressBar studentProgressBar;
 
 		private static UIColor studentColor = UIColor.Red;
-		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f);
+		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f); //blue
 
-		private float lineWidth = 10.0f;
+		private float lineWidth = 10.0f; //width of circle fragment
 		public bool innerProgressEnabled = true;
 
 		private int progress = 0;
 		int maxProgress = 100;
-
-
 
 		public delegate void StudentTrackMutedEventHandler(bool muted);
 		public event StudentTrackMutedEventHandler StudentTrackMuted;
@@ -43,6 +41,8 @@ namespace Lingvo.MobileApp.iOS
 			TextColor = teacherColor.ColorWithAlpha(0.8f),
 			Font = UIFont.SystemFontOfSize(28, UIFontWeight.Thin)
 		};
+
+		//vertical container view that holds the time label and the mute button
 		UIStackView stackView = new UIStackView()
 		{
 			Axis = UILayoutConstraintAxis.Vertical,
@@ -54,9 +54,12 @@ namespace Lingvo.MobileApp.iOS
 			setupViews();
 		}
 
-
+		/// <summary>
+		/// creates the view layout programatically using Autolayout
+		/// </summary>
 		public void setupViews()
 		{
+			//setup outer circle bar
 			teacherProgressBar = new CircleProgressBar(Frame);
 			teacherProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
 			teacherProgressBar.ProgressColor = teacherColor;
@@ -65,6 +68,7 @@ namespace Lingvo.MobileApp.iOS
 			teacherProgressBar.LineWidth = lineWidth;
 			AddSubview(teacherProgressBar);
 
+			//setup inner circle bar
 			studentProgressBar = new CircleProgressBar(Frame);
 			studentProgressBar.TranslatesAutoresizingMaskIntoConstraints = false;
 			studentProgressBar.ProgressColor = studentColor;
@@ -76,8 +80,7 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.Hidden = !innerProgressEnabled;
 			AddSubview(studentProgressBar);
 
-			//layout views programatically
-			//create Autolayout constraints
+			//layout views using Autolayout so that they look good on different screen sizes
 			var viewNames = NSDictionary.FromObjectsAndKeys(new NSObject[] {
 				teacherProgressBar,
 				studentProgressBar
@@ -96,29 +99,36 @@ namespace Lingvo.MobileApp.iOS
 
 
 			//Wrap label in vertical stack view to avoid repositioning the label programatically
-		
 			AddSubview(stackView);
 			stackView.AddArrangedSubview(timeLabel);
 			stackView.AddArrangedSubview(muteBtn);
 
 			//subscribe to click events of button in the middle
 			muteBtn.AddTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
+
+			//set the width and height of the muteButton
 			muteBtn.WidthAnchor.ConstraintEqualTo(48).Active = true;
 			muteBtn.HeightAnchor.ConstraintEqualTo(48).Active = true;
 
 			updateMuteButtonImage();
-
 
 			//layout stack view using Autolayout
 			stackView.TranslatesAutoresizingMaskIntoConstraints = false;
 			stackView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
 			stackView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
 
+			//hide the inner bar if student is muted
 			if (!innerProgressEnabled)
 			{
 				studentProgressBar.Muted = true;
 			}
 		}
+
+		/// <summary>
+		/// Handles click events of the mute button
+		/// </summary>
+		/// <param name="sender">the mute button</param>
+		/// <param name="e">event args</param>
 		private void OnMuteButtonClicked(object sender, EventArgs e)
 		{
 			innerProgressEnabled = !innerProgressEnabled;
@@ -130,6 +140,10 @@ namespace Lingvo.MobileApp.iOS
 			studentProgressBar.render();
 
 		}
+
+		/// <summary>
+		/// adjusts image of mute button (speaker + crossed out speaker)
+		/// </summary>
 		private void updateMuteButtonImage()
 		{
 			var imageName = innerProgressEnabled ? "ic_volume_up" : "ic_volume_off";
@@ -188,12 +202,6 @@ namespace Lingvo.MobileApp.iOS
                 timeLabel.Text = value;
             }
         }
-
-		protected void runOnMainThread(Action action)
-		{
-			//updates on UI only work on the main thread
-			DispatchQueue.MainQueue.DispatchAsync(action);
-		}
 
 		public int MaxProgress
 		{
@@ -276,7 +284,11 @@ namespace Lingvo.MobileApp.iOS
 				muteBtn.SetTitleColor(value, UIControlState.Normal);
 			}
 		}
-
+		/// <summary>
+		/// Layout the sublayers of the view's layer. Here the frame + bound property of the sublayers are set
+		/// Otherwise Autolayout is unable to render the sublayers correctly
+		/// </summary>
+		/// <param name="layer">Layer.</param>
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
@@ -298,6 +310,9 @@ namespace Lingvo.MobileApp.iOS
 				}
 			}
 		}
+		/// <summary>
+		/// Redraw the entire progress view
+		/// </summary>
 		public void render()
 		{
 			stackView.RemoveFromSuperview();
