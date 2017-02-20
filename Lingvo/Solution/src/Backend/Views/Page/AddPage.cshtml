@@ -1,6 +1,7 @@
 @model PageModel
 
 @section Scripts {
+    <script src="~/js/Clock.js" asp-append-version="true"></script>
     <script src="~/js/recorder/audioRecord.js" asp-append-version="true"></script>
     <script src="~/js/recorder/webrecorder.js" asp-append-version="true"></script>
     <script src="~/js/microphone/volume-meter.js" asp-append-version="true"></script>
@@ -14,13 +15,15 @@
         </h3>
     </div>
     <form style="padding-top:20px;" id="pageForm" enctype="multipart/form-data"
-          method="post" asp-controller="Page" asp-action="@(Model.Page == null ? "CreatePage" : "UpdatePage")" asp-route-id="@Model.Page?.Id">
-        <input type="hidden" name="workbookID" value="@Model.Workbook.Id"/>
+          method="post" asp-controller="Page" asp-action="@(Model.Page == null ? "AddPage" : "EditPage")" asp-route-id="@Model.Page?.Id">
+        <input type="hidden" name="WorkbookID" value="@Model.Workbook.Id"/>
+        <input type="hidden" asp-for="Id" value="@Model.Page?.Id" id="pageId" />
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="form-group col-md-3" style=" padding-left:0px;">
-                    <label for="page-number">Seitenzahl</label>
-                    <input name="pageNumber" type="number" min="1" class="form-control input-lg" id="page-number" placeholder="1" value="@(Model.Page?.Number ?? ViewData["pageNumber"])" />
+                    <label for="PageNumber">Seitenzahl</label>
+                    <input asp-for="PageNumber" type="number" min="1" class="form-control input-lg" placeholder="z.B. 13" value="@(Model.Page?.Number ?? ViewData["pageNumber"])" />
+                    <span asp-validation-for="PageNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-9" style="padding-right:0">
                     <label for="page-name">Thema der Lektion</label>
@@ -76,8 +79,8 @@
                 <div class="col-md-6" >
                         <input type="file" name="recordedFile" id="recordedFile" class="hidden" accept="audio/*" />
                         <h3>Audiospur jetzt direkt aufnehmen</h3>
-                        <div class="panel row">
-                            <div class="panel-content">
+                        <div>
+                            <div class="panel-content row">
                                 <input type="checkbox" class="toggle-button-toggle" id="record-btn-toggle" onchange="toggleRecording(this)" checked="false"/>
                                 <label class="toggle-action-button btn btn-default" id="record-btn" for="record-btn-toggle">
                                     <span class="toggle-button-state1 record-btn-record">
@@ -90,11 +93,11 @@
                                     </span>
                                 </label>
                             
-                                <label id="minutes">00</label>:<label id="seconds">00</label>                            
-                                <canvas class="label" id="meter" width="100" height="20" style="margin-top: 10px " ></canvas>
+                                <label style="padding-left:30px" id="minutes">00</label>:<label id="seconds">00</label>                            
+                                <canvas id="meter" width="175" height="20"></canvas>
                             </div>        
                         </div>
-                        <label id="onair" style="color:red; text-align: left"></label>            
+                        <label id="onair" style="color:red; text-align: left"></label>
                     </div>
                 <div class="row" style="text-align: right;">
                     <div class="col-md-6">
@@ -109,6 +112,8 @@
                             </label>
                         </div>
                     </div>
+                </div>
+            </div>
         </div>
         <div class="form-group" style="text-align: center">
             <a class="btn btn-lg btn-danger" style="border:none" onclick="leavePage(event);" asp-controller="Workbook" asp-action="Workbook" asp-route-id="@Model.Workbook.Id">Abbrechen</a>
@@ -159,7 +164,25 @@
         </div>
     </div>
 
-
+    <div class="modal fade" id="recording-required-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-error">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white;opacity:1">&times;</button>
+                    <h4 class="modal-title">Lehrerspur fehlt!</h4>
+                </div>
+                <div class="modal-body text-justify" style="font-size:85%">
+                    <p>
+                        Sie müssen entweder eine Datei zum Hochladen auswählen oder eine neue Aufnahme durchführen.
+                        Erst dann können Sie die Seite speichern.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Schließen</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="conversion-modal" role="dialog" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">

@@ -2,17 +2,14 @@ using System;
 using System.IO;
 using System.Linq;
 
-using Lingvo.Common.Entities;
+using Microsoft.EntityFrameworkCore;
 
 using Xunit;
 
-using Microsoft.EntityFrameworkCore;
-
-using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
-
 namespace Lingvo.Backend.Tests
 {
+	using Common.Entities;
+	using Services;
 	
     public class DatabaseTests 
     {

@@ -1,15 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Xunit;
+
 using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
-using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+using Xunit;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace Lingvo.Backend.Tests
 {
+	using Controllers;
+	using Services;
+
 	public class AppControllerTests
 	{
 

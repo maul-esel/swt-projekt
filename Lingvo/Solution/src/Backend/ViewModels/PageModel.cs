@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using Lingvo.Common.Entities;
@@ -21,13 +22,16 @@ namespace Lingvo.Backend.ViewModels
 		public PageModel(Page page, string recordingUrl)
 		{
 			Page = page;
+			Id = page.Id;
 			Workbook = page.Workbook;
 			CurrentRecordingUrl = recordingUrl;
 			CurrentRecordingName = FormatRecordingName(page.TeacherTrack);
 		}
 
+		public int? Id { get; set; }
+
 		[BindNever]
-		public Page Page { get; }
+		public Page Page { get; set; }
 
 		[BindNever]
 		public Workbook Workbook { get; set; }
@@ -50,7 +54,10 @@ namespace Lingvo.Backend.ViewModels
 
 		public string Description { get; set; }
 
-		[Required]
+		[Required(ErrorMessage = "Es muss eine Seitennummer angegeben werden.")]
+		[Remote(action: nameof(Controllers.PageController.UniquePageNumber), controller: "Page",
+			AdditionalFields = "WorkbookID,Id",
+			ErrorMessage = "Eine Seite mit dieser Seitenzahl existiert bereits.")]
 		public int PageNumber { get; set; }
 
 		public IFormFile UploadedFile { get; set; }
