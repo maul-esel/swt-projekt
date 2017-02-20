@@ -18,7 +18,7 @@ namespace Lingvo.MobileApp.iOS
 		private static UIColor teacherColor = new UIColor(74.0f / 255.0f, 144.0f / 255.0f, 226.0f / 255.0f, 1.0f); //blue
 
 		private float lineWidth = 10.0f; //width of circle fragment
-		public bool innerProgressEnabled = true;
+		private bool innerProgressEnabled = true;
 
 		private int progress = 0;
 		int maxProgress = 100;
@@ -321,8 +321,6 @@ namespace Lingvo.MobileApp.iOS
 			muteBtn.RemoveTarget(OnMuteButtonClicked, UIControlEvent.TouchUpInside);
 			teacherProgressBar?.RemoveFromSuperview();
 			studentProgressBar?.RemoveFromSuperview();
-
-
 
 			setupViews();
 		}
