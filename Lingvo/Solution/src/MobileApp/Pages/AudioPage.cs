@@ -14,7 +14,7 @@ namespace Lingvo.MobileApp.Pages
     class AudioPage : ContentPage
     {
         private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 45, WinPhone: 50);
-        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 75, WinPhone: 110);
+        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 60, Android: 75, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 5;

@@ -103,9 +103,11 @@ namespace Lingvo.MobileApp.iOS
 			//setup autolayout for label
 			label.LeftAnchor.ConstraintEqualTo(button.LeftAnchor).Active = true;
 			label.RightAnchor.ConstraintEqualTo(button.RightAnchor).Active = true;
-			label.CenterXAnchor.ConstraintEqualTo(button.CenterXAnchor).Active = true;
-			label.CenterYAnchor.ConstraintLessThanOrEqualTo(button.CenterYAnchor).Active = true;
-			label.HeightAnchor.ConstraintGreaterThanOrEqualTo(20.0f);
+			label.TopAnchor.ConstraintEqualTo(button.TopAnchor).Active = true;
+			label.BottomAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
+			/*label.CenterXAnchor.ConstraintEqualTo(button.CenterXAnchor).Active = true;
+			label.CenterYAnchor.ConstraintLessThanOrEqualTo(button.CenterYAnchor).Active = true;*/
+
 
 
 
@@ -156,6 +158,8 @@ namespace Lingvo.MobileApp.iOS
 				button.Layer.BorderWidth = 1;
 				button.Layer.SetNeedsDisplay();
 			}
+
+			label.Font = UIFont.SystemFontOfSize((int)(0.25 * element.HeightRequest), UIFontWeight.Regular);
 
 		}
 
