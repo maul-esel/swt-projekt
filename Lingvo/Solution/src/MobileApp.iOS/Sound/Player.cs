@@ -185,21 +185,23 @@ namespace Lingvo.MobileApp.iOS.Sound
 				Stop();
 				return;
 			}
-
 			teacherTrack.CurrentTime += (double)seconds;
 
-			if (studentTrack?.CurrentTime + seconds >= studentTrack?.Duration)
+			if (studentTrack != null)
 			{
-				studentTrack?.Pause();
-            }
-			else
-            {
-				Sync();
-
-				if (studentTrack != null && !studentTrack.Playing && teacherTrack.Playing)
+				if (studentTrack.CurrentTime + seconds >= studentTrack.Duration)
 				{
-					studentTrack.Play();
+					studentTrack.Pause();
 				}
+				else
+				{
+					Sync();
+					if (!studentTrack.Playing && teacherTrack.Playing)
+					{
+						studentTrack.Play();
+					}
+				}
+
 			}
 
 			OnProgress(teacherTrack.CurrentTime);
@@ -309,10 +311,7 @@ namespace Lingvo.MobileApp.iOS.Sound
 
 		private void Sync()
 		{
-            if (studentTrack != null)
-            {
-                studentTrack.CurrentTime = teacherTrack.CurrentTime;
-            }
+                studentTrack.CurrentTime = teacherTrack.CurrentTime;   
 		}
 
 
