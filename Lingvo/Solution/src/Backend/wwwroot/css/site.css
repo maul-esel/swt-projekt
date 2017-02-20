@@ -83,19 +83,22 @@
     .lingvo-header .create-button {
         float: right;
         margin: 0px;
+        width: 15%;
     }
 
-    .glyphicon.glyphicon-eye-open {
-      color: #4280D0;
+    .glyphicon-button .glyphicon {
+        color: darkgray;
     }
-	.glyphicon.glyphicon-eye-open:hover {
-		color: #295ea3;
-	}
-	.glyphicon-download-alt, .glyphicon-pencil, .glyphicon-trash, .glyphicon-eye-close {
-		color: gray;
-	}
-    .glyphicon-download-alt:hover, .glyphicon-pencil:hover, .glyphicon-trash:hover, .glyphicon-eye-close {
+    .glyphicon-button:hover .glyphicon {
         color: #555;
+    }
+
+    /* highlight published workbooks */
+    .glyphicon-button .glyphicon-eye-open {
+        color: #4280D0
+    }
+    .glyphicon-button:hover .glyphicon-eye-open {
+        color: #2E6DA4
     }
 
     .workbook-title {
@@ -244,8 +247,10 @@
 
     #meter
     {
-        display: inline-block !important;
-        border:1px solid #000000;
+        display: inline !important;
+        border: 1px solid #000000;
+        vertical-align: middle !important;
+        margin-left: 30px;
     }
 
 

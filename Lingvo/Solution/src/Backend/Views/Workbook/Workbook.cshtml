@@ -10,7 +10,7 @@
         <h3>
             <a asp-controller="Workbook" asp-action="Index">Arbeitshefte</a> > @Model.Title
         </h3>
-        <a class="create-button btn btn-success btn-md" asp-controller="Page" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite anlegen</a>
+        <a class="create-button btn btn-success btn-md" asp-controller="Page" asp-action="AddPage" asp-route-workbookId="@Model.Id">Neue Seite</a>
     </div>
     <table id="workbooks" class="table">
         <tbody>
@@ -30,12 +30,12 @@
                     </td>
                     <td>Dauer: @TimeSpan.FromMilliseconds(page.TeacherTrack.Duration).ToString("mm\\:ss") min</td>
                     <td>
-                        <a asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
+                        <a class="glyphicon-button" asp-controller="Page" asp-action="EditPage" title="Seite bearbeiten" asp-route-id="@page.Id">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     </td>
                     <td>
-                        <a title="Aufnahme herunterladen" href="@url" target="_blank" download>
+                        <a class="glyphicon-button" title="Aufnahme herunterladen" href="@url" target="_blank" download>
                             <span class="glyphicon glyphicon-download-alt"></span>
                         </a>
                     </td>

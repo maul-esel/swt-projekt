@@ -2,10 +2,11 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace Lingvo.Backend.Tests
 {
+	using Services;
+
 	public class TestsFixture 
 	{
 		public static string ConnectionString { get; set; }

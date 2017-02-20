@@ -6,25 +6,16 @@ var recLength = 0,
     recordAsMP3 = false,
     recordAsOGG = false;
 
-
 var recBufferMP3 =[];
-
-
 var mp3Encoder;
 var vorbisEncoder;
-
 var mp3defaultConfig = { mode : 3,  channels:1};
-
-
 
 vorbisdefaultConfig = {
   channels:1,
       quality: 1.0,
     sampleRate: sampleRate
 };
-
-
-
 
 this.onmessage = function(e){
   switch(e.data.command){
@@ -61,8 +52,6 @@ function init(config){
   recordAsMP3 = config.recordAsMP3 || false;
   recordAsOGG = false;   // This has been giving me some problems
 
-
-
   if(recordAsMP3) mp3Encoder.init(mp3defaultConfig);
   if(recordAsOGG) {
 
@@ -73,27 +62,20 @@ function init(config){
 
 }
 
-function record(inputBuffer){
+function record(inputBuffer) { 
   recBuffersL.push(inputBuffer[0]);
   //recBuffersR.push(inputBuffer[1]);
   recLength += inputBuffer[0].length;
 
-
   if(recordAsMP3){
 
-
     var chunk = mp3Encoder.encode(inputBuffer[0]);
-
-
 
     if(chunk.length > 0){
 
       recBufferMP3.push(chunk);
 
     }
-
-
-
   }
 
   if(recordAsOGG){
@@ -124,13 +106,42 @@ function exportMP3(){
     mp3Blob = mp3Encoder.getMP3();
   } else{
     var bufferL = mergeBuffers(recBuffersL, recLength);
+
+    var audioData = normalizeSamples(bufferL);
+  
     mp3Blob = mp3Encoder.toFile(bufferL, mp3defaultConfig);
   }
 
 
    this.postMessage(mp3Blob);
+}
 
+function normalizeSamples(samples) {
 
+  var normalizedSamples = new Float32Array(samples);
+  var currentSample;
+  var samplePeak = 0.0;
+
+  //Getting the maximum peak of the samples
+  for (var i = 0; i < samples.length; i++){
+    currentSample = Math.abs(samples[i]);
+    if (currentSample > samplePeak && currentSample <= 1.0) {
+      samplePeak = currentSample;
+    }
+  }
+
+  //Normalizing the values
+  if (samplePeak != 0.0) {
+    var normalizationRatio = (1/samplePeak);
+
+    for (var i = 0; i < samples.length; i++) {
+      normalizedSamples[i] = (samples[i] * normalizationRatio);
+    }
+    return normalizedSamples;  
+  }
+  
+  //If the sample peak was zero we return the original samples
+  return samples;
 }
 
 
