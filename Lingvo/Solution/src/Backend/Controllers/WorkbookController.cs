@@ -27,15 +27,6 @@ namespace Lingvo.Backend.Controllers
 		}
 
 		/// <summary>
-		/// Displays the internal error view.
-		/// </summary>
-		[AllowAnonymous]
-		public IActionResult Error()
-		{
-			return View();
-		}
-
-		/// <summary>
 		/// Displays the workbook the the given <paramref name="id"/>.
 		/// </summary>
 		[Route("workbooks/{id}")]
