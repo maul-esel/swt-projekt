@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Lingvo.Backend
+namespace Lingvo.Backend.Services
 {
 	public interface IStorage
 	{

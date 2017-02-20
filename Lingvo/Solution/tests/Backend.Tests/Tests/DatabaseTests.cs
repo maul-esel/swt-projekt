@@ -1,21 +1,21 @@
 using System;
 using System.IO;
 using System.Linq;
-
-using Lingvo.Common.Entities;
-
-using Xunit;
+using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
 
-using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
+using Xunit;
 
 namespace Lingvo.Backend.Tests
 {
+	using Common.Entities;
+	using Services;
 	
     public class DatabaseTests 
     {
+		const int triggerDelay = 200;
+
 		public DatabaseTests()
 		{
 			TestsFixture.Setup();
@@ -94,21 +94,26 @@ namespace Lingvo.Backend.Tests
 		public void TestSavePage()
 		{
 			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
+			var workbook = Database.Workbooks.Find(1);
+
 			var testPage = new Page()
 			{
 				Number = 5,
-				workbookId = 1,
-				Workbook = Database.Workbooks.Find(1),
+				workbookId = workbook.Id,
+				Workbook = workbook,
 				Description = "Test",
 				TeacherTrack = Database.Recordings.Find(1),
 				teacherTrackId = 1					
 			};
-
 			Console.WriteLine(testPage.StudentTrack);
 			Console.WriteLine(testPage.studentTrackId);
 			Database.Save(testPage);
 			Assert.Equal(5, Database.Pages.Count());
 			Assert.NotNull(Database.Pages.Find(testPage.Id));
+
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
+			Database.Entry(workbook).Reload();
+			Assert.Equal(3, workbook.TotalPages);
 		}
 
 		[Fact]
@@ -169,6 +174,10 @@ namespace Lingvo.Backend.Tests
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Description, "Test");
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).Workbook.Id, testWorkbook.Id);
 			Assert.Equal(((Page)savedWorkbook.Pages.ElementAt(0)).TeacherTrack.LocalPath, "test");
+
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
+			Database.Entry(testWorkbook).Reload();
+			Assert.Equal(1, testWorkbook.TotalPages);
 		}
 
 		[Fact]
@@ -196,6 +205,9 @@ namespace Lingvo.Backend.Tests
 		{
 			DatabaseService Database = DatabaseService.Connect(TestsFixture.ConnectionString);
 
+			var workbook = Database.Workbooks.Find(1);
+			Assert.Equal(2, workbook.TotalPages);
+
 			var v = Database.Pages.Find(1);
 			Database.Delete(v);
 
@@ -204,6 +216,10 @@ namespace Lingvo.Backend.Tests
 			Assert.NotNull(Database.Pages.Find(3));
 			Assert.NotNull(Database.Pages.Find(4));
 			Assert.Null(Database.Recordings.Find(1));
+
+			Thread.Sleep(triggerDelay); // delay: wait for trigger to run
+			Database.Entry(workbook).Reload();
+			Assert.Equal(1, workbook.TotalPages);
 		}
 
 		[Fact]
@@ -226,14 +242,18 @@ namespace Lingvo.Backend.Tests
 		{
 			var db = DatabaseService.Connect(TestsFixture.ConnectionString);
 
+			var workbook = db.Workbooks.Find(1);
 			var page1 = db.FindPageWithRecording(1);
 			var page2 = db.FindPageWithRecording(2);
 
+			Assert.Equal(2, workbook.TotalPages);
 			Assert.Equal(1, page1.TeacherTrack.Id);
 			Assert.Equal(2, page2.TeacherTrack.Id);
 
 			page1.TeacherTrack = page2.TeacherTrack;
 			db.Save(page1);
+			db.Entry(workbook).Reload();
+			Assert.Equal(2, workbook.TotalPages);
 
 			page1 = db.FindPageWithRecording(1);
 			Assert.Equal(2, page1.TeacherTrack.Id);

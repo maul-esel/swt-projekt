@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace Lingvo.Backend.Tests
 {
+	using Services;
+
 	public class StorageMock: IStorage
 	{
 

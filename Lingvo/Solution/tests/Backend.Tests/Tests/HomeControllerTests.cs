@@ -1,20 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Lingvo.Common.Entities;
-
 using Xunit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Lingvo.Backend.Controllers;
-using Lingvo.Backend.ViewModels;
 
 namespace Lingvo.Backend.Tests
 {
+	using Controllers;
+	using ViewModels;
+	using Services;
+
 	public class HomeControllerTests
 	{
 		public HomeControllerTests()
@@ -109,7 +107,7 @@ namespace Lingvo.Backend.Tests
 			var controller = new WorkbookController();
 			var cl = new CloudLibrary(new StorageMock(), DatabaseService.Connect(TestsFixture.ConnectionString));
 
-			var result = controller.CreateWorkbook(cl, "NeuesWorkbook", "Nur zum Testen");
+			var result = controller.AddWorkbook(cl, new WorkbookModel() { Title = "NeuesWorkbook", Subtitle = "Nur zum Testen" });
 
 			Assert.Equal(3, cl.FindWorkbooksWithReferences().Count());
 			Assert.Equal("NeuesWorkbook", cl.FindWorkbooksWithReferences().Last().Title);
@@ -128,7 +126,7 @@ namespace Lingvo.Backend.Tests
 				PageNumber = 11
 			};
 
-			var result = await controller.UpdatePage(cl, 1, p);
+			var result = await controller.EditPage(cl, 1, p);
 
 			Assert.Equal("new", cl.FindPageWithRecording(1).Description);
 			Assert.Equal(11, cl.FindPageWithRecording(1).Number);
@@ -148,7 +146,7 @@ namespace Lingvo.Backend.Tests
 				UploadedFile = new FileMock()
 			};
 
-			var result = await controller.CreatePage(cl, p);
+			var result = await controller.AddPage(cl, p);
 
 			var w = cl.FindWorkbookWithReferences(1);
 
