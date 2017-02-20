@@ -105,13 +105,7 @@ namespace Lingvo.MobileApp.iOS
 			label.RightAnchor.ConstraintEqualTo(button.RightAnchor).Active = true;
 			label.TopAnchor.ConstraintEqualTo(button.TopAnchor).Active = true;
 			label.BottomAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
-			/*label.CenterXAnchor.ConstraintEqualTo(button.CenterXAnchor).Active = true;
-			label.CenterYAnchor.ConstraintLessThanOrEqualTo(button.CenterYAnchor).Active = true;*/
-
-
-
-
-
+	
 		}
 		private void buttonClicked()
 		{
