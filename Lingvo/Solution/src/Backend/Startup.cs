@@ -74,6 +74,8 @@ namespace Lingvo.Backend
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseStatusCodePages();
+
 			app.UseCookieAuthentication(new CookieAuthenticationOptions()
 			{
 				ExpireTimeSpan = TimeSpan.FromDays(7),
