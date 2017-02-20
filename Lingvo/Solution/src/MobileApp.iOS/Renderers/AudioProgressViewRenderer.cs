@@ -28,15 +28,15 @@ namespace Lingvo.MobileApp.iOS
 
 			if (e.OldElement != null)
 			{
+				//unregister event listeners
 				e.OldElement.PropertyChanged -= updateView;
 				progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
 				e.OldElement.SizeChanged -= NewElementOnSizeChanged;
 			}
-			 if (e.NewElement != null)
+			if (e.NewElement != null)
 			{
-
+				//add event listeners for property changes
 				e.NewElement.PropertyChanged += updateView;
-
 				progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
 				e.NewElement.SizeChanged += NewElementOnSizeChanged;
 			}
@@ -67,7 +67,7 @@ namespace Lingvo.MobileApp.iOS
 			if (progressView.TextSize != element.TextSize)
 				progressView.TextSize = element.TextSize;
 	
-
+			//calculate the label's time label string depending on the current progress
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
@@ -94,6 +94,11 @@ namespace Lingvo.MobileApp.iOS
             }
 
         }
+		/// <summary>
+		/// Gets fired when the view's frame has changed
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="eventArgs">Event arguments</param>
 		private void NewElementOnSizeChanged(object sender, EventArgs eventArgs)
 		{
 			var audioProgressView = sender as LingvoAudioProgressView;
@@ -109,6 +114,11 @@ namespace Lingvo.MobileApp.iOS
 
 			}
 		}
+		/// <summary>
+		/// Layout sublayers of the current view. This is needed because the progress view uses CAShapeLayer objects to render itself.
+		/// The sublayers' frames must be set manually
+		/// </summary>
+		/// <param name="layer">Layer</param>
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
