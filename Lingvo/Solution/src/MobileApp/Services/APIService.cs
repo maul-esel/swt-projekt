@@ -110,8 +110,6 @@ namespace Lingvo.MobileApp
                 reqState.Response.Close();
                 reqState.FileStream.Close();
                 File.Delete(reqState.FilePath);
-
-                ProgressHolder.Instance.GetPageProgress(reqState.Page.Id)?.Cancel();
             }
 
             reqState.CancellationToken.ThrowIfCancellationRequested();
@@ -214,7 +212,7 @@ namespace Lingvo.MobileApp
         /// </summary>
         /// <returns>The workbook.</returns>
         /// <param name="workbookID">Workbook identifier.</param>
-        public async Task<Workbook> FetchWorkbook(int workbookID, CancellationToken cancellationToken)
+        public async Task<Workbook> FetchWorkbook(int workbookID, CancellationTokenSource cancellationToken)
         {
             try
             {
@@ -223,13 +221,12 @@ namespace Lingvo.MobileApp
 
                 await FetchPages(workbook);
 
-                workbook.Pages.ForEach(p => ProgressHolder.Instance.CreatePageProgress(p));
+                workbook.Pages.ForEach(p => ProgressHolder.Instance.CreateSubProgress(p, cancellationToken));
 
                 foreach (IPage page in workbook.Pages)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        ProgressHolder.Instance.GetWorkbookProgress(workbook.Id).Cancel();
                         break;
                     }
 
@@ -251,13 +248,13 @@ namespace Lingvo.MobileApp
         /// </summary>
         /// <returns>The page.</returns>
         /// <param name="proxy">Proxy.</param>
-        public async Task<Page> FetchPage(PageProxy proxy, CancellationToken cancellationToken)
+        public async Task<Page> FetchPage(PageProxy proxy, CancellationTokenSource cancellationToken)
         {
             try
             {
-                ProgressHolder.Instance.CreatePageProgress(proxy);
+                ProgressHolder.Instance.CreatePageProgress(proxy, cancellationToken);
 
-                Recording recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3", cancellationToken);
+                Recording recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3", cancellationToken.Token);
 
                 Page page = new Page();
                 page.Id = proxy.Id;

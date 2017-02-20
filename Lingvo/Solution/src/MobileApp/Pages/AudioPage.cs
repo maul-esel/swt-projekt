@@ -14,7 +14,7 @@ namespace Lingvo.MobileApp.Pages
     class AudioPage : ContentPage
     {
         private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 45, WinPhone: 50);
-        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 75, WinPhone: 110);
+        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 60, Android: 75, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 5;
@@ -160,7 +160,8 @@ namespace Lingvo.MobileApp.Pages
                 },
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.End,
-                ColumnSpacing = 10
+                ColumnSpacing = 10,
+                Padding = new Thickness(-10, 0)
             };
 
             ProgressView = new LingvoAudioProgressView()
@@ -185,11 +186,10 @@ namespace Lingvo.MobileApp.Pages
             RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
-                Text = "-" + SeekTimeStep,
+                Text = " " + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
-                TextOrientation = TextAlignment.End,
                 IsEnabled = false,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -197,11 +197,10 @@ namespace Lingvo.MobileApp.Pages
             ForwardButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.ForwardImage,
-                Text = "+" + SeekTimeStep,
+                Text = SeekTimeStep + " ",
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
-                TextOrientation = TextAlignment.Start,
                 IsEnabled = false,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -238,7 +237,7 @@ namespace Lingvo.MobileApp.Pages
 
             NextPageButton = new LingvoRoundImageButton
             {
-                Image = "ic_next.xml",
+                Image = "ic_next.png",
                 HorizontalOptions = LayoutOptions.EndAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 WidthRequest = Device.OnPlatform(iOS: PageButtonSize, Android: PageButtonSize, WinPhone: 2 * PageButtonSize),
@@ -250,7 +249,7 @@ namespace Lingvo.MobileApp.Pages
 
             PreviousPageButton = new LingvoRoundImageButton
             {
-                Image = "ic_previous.xml",
+                Image = "ic_previous.png",
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 WidthRequest = Device.OnPlatform(iOS: PageButtonSize, Android: PageButtonSize, WinPhone: 2 * PageButtonSize),

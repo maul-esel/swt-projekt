@@ -116,7 +116,7 @@ namespace Lingvo.MobileApp.Proxies
         /// Load the real page object for this proxy
         /// </summary>
         /// <returns>The resolve.</returns>
-        public async Task Resolve(CancellationToken cancellationToken)
+        public async Task Resolve(CancellationTokenSource cancellationToken)
         {
             if (NewerVersionExists())
             {
@@ -140,7 +140,7 @@ namespace Lingvo.MobileApp.Proxies
 
         }
 
-        private async Task DownloadPage(CancellationToken cancellationToken)
+        private async Task DownloadPage(CancellationTokenSource cancellationToken)
         {
             Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, cancellationToken);
 

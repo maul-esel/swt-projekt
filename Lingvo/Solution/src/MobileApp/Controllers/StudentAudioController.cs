@@ -37,11 +37,17 @@ namespace Lingvo.MobileApp.Controllers
             {
                 exercisable = value;
 
-                audioPlayer.StateChange += (obj) => StopRecorderIfNecessary();
-                audioPlayer.PrepareTeacherTrack(exercisable.TeacherTrack);
+                try
+                {
+                    audioPlayer.StateChange += (obj) => StopRecorderIfNecessary();
+                    audioPlayer.PrepareTeacherTrack(exercisable.TeacherTrack);
 
-
-                audioPlayer.PrepareStudentTrack(exercisable.StudentTrack);
+                    audioPlayer.PrepareStudentTrack(exercisable.StudentTrack);
+                }
+                catch
+                {
+                    Error?.Invoke();
+                }
 
             }
 
@@ -232,7 +238,7 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
-        private void StopRecorderIfNecessary()
+        private async void StopRecorderIfNecessary()
         {
             if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
             {
@@ -255,7 +261,14 @@ namespace Lingvo.MobileApp.Controllers
                 //deleting the old recording
                 if (exercisable.StudentTrack != null)
                 {
-                    Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack)));
+                    try
+                    {
+                        await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack)));
+                    }
+                    catch
+                    {
+                        //Do nothing
+                    }
                 }
 
                 if (recording != null)
