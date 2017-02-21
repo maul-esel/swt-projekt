@@ -1,0 +1,27 @@
+title Lehrermemo aufnehmen
+
+":Lehrer"->":System": startTeacherMemo()
+":System"->":Recorder": start()
+":Recorder"-->":System": 
+":System"-->":Lehrer":
+":Lehrer"->":System": endTeacherMemo()
+":System"->":Recorder": stop()
+":Recorder"-->":System": recording
+":System"-->":Lehrer":
+
+loop Lehrer nicht zufrieden mit Aufnahme
+":Lehrer"->":System": reset()
+":System"-->":Lehrer":
+":Lehrer"->":System": startTeacherMemo()
+":System"->":Recorder": start()
+":Recorder"-->":System": 
+":System"-->":Lehrer":
+
+":Lehrer"->":System": endTeacherMemo()
+":System"->":Recorder": stop()
+":Recorder"-->":System": recording
+":System"-->":Lehrer":
+end
+
+":Lehrer"->":System": saveTeacherMemo(name)
+":System"-->":Lehrer":

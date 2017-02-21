@@ -1,4 +1,0 @@
-title Schülerspur Löschen
-
-":Student" ->+ ":System": deleteStudentRecording(page)
-":System" -->- ":Student": success

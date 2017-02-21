@@ -1,0 +1,14 @@
+title Download verfügbarer Lehrerspuren
+
+":Schüler" -> ":System": fetchAllWorkbooks()
+":System" --> ":Schüler": workbook[ ]
+
+alt Gesamtes Heft herunterladen 
+  ":Schüler" -> ":System": downloadWorkbook(workbook)
+  ":System" --> ":Schüler": workbook
+else Einzelseiten herunterladen
+  loop ausgewähltes Workbook hat weitere Seiten
+    ":Schüler" -> ":System": downloadSinglePage(page)
+    ":System" --> ":Schüler": page
+  end
+end
