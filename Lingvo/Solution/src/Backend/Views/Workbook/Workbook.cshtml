@@ -20,7 +20,7 @@
                 var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
                 <tr id="@id">
                     <td class="text-center">
-                        <a href="@id" class="page-play-button" title="Seite abspielen">
+                        <a href="#@id" class="page-play-button" title="Seite abspielen">
                             <span class="glyphicon glyphicon-play"></span>
                         </a>
                         <audio src="@url" class="page-play-audio"></audio>
