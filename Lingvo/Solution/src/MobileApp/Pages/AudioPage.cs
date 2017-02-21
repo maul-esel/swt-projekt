@@ -1,6 +1,4 @@
-﻿using Android.OS;
-using Lingvo.Common.Adapters;
-using Lingvo.Common.Entities;
+﻿using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
 using Lingvo.MobileApp.Entities;
