@@ -1,0 +1,4 @@
+title Schülerspur Löschen
+
+":Schüler" -> ":System": deleteStudentRecording(page)
+":System" --> ":Schüler": 
