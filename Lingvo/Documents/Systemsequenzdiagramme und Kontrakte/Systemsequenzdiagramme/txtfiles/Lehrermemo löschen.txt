@@ -1,0 +1,5 @@
+title Lehrermemo löschen
+
+":Schüler"->":System": deleteTeacherMemo(memo)
+":System"-->":Schüler":
+

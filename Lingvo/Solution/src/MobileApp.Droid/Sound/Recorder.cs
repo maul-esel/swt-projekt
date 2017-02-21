@@ -7,6 +7,7 @@ using Lingvo.Common.Entities;
 using Lingvo.Common.Services;
 using Android.Media;
 using Lingvo.MobileApp.Droid.Sound;
+using Android.OS;
 
 [assembly: Dependency(typeof(Recorder))]
 namespace Lingvo.MobileApp.Droid.Sound
@@ -44,7 +45,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void Continue()
         {
-            if (State == RecorderState.PAUSED)
+            if (State == RecorderState.PAUSED && Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 recorder.Resume();
                 State = RecorderState.RECORDING;
@@ -53,7 +54,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void Pause()
         {
-            if (State == RecorderState.RECORDING)
+            if (State == RecorderState.RECORDING && Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 recorder.Pause();
                 State = RecorderState.PAUSED;

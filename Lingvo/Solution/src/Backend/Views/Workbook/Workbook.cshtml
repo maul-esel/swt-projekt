@@ -16,10 +16,11 @@
         <tbody>
             @foreach (var page in Model.Pages.OrderBy(p => p.Number))
             {
+                var id = "page-list-item" + page.Id + "-workbook" + Model.Id;
                 var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
-                <tr>
+                <tr id="@id">
                     <td class="text-center">
-                        <a href="#" class="page-play-button" title="Seite abspielen">
+                        <a href="#@id" class="page-play-button" title="Seite abspielen">
                             <span class="glyphicon glyphicon-play"></span>
                         </a>
                         <audio src="@url" class="page-play-audio"></audio>

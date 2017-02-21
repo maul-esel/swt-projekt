@@ -1,0 +1,41 @@
+title Seite bearbeiten
+
+":SchŸler"->":System": selectPage(p)
+":System"-->":SchŸler":
+":SchŸler"->":System": startStudentRecording()
+
+":System"->":Player": play()
+":Player"-->":System":
+":System"->":Recorder": start()
+":Recorder"-->":System":
+
+":System"-->":SchŸler":
+
+opt 
+":SchŸler"->":System": pause()
+":System"->":Player": pause()
+":Player"-->":System":
+":System"->":Recorder": pause()
+":Recorder"-->":System":
+":System"-->":SchŸler":
+
+":SchŸler"->":System": continue()
+":System"->":Player": continue()
+":Player"-->":System":
+":System"->":Recorder": continue()
+":Recorder"-->":System":
+":System"-->":SchŸler":
+end
+
+opt
+":SchŸler"->":System": seek(seconds)
+":System"->":Player": seek(seconds)
+":Player"-->":System":
+":System"->":Recorder": seek(seconds)
+":Recorder"-->":System":
+":System"-->":SchŸler":
+end
+
+":Player"-->":System": end
+":System"->":Recorder": stop()
+":Recorder"-->":System": recording

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/primaryColor</item>
+    <item name="colorAccent">@color/secondaryColor</item>
+    <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+    <item name="actionModeStyle">@style/AppTheme_ActionMode</item>
+    <item name="android:colorPressedHighlight">@color/highlightColor</item>
+    <item name="android:colorLongPressedHighlight">@color/highlightColor</item>
+    <item name="android:colorFocusedHighlight">@color/highlightColor</item>
+    <item name="android:colorActivatedHighlight">@color/highlightColor</item>
+    <item name="android:activatedBackgroundIndicator">@color/highlightColor</item>
+    <item name="windowActionModeOverlay">true</item>
+  </style>
+
+  <style name="AppTheme_ActionMode" parent="Widget.AppCompat.ActionMode">
+    <item name="background">@color/secondaryColor</item>
+    <item name="android:actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+  </style>
+
+  <style name="AppTheme.Splash" parent ="AppTheme">
+    <item name="android:windowBackground">@drawable/splash_screen</item>
+  </style>
+</resources>
