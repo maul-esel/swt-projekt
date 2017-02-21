@@ -27,7 +27,7 @@
             <Span x:Key="desc_teacherTrackNameAlreadyExists">Es existiert bereits eine Lehrermemo mit diesem Namen! Bitte wähle einen anderen.</Span>
             <Span x:Key="label_edit">Bearbeiten</Span>
             <Span x:Key="label_legal">Impressum</Span>
-            <Span x:Key="app_name">Deutsch für Dich</Span>
+            <Span x:Key="app_name">Lingvo</Span>
             <Span x:Key="legal_university">Universität Augsburg</Span>
             <Span x:Key="legal_institute">Institut für Software &amp; Systems Engineering</Span>
             <Span x:Key="legal_link">www.isse.uni-augsburg.de</Span>
