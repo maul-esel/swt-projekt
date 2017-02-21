@@ -146,9 +146,9 @@ DELETE FROM `workbooks`;
 --
 
 INSERT INTO `workbooks` (`id`, `title`, `subtitle`, `totalPages`, `lastModified`, `isPublished`) VALUES
-(3, 'Thannhauser Modell', 'Deutschkurs für Anfänger', 38, '2017-02-15 19:46:53', 1),
-(5, 'Diktate und mehr', 'Tauschring Gelderland', 9, '2017-02-15 20:28:53', 1),
-(7, 'Flüchtlingshilfe München', NULL, 27, '2017-02-15 22:02:15', 1);
+(3, 'Thannhauser Modell', 'Deutschkurs für Anfänger', 0, '2017-02-15 19:46:53', 1),
+(5, 'Diktate und mehr', 'Tauschring Gelderland', 0, '2017-02-15 20:28:53', 1),
+(7, 'Flüchtlingshilfe München', NULL, 0, '2017-02-15 22:02:15', 1);
 
 
 
