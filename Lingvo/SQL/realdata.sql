@@ -28,11 +28,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `editors`
 --
 
-CREATE TABLE `editors` (
-  `name` varchar(30) NOT NULL,
-  `passwordHash` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Truncate table before insert `editors`
 --
@@ -46,124 +41,15 @@ INSERT INTO `editors` (`name`, `passwordHash`) VALUES
 ('DEV', 'AQAAAAEAACcQAAAAEObagOrjXY6h0oymHQWd9na59TRLBdb9etP31ZWMN5OfbCopKZazN4HH59t1SELvPA=='),
 ('GIETMANN', 'AQAAAAEAACcQAAAAEM75qbd85ybQJzWImNGHOoJ7gEu59ANQ2aFf1E86+uCA9M4deXUDixFOTHMfFjUSQQ==');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `pages`
---
-
-CREATE TABLE `pages` (
-  `id` int(11) NOT NULL,
-  `workbookID` int(11) DEFAULT NULL,
-  `number` int(11) DEFAULT NULL,
-  `description` text NOT NULL,
-  `teacherTrackId` int(11) NOT NULL,
-  `studentTrackId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Truncate table before insert `pages`
---
-
-TRUNCATE TABLE `pages`;
---
--- Dumping data for table `pages`
---
-
-INSERT INTO `pages` (`id`, `workbookID`, `number`, `description`, `teacherTrackId`, `studentTrackId`) VALUES
-(5, 3, 3, 'Begrüßung, Vorstellung und Familie', 5, NULL),
-(6, 3, 4, 'Wie geht es Ihnen?', 6, NULL),
-(7, 3, 5, 'Ich mache etwas', 7, NULL),
-(8, 3, 6, 'Tagesablauf und Tageszeit', 8, NULL),
-(9, 3, 7, 'Was machen Sie heute?', 9, NULL),
-(10, 3, 8, 'Was machst du heute?', 10, NULL),
-(11, 3, 9, 'Wochentage, Zahlen, Farben und Uhrzeit', 11, NULL),
-(12, 3, 10, 'Zahlen', 12, NULL),
-(13, 3, 11, 'Wie spät ist es?', 13, NULL),
-(14, 3, 12, 'Haushalt und wohnen', 14, NULL),
-(15, 3, 13, 'Wo ist...?', 15, NULL),
-(16, 3, 14, 'Wie ist es?', 16, NULL),
-(17, 3, 15, 'Ich gehe einkaufen', 17, NULL),
-(18, 3, 16, 'Einkaufszettel', 18, NULL),
-(19, 3, 17, 'Einkaufsprospekt', 19, NULL),
-(20, 3, 18, 'Körper und Gesundheit', 20, NULL),
-(21, 3, 19, 'Mein Gesicht', 21, NULL),
-(22, 3, 20, 'Ich bin krank', 22, NULL),
-(23, 3, 21, 'Beim Arzt', 23, NULL),
-(24, 3, 22, 'Kleidung', 24, NULL),
-(25, 3, 23, 'Im Bekleidungsgeschäft', 25, NULL),
-(26, 3, 24, 'Fahduma kauft ein', 26, NULL),
-(27, 3, 25, 'Die Jahreszeiten', 27, NULL),
-(28, 3, 26, 'Das Wetter in Deutschland', 28, NULL),
-(29, 3, 27, 'Berufe', 29, NULL),
-(30, 3, 28, 'Wer arbeitet wo?', 30, NULL),
-(31, 3, 29, 'Ein Kind geht', 31, NULL),
-(32, 3, 30, 'Was hast du gemacht?', 32, NULL),
-(33, 3, 31, 'Kommunikation', 33, NULL),
-(34, 3, 32, 'Kein Leben ohne Smartphone?', 34, NULL),
-(35, 3, 33, 'Verkehr und Orientierung', 35, NULL),
-(36, 3, 34, 'Der Zugfahrplan', 36, NULL),
-(37, 3, 35, 'Suche im Stadtplan', 37, NULL),
-(38, 3, 36, 'Behörden für Asylbewerber', 38, NULL),
-(39, 3, 37, 'Religion', 39, NULL),
-(40, 3, 38, 'Feste in Deutschland', 40, NULL),
-(41, 3, 39, 'Mein Steckbrief', 41, NULL),
-(42, 3, 40, 'Das kann ich gut', 42, NULL),
-(43, 5, 1, 'Zuhause üben', 43, NULL),
-(44, 5, 2, 'Alles beginnt zu blühen', 44, NULL),
-(45, 5, 3, 'Die Fahrt zum Bauernhof', 45, NULL),
-(46, 5, 4, 'Viel zu tun', 46, NULL),
-(47, 5, 5, 'Der Igel', 47, NULL),
-(48, 5, 6, 'Der Ausflug', 48, NULL),
-(49, 5, 7, 'Wir und Europa', 49, NULL),
-(50, 5, 8, 'Ich werde Anstreicherhelfer', 50, NULL),
-(51, 5, 9, 'Flüchtlinge', 51, NULL),
-(52, 7, 4, 'Willkommen', 52, NULL),
-(53, 7, 6, 'Erste Gespräche', 53, NULL),
-(54, 7, 7, 'Schreibe bitte', 54, NULL),
-(55, 7, 8, 'Begrüßung und Verabschiedung', 55, NULL),
-(56, 7, 9, 'Die Zahlen', 56, NULL),
-(57, 7, 10, 'Die Uhr', 57, NULL),
-(58, 7, 11, 'Wie spät ist es?', 58, NULL),
-(59, 7, 12, 'Bus und U-Bahn', 59, NULL),
-(60, 7, 13, 'Schreibe bitte', 60, NULL),
-(61, 7, 14, 'Essen und Trinken', 61, NULL),
-(62, 7, 15, 'Essen und Trinken', 62, NULL),
-(63, 7, 16, 'Einkaufen', 63, NULL),
-(64, 7, 17, 'Im Supermarkt', 64, NULL),
-(65, 7, 18, 'Kleidung', 65, NULL),
-(66, 7, 19, 'Kleidung', 66, NULL),
-(67, 7, 20, 'Die Famimlie', 67, NULL),
-(68, 7, 21, 'Schreibe bitte', 68, NULL),
-(69, 7, 22, 'Das Gesicht', 69, NULL),
-(70, 7, 23, 'Der Körper', 70, NULL),
-(71, 7, 24, 'Gesundheit und Krankheit', 71, NULL),
-(72, 7, 25, 'Wichtig', 72, NULL),
-(73, 7, 26, 'Die Possesivpronomen', 73, NULL),
-(74, 7, 27, 'Spreche und schreibe', 74, NULL),
-(75, 7, 28, 'Von Tag zu Tag', 75, NULL),
-(76, 7, 29, 'Was ist in meinem Zimmer?', 76, NULL),
-(77, 7, 30, 'Was tue ich in meinem Zimmer', 77, NULL),
-(78, 7, 31, 'Ich sitze', 78, NULL);
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `recordings`
 --
-
-CREATE TABLE `recordings` (
-  `id` int(11) NOT NULL,
-  `creationTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `duration` int(11) NOT NULL,
-  `localPath` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Truncate table before insert `recordings`
 --
 
-TRUNCATE TABLE `recordings`;
+DELETE FROM `recordings`;
 --
 -- Dumping data for table `recordings`
 --
@@ -250,20 +136,11 @@ INSERT INTO `recordings` (`id`, `creationTime`, `duration`, `localPath`) VALUES
 -- Table structure for table `workbooks`
 --
 
-CREATE TABLE `workbooks` (
-  `id` int(11) NOT NULL,
-  `title` text NOT NULL,
-  `subtitle` text,
-  `totalPages` int(11) NOT NULL,
-  `lastModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `isPublished` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Truncate table before insert `workbooks`
 --
 
-TRUNCATE TABLE `workbooks`;
+DELETE FROM `workbooks`;
 --
 -- Dumping data for table `workbooks`
 --
@@ -273,39 +150,102 @@ INSERT INTO `workbooks` (`id`, `title`, `subtitle`, `totalPages`, `lastModified`
 (5, 'Diktate und mehr', 'Tauschring Gelderland', 9, '2017-02-15 20:28:53', 1),
 (7, 'Flüchtlingshilfe München', NULL, 27, '2017-02-15 22:02:15', 1);
 
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pages`
+--
+
+--
+-- Truncate table before insert `pages`
+--
+
+DELETE FROM `pages`;
+--
+-- Dumping data for table `pages`
+--
+
+INSERT INTO `pages` (`id`, `workbookID`, `number`, `description`, `teacherTrackId`, `studentTrackId`) VALUES
+(5, 3, 3, 'Begrüßung, Vorstellung und Familie', 5, NULL),
+(6, 3, 4, 'Wie geht es Ihnen?', 6, NULL),
+(7, 3, 5, 'Ich mache etwas', 7, NULL),
+(8, 3, 6, 'Tagesablauf und Tageszeit', 8, NULL),
+(9, 3, 7, 'Was machen Sie heute?', 9, NULL),
+(10, 3, 8, 'Was machst du heute?', 10, NULL),
+(11, 3, 9, 'Wochentage, Zahlen, Farben und Uhrzeit', 11, NULL),
+(12, 3, 10, 'Zahlen', 12, NULL),
+(13, 3, 11, 'Wie spät ist es?', 13, NULL),
+(14, 3, 12, 'Haushalt und wohnen', 14, NULL),
+(15, 3, 13, 'Wo ist...?', 15, NULL),
+(16, 3, 14, 'Wie ist es?', 16, NULL),
+(17, 3, 15, 'Ich gehe einkaufen', 17, NULL),
+(18, 3, 16, 'Einkaufszettel', 18, NULL),
+(19, 3, 17, 'Einkaufsprospekt', 19, NULL),
+(20, 3, 18, 'Körper und Gesundheit', 20, NULL),
+(21, 3, 19, 'Mein Gesicht', 21, NULL),
+(22, 3, 20, 'Ich bin krank', 22, NULL),
+(23, 3, 21, 'Beim Arzt', 23, NULL),
+(24, 3, 22, 'Kleidung', 24, NULL),
+(25, 3, 23, 'Im Bekleidungsgeschäft', 25, NULL),
+(26, 3, 24, 'Fahduma kauft ein', 26, NULL),
+(27, 3, 25, 'Die Jahreszeiten', 27, NULL),
+(28, 3, 26, 'Das Wetter in Deutschland', 28, NULL),
+(29, 3, 27, 'Berufe', 29, NULL),
+(30, 3, 28, 'Wer arbeitet wo?', 30, NULL),
+(31, 3, 29, 'Ein Kind geht', 31, NULL),
+(32, 3, 30, 'Was hast du gemacht?', 32, NULL),
+(33, 3, 31, 'Kommunikation', 33, NULL),
+(34, 3, 32, 'Kein Leben ohne Smartphone?', 34, NULL),
+(35, 3, 33, 'Verkehr und Orientierung', 35, NULL),
+(36, 3, 34, 'Der Zugfahrplan', 36, NULL),
+(37, 3, 35, 'Suche im Stadtplan', 37, NULL),
+(38, 3, 36, 'Behörden für Asylbewerber', 38, NULL),
+(39, 3, 37, 'Religion', 39, NULL),
+(40, 3, 38, 'Feste in Deutschland', 40, NULL),
+(41, 3, 39, 'Mein Steckbrief', 41, NULL),
+(42, 3, 40, 'Das kann ich gut', 42, NULL),
+(43, 5, 1, 'Zuhause üben', 43, NULL),
+(44, 5, 2, 'Alles beginnt zu blühen', 44, NULL),
+(45, 5, 3, 'Die Fahrt zum Bauernhof', 45, NULL),
+(46, 5, 4, 'Viel zu tun', 46, NULL),
+(47, 5, 5, 'Der Igel', 47, NULL),
+(48, 5, 6, 'Der Ausflug', 48, NULL),
+(49, 5, 7, 'Wir und Europa', 49, NULL),
+(50, 5, 8, 'Ich werde Anstreicherhelfer', 50, NULL),
+(51, 5, 9, 'Flüchtlinge', 51, NULL),
+(52, 7, 4, 'Willkommen', 52, NULL),
+(53, 7, 6, 'Erste Gespräche', 53, NULL),
+(54, 7, 7, 'Schreibe bitte', 54, NULL),
+(55, 7, 8, 'Begrüßung und Verabschiedung', 55, NULL),
+(56, 7, 9, 'Die Zahlen', 56, NULL),
+(57, 7, 10, 'Die Uhr', 57, NULL),
+(58, 7, 11, 'Wie spät ist es?', 58, NULL),
+(59, 7, 12, 'Bus und U-Bahn', 59, NULL),
+(60, 7, 13, 'Schreibe bitte', 60, NULL),
+(61, 7, 14, 'Essen und Trinken', 61, NULL),
+(62, 7, 15, 'Essen und Trinken', 62, NULL),
+(63, 7, 16, 'Einkaufen', 63, NULL),
+(64, 7, 17, 'Im Supermarkt', 64, NULL),
+(65, 7, 18, 'Kleidung', 65, NULL),
+(66, 7, 19, 'Kleidung', 66, NULL),
+(67, 7, 20, 'Die Famimlie', 67, NULL),
+(68, 7, 21, 'Schreibe bitte', 68, NULL),
+(69, 7, 22, 'Das Gesicht', 69, NULL),
+(70, 7, 23, 'Der Körper', 70, NULL),
+(71, 7, 24, 'Gesundheit und Krankheit', 71, NULL),
+(72, 7, 25, 'Wichtig', 72, NULL),
+(73, 7, 26, 'Die Possesivpronomen', 73, NULL),
+(74, 7, 27, 'Spreche und schreibe', 74, NULL),
+(75, 7, 28, 'Von Tag zu Tag', 75, NULL),
+(76, 7, 29, 'Was ist in meinem Zimmer?', 76, NULL),
+(77, 7, 30, 'Was tue ich in meinem Zimmer', 77, NULL),
+(78, 7, 31, 'Ich sitze', 78, NULL);
+
+-- --------------------------------------------------------
 --
 -- Indexes for dumped tables
---
-
---
--- Indexes for table `editors`
---
-ALTER TABLE `editors`
-  ADD PRIMARY KEY (`name`);
-
---
--- Indexes for table `pages`
---
-ALTER TABLE `pages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `wbid` (`workbookID`),
-  ADD KEY `ttfk` (`teacherTrackId`),
-  ADD KEY `stfk` (`studentTrackId`);
-
---
--- Indexes for table `recordings`
---
-ALTER TABLE `recordings`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `workbooks`
---
-ALTER TABLE `workbooks`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
 --
 
 --
@@ -326,16 +266,3 @@ ALTER TABLE `workbooks`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `pages`
---
-ALTER TABLE `pages`
-  ADD CONSTRAINT `pages_ibfk_1` FOREIGN KEY (`workbookID`) REFERENCES `workbooks` (`id`),
-  ADD CONSTRAINT `pages_ibfk_2` FOREIGN KEY (`teacherTrackId`) REFERENCES `recordings` (`id`),
-  ADD CONSTRAINT `pages_ibfk_3` FOREIGN KEY (`studentTrackId`) REFERENCES `recordings` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
