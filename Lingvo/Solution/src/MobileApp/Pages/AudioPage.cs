@@ -1,4 +1,5 @@
-﻿using Lingvo.Common.Adapters;
+﻿using Android.OS;
+using Lingvo.Common.Adapters;
 using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
@@ -73,6 +74,7 @@ namespace Lingvo.MobileApp.Pages
                 SetSeekingButtonsAccordingly();
                 return;
             }
+            else
             if (state == PlayerState.PAUSED)
             {
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
@@ -80,11 +82,13 @@ namespace Lingvo.MobileApp.Pages
                 SetSeekingButtonsAccordingly();
                 return;
             }
+            else
             if (state == PlayerState.STOPPED || state == PlayerState.IDLE)
             {
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
                 RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+                PlayPauseButton.IsEnabled = true;
                 return;
             }
         }
@@ -96,10 +100,20 @@ namespace Lingvo.MobileApp.Pages
             if (recorderState == RecorderState.RECORDING)
             {
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    PlayPauseButton.IsEnabled = false;
+                }
             }
             else
             {
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
+
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    PlayPauseButton.IsEnabled = true;
+                }
             }
         }
 
