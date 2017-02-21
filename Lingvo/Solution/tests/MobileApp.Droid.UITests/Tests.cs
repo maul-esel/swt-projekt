@@ -27,6 +27,18 @@ namespace MobileApp.Droid.UITests
 		[Test]
 		public void AppLaunches()
 		{
+			//app.Repl();
+		}
+
+		[Test]
+		public void DownloadWorkbookTest()
+		{
+			//Navigate to Download tap
+			app.Tap(c => c.Text("Download"));
+			//click on one workbook
+			app.Tap(c => c.Marked("Thannhauser Modell"));
+
+			//download 1 page
 			app.Repl();
 		}
 	}
