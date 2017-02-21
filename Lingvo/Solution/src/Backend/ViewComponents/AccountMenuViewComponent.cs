@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lingvo.Backend.ViewComponents
 {
+	/// <summary>
+	/// A View Component encapsulating the user menu containing options such
+	/// as logout or creating a new user.
+	/// </summary>
     public class AccountMenuViewComponent : ViewComponent
     {
 		private readonly SignInManager<Editor> _signInManager;

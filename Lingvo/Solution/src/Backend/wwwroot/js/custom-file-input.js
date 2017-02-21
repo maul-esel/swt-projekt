@@ -19,8 +19,12 @@
 			else
 				fileName = e.target.value.split( '\\' ).pop();
 
-            if (fileName)
-                updateNewTrackUI(fileName, this.files[0])
+            if (fileName) {
+                if (current_recording)
+                    $("#recording-overwrite-warning").modal() // warn the user
+                else
+                    updateNewTrackUI(fileName, this.files[0])
+            }
 		});
 
 		// Firefox bug fix

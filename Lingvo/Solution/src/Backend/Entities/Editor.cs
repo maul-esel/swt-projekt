@@ -2,7 +2,8 @@
 namespace Lingvo.Backend
 {
 	/// <summary>
-	/// A Editor for the editing system.
+	/// An editor for the editing system.
+	/// Contains user information necessary for login & logout.
 	/// </summary>
 	public class Editor
 	{
@@ -18,6 +19,7 @@ namespace Lingvo.Backend
 
 		/// <summary>
 		/// Gets or sets the hashed password.
+		/// The hashed value is supplied by the Identity framework.
 		/// </summary>
 		/// <value>The password.</value>
 		public String PasswordHash

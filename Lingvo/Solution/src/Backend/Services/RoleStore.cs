@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Lingvo.Backend.Services
 {
-	// Currently unused - an implementation is nevertheless required by Identity.
+	/// <summary>
+	/// Implements a role storage for ASP.NET Core Identity.
+	/// This is currently unused - an implementation is nevertheless required by Identity.
+	/// </summary>
 	public class RoleStore : IRoleStore<object>
 	{
 		Task<IdentityResult> IRoleStore<object>.CreateAsync(object role, CancellationToken cancellationToken)

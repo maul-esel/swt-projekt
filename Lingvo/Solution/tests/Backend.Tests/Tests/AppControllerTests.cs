@@ -86,16 +86,24 @@ namespace Lingvo.Backend.Tests
 
 			var json = JsonConvert.SerializeObject(((JsonResult)result).Value);
 
-			Assert.Equal("[{\"Id\":1,\"workbookId\":1,\"Number\":1,\"Description\":\"Begrüßung, Vorstellung und Familie\"},{\"Id\":2,\"workbookId\":1,\"Number\":2,\"Description\":\"Wie geht es Ihnen?\"}]",
-						json);
+			Assert.Equal("[{\"Id\":1,\"workbookId\":1,\"Number\":1,\"Description\":\"Begrüßung, Vorstellung und Familie\",\"creationTime\":",
+			             json.Substring(0, 101));
+			Assert.Equal("\"},{\"Id\":2,\"workbookId\":1,\"Number\":2,\"Description\":\"Wie geht es Ihnen?\",\"creationTime\":", 
+			             json.Substring(121, 87));
+			Assert.Equal("\"}]", 
+			             json.Substring(228));
 
 			result = controller.GetPages(db, 2);
 			Assert.IsType<JsonResult>(result);
 
 			json = JsonConvert.SerializeObject(((JsonResult)result).Value);
 
-			Assert.Equal("[{\"Id\":3,\"workbookId\":2,\"Number\":1,\"Description\":\"Das Alphabet\"},{\"Id\":4,\"workbookId\":2,\"Number\":2,\"Description\":\"Erste Gespräche\"}]",
-			            json);
+			Assert.Equal("[{\"Id\":3,\"workbookId\":2,\"Number\":1,\"Description\":\"Das Alphabet\",\"creationTime\":",
+			             json.Substring(0, 79));
+			Assert.Equal("\"},{\"Id\":4,\"workbookId\":2,\"Number\":2,\"Description\":\"Erste Gespräche\",\"creationTime\":\"",
+			             json.Substring(99, 85));
+			Assert.Equal("\"}]",
+			             json.Substring(203));
 		}
 
 		[Fact]

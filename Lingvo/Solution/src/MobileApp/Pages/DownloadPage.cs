@@ -13,6 +13,7 @@ namespace Lingvo.MobileApp.Pages
     {
         public DownloadPage()
         {
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
 
@@ -55,11 +56,13 @@ namespace Lingvo.MobileApp.Pages
 
             listView.RefreshCommand = new Command(async () =>
             {
+                Device.BeginInvokeOnMainThread(() => listView.IsRefreshing = true);
+
                 Workbook[] newWorkbooks = await CloudLibraryProxy.Instance.FetchAllWorkbooks();
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    errorLabel.IsVisible = newWorkbooks.Length == 0;
+                    errorLabel.IsVisible = newWorkbooks == null ? true : newWorkbooks.Length == 0;
                     listView.ItemsSource = newWorkbooks;
                     listView.IsRefreshing = false;
                 });

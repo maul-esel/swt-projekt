@@ -100,7 +100,6 @@ namespace Lingvo.MobileApp.Droid.Views
             set
             {
                 studentProgressBar.DrawStroke = value;
-                InnerMuteButtonVisible = value;
                 Invalidate();
             }
         }
@@ -110,7 +109,7 @@ namespace Lingvo.MobileApp.Droid.Views
             get { return studentMuteButton.Visibility == ViewStates.Visible; }
             set
             {
-                bool newVal = InnerProgressEnabled && value;
+                bool newVal = value;
                 studentMuteButton.Visibility = newVal ? ViewStates.Visible : ViewStates.Gone;
                 studentProgressBar.CenterText = !newVal;
                 Invalidate();

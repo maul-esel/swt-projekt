@@ -6,6 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lingvo.Backend.Services
 {
+	/// <summary>
+	/// Stores user (<see cref="Editor"/>) information
+	/// and connects the ASP.NET Core Identity framework to the database.
+	/// 
+	/// For method documentation, refer to the respective interfaces.
+	/// </summary>
 	public class EditorStore : IUserStore<Editor>, IUserPasswordStore<Editor>
 	{
 		private readonly DatabaseService _db;
