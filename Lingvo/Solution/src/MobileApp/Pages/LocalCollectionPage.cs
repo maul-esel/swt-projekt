@@ -14,6 +14,7 @@ namespace Lingvo.MobileApp.Pages
         public LocalCollectionPage()
         {
             Title = ((Span)App.Current.Resources["page_title_localCollection"]).Text;
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_book.png");
 
             listView = new ListView(ListViewCachingStrategy.RecycleElement)
