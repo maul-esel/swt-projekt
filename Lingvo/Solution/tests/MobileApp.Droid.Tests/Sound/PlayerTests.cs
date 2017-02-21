@@ -6,6 +6,7 @@ using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Droid.Sound;
 using Android.App;
+using System.Reflection;
 
 namespace MobileApp.Droid.Tests
 {
@@ -26,14 +27,16 @@ namespace MobileApp.Droid.Tests
             //Creating a test audiofile
 
             //Read the audio test file from resources bundle
-            var fileStream = Application.Context.Assets.Open("test_audio_file.mp3");
-            var testFileStream = File.Create(testFilePath);
+            var context = Application.Context;
+            var assets = context.Assets;
+            var fileStream = assets.Open(testFileName);
 
             //Create filePath to default documents directory
             var documentsDirPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             testFilePath = Path.Combine(documentsDirPath, testFileName);
 
             ////Now write the testfile to the documents directory
+            var testFileStream = File.Create(testFilePath);
             fileStream.CopyTo(testFileStream);
 
             //Create a test teacher track recording
@@ -141,7 +144,7 @@ namespace MobileApp.Droid.Tests
             testPlayer.SeekTo(5);
             testPlayer.SeekTo(5);
 
-            Assert.AreEqual(currentProgress + 15, testPlayer.CurrentProgress);
+            Assert.AreEqual(currentProgress + 15000, testPlayer.CurrentProgress);
 
         }
 
