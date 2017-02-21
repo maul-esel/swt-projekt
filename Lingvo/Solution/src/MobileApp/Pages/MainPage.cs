@@ -7,6 +7,10 @@ namespace Lingvo.MobileApp.Pages
 	
     public partial class MainPage : NavigationPage
     {
+		/// <summary>
+		/// A custom class that sets the Back button.
+		/// Because our app is a tabbed application, the SetBackButtonTitle method must be invoked within the TabbedPage constructor
+		/// </summary>
 		private class CustomTabbedPage : TabbedPage
 		{
 			public CustomTabbedPage() : base()
