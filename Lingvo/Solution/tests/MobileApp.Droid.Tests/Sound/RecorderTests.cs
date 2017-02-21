@@ -72,25 +72,28 @@ namespace MobileApp.Droid.Tests
         [Test]
         public void ShouldContinueCorrectly()
         {
-            testRecorder.PrepareToRecord();
-            testRecorder.Start();
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+            {
+                testRecorder.PrepareToRecord();
+                testRecorder.Start();
 
 
-            Thread.Sleep(timeout); //Let the recorder record for a while
-            testRecorder.Pause();
+                Thread.Sleep(timeout); //Let the recorder record for a while
+                testRecorder.Pause();
 
-            Thread.Sleep(timeout); // During this time the recorder should not be recording.
-            testRecorder.Continue();
+                Thread.Sleep(timeout); // During this time the recorder should not be recording.
+                testRecorder.Continue();
 
-            Thread.Sleep(timeout); //Let the recorder record for a while again
-            Recording resultTrack = testRecorder.Stop();
+                Thread.Sleep(timeout); //Let the recorder record for a while again
+                Recording resultTrack = testRecorder.Stop();
 
-            //Now the total length of the recording should not 
-            //be longer than approximately 2*timeout
+                //Now the total length of the recording should not 
+                //be longer than approximately 2*timeout
 
 
-            Assert.IsTrue(resultTrack.Duration < 2 * (timeout + tolerance));
-            Assert.IsTrue(resultTrack.Duration > 2 * (timeout - tolerance));
+                Assert.IsTrue(resultTrack.Duration < 2 * (timeout + tolerance));
+                Assert.IsTrue(resultTrack.Duration > 2 * (timeout - tolerance));
+            }
         }
 
     }
