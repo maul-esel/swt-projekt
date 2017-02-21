@@ -1,0 +1,5 @@
+Der Projektplan wurde, wie am 12.01.2017 besprochen, als github issues geführt.
+https://github.com/maul-esel/swt-projekt/issues?utf8=✓&q=is%3Aissue
+
+Die Übersicht über erledigte Aufgaben bis zum 12.01.2017 befindet sich im Wiki des github repositories.
+https://github.com/maul-esel/swt-projekt/wiki/Arbeitsübersicht-bis-12.01.17

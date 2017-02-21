@@ -1,0 +1,6 @@
+title Seite auswählen
+
+":Schüler" -> ":System": getLocalWorkbooks()
+":System" --> ":Schüler": workbook [ ]
+":Schüler" -> ":System": getLocalPages(workbook)
+":System" --> ":Schüler": page [ ]
