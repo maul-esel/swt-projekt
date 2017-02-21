@@ -17,6 +17,7 @@ namespace Lingvo.MobileApp.Pages
         public TeacherMemosPage(Xamarin.Forms.Page parentPage)
         {
             Title = ((Span)App.Current.Resources["page_title_teacherMemo"]).Text;
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_mic.png");
 
             item = new ToolbarItem
@@ -137,7 +138,8 @@ namespace Lingvo.MobileApp.Pages
 
         async void AddNewClicked(object sender, EventArgs e)
         {
-            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
+
+			await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)

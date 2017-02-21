@@ -13,6 +13,7 @@ namespace Lingvo.MobileApp.Pages
     {
         public DownloadPage()
         {
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
             Title = ((Span)App.Current.Resources["page_title_download"]).Text;
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
 
