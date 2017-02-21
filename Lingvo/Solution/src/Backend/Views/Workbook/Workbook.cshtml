@@ -16,7 +16,7 @@
         <tbody>
             @foreach (var page in Model.Pages.OrderBy(p => p.Number))
             {
-                var id = "page-list-item" + page.Id + "-workbook" + page.workbookID;
+                var id = "page-list-item" + page.Id + "-workbook" + Model.Id;
                 var url = await storage.GetAccessUrlAsync(page.TeacherTrack.LocalPath);
                 <tr id="@id">
                     <td class="text-center">
