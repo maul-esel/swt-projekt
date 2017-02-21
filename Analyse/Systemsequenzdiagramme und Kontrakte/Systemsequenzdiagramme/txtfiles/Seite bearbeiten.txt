@@ -1,67 +1,41 @@
+title Seite bearbeiten
 
-":Schüler"->":System": workOn(page)
+":SchŸler"->":System": selectPage(p)
+":System"-->":SchŸler":
+":SchŸler"->":System": startStudentRecording()
 
-
-opt Schülerspur zu page exisitiert bereits
-":System"->":Schüler": warnOverwriting()
-":Schüler"-->":System": ok
-end
-
-":System"->":Player": play(page)
-":System"->":Recorder": startRecording()
-
-opt 
-":Schüler"->":System": pause()
-":System"->":Player": pausePlaying()
-":System"->":Recorder": pauseRecording()
-":Schüler"->":System": continue()
-":System"->":Player": continuePlaying()
-":System"->":Recorder": continueRecording()
-end
-
-opt
-":Schüler"->":System": goBack(time)
-":System"->":Player": goBack(time)
-":System"->":Recorder": goBack(time)
-end
-
-":Player"-->":System": end
-":System"->":Recorder": endRecording()
-":Recorder"-->":System": recordFile
-":System"->":System": saveStudentRecording(page, recording)
-
-
-
-VERSION 2:
-
-":SchŸler"->":System": workOn(page)
-
-
-opt SchŸlerspur zu page exisitiert bereits
-":System"->":SchŸler": warnOverwriting()
-":SchŸler"-->":System": ok
-end
-":SchŸler"->":System": playPage()
 ":System"->":Player": play()
+":Player"-->":System":
 ":System"->":Recorder": start()
+":Recorder"-->":System":
+
+":System"-->":SchŸler":
 
 opt 
 ":SchŸler"->":System": pause()
 ":System"->":Player": pause()
+":Player"-->":System":
 ":System"->":Recorder": pause()
+":Recorder"-->":System":
+":System"-->":SchŸler":
+
 ":SchŸler"->":System": continue()
-":System"->":Player": play()
-":System"->":Recorder": start()
+":System"->":Player": continue()
+":Player"-->":System":
+":System"->":Recorder": continue()
+":Recorder"-->":System":
+":System"-->":SchŸler":
 end
 
 opt
-":SchŸler"->":System": seekTo(time)
-":System"->":Player": seekTo(time)
-":System"->":Recorder": seekTo(time)
+":SchŸler"->":System": seek(seconds)
+":System"->":Player": seek(seconds)
+":Player"-->":System":
+":System"->":Recorder": seek(seconds)
+":Recorder"-->":System":
+":System"-->":SchŸler":
 end
 
 ":Player"-->":System": end
 ":System"->":Recorder": stop()
-":Recorder"-->":System": recordFile
-":System"->":System": saveStudentRecording(page, recording)
-
+":Recorder"-->":System": recording

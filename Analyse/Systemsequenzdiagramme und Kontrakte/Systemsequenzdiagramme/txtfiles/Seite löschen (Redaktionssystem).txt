@@ -1,0 +1,9 @@
+title Seite löschen (Redaktionssystem)
+
+":Redakteur" -> ":System": deletePage(page)
+":System" --> ":Redakteur": 
+
+
+
+
+

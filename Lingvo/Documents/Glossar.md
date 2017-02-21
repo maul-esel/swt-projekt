@@ -14,6 +14,6 @@ Version vom 20.02.2017
 | Lehrermemo | Aufnahmen, die Deutschlehrer während des Unterrichts auf Smartphones von Schülern einsprechen, wenn diese Schwierigkeiten mit bestimmten Wörtern oder Sätzen haben | Teacher Memo |
 | Lokale Sammlung | Umfasst alle Arbeitshefte mit zugehörigen Seiten sowie Aufnahmen jeglicher Art zusammen mit den Lehrermemos, die auf einem Smartphone vorhanden sind | Local Collection |
 | Redakteur | Benutzer des Redaktionssystems; Besitzt einen Account, um sich an diesem anzumelden | Editor |
-| Redaktionssystem | Bestandteil des Backends; Stellt dem Redakteur alle nötigen Funktionen zur Verwaltung von Arbeitsheften, Seiten und Lehrerspuren zur Verfügung |  |
+| Redaktionssystem | Bestandteil des Backends; Stellt dem Redakteur alle nötigen Funktionen zur Verwaltung von Arbeitsheften, Seiten und Lehrerspuren zur Verfügung | Editing System |
 | Schülerspur | Aufnahmen, die vom Schüler erstellt wird, während er eine Lehrerspur oder Lehrermemo nachspricht | Student Track |
 | Seite | Repräsentiert eine Seite aus einem Arbeitsheft; Wird charakterisiert durch Seitennummer, Beschreibung | Page |

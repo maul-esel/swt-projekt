@@ -1,0 +1,18 @@
+title Seite ändern
+
+opt Redakteur will Audiodatei ändern
+
+alt Neue Aufnahme
+    ":Redakteur" -> ":System": startRecording()
+    ":System" --> ":Redakteur": 
+    ":Redakteur" -> ":System": stopRecording()
+    ":System" --> ":Redakteur": recording
+  else Aufnahme importieren
+    ":Redakteur" -> ":System": importRecording(path)
+    ":System" --> ":Redakteur": recording
+  end
+
+end
+
+":Redakteur"->":System": editPage(page, number, description, recording)
+":System" --> ":Redakteur":

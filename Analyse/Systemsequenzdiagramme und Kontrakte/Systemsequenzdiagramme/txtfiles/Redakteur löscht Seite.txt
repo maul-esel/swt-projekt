@@ -1,9 +1,0 @@
-title Redakteur löscht Seite
-
-":Redakteur" ->+ ":System": deletePage()
-":System" -->- ":Redakteur": success
-
-
-
-
-
