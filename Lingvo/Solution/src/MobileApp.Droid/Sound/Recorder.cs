@@ -15,6 +15,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
     public class Recorder : IRecorder
     {
+		//Prefix constants for the recording names
         private const String RECORDING_PREFIX = "record_";
         private const String DATE_FORMAT = "yyyy-MM-ddTHH-mm-ss";
         private string currentRecordingPath;
@@ -25,10 +26,16 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public Recorder()
         {
+			
             audioManager = AudioManager.FromContext(Android.App.Application.Context);
             State = RecorderState.IDLE;
         }
 
+		/// <summary>
+		/// State property of the current recorder
+		/// (idle, error, recording, stopped, paused)
+		/// </summary>
+		/// <value>The state.</value>
         public RecorderState State
         {
             get
@@ -43,6 +50,10 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         }
 
+		/// <summary>
+		/// Currently not used as pausing and resuming a recording is not supported
+		/// before Android verion code 24 (Nougat)
+		/// </summary>
         public void Continue()
         {
             if (State == RecorderState.PAUSED && Build.VERSION.SdkInt >= BuildVersionCodes.N)
@@ -52,6 +63,10 @@ namespace Lingvo.MobileApp.Droid.Sound
             }
         }
 
+		/// <summary>
+		/// Currently not used as pausing and resuming a recording is not supported
+		/// before Android verion code 24 (Nougat)
+		/// </summary>
         public void Pause()
         {
             if (State == RecorderState.RECORDING && Build.VERSION.SdkInt >= BuildVersionCodes.N)
@@ -62,12 +77,19 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         }
 
+		/// <summary>
+		/// Starts the recording
+		/// </summary>
         public void Start()
         {
             recorder.Start();
             State = RecorderState.RECORDING;
         }
 
+		/// <summary>
+		/// Stops the recording and creates a new recording entity
+		/// </summary>
+		/// <returns>The new recording</returns>
         public Recording Stop()
         {
             if (State == RecorderState.RECORDING || State == RecorderState.PAUSED)
@@ -93,6 +115,12 @@ namespace Lingvo.MobileApp.Droid.Sound
             return null;
         }
 
+		/// <summary>
+		/// Prepares the recording session, i.e. gets the correct
+		/// audio input (headset or built in microphone) and output
+		/// (Voice call for automatic noise cancelling)
+		/// </summary>
+		/// <returns><c>true</c>, if to record was prepared, <c>false</c> otherwise.</returns>
         public bool PrepareToRecord()
         {
             currentRecordingPath = FileUtil.getAbsolutePath(getFileName());
@@ -114,6 +142,10 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         }
 
+		/// <summary>
+		/// Returns a new filename following the specified filename pattern
+		/// </summary>
+		/// <returns>The file name.</returns>
         private String getFileName()
         {
             return RECORDING_PREFIX + DateTime.Now.ToString(DATE_FORMAT) + ".3gpp";
