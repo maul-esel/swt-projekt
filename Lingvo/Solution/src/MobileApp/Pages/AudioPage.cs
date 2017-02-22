@@ -239,7 +239,7 @@ namespace Lingvo.MobileApp.Pages
                 WidthRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 VerticalOptions = LayoutOptions.End,
-                AutomationId = "RecordButton"
+                AutomationId = "RecordStopButton"
             };
 
             buttonGrid.Children.Add(RewindButton, 0, 0);

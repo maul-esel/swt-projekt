@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Xamarin.UITest;
-using System.Collections.Generic;
-using Xamarin.UITest.Queries;
 using System.Threading;
 
 namespace MobileApp.Droid.UITests
@@ -55,11 +50,39 @@ namespace MobileApp.Droid.UITests
             //Open page
             app.TapCoordinates(692, 262);
 
+            //Wait until page is rendered
+            Thread.Sleep(500);
+
             //Look for Play/Pause Button
             var ppbutton = app.Query(c => c.Marked("PlayPauseButton"));
 
             //Assert it exists
             Assert.AreEqual(ppbutton.Length, 1);
+        }
+
+        [Test]
+        public void EditPageTest()
+        {
+            int timeout = 2000;
+            int tolerance = 500;
+
+            //Open the page
+            SelectPageTest();
+
+            //Start recording
+            app.Tap(c => c.Marked("RecordStopButton"));
+
+            //Let the recorder record for a while
+            Thread.Sleep(timeout);
+
+            //Stop recording
+            app.Tap(c => c.Marked("RecordStopButton"));
+
+            //Give it time to save
+            Thread.Sleep(tolerance);
+
+            //Check if the mute button is visible (=> StudentTrack exists)
+            Assert.Greater(app.Query(c => c.Marked("MuteButton")).Length, 0);
         }
     }
 }

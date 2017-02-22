@@ -146,7 +146,8 @@ namespace Lingvo.MobileApp.Droid.Views
 
             studentMuteButton = new ImageButton(context)
             {
-                Background = null
+                Background = null,
+                ContentDescription = "MuteButton"
             };
 
             studentMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
