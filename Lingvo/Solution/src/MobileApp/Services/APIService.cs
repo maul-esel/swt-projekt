@@ -59,7 +59,6 @@ namespace Lingvo.MobileApp
 
             reqState.Request = req;
             reqState.Page = proxy;
-            reqState.TransferStart = DateTime.Now;
             reqState.FilePath = filePath;
             reqState.CancellationToken = cancellationToken;
 
