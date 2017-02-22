@@ -40,6 +40,7 @@ namespace Lingvo.MobileApp.Droid.Views
             set
             {
                 studentProgressBar.Text = value;
+                studentProgressBar.ContentDescription = value;
                 Invalidate();
             }
         }
@@ -146,7 +147,8 @@ namespace Lingvo.MobileApp.Droid.Views
 
             studentMuteButton = new ImageButton(context)
             {
-                Background = null
+                Background = null,
+                ContentDescription = "MuteButton"
             };
 
             studentMuteButton.SetScaleType(ImageView.ScaleType.FitXy);
@@ -158,6 +160,8 @@ namespace Lingvo.MobileApp.Droid.Views
                 studentMuted = !studentMuted;
                 StudentTrackMuted?.Invoke(studentMuted);
                 SetButtonResource(studentMuteButton, studentMuted);
+
+                teacherProgressBar.ContentDescription = studentMuted ? "StudentMuted" : null;
             };
 
             AddView(studentMuteButton, 2, new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent));
