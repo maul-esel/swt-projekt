@@ -119,6 +119,8 @@ Mit dem "Stopp"-Knopf kann die Aufnahme nun gestoppt werden. Außerdem muss ein 
 
 <img src="ScreenshotsApp/LehrermemoÜbersicht.png" style="width: 170px; display: block; margin: auto;"/>
 
+**Hinweis:** Es dürfen keine zwei Lehrermemos mit dem selben Namen angelegt werden!
+
 ##### 2.3.2 Mit Lehrermemos üben
 
 Mit Lehrermemos kann genauso geübt werden, wie mit Seiten von Arbeitsheften. Alles Wichtige hierzu wurde bereits in Abschnitt 2.2 beschrieben und kann dort nachgelesen werden. Wurde eine Lehrermemo bearbeitet, wird dies analog zu den Seiten wieder mit einem roten Kreis angezeigt:
@@ -127,6 +129,14 @@ Mit Lehrermemos kann genauso geübt werden, wie mit Seiten von Arbeitsheften. Al
 
 ##### 2.3.3 Lehrermemos verwalten
 
+Ähnlich wie Seiten können Lehrermemos auch verwaltet werden. Durch gedrückt halten einer Lehrermemo unter Android bzw. nach links wischen der Memo unter iOS wird das Bearbeitungsmenü angezeigt:
+
 <img src="ScreenshotsApp/LehrermemoBearbeiten.png" style="width: 170px; display: block; margin: auto;"/>
 
+Die Mülltonne löscht wieder die Lehrermemo inklusive der Schülerspur, falls vorhanden. Das durchgestrichene Mikrofon löscht nur die Schülerspur, nicht aber die Lehrermemo selbst. Mit der Auswahl des Stifts kann der Name der Lehrermemo bearbeitet werden:
+
 <img src="ScreenshotsApp/LehrermemoNameÄndern.png" style="width: 170px; display: block; margin: auto;"/>
+
+Ist der neue Name gewählt, wird dies mit dem Haken bestätigt.
+
+**Hinweis:** Zwei Lehrermemos dürfen nicht den selben Namen haben.
