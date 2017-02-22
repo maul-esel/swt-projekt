@@ -1,5 +1,12 @@
 # Technical Documentation
 
+### Deutsch für dich (Projekt Lingvo)
+##### Version 1.0
+###### Erstellungsdatum 21.02.2017
+###### Version vom 22.02.2017
+
+Erstellt von: Jan Göbel, Dominik Klumpp, Philip Lenzen, Katja Ludwig, Ralph Reithmeier
+
 ## Table of Contents
 
 1. Introduction
