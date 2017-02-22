@@ -10,6 +10,12 @@ Erstellt von: Jan Göbel, Dominik Klumpp, Philip Lenzen, Katja Ludwig, Ralph Rei
 ### 1 Erste Schritte
 Zur Benutzung des Redaktionssystems von "Deutsch für dich" wird ein Benutzerkonto mit Passwort benötigt. Es ist aktuell unter https://lingvo.azurewebsites.net/ zu finden. Dort wird man zunächst dazu aufgefordert, sich einzuloggen.
 
+Um neue Seiten einzusprechen, ist es weiterhin wichtig, dem Browser den Zugriff auf das Mikrofon zu erlauben. Folgende Meldung erscheint auf dem Bildschirm:
+
+<img src="ScreenshotsRedaktionssystem/Mikrophon.png" style="width: 300px; display: block; margin: auto;"/>
+
+Falls man den Zugriff nicht erlaubt, kann man das zu einem späteren Zeitpunkt auf einen Klick auf das entsprechende Symbol im Browser doch noch tun. Es hängt aber vom Browser ab, wo dies zu finden ist.
+
 ![](ScreenshotsRedaktionssystem/Login.png)
 
 
@@ -90,7 +96,7 @@ Durch einen Klick auf das Stiftsymbol in der Seitenübersicht kann wie in der fo
 
 ![](ScreenshotsRedaktionssystem/SeiteBearbeiten.png)
 
-Der Redakteur kann Seitenzahl und Beschreibung ändern, aber auch eine neue Audiodatei auswählen. Welche Möglichkeiten es hier gibt, wurde bereits in Abschnitt 2.2.1 beschrieben und kann dort nachgelesen werden. Auch hier darf die Seitenzahl noch nicht an eine bereits dem selben Arbeitsheft zugeordeten Seite vergeben sein.
+Der Redakteur kann Seitenzahl und Beschreibung ändern, aber auch eine neue Audiodatei auswählen. Welche Möglichkeiten es hier gibt, wurde bereits in Abschnitt 2.2.1 beschrieben und kann dort nachgelesen werden. Auch hier darf die Seitenzahl noch nicht an eine bereits dem selben Arbeitsheft zugeordeten Seite vergeben sein. Im Informationsfeld findet sich der Name bzw. der Aufnahmezeitpunkt der aktuellen Lehrerspur, daneben kann man sie sich nochmals anhören oder auch herunterladen.
 
 **Hinweis:** Über einen Klick auf den Namen des Arbeitshefts in der Kopfzeile kann zur Übersicht über die Seiten gewechselt werden. Die Auswahl von "Arbeitshefte" in der Kopfzeile springt zurück zur Übersicht über alle verfügbaren Arbeitshefte.
 
