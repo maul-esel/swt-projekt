@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Lingvo.Common.Services;
 
@@ -12,15 +11,13 @@ using Lingvo.Common.Entities;
 using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Util;
 using System.Threading;
-using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Services;
-using Lingvo.MobileApp.Services.Progress;
 using Newtonsoft.Json.Converters;
 
 namespace Lingvo.MobileApp
 {
     /// <summary>
-    /// Service for communication with the server
+    /// Service for communication with the server REST API
     /// </summary>
     public class APIService
     {
@@ -37,6 +34,9 @@ namespace Lingvo.MobileApp
 
         private static APIService instance;
 
+		/// <summary>
+		/// Singleton pattern
+		/// </summary>
         public static APIService Instance => instance ?? (instance = new APIService());
 
         private static readonly int BufferSize = 1500;
@@ -46,12 +46,12 @@ namespace Lingvo.MobileApp
         }
 
         /// <summary>
-        /// Downloads a teacher track from the given url.
+        /// Downloads a teacher track from the given <paramref name="url"/>.
         /// </summary>
-        /// <returns>The from URL.</returns>
-        /// <param name="url">URL.</param>
-        /// <param name="progress">The progress delegate for progress reporting</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <returns>A <see cref="Task"/> that completes when the download has finished.</returns>
+        /// <param name="proxy">The proxy whose page is downloaded</param>
+		/// <param name="filePath">The path where the MP3 file should be saved</param>
+		/// <param name="cancellationToken">A token to cancel the download</param>
         private Task DownloadTeacherTrack(PageProxy proxy, string url, string filePath, CancellationToken cancellationToken)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
@@ -154,12 +154,10 @@ namespace Lingvo.MobileApp
         }
 
         /// <summary>
-        /// Fetchs Data from URL.
+        /// Fetches Data from the given <paramref name="url"/> and converts it with the given callback.
         /// </summary>
-        /// <returns>The from URL.</returns>
-        /// <param name="url">URL.</param>
+        /// <returns>A task that eventually completes and returns the converted data</returns>
         /// <param name="convert">Function for data conversion</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
         private async Task<T> FetchFromURLAsync<T>(string url, Func<WebResponse, Task<T>> convert)
         {
             var response = await WebRequest.Create(url).GetResponseAsync();
@@ -168,7 +166,9 @@ namespace Lingvo.MobileApp
             return result;
         }
 
-
+		/// <summary>
+		/// Reads the body of the given <paramref name="response"/>.
+		/// </summary>
         private async Task<string> ReadTextAsync(WebResponse response)
         {
             var stream = response.GetResponseStream();
@@ -181,17 +181,15 @@ namespace Lingvo.MobileApp
         /// <summary>
         /// Fetchs data from the URL as text.
         /// </summary>
-        /// <returns>The text from URL.</returns>
-        /// <param name="url">URL.</param>
         private Task<string> FetchTextFromURLAsync(string url)
         {
             return FetchFromURLAsync(url, ReadTextAsync);
         }
 
         /// <summary>
-        /// Fetchs the workbooks.
+        /// Fetchs the workbooks available on the server.
         /// </summary>
-        /// <returns>The workbooks.</returns>
+        /// <returns>A <see cref="Task"/> that eventually completes and returns the workbooks.</returns>
         public async Task<Workbook[]> FetchWorkbooks()
         {
             try
@@ -208,10 +206,11 @@ namespace Lingvo.MobileApp
         }
 
         /// <summary>
-        /// Fetchs a workbook.
+        /// Fetches a workbook.
         /// </summary>
         /// <returns>The workbook.</returns>
         /// <param name="workbookID">Workbook identifier.</param>
+		/// <param name="cancellationToken">The <see cref="CancellationTokenSource"/> used to cancel the download.</param>
         public async Task<Workbook> FetchWorkbook(int workbookID, CancellationTokenSource cancellationToken)
         {
             try
@@ -244,10 +243,11 @@ namespace Lingvo.MobileApp
         }
 
         /// <summary>
-        /// Fetchs a page.
+        /// Fetches a page.
         /// </summary>
-        /// <returns>The page.</returns>
-        /// <param name="proxy">Proxy.</param>
+        /// <returns>A <see cref="Task"/> taht enventually completes and returns the page.</returns>
+        /// <param name="proxy">The proxy whose <see cref="Page"/> is downloaded</param>
+		/// <param name="cancellationToken">The <see cref="CancellationTokenSource"/> used to cancel the download.</param>
         public async Task<Page> FetchPage(PageProxy proxy, CancellationTokenSource cancellationToken)
         {
             try
@@ -276,10 +276,8 @@ namespace Lingvo.MobileApp
         }
 
         /// <summary>
-        /// Fetchs the pages for a workbook.
+        /// Fetchs the pages for the given <paramref name="workbook"/> and attaches them to the <paramref name="workbook"/>.
         /// </summary>
-        /// <returns>Nothing, the pages are attached to the given workbook object</returns>
-        /// <param name="workbook">Workbook.</param>
         public async Task FetchPages(Workbook workbook)
         {
             try
@@ -307,8 +305,9 @@ namespace Lingvo.MobileApp
         /// Fetchs a teacher track.
         /// </summary>
         /// <returns>The teacher track.</returns>
-        /// <param name="page">Page.</param>
-        /// <param name="localPath">Local path.</param>
+        /// <param name="page">The <see cref="PageProxy"/> whose <see cref="PageProxy.TeacherTrack"/> should be downloaded</param>
+        /// <param name="localPath">Local path where the MP3 file is saved.</param>
+		/// <param name="cancellationToken">Token used to cancel the download.</param>
         private async Task<Recording> FetchTeacherTrack(PageProxy proxy, String localPath, CancellationToken cancellationToken)
         {
             var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
