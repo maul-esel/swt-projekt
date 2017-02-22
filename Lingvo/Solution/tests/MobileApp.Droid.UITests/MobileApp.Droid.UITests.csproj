@@ -34,7 +34,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalTests.cs" />
+    <Compile Include="PageTests.cs" />
+    <Compile Include="TeacherMemoTests.cs"/>
     <Compile Include="RemoteTests.cs" />
     <Compile Include="AppInitializer.cs" />
   </ItemGroup>
