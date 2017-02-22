@@ -12,6 +12,9 @@ namespace Lingvo.MobileApp.Proxies
     {
         public int Id { get; set; }
 
+		/// <summary>
+		/// Called whenever a page is changed
+		/// </summary>
         public delegate void OnPageChanged(int id);
 
         private Page original;
@@ -20,6 +23,10 @@ namespace Lingvo.MobileApp.Proxies
 
         public int workbookId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the creation time.
+		/// </summary>
+		/// <value>The creation time.</value>
         public DateTime CreationTime
         {
             get; set;
@@ -95,6 +102,10 @@ namespace Lingvo.MobileApp.Proxies
             LocalCollection.Instance.PageChanged += Instance_PageChanged;
         }
 
+		/// <summary>
+		/// Checks if the original page has changed and updates its reference if necessary.
+		/// </summary>
+		/// <param name="p">The changed page</param>
         private void Instance_PageChanged(IPage p)
         {
             if (p.Id.Equals(Id))
@@ -140,6 +151,11 @@ namespace Lingvo.MobileApp.Proxies
 
         }
 
+		/// <summary>
+		/// Downloads the page from the server.
+		/// </summary>
+		/// <returns>The page.</returns>
+		/// <param name="cancellationToken">Token for cancelling the download</param>
         private async Task DownloadPage(CancellationTokenSource cancellationToken)
         {
             Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, cancellationToken);
@@ -167,6 +183,10 @@ namespace Lingvo.MobileApp.Proxies
             }
         }
 
+		/// <summary>
+		/// Checks if a newer version of this page exists 
+		/// </summary>
+		/// <returns><c>true</c>, if a newer version exists, <c>false</c> otherwise.</returns>
         public bool NewerVersionExists()
         {
             IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));

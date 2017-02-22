@@ -8,7 +8,7 @@ using System.Threading;
 namespace Lingvo.MobileApp.Proxies
 {
     /// <summary>
-    /// Cloud library proxy.
+    /// Interface for communication with the server: downloading and fetching available data
     /// </summary>
     public class CloudLibraryProxy
     {
@@ -32,16 +32,18 @@ namespace Lingvo.MobileApp.Proxies
         /// </summary>
         /// <returns>The page.</returns>
         /// <param name="proxy">A proxy for the page that is downloaded</param>
+		/// <param name="cancellationToken">Token for cancelling the download</param>
         internal async Task<Page> DownloadSinglePage(PageProxy proxy, CancellationTokenSource cancellationToken)
         {
             return await service.FetchPage(proxy, cancellationToken);
         }
 
         /// <summary>
-        /// Downloads a workbook and adds it to the local collection
+        /// Downloads a whole workbook and adds it to the local collection
         /// </summary>
         /// <returns>The workbook.</returns>
         /// <param name="workbookID">Workbook identifier.</param>
+		/// <param name="cancellationToken">Token for cancelling the download</param>
         public async Task<Workbook> DownloadWorkbook(int workbookID, CancellationTokenSource cancellationToken)
         {
             var workbook = await service.FetchWorkbook(workbookID, cancellationToken);
@@ -55,7 +57,7 @@ namespace Lingvo.MobileApp.Proxies
         }
 
         /// <summary>
-        /// Returns a list of all workbooks, with page proxy objects for all existing pages on server
+        /// Returns a list of all workbooks with page proxy objects for all existing pages on the server
         /// </summary>
         /// <returns>The all workbooks.</returns>
         public async Task<Workbook[]> FetchAllWorkbooks()

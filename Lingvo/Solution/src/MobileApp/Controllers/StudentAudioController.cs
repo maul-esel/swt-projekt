@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Lingvo.MobileApp.Controllers
 {
     /// <summary>
-    /// Controller for working on pages
+    /// Controller for working on exercises
     /// </summary>
     public class StudentAudioController
     {
@@ -23,7 +23,7 @@ namespace Lingvo.MobileApp.Controllers
         private IExercise exercisable;
 
         /// <summary>
-        /// Gets or sets the selected page.
+        /// Gets or sets the selected exercise
         /// </summary>
         /// <value>The selected page.</value>
         public IExercise Exercisable
@@ -71,6 +71,9 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
+		/// <summary>
+		/// Occurs when state change.
+		/// </summary>
         public event Action<PlayerState> StateChange
         {
             add
@@ -109,7 +112,7 @@ namespace Lingvo.MobileApp.Controllers
         public RecorderState CurrentRecorderState => recorder.State;
 
         /// <summary>
-        /// Gets the instance of StudentPageController (Singleton Pattern)
+        /// Gets the instance of StudentAudioController (Singleton Pattern)
         /// </summary>
         /// <returns>The instance.</returns>
         public static StudentAudioController Instance => instance ?? (instance = new StudentAudioController());
@@ -121,7 +124,7 @@ namespace Lingvo.MobileApp.Controllers
         }
 
         /// <summary>
-        /// Plays the page.
+        /// Plays the currently selected exercise.
         /// </summary>
         public void PlayPage()
         {
@@ -238,6 +241,9 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
+		/// <summary>
+		/// Stops the recorder if necessary.
+		/// </summary>
         private async void StopRecorderIfNecessary()
         {
             if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
