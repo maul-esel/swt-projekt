@@ -122,3 +122,8 @@ The UI for app and the Editing System was mocked before development. The results
 * ***Security:*** For the security of the backend, we rely on ASP.NET Core Identity and other ASP.NET core features as an established solution. Passwords are not stored as plaintext, but as salted hashes. All communication with the server is sent over HTTPS.
 * ***Usability & Simplicity*** of app and Editing System were a key aspect of the design. Several alternatives were discussed, and feedback from the customer and usability experts was integrated.
 * ***Maintainability:*** Unit tests exist in the backend for database access, the JSON REST API and the Editing System controllers. They are executed on Travis CI for each push to the github repository. The mobile app has unit tests for player and recorder functionality (on both platforms) as wells as UI tests for the core use cases. Since they require a device or a simulator, they are not executed on the CI.
+* ***Code Quality:*** Seerene was used to analyze the project (without 3rd-party or generated code) according to two metrics: McCabe Cyclomatic complexity and Nesting Level. The result was satisfying in both cases. For reference see the two screenshots below, which also include an analysis of the most commonly changed parts of the application.
+
+![](Metrics/MCCC.png)
+![](Metrics/nl.png)
+![](Metrics/changes.png)
