@@ -11,6 +11,9 @@ using Lingvo.Common.Services;
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.Droid.Sound
 {
+	/// <summary>
+	/// Android implementation of <see cref="IPlayer"/>. For documentation on the <see cref="IPlayer"/> methods, see <see cref="IPlayer"/>.
+	/// </summary>
     public class Player : IPlayer
     {
 
@@ -114,9 +117,6 @@ namespace Lingvo.MobileApp.Droid.Sound
             }
         }
 
-		/// <summary>
-		/// Pauses the playback
-		/// </summary>
         public void Pause()
         {
             teacherTrack?.Pause();
@@ -137,10 +137,6 @@ namespace Lingvo.MobileApp.Droid.Sound
             progressHandler.PostDelayed(progressUpdate, 100); //Each 100 milliseconds the OnProgress method is called
         }
 
-		/// <summary>
-		/// Prepares the student track, i.e. makes it ready for playback
-		/// </summary>
-		/// <param name="recording">Recording.</param>
         public void PrepareStudentTrack(Recording recording)
         {
             if (recording == null)
@@ -154,10 +150,7 @@ namespace Lingvo.MobileApp.Droid.Sound
                 IsStudentTrackMuted = false;
             }
         }
-		/// <summary>
-		/// Prepares the teacher track, i.e makes it ready for playback
-		/// </summary>
-		/// <param name="recording">Recording.</param>
+
         public void PrepareTeacherTrack(Recording recording)
         {
             teacherRecording = recording;
@@ -173,12 +166,6 @@ namespace Lingvo.MobileApp.Droid.Sound
             OnProgress(teacherTrack.CurrentPosition);
         }
 
-		/// <summary>
-		/// Jumps back or forth in playback. There is a distinction whether a studenttrack is running or not.
-		/// In addition, it is checked whether the duration of the student track is shorter than the one of the teacher
-		/// track. If so, the student track is muted once we jump out of its duration.
-		/// </summary>
-		/// <param name="seconds">Seconds.</param>
         public void SeekTo(int seconds)
         {
             if (teacherTrack?.CurrentPosition + seconds * 1000 >= teacherTrack?.Duration)

@@ -77,19 +77,12 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         }
 
-		/// <summary>
-		/// Starts the recording
-		/// </summary>
         public void Start()
         {
             recorder.Start();
             State = RecorderState.RECORDING;
         }
 
-		/// <summary>
-		/// Stops the recording and creates a new recording entity
-		/// </summary>
-		/// <returns>The new recording</returns>
         public Recording Stop()
         {
             if (State == RecorderState.RECORDING || State == RecorderState.PAUSED)
