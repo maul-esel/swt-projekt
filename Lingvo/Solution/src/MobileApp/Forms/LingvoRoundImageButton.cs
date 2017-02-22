@@ -5,6 +5,9 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Forms
 {
+    /// <summary>
+    /// A custom rounded image button, which can have a border and text.
+    /// </summary>
     public class LingvoRoundImageButton : View
     {
         public static readonly string PlayImage = "ic_play_arrow.png";
@@ -20,6 +23,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: "");
 
+        /// <summary>
+        /// The button image.
+        /// </summary>
         public string Image
         {
             get { return (string)GetValue(ImageProperty); }
@@ -32,6 +38,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: Color.Black);
 
+        /// <summary>
+        /// The button overlay color.
+        /// </summary>
         public Color Color
         {
             get { return (Color)GetValue(ColorProperty); }
@@ -44,6 +53,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: false);
 
+        /// <summary>
+        /// Determines if the button has a circle border.
+        /// </summary>
         public bool Border
         {
             get { return (bool)GetValue(BorderProperty); }
@@ -56,6 +68,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: false);
 
+        /// <summary>
+        /// Determines if the button is filled.
+        /// </summary>
         public bool Filled
         {
             get { return (bool)GetValue(FilledProperty); }
@@ -68,6 +83,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: "");
 
+        /// <summary>
+        /// The text of the button.
+        /// </summary>
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
@@ -80,6 +98,9 @@ namespace Lingvo.MobileApp.Forms
           declaringType: typeof(LingvoRoundImageButton),
           defaultValue: TextAlignment.Center);
 
+        /// <summary>
+        /// The orientation of the text.
+        /// </summary>
         public TextAlignment TextOrientation
         {
             get { return (TextAlignment)GetValue(TextOrientationProperty); }
@@ -87,6 +108,10 @@ namespace Lingvo.MobileApp.Forms
         }
 
         public delegate void OnClickedEventHandler(object sender, EventArgs e);
+
+        /// <summary>
+        /// The event fired when the button is clicked.
+        /// </summary>
         public event OnClickedEventHandler OnClicked;
 
         public void OnButtonClicked(object sender, EventArgs e)

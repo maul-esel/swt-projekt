@@ -9,6 +9,9 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for downloading pages of a workbook from the server.
+    /// </summary>
     public partial class DownloadPagesPage : ContentPage
     {
         private Workbook workbook;

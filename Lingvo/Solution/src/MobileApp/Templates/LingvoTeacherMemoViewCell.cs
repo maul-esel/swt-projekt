@@ -9,13 +9,22 @@ using System;
 
 namespace Lingvo.MobileApp.Templates
 {
+    /// <summary>
+    /// The ViewCell for displaying information and providing context actions of a teacher memo.
+    /// </summary>
     class LingvoTeacherMemoViewCell : ViewCell
     {
+        /// <summary>
+        /// The progress view showing if the teacher memo has a student track.
+        /// </summary>
         internal LingvoAudioProgressView ProgressView
         {
             get; private set;
         }
 
+        /// <summary>
+        /// The context menu items for editing and deleting the teacher memo itself or the student track.
+        /// </summary>
         private MenuItem deleteAction, editAction, deleteStudentAction;
 
         public LingvoTeacherMemoViewCell() :
@@ -65,10 +74,7 @@ namespace Lingvo.MobileApp.Templates
 
             deleteStudentAction.Clicked += DeleteStudentAction_Clicked;
 
-            editAction.Clicked += async (o, e) =>
-            {
-                await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage((TeacherMemo)BindingContext));
-            };
+            editAction.Clicked += EditAction_Clicked;
 
             View = new StackLayout
             {
@@ -84,6 +90,21 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        /// <summary>
+        /// Occurs when the edit context menu item was clicked.
+        /// Opens the teacher memo for editing in <see cref="EditTeacherMemoPage"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
+        private async void EditAction_Clicked(object sender, EventArgs e)
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage((TeacherMemo)BindingContext));
+        }
+
+        /// <summary>
+        /// Called when the view cell appears on screen.
+        /// Registers all important events.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -91,12 +112,22 @@ namespace Lingvo.MobileApp.Templates
 
         }
 
+        /// <summary>
+        /// Called when the view cell disappears on screen.
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             LocalCollection.Instance.TeacherMemoChanged -= Event_TeacherMemoChanged;
         }
 
+        /// <summary>
+        /// Occurs when the delete student track context menu item was clicked.
+        /// Displays a warning dialog and deletes the student track of the teacher memo after positive result.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
         private async void DeleteStudentAction_Clicked(object sender, EventArgs e)
         {
             try
@@ -114,6 +145,12 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when the delete teacher memo context menu item was clicked.
+        /// Displays a warning dialog and deletes the teacher memo after positive result.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
         private async void DeleteAction_Clicked(object sender, EventArgs e)
         {
             try
@@ -131,6 +168,10 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when the <c>BindingContext</c> of the view cell has changed.
+        /// Refreshes the progress view and the context actions.
+        /// </summary>
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -151,6 +192,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when a teacher memo has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the changed teacher memo is equal to it.
+        /// </summary>
+        /// <param name="t">The teacher memo which has changed.</param>
         private void Event_TeacherMemoChanged(TeacherMemo t)
         {
             TeacherMemo memo = (TeacherMemo)BindingContext;

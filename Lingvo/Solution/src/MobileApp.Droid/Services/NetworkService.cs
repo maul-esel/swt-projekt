@@ -17,6 +17,9 @@ using Android.Net;
 [assembly: Dependency(typeof(NetworkService))]
 namespace Lingvo.MobileApp.Droid.Services
 {
+    /// <summary>
+    /// The Android implementation of <see cref="INetworkService"/>. For documentation on the <see cref="INetworkService"/> methods, see <see cref="INetworkService"/>.
+    /// </summary>
     public class NetworkService : INetworkService
     {
         public bool IsWifiConnected()

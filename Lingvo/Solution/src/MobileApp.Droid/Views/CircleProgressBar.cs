@@ -16,6 +16,9 @@ using Android.Views;
 
 namespace Lingvo.MobileApp.Droid.Views
 {
+    /// <summary>
+    /// A circular progress bar view.
+    /// </summary>
     [Register("lingvo.mobileapp.droid.CircleProgressBar")]
     public class CircleProgressBar : View
     {
@@ -376,13 +379,11 @@ namespace Lingvo.MobileApp.Droid.Views
                     textPaint.TextSize = textSize;
                     if (centerText)
                     {
-                        //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - offset);
                         float textHeight = textPaint.Descent() + textPaint.Ascent();
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, (Width - textHeight) / 2.0f, textPaint);
                     }
                     else
                     {
-                        //textPaint.TextSize /= textPaint.MeasureText(text) / (2 * innerCircleRadius - textPaint.Descent() - offset);
                         canvas.DrawText(text, (Width - textPaint.MeasureText(text)) / 2.0f, Width / 2.0f - textPaint.Descent() / 2.0f, textPaint);
                     }
                 }

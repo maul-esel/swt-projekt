@@ -9,6 +9,9 @@ using Lingvo.MobileApp.Entities;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for downloading whole workbooks from the server.
+    /// </summary>
     public partial class DownloadPage : ContentPage
     {
         public DownloadPage()
@@ -74,6 +77,9 @@ namespace Lingvo.MobileApp.Pages
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
             => ((ListView)sender).SelectedItem = null;
 
+        /// <summary>
+        /// Opens the workbook and shows its pages in a <see cref="DownloadPagesPage"/>.
+        /// </summary>
         async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)

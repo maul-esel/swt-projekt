@@ -17,25 +17,65 @@ using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 
 namespace Lingvo.MobileApp.Services
 {
+	/// <summary>
+	/// Manages the SQLite database storage.
+	/// </summary>
     public class DatabaseService
     {
         readonly SQLiteConnection database;
 
+		/// <summary>
+		/// The list of all <see cref="Workbook"/>s present in the database.
+		/// </summary>
         public IEnumerable<Workbook> Workbooks => database.Table<Workbook>();
+
+		/// <summary>
+		/// The list of all <see cref="Recording"/>s present in the database.
+		/// </summary>
         public IEnumerable<Recording> Recordings => database.Table<Recording>();
+
+		/// <summary>
+		/// The list of all <see cref="Page"/>s present in the database.
+		/// </summary>
         public IEnumerable<Page> Pages => database.Table<Page>();
+
+		/// <summary>
+		/// The list of all <see cref="TeacherMemo"/>s present in the database.
+		/// </summary>
         public IEnumerable<TeacherMemo> TeacherMemos => database.Table<TeacherMemo>();
 
+		/// <summary>
+		/// Raised when a <see cref="Workbook"/> in the database is added, modified or deleted.
+		/// </summary>
         public event Action<Workbook> WorkbookChanged;
-        public event Action<TeacherMemo> TeacherMemoChanged;
-        public event Action<Page> PageChanged;
-        public event Action<Recording> RecordingChanged;
 
+		/// <summary>
+		/// Raised when a <see cref="TeacherMemo"/> in the database is added, modified ot deleted.
+		/// </summary>
+        public event Action<TeacherMemo> TeacherMemoChanged;
+
+		/// <summary>
+		/// Raised when a <see cref="Page"/> in the database is added, modified ot deleted.
+		/// </summary>
+		public event Action<Page> PageChanged;
+
+		/// <summary>
+		/// Raised when a <see cref="Recording"/> in the database is added, modified ot deleted.
+		/// </summary>
+		public event Action<Recording> RecordingChanged;
+
+		/// <summary>
+		/// Creates a new instance
+		/// </summary>
+		/// <param name="dbPath">The path to the database (.sqlite file). Created if not exists.</param>
         public DatabaseService(string dbPath)
         {
             database = new SQLiteConnection(new SQLitePlatform(), dbPath, false);
         }
 
+		/// <summary>
+		/// Initializes a newly created database by creating the necessary tables.
+		/// </summary>
         public void createTables()
         {
             database.CreateTable<Workbook>();
@@ -91,6 +131,10 @@ namespace Lingvo.MobileApp.Services
 
         }
 
+		/// <summary>
+		/// Loads a workbook's pages from the database.
+		/// </summary>
+		/// <param name="w"></param>
         private void setWorkbookPages(Workbook w)
         {
             var pages = database.Query<Page>("select * from Pages where workbookId = ?", w.Id);
@@ -176,6 +220,9 @@ namespace Lingvo.MobileApp.Services
             return p;
         }
 
+		/// <summary>
+		/// Loads a <see cref="TeacherMemo"/>'s recordings.
+		/// </summary>
         private void GetTeacherMemosRecordings(TeacherMemo t)
         {
             if (t.RecordingId > 0)
@@ -192,9 +239,7 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Save the specified recording.
         /// </summary>
-        /// <returns>The save.</returns>
         /// <param name="recording">Recording.</param>
-
         public void Save(Recording recording)
         {
             if (recording.Id > 0 && FindRecording(recording.Id) != null)
@@ -212,7 +257,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Save the specified page, updates it if it already exists.
         /// </summary>
-        /// <returns>The save.</returns>
         /// <param name="page">Page.</param>
         public void Save(Page page)
         {
@@ -226,7 +270,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Save the specified workbook, updates it if it already exists.
         /// </summary>
-        /// <returns>The save.</returns>
         /// <param name="workbook">Workbook.</param>
         public void Save(Workbook workbook)
         {
@@ -239,7 +282,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Save the specified memo 
         /// </summary>
-        /// <returns>The save.</returns>
         /// <param name="memo">Memo.</param>
         public void Save(TeacherMemo memo)
         {
@@ -263,7 +305,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Delete the specified memo and its recordings.
         /// </summary>
-        /// <returns>The delete.</returns>
         /// <param name="memo">Memo.</param>
         public void Delete(TeacherMemo memo)
         {
@@ -282,7 +323,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Delete the specified recording.
         /// </summary>
-        /// <returns>The delete.</returns>
         /// <param name="recording">Recording.</param>
         public void Delete(Recording recording)
         {
@@ -296,7 +336,6 @@ namespace Lingvo.MobileApp.Services
         /// <summary>
         /// Delete the specified page and its recordings.
         /// </summary>
-        /// <returns>The delete.</returns>
         /// <param name="page">Page.</param>
         public void Delete(Page page)
         {
@@ -313,9 +352,8 @@ namespace Lingvo.MobileApp.Services
         }
 
         /// <summary>
-        /// Delete the specified workbook and on cascade all its pages.
+        /// Delete the specified workbook, all its pages and their recordings.
         /// </summary>
-        /// <returns>The delete.</returns>
         /// <param name="workbook">Workbook.</param>
         public void Delete(Workbook workbook)
         {

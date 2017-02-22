@@ -2,6 +2,9 @@
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for the imprint.
+    /// </summary>
     public class LegalPage : ContentPage
     {
         public LegalPage()

@@ -10,6 +10,11 @@ using Android.Util;
 
 namespace Lingvo.MobileApp.Droid.Views
 {
+    /// <summary>
+    /// Basic Android view implementation of <see cref="LingvoAudioProgressView"/>.
+    /// This view consists of two <see cref="CircleProgressBar"/> (with adapted size)
+    /// and an ImageButton as mute button.
+    /// </summary>
     class AndroidLingvoAudioProgressView : RelativeLayout
     {
         private CircleProgressBar studentProgressBar;
