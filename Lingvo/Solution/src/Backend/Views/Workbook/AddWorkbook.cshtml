@@ -8,7 +8,7 @@
     <div class="lingvo-header">
         <h3><a asp-controller="Workbook" asp-action="Index">Arbeitshefte</a> &gt; @ViewData["Title"]</h3>
     </div>
-    <form asp-controller="Workbook" asp-action="@(Model == null ? "AddWorkbook" : "EditWorkbook")" method="post" style="padding-top: 40px">
+    <form asp-controller="Workbook" asp-action="@(Model.Workbook == null ? "AddWorkbook" : "EditWorkbook")" method="post" style="padding-top: 40px">
         <input asp-for="Id" type="hidden" value="@Model.Workbook?.Id"/>
         <div class="form-group">
             <label for="workbook-title-name">Titel</label>
