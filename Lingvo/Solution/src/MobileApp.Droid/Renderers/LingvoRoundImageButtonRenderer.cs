@@ -10,6 +10,9 @@ using Xamarin.Forms.Platform.Android;
 [assembly: Xamarin.Forms.ExportRenderer(typeof(Lingvo.MobileApp.Forms.LingvoRoundImageButton), typeof(LingvoRoundImageButtonRenderer))]
 namespace Lingvo.MobileApp.Droid.Renderers
 {
+    /// <summary>
+    /// The Android custom renderer for the <see cref="LingvoRoundImageButton"/>.
+    /// </summary>
     class LingvoRoundImageButtonRenderer : Xamarin.Forms.Platform.Android.AppCompat.ViewRenderer<Lingvo.MobileApp.Forms.LingvoRoundImageButton, Android.Widget.Button>
     {
         Button button;
@@ -17,6 +20,11 @@ namespace Lingvo.MobileApp.Droid.Renderers
         Xamarin.Forms.TextAlignment alignment;
         bool isAligned = false;
 
+        /// <summary>
+        /// Called on each instatiation of the <c>Xamarin.Forms.View</c>.
+        /// Registers or unregisters event listeners and <see cref="updateView(object, EventArgs)"/>.
+        /// </summary>
+        /// <param name="e">The <c>ElementChangedEventArgs</c> containing the <see cref="LingvoRoundImageButton"/>.</param>
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Lingvo.MobileApp.Forms.LingvoRoundImageButton> e)
         {
             base.OnElementChanged(e);
@@ -38,6 +46,11 @@ namespace Lingvo.MobileApp.Droid.Renderers
             }
         }
 
+        /// <summary>
+        /// Changes the appearance of the button according to properties of the <see cref="LingvoRoundImageButton"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>EventArgs</c>.</param>
         public void updateView(object sender, PropertyChangedEventArgs e)
         {
             if (Control == null)
@@ -53,6 +66,8 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             string identifier = element.Image?.Length > 0 ? element.Image.Substring(0, element.Image.LastIndexOf('.')) : null;
             int resourceId = 0;
+
+            //If we got an image, get its android resource id
             if (identifier != null)
             {
                 resourceId = (int)typeof(Resource.Drawable).GetField(identifier).GetValue(null);
@@ -60,8 +75,14 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             if (resourceId != 0)
             {
+                //Here, we got an image resource
+
                 if (element.Border)
                 {
+                    //If we additionally have to draw a border, create a LayerDrawable
+                    //and add the circle background and the image; additionally, take 
+                    //care of the filled property!
+
                     int offset = element.Filled ? 1 : 0;
                     Drawable[] layers = new Drawable[2 + offset];
                     layers[0 + offset] = Resources.GetDrawable(Resource.Drawable.round_button_border);
@@ -69,22 +90,32 @@ namespace Lingvo.MobileApp.Droid.Renderers
                     layers[1 + offset] = Resources.GetDrawable(resourceId).Mutate();
                     if (element.Filled)
                     {
+                        //If we should fill the button on top, fill the background and
+                        //draw the image in white
+
                         layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
                         layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
                         layers[1 + offset].SetColorFilter(Color.White, PorterDuff.Mode.SrcIn);
                     }
                     else
                     {
+                        //Otherwise, draw the image in the given color
+
                         layers[1 + offset].SetColorFilter(color, PorterDuff.Mode.SrcIn);
                     }
                     button.Background = new LayerDrawable(layers);
                 }
                 else
                 {
+                    //Okay, no border - means one background image less.
+
                     Drawable image = Resources.GetDrawable(resourceId).Mutate();
 
                     if (element.Filled)
                     {
+                        //If we should fill the button, create a LayerDrawable with filled background
+                        //and draw the image in white
+
                         Drawable[] layers = new Drawable[2];
                         layers[0] = Resources.GetDrawable(Resource.Drawable.round_button_filled);
                         layers[0].SetColorFilter(color, PorterDuff.Mode.SrcAtop);
@@ -94,6 +125,8 @@ namespace Lingvo.MobileApp.Droid.Renderers
                     }
                     else
                     {
+                        //No border, no filling - simply draw the image in the given color
+
                         image.SetColorFilter(color, PorterDuff.Mode.SrcIn);
                         button.Background = image;
                     }
@@ -102,13 +135,20 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             if (element.Text?.Length > 0)
             {
+                //We got a text, so set all relevant text properties and the text itself
+
                 int textHeight = (int)(element.HeightRequest * 0.25);
                 button.Text = element.Text;
 
                 button.TextSize = textHeight;
 
+                button.SetTextColor(color);
+
                 if (element.TextOrientation != alignment || !isAligned)
                 {
+                    //Uh oh - a custom alignment. So compute the padding, change the gravity
+                    //and save the alignment for a potential undo operation (means the next re-alignment)
+
                     if (isAligned)
                     {
                         button.SetPadding(button.PaddingLeft - customPaddingLeft, button.PaddingTop, button.PaddingRight - customPaddingRight, button.PaddingEnd - customPaddingRight - customPaddingLeft);
@@ -138,15 +178,6 @@ namespace Lingvo.MobileApp.Droid.Renderers
                     alignment = element.TextOrientation;
                 }
             }
-
-
-            if (element.Text?.Length > 0)
-            {
-                button.SetTextColor(color);
-            }
-
-
-
         }
     }
 }

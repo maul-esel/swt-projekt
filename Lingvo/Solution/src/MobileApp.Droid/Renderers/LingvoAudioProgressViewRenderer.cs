@@ -7,10 +7,18 @@ using Android.Util;
 [assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.Droid.Renderers.LingvoAudioProgressViewRenderer))]
 namespace Lingvo.MobileApp.Droid.Renderers
 {
+    /// <summary>
+    /// The Android custom renderer for the <see cref="LingvoAudioProgressView"/>.
+    /// </summary>
     class LingvoAudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, Android.Views.View>
     {
         AndroidLingvoAudioProgressView progressView;
 
+        /// <summary>
+        /// Called on each instatiation of the <c>Xamarin.Forms.View</c>.
+        /// Registers or unregisters event listeners and <see cref="updateView(object, EventArgs)"/>.
+        /// </summary>
+        /// <param name="e">The <c>ElementChangedEventArgs</c> containing the <see cref="LingvoAudioProgressView"/>.</param>
         protected override void OnElementChanged(ElementChangedEventArgs<LingvoAudioProgressView> e)
         {
             base.OnElementChanged(e);
@@ -33,6 +41,11 @@ namespace Lingvo.MobileApp.Droid.Renderers
             }
         }
 
+        /// <summary>
+        /// Updates the <see cref="AndroidLingvoAudioProgressView"/> with information from <see cref="LingvoAudioProgressView"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>EventArgs</c>.</param>
         private void updateView(object sender, EventArgs e)
         {
             if (Control == null)
@@ -43,6 +56,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             progressView.ContentDescription = element.AutomationId;
 
+            //Set each attribute if it has changed
             if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
                 progressView.InnerProgressEnabled = element.InnerProgressEnabled;
             if (progressView.InnerMuteButtonVisible != element.MuteEnabled)
@@ -58,6 +72,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
             if (progressView.Progress != element.Progress)
                 progressView.Progress = element.Progress;
 
+            //Set the text of the progress view according to the label type
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
