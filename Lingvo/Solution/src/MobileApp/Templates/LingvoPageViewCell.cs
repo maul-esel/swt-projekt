@@ -9,8 +9,14 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
+    /// <summary>
+    /// The ViewCell for displaying information and providing context actions of a page.
+    /// </summary>
     class LingvoPageViewCell : ViewCell
     {
+        /// <summary>
+        /// The progress view showing if the page has a student track or, if in <see cref="DownloadPagesPage"/>, showing the download progress.
+        /// </summary>
         internal LingvoAudioProgressView ProgressView
         {
             get; private set;
@@ -21,6 +27,9 @@ namespace Lingvo.MobileApp.Templates
             get; private set;
         }
 
+        /// <summary>
+        /// The context menu items for deleting the page itself or the student track of the page.
+        /// </summary>
         private MenuItem deleteStudentAction, deleteAction;
 
         public LingvoPageViewCell() :
@@ -99,6 +108,10 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        /// <summary>
+        /// Called when the view cell appears on screen.
+        /// Registers all important events.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -106,12 +119,22 @@ namespace Lingvo.MobileApp.Templates
 
         }
 
+        /// <summary>
+        /// Called when the view cell disappears on screen.
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             LocalCollection.Instance.PageChanged -= Event_PageChanged;
         }
 
+        /// <summary>
+        /// Occurs when the delete student track context menu item was clicked.
+        /// Displays a warning dialog and deletes the student track of the page after positive result.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
         private async void DeleteStudentAction_Clicked(object sender, EventArgs e)
         {
             try
@@ -129,6 +152,12 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when the delete page context menu item was clicked.
+        /// Displays a warning dialog and deletes the page after positive result.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
         private async void DeleteAction_Clicked(object sender, EventArgs e)
         {
             try
@@ -147,6 +176,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when a page has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the changed page is equal to it.
+        /// </summary>
+        /// <param name="p">The page which has changed.</param>
         protected virtual void Event_PageChanged(IPage p)
         {
             IPage page = (IPage)BindingContext;
@@ -159,6 +193,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Binds the views in this view cell to the given page.
+        /// Actually, it refreshes the progress view.
+        /// </summary>
+        /// <param name="page">The page to bind this view cell to.</param>
         protected virtual void BindViewCell(IPage page)
         {
             ProgressView.OuterProgressColor = (Color)App.Current.Resources["primaryColor"];
@@ -171,6 +210,10 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.None;
         }
 
+        /// <summary>
+        /// Occurs when the <c>BindingContext</c> has changed.
+        /// Refreshes context actions and subtitle and calls <see cref="BindViewCell(IPage)"/>.
+        /// </summary>
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();

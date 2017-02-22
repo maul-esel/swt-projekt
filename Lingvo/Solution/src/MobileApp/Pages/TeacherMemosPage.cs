@@ -122,6 +122,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page appears on screen.
         /// Registers all important events and refreshes the list.
         /// </summary>
         protected override void OnAppearing()
@@ -132,6 +133,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page disappears on screen.
         /// Unregisters the events registered in <see cref="OnAppearing"/>.
         /// </summary>
         protected override void OnDisappearing()

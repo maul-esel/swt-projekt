@@ -332,6 +332,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page appears on screen.
         /// Registers all important events to actualize the views 
         /// </summary>
         protected override void OnAppearing()
@@ -354,6 +355,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page disappears on screen.
         /// Unregisters all events registered in <see cref="OnAppearing"/> and stops the audio session.
         /// </summary>
         protected override void OnDisappearing()

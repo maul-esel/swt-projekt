@@ -13,6 +13,9 @@ using Lingvo.MobileApp.Services.Progress;
 
 namespace Lingvo.MobileApp.Templates
 {
+    /// <summary>
+    /// The ViewCell for displaying information of and providing a download button for a workbook on the server.
+    /// </summary>
     class LingvoDownloadWorkbookViewCell : LingvoWorkbookViewCell
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
@@ -21,6 +24,10 @@ namespace Lingvo.MobileApp.Templates
         private static readonly FileImageSource downloadImage = (FileImageSource)ImageSource.FromFile("ic_action_download.png");
 
         private LingvoRoundImageButton downloadButton;
+
+        /// <summary>
+        /// The <c>CancellationTokenSource</c> for a async download.
+        /// </summary>
         private CancellationTokenSource cancellationToken;
 
         public LingvoDownloadWorkbookViewCell() : base()
@@ -40,6 +47,11 @@ namespace Lingvo.MobileApp.Templates
             ((Grid)View).Children.Add(downloadButton, 1, 0);
         }
 
+        /// <summary>
+        /// Occurs when a page has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the workbook contains the changed page.
+        /// </summary>
+        /// <param name="p">The page which has changed.</param>
         protected override void Event_PageChanged(IPage p)
         {
             Workbook workbook = (Workbook)BindingContext;
@@ -49,6 +61,11 @@ namespace Lingvo.MobileApp.Templates
             };
         }
 
+        /// <summary>
+        /// Occurs when a workbook has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the changed workbook is equal to it.
+        /// </summary>
+        /// <param name="w">The workbook which has changed.</param>
         protected override void Event_WorkbookChanged(Workbook w)
         {
             Workbook workbook = (Workbook)BindingContext;
@@ -58,18 +75,32 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Called when the view cell appears on screen.
+        /// Registers <see cref="OnProgressUpdate(double)"/> as progress listener in <see cref="ProgressHolder"/>.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
             ProgressHolder.Instance.SetWorkbookProgressListener((Workbook)BindingContext, OnProgressUpdate);
         }
 
+        /// <summary>
+        /// Called when the view cell disappears on screen.
+        /// Unregisters the progress listener <see cref="OnProgressUpdate(double)"/> in <see cref="ProgressHolder"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             ProgressHolder.Instance.UnsetWorkbookProgressListener((Workbook)BindingContext);
             base.OnDisappearing();
         }
 
+        /// <summary>
+        /// Occurs when the download or cancel button (which are basically the same button instance) has been clicked.
+        /// If the workbook has no corresponding download progress, a new download is started; if the device is not connected
+        /// to Wifi, a warning dialog is shown before, starting the download only with positive result.
+        /// If a running download already exists, the download is cancelled.
+        /// </summary>
         private async void DownloadWorkbook()
         {
 
@@ -98,11 +129,21 @@ namespace Lingvo.MobileApp.Templates
             Device.BeginInvokeOnMainThread(() => downloadButton.Image = (FileImageSource)ImageSource.FromFile("ic_action_download.png"));
         }
 
+        /// <summary>
+        /// Called when the download progress reports a progress update.
+        /// Updates the progress of the progress view.
+        /// </summary>
+        /// <param name="progress">The new progress.</param>
         private void OnProgressUpdate(double progress)
         {
             Device.BeginInvokeOnMainThread(() => ProgressView.Progress = (int)progress);
         }
 
+        /// <summary>
+        /// Binds the views in this view cell to the given workbook.
+        /// Actually, it refreshes the progress view and the download button.
+        /// </summary>
+        /// <param name="workbook">The workbook to bind this view cell to.</param>
         protected override void BindViewCell(Workbook workbook)
         {
             bool hasPages = workbook.TotalPages > 0;
@@ -114,6 +155,7 @@ namespace Lingvo.MobileApp.Templates
 
             if (hasPages)
             {
+                //Pages exist, so we can compute a progress
                 progress = Math.Min(100, 100 * (localWorkbook?.Pages.Count).GetValueOrDefault(0) / workbook.TotalPages);
 
                 if (progress == 100)
@@ -130,6 +172,9 @@ namespace Lingvo.MobileApp.Templates
 
             if (NewerVersionExists(workbook))
             {
+                //A newer version of a page in this workbook exists on the server, so show the exclamation mark 
+                //in progress view and re-enable the download button by setting progress to 0
+
                 ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.Error;
                 ProgressView.OuterProgressColor = Color.Red;
                 SubtitleLabel.Text = ((Span)App.Current.Resources["label_newer_version"]).Text;
@@ -159,6 +204,9 @@ namespace Lingvo.MobileApp.Templates
 
             if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id))
             {
+                //A running download progress exists, so bind this cancellationToken to
+                //the one of the progress
+
                 WorkbookProgress workbookProgress = ProgressHolder.Instance.GetWorkbookProgress(workbook.Id);
                 progress = (int)workbookProgress.CurrentProgress;
                 cancellationToken = workbookProgress.CancellationToken;
@@ -170,6 +218,7 @@ namespace Lingvo.MobileApp.Templates
 
             bool hasRunningToken = cancellationToken != null && !cancellationToken.IsCancellationRequested;
 
+            //Set the button image according to the download state
             if (ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) && hasRunningToken)
             {
                 downloadButton.Image = cancelImage;
@@ -181,9 +230,15 @@ namespace Lingvo.MobileApp.Templates
 
             ProgressView.Progress = progress;
 
+            //Disable the download button if the workbook has no pages on the server or it's alredy downloaded completely
             downloadButton.IsEnabled = hasPages && progress < 100 && (!ProgressHolder.Instance.HasWorkbookProgress(workbook.Id) || hasRunningToken);
         }
 
+        /// <summary>
+        /// Checks if a newer version exists for every page in the workbook.
+        /// </summary>
+        /// <param name="workbook">The workbook to check.</param>
+        /// <returns><c>True</c>, if a newer version exists on the server for at least one page, <c>false</c> otherwise.</returns>
         private bool NewerVersionExists(Workbook workbook)
         {
             foreach (IPage page in workbook.Pages)

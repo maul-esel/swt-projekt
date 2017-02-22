@@ -57,6 +57,10 @@ namespace Lingvo.MobileApp.Pages
             get; set;
         }
 
+        /// <summary>
+        /// Constructor used for editing a teacher memo (which means editing the name)
+        /// </summary>
+        /// <param name="memo">The memo to edit.</param>
         public EditTeacherMemoPage(TeacherMemo memo) : this()
         {
             NameLabel.IsVisible = true;
@@ -79,6 +83,9 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        /// <summary>
+        /// Constructor for creating a new teacher memo.
+        /// </summary>
         public EditTeacherMemoPage() : base()
         {
             Title = ((Span)App.Current.Resources["page_title_recordTeacherMemo"]).Text;
@@ -179,6 +186,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page appears on screen.
         /// Registers all important events to actualize the views 
         /// </summary>
         protected override void OnAppearing()
@@ -189,6 +197,7 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
+        /// Called when the page disappears on screen.
         /// Unregisters all events registered in <see cref="OnAppearing"/>.
         /// </summary>
         protected override void OnDisappearing()
