@@ -1,10 +1,22 @@
 var searchData=
 [
-  ['getaccessurlasync',['GetAccessUrlAsync',['../class_lingvo_1_1_backend_1_1_services_1_1_azure_storage.html#a5552d027966607a8ed43f2665b9e1db7',1,'Lingvo.Backend.Services.AzureStorage.GetAccessUrlAsync()'],['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#a030ea788699e5b36feea6f18fa5a8c8a',1,'Lingvo.Backend.Services.CloudLibrary.GetAccessUrlAsync()'],['../interface_lingvo_1_1_backend_1_1_services_1_1_i_storage.html#a542686f017c5eee5be8b1efffe5523bc',1,'Lingvo.Backend.Services.IStorage.GetAccessUrlAsync()']]],
-  ['getpages',['GetPages',['../class_lingvo_1_1_backend_1_1_controllers_1_1_app_controller.html#a33b78177de297d86d6942357e0fc0fdb',1,'Lingvo::Backend::Controllers::AppController']]],
-  ['getpageswithreferences',['GetPagesWithReferences',['../class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#aed2ec849dd727baca58c4c8c6ddcf62a',1,'Lingvo::Backend::Services::DatabaseService']]],
-  ['getteachertrack',['GetTeacherTrack',['../class_lingvo_1_1_backend_1_1_controllers_1_1_app_controller.html#ab92022d7c67a5b2fafcbb01a10dc6bd2',1,'Lingvo::Backend::Controllers::AppController']]],
-  ['getworkbook',['GetWorkbook',['../class_lingvo_1_1_backend_1_1_controllers_1_1_app_controller.html#ac9132339928c6c79c0abf911827903a2',1,'Lingvo::Backend::Controllers::AppController']]],
-  ['getworkbooks',['GetWorkbooks',['../class_lingvo_1_1_backend_1_1_controllers_1_1_app_controller.html#aee6c40f24959c01417f67860c1ac54d9',1,'Lingvo::Backend::Controllers::AppController']]],
-  ['getworkbookswithreferences',['GetWorkbooksWithReferences',['../class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a0fba15b2842470d3f8c37e7ca905e2d6',1,'Lingvo::Backend::Services::DatabaseService']]]
+  ['fetchallworkbooks',['FetchAllWorkbooks',['../class_lingvo_1_1_mobile_app_1_1_proxies_1_1_cloud_library_proxy.html#a1613f029e81f66b82a622b4eb841d96b',1,'Lingvo::MobileApp::Proxies::CloudLibraryProxy']]],
+  ['fetchpage',['FetchPage',['../class_lingvo_1_1_mobile_app_1_1_a_p_i_service.html#a124b27aff8bd4a1940250fd84d6b4167',1,'Lingvo::MobileApp::APIService']]],
+  ['fetchpages',['FetchPages',['../class_lingvo_1_1_mobile_app_1_1_a_p_i_service.html#abf9260c551d5dfadbf3e0b6890e56d74',1,'Lingvo::MobileApp::APIService']]],
+  ['fetchworkbook',['FetchWorkbook',['../class_lingvo_1_1_mobile_app_1_1_a_p_i_service.html#ae5035b7e0bde0cf288e78224a92509b3',1,'Lingvo::MobileApp::APIService']]],
+  ['fetchworkbooks',['FetchWorkbooks',['../class_lingvo_1_1_mobile_app_1_1_a_p_i_service.html#aea9f61a123c5b477c1bdee9629e31321',1,'Lingvo::MobileApp::APIService']]],
+  ['filepath',['FilePath',['../class_lingvo_1_1_mobile_app_1_1_util_1_1_page_download_state.html#a9a74bb8cb61e94c0fffec69001fa3f2d',1,'Lingvo::MobileApp::Util::PageDownloadState']]],
+  ['filestream',['FileStream',['../class_lingvo_1_1_mobile_app_1_1_util_1_1_page_download_state.html#a257fb589fe1c43d3fa331972439996e3',1,'Lingvo::MobileApp::Util::PageDownloadState']]],
+  ['filled',['Filled',['../class_lingvo_1_1_mobile_app_1_1_forms_1_1_lingvo_round_image_button.html#a511b7a31e656f20e3c4d5f2f18e45a27',1,'Lingvo::MobileApp::Forms::LingvoRoundImageButton']]],
+  ['findpage',['FindPage',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#a7181096308ddb432ae119585a39ea33d',1,'Lingvo::MobileApp::Services::DatabaseService']]],
+  ['findpagebynumberasync',['FindPageByNumberAsync',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#ac351482e8b6a6e40a763a1205df5da1e',1,'Lingvo::Backend::Services::CloudLibrary']]],
+  ['findpagewithrecording',['FindPageWithRecording',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#aa24413ae246aeb9b658f0af1106ab04d',1,'Lingvo.Backend.Services.CloudLibrary.FindPageWithRecording()'],['../class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a28f8940b1d8e4b5f22ea19cb89ea4c1d',1,'Lingvo.Backend.Services.DatabaseService.FindPageWithRecording()']]],
+  ['findrecording',['FindRecording',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#a7f7edeb4b7c88600dffcc177a46dbaa4',1,'Lingvo.Backend.Services.CloudLibrary.FindRecording()'],['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#aeca1eace80afe14cfec351ad351d34cd',1,'Lingvo.MobileApp.Services.DatabaseService.FindRecording()']]],
+  ['findteachermemo',['FindTeacherMemo',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#a157b29b3cd73244458c64e69ef41f21c',1,'Lingvo::MobileApp::Services::DatabaseService']]],
+  ['findteachermemos',['FindTeacherMemos',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#a7f23ad9bd400d46dbf586e9de46840e7',1,'Lingvo::MobileApp::Services::DatabaseService']]],
+  ['findworkbook',['FindWorkbook',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#ad8971f173c005f9c02607855ac075265',1,'Lingvo::MobileApp::Services::DatabaseService']]],
+  ['findworkbookbytitleasync',['FindWorkbookByTitleAsync',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#a69ff88ac93ab29860980c6c4c528adf5',1,'Lingvo::Backend::Services::CloudLibrary']]],
+  ['findworkbooks',['FindWorkbooks',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_database_service.html#acd2c0b408db9b33a9dbe2691bfcfdced',1,'Lingvo::MobileApp::Services::DatabaseService']]],
+  ['findworkbookswithreferences',['FindWorkbooksWithReferences',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#a5146804a87227d909da0a9ed5bdd15f7',1,'Lingvo::Backend::Services::CloudLibrary']]],
+  ['findworkbookwithreferences',['FindWorkbookWithReferences',['../class_lingvo_1_1_backend_1_1_services_1_1_cloud_library.html#ae3569ac41bf762db98fde699f1c70150',1,'Lingvo.Backend.Services.CloudLibrary.FindWorkbookWithReferences()'],['../class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#afc38f8f9776645687b67add33679e160',1,'Lingvo.Backend.Services.DatabaseService.FindWorkbookWithReferences()']]]
 ];

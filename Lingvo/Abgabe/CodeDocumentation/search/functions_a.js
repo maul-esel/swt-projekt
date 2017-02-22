@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['uniquepagenumber',['UniquePageNumber',['../class_lingvo_1_1_backend_1_1_controllers_1_1_page_controller.html#a446bb7c731c2769f65b6f968f92dc342',1,'Lingvo::Backend::Controllers::PageController']]],
-  ['uniqueworkbooktitle',['UniqueWorkbookTitle',['../class_lingvo_1_1_backend_1_1_controllers_1_1_workbook_controller.html#afbdffaef1c649bfa92799f4d729f1a5c',1,'Lingvo::Backend::Controllers::WorkbookController']]]
+  ['markassubprogress',['MarkAsSubProgress',['../class_lingvo_1_1_mobile_app_1_1_services_1_1_progress_1_1_page_progress.html#a9da23c82977990c39123f439f49040c4',1,'Lingvo::MobileApp::Services::Progress::PageProgress']]]
 ];

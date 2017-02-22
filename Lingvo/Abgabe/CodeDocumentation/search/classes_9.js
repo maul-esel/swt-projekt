@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['workbookcontroller',['WorkbookController',['../class_lingvo_1_1_backend_1_1_controllers_1_1_workbook_controller.html',1,'Lingvo::Backend::Controllers']]],
-  ['workbookmodel',['WorkbookModel',['../class_lingvo_1_1_backend_1_1_view_models_1_1_workbook_model.html',1,'Lingvo::Backend::ViewModels']]]
+  ['networkservice',['NetworkService',['../class_lingvo_1_1_mobile_app_1_1_droid_1_1_services_1_1_network_service.html',1,'Lingvo.MobileApp.Droid.Services.NetworkService'],['../class_lingvo_1_1_mobile_app_1_1i_o_s_1_1_services_1_1_network_service.html',1,'Lingvo.MobileApp.iOS.Services.NetworkService']]]
 ];

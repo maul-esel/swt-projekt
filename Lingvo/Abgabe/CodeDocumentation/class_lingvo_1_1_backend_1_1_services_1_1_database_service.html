@@ -75,7 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Encapsulates access to the database used for storing Workbooks, Pages, Recs and Editors.  
+<p>Encapsulates access to the database used for storing Workbooks, Pages, Recs and <a class="el" href="class_lingvo_1_1_backend_1_1_editor.html" title="An editor for the editing system. Contains user information necessary for login &amp; logout...">Editor</a>s.  
  <a href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for Lingvo.Backend.Services.DatabaseService:</div>
@@ -91,34 +91,34 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9fe5918943485cbef7b9097265dfbbcd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a9fe5918943485cbef7b9097265dfbbcd">DatabaseService</a> (DbContextOptions&lt; <a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html">DatabaseService</a> &gt; options)</td></tr>
 <tr class="memdesc:a9fe5918943485cbef7b9097265dfbbcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new instance. The <em>options</em>  are configured in Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection) and supplied by dependency injection.  <a href="#a9fe5918943485cbef7b9097265dfbbcd">More...</a><br /></td></tr>
 <tr class="separator:a9fe5918943485cbef7b9097265dfbbcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fba15b2842470d3f8c37e7ca905e2d6"><td class="memItemLeft" align="right" valign="top">List&lt; Workbook &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a0fba15b2842470d3f8c37e7ca905e2d6">GetWorkbooksWithReferences</a> ()</td></tr>
+<tr class="memitem:a0fba15b2842470d3f8c37e7ca905e2d6"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a0fba15b2842470d3f8c37e7ca905e2d6">GetWorkbooksWithReferences</a> ()</td></tr>
 <tr class="memdesc:a0fba15b2842470d3f8c37e7ca905e2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all workbooks, their pages and the associated recordings from the database.  <a href="#a0fba15b2842470d3f8c37e7ca905e2d6">More...</a><br /></td></tr>
 <tr class="separator:a0fba15b2842470d3f8c37e7ca905e2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed2ec849dd727baca58c4c8c6ddcf62a"><td class="memItemLeft" align="right" valign="top">List&lt; Page &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#aed2ec849dd727baca58c4c8c6ddcf62a">GetPagesWithReferences</a> ()</td></tr>
+<tr class="memitem:aed2ec849dd727baca58c4c8c6ddcf62a"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#aed2ec849dd727baca58c4c8c6ddcf62a">GetPagesWithReferences</a> ()</td></tr>
 <tr class="memdesc:aed2ec849dd727baca58c4c8c6ddcf62a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all pages with their associated recordings from the database.  <a href="#aed2ec849dd727baca58c4c8c6ddcf62a">More...</a><br /></td></tr>
 <tr class="separator:aed2ec849dd727baca58c4c8c6ddcf62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc38f8f9776645687b67add33679e160"><td class="memItemLeft" align="right" valign="top">Workbook&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#afc38f8f9776645687b67add33679e160">FindWorkbookWithReferences</a> (int id)</td></tr>
+<tr class="memitem:afc38f8f9776645687b67add33679e160"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#afc38f8f9776645687b67add33679e160">FindWorkbookWithReferences</a> (int id)</td></tr>
 <tr class="memdesc:afc38f8f9776645687b67add33679e160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the workbook with the given <em>id</em>  and loads it from the database, including its pages and their associated recordings.  <a href="#afc38f8f9776645687b67add33679e160">More...</a><br /></td></tr>
 <tr class="separator:afc38f8f9776645687b67add33679e160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28f8940b1d8e4b5f22ea19cb89ea4c1d"><td class="memItemLeft" align="right" valign="top">Page&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a28f8940b1d8e4b5f22ea19cb89ea4c1d">FindPageWithRecording</a> (int id)</td></tr>
-<tr class="memdesc:a28f8940b1d8e4b5f22ea19cb89ea4c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the page with the given <em>id</em>  and loads it from the database, including the associated Page.TeacherTrack.  <a href="#a28f8940b1d8e4b5f22ea19cb89ea4c1d">More...</a><br /></td></tr>
+<tr class="memitem:a28f8940b1d8e4b5f22ea19cb89ea4c1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a28f8940b1d8e4b5f22ea19cb89ea4c1d">FindPageWithRecording</a> (int id)</td></tr>
+<tr class="memdesc:a28f8940b1d8e4b5f22ea19cb89ea4c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the page with the given <em>id</em>  and loads it from the database, including the associated <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html#a93401891c8b58457d3ba054c833cb634" title="Gets or sets the teacher track. ">Page.TeacherTrack</a>.  <a href="#a28f8940b1d8e4b5f22ea19cb89ea4c1d">More...</a><br /></td></tr>
 <tr class="separator:a28f8940b1d8e4b5f22ea19cb89ea4c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af79389b106702c561ad445ceddf8b799"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#af79389b106702c561ad445ceddf8b799">Save</a> (Recording recording)</td></tr>
+<tr class="memitem:af79389b106702c561ad445ceddf8b799"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#af79389b106702c561ad445ceddf8b799">Save</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a> recording)</td></tr>
 <tr class="memdesc:af79389b106702c561ad445ceddf8b799"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the specified <em>recording</em> , updates it if it already exists.  <a href="#af79389b106702c561ad445ceddf8b799">More...</a><br /></td></tr>
 <tr class="separator:af79389b106702c561ad445ceddf8b799"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fc0455473b14ed19312193de1b97642"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a4fc0455473b14ed19312193de1b97642">Save</a> (Page page)</td></tr>
+<tr class="memitem:a4fc0455473b14ed19312193de1b97642"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a4fc0455473b14ed19312193de1b97642">Save</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a> page)</td></tr>
 <tr class="memdesc:a4fc0455473b14ed19312193de1b97642"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the specified <em>page</em> , updates it if it already exists.  <a href="#a4fc0455473b14ed19312193de1b97642">More...</a><br /></td></tr>
 <tr class="separator:a4fc0455473b14ed19312193de1b97642"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0289efe3a4e2abe3da1e80f5d0699a91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a0289efe3a4e2abe3da1e80f5d0699a91">Save</a> (Workbook workbook)</td></tr>
+<tr class="memitem:a0289efe3a4e2abe3da1e80f5d0699a91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a0289efe3a4e2abe3da1e80f5d0699a91">Save</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a> workbook)</td></tr>
 <tr class="memdesc:a0289efe3a4e2abe3da1e80f5d0699a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the specified <em>workbook</em> , updates it if it already exists.  <a href="#a0289efe3a4e2abe3da1e80f5d0699a91">More...</a><br /></td></tr>
 <tr class="separator:a0289efe3a4e2abe3da1e80f5d0699a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaad308136025d087f9f68869ed8d17ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#aaad308136025d087f9f68869ed8d17ea">Delete</a> (Recording recording)</td></tr>
+<tr class="memitem:aaad308136025d087f9f68869ed8d17ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#aaad308136025d087f9f68869ed8d17ea">Delete</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a> recording)</td></tr>
 <tr class="memdesc:aaad308136025d087f9f68869ed8d17ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes the specified <em>recording</em> .  <a href="#aaad308136025d087f9f68869ed8d17ea">More...</a><br /></td></tr>
 <tr class="separator:aaad308136025d087f9f68869ed8d17ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9695600ad94daf91d65836b36f90b640"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a9695600ad94daf91d65836b36f90b640">Delete</a> (Page page)</td></tr>
+<tr class="memitem:a9695600ad94daf91d65836b36f90b640"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a9695600ad94daf91d65836b36f90b640">Delete</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a> page)</td></tr>
 <tr class="memdesc:a9695600ad94daf91d65836b36f90b640"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes the specified <em>page</em>  and the associated recording.  <a href="#a9695600ad94daf91d65836b36f90b640">More...</a><br /></td></tr>
 <tr class="separator:a9695600ad94daf91d65836b36f90b640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c39cc5eeea5d5b41379d756cc119c47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a2c39cc5eeea5d5b41379d756cc119c47">Delete</a> (Workbook workbook)</td></tr>
+<tr class="memitem:a2c39cc5eeea5d5b41379d756cc119c47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a2c39cc5eeea5d5b41379d756cc119c47">Delete</a> (<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a> workbook)</td></tr>
 <tr class="memdesc:a2c39cc5eeea5d5b41379d756cc119c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete the specified <em>workbook</em>  and all corresponding pages.  <a href="#a2c39cc5eeea5d5b41379d756cc119c47">More...</a><br /></td></tr>
 <tr class="separator:a2c39cc5eeea5d5b41379d756cc119c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -136,21 +136,21 @@ override void&#160;</td><td class="memItemRight" valign="bottom"><b>OnModelCreat
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a86381c44338244a53ae600a47a294380"><td class="memItemLeft" align="right" valign="top">DbSet&lt; Workbook &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a86381c44338244a53ae600a47a294380">Workbooks</a><code> [get, set]</code></td></tr>
+<tr class="memitem:a86381c44338244a53ae600a47a294380"><td class="memItemLeft" align="right" valign="top">DbSet&lt; <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a86381c44338244a53ae600a47a294380">Workbooks</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a86381c44338244a53ae600a47a294380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exposes the list of Workbooks stored in the database.  <a href="#a86381c44338244a53ae600a47a294380">More...</a><br /></td></tr>
 <tr class="separator:a86381c44338244a53ae600a47a294380"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a703d0eede83411f1982c807ec4a1b2a6"><td class="memItemLeft" align="right" valign="top">DbSet&lt; Page &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a703d0eede83411f1982c807ec4a1b2a6">Pages</a><code> [get, set]</code></td></tr>
+<tr class="memitem:a703d0eede83411f1982c807ec4a1b2a6"><td class="memItemLeft" align="right" valign="top">DbSet&lt; <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a703d0eede83411f1982c807ec4a1b2a6">Pages</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a703d0eede83411f1982c807ec4a1b2a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exposes the list of Pages stored in the database.  <a href="#a703d0eede83411f1982c807ec4a1b2a6">More...</a><br /></td></tr>
 <tr class="separator:a703d0eede83411f1982c807ec4a1b2a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97717efa2abe35b5882f425f2e5e66f0"><td class="memItemLeft" align="right" valign="top">DbSet&lt; Recording &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a97717efa2abe35b5882f425f2e5e66f0">Recordings</a><code> [get, set]</code></td></tr>
+<tr class="memitem:a97717efa2abe35b5882f425f2e5e66f0"><td class="memItemLeft" align="right" valign="top">DbSet&lt; <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#a97717efa2abe35b5882f425f2e5e66f0">Recordings</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a97717efa2abe35b5882f425f2e5e66f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exposes the list of Recordings stored in the database.  <a href="#a97717efa2abe35b5882f425f2e5e66f0">More...</a><br /></td></tr>
 <tr class="separator:a97717efa2abe35b5882f425f2e5e66f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11288a7ad992da6f4cbeeb128e6f240"><td class="memItemLeft" align="right" valign="top">DbSet&lt; Editor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#ad11288a7ad992da6f4cbeeb128e6f240">Editors</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ad11288a7ad992da6f4cbeeb128e6f240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exposes the list of Editors stored in the database.  <a href="#ad11288a7ad992da6f4cbeeb128e6f240">More...</a><br /></td></tr>
+<tr class="memitem:ad11288a7ad992da6f4cbeeb128e6f240"><td class="memItemLeft" align="right" valign="top">DbSet&lt; <a class="el" href="class_lingvo_1_1_backend_1_1_editor.html">Editor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lingvo_1_1_backend_1_1_services_1_1_database_service.html#ad11288a7ad992da6f4cbeeb128e6f240">Editors</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad11288a7ad992da6f4cbeeb128e6f240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exposes the list of <a class="el" href="class_lingvo_1_1_backend_1_1_editor.html" title="An editor for the editing system. Contains user information necessary for login &amp; logout...">Editor</a>s stored in the database.  <a href="#ad11288a7ad992da6f4cbeeb128e6f240">More...</a><br /></td></tr>
 <tr class="separator:ad11288a7ad992da6f4cbeeb128e6f240"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Encapsulates access to the database used for storing Workbooks, Pages, Recs and Editors. </p>
+<div class="textblock"><p>Encapsulates access to the database used for storing Workbooks, Pages, Recs and <a class="el" href="class_lingvo_1_1_backend_1_1_editor.html" title="An editor for the editing system. Contains user information necessary for login &amp; logout...">Editor</a>s. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9fe5918943485cbef7b9097265dfbbcd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9fe5918943485cbef7b9097265dfbbcd">&#9670;&nbsp;</a></span>DatabaseService()</h2>
@@ -227,7 +227,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Delete </td>
           <td>(</td>
-          <td class="paramtype">Recording&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a>&#160;</td>
           <td class="paramname"><em>recording</em></td><td>)</td>
           <td></td>
         </tr>
@@ -255,7 +255,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Delete </td>
           <td>(</td>
-          <td class="paramtype">Page&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a>&#160;</td>
           <td class="paramname"><em>page</em></td><td>)</td>
           <td></td>
         </tr>
@@ -283,7 +283,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Delete </td>
           <td>(</td>
-          <td class="paramtype">Workbook&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a>&#160;</td>
           <td class="paramname"><em>workbook</em></td><td>)</td>
           <td></td>
         </tr>
@@ -309,7 +309,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Page Lingvo.Backend.Services.DatabaseService.FindPageWithRecording </td>
+          <td class="memname"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a> Lingvo.Backend.Services.DatabaseService.FindPageWithRecording </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
@@ -323,7 +323,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Finds the page with the given <em>id</em>  and loads it from the database, including the associated Page.TeacherTrack. </p>
+<p>Finds the page with the given <em>id</em>  and loads it from the database, including the associated <a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html#a93401891c8b58457d3ba054c833cb634" title="Gets or sets the teacher track. ">Page.TeacherTrack</a>. </p>
 
 </div>
 </div>
@@ -337,7 +337,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Workbook Lingvo.Backend.Services.DatabaseService.FindWorkbookWithReferences </td>
+          <td class="memname"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a> Lingvo.Backend.Services.DatabaseService.FindWorkbookWithReferences </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
@@ -365,7 +365,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;Page&gt; Lingvo.Backend.Services.DatabaseService.GetPagesWithReferences </td>
+          <td class="memname">List&lt;<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a>&gt; Lingvo.Backend.Services.DatabaseService.GetPagesWithReferences </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -392,7 +392,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;Workbook&gt; Lingvo.Backend.Services.DatabaseService.GetWorkbooksWithReferences </td>
+          <td class="memname">List&lt;<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a>&gt; Lingvo.Backend.Services.DatabaseService.GetWorkbooksWithReferences </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -421,7 +421,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Save </td>
           <td>(</td>
-          <td class="paramtype">Recording&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a>&#160;</td>
           <td class="paramname"><em>recording</em></td><td>)</td>
           <td></td>
         </tr>
@@ -449,7 +449,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Save </td>
           <td>(</td>
-          <td class="paramtype">Page&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a>&#160;</td>
           <td class="paramname"><em>page</em></td><td>)</td>
           <td></td>
         </tr>
@@ -477,7 +477,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void Lingvo.Backend.Services.DatabaseService.Save </td>
           <td>(</td>
-          <td class="paramtype">Workbook&#160;</td>
+          <td class="paramtype"><a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a>&#160;</td>
           <td class="paramname"><em>workbook</em></td><td>)</td>
           <td></td>
         </tr>
@@ -504,7 +504,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">DbSet&lt;Editor&gt; Lingvo.Backend.Services.DatabaseService.Editors</td>
+          <td class="memname">DbSet&lt;<a class="el" href="class_lingvo_1_1_backend_1_1_editor.html">Editor</a>&gt; Lingvo.Backend.Services.DatabaseService.Editors</td>
         </tr>
       </table>
   </td>
@@ -514,7 +514,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Exposes the list of Editors stored in the database. </p>
+<p>Exposes the list of <a class="el" href="class_lingvo_1_1_backend_1_1_editor.html" title="An editor for the editing system. Contains user information necessary for login &amp; logout...">Editor</a>s stored in the database. </p>
 
 </div>
 </div>
@@ -528,7 +528,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">DbSet&lt;Page&gt; Lingvo.Backend.Services.DatabaseService.Pages</td>
+          <td class="memname">DbSet&lt;<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_page.html">Page</a>&gt; Lingvo.Backend.Services.DatabaseService.Pages</td>
         </tr>
       </table>
   </td>
@@ -552,7 +552,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">DbSet&lt;Recording&gt; Lingvo.Backend.Services.DatabaseService.Recordings</td>
+          <td class="memname">DbSet&lt;<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_recording.html">Recording</a>&gt; Lingvo.Backend.Services.DatabaseService.Recordings</td>
         </tr>
       </table>
   </td>
@@ -576,7 +576,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">DbSet&lt;Workbook&gt; Lingvo.Backend.Services.DatabaseService.Workbooks</td>
+          <td class="memname">DbSet&lt;<a class="el" href="class_lingvo_1_1_common_1_1_entities_1_1_workbook.html">Workbook</a>&gt; Lingvo.Backend.Services.DatabaseService.Workbooks</td>
         </tr>
       </table>
   </td>
