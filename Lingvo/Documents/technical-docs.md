@@ -18,6 +18,8 @@ Erstellt von: Jan Göbel, Dominik Klumpp, Philip Lenzen, Katja Ludwig, Ralph Rei
     * Interfaces
     * Internal Structure
   * App Structure
+    * Xamarin User Interface
+    * Internal Structure
 4. Dynamic View
 5. Miscellaneous Documents
 6. Non-Functional Characteristics
@@ -111,13 +113,13 @@ Almost all features are implemented in a shared project for both platforms. The 
 
 #### Xamarin User Interface
 
-The Mobile App is written in Xamarin Forms to allow the same design on all platforms. Therefore, it consists mainly of `Xamarin.Forms.Page` classes, while the main `NavigationPage` contains a `TabbedPage` as content. This gives the user a familiar experience because the page tabs are rendered in the default platform style. 
-If a page contains a list, each item is displayed via a `ViewCell`, which is recycled if it's swiped out. Therefore, memory consumption is still quite small even with large item sets. 
-In general, the data being displayed is obtained by one-way bindings directly on the model classes. 
+The Mobile App is written in Xamarin Forms to allow the same design on all platforms. Therefore, it consists mainly of `Xamarin.Forms.Page` classes, while the main `NavigationPage` contains a `TabbedPage` as content. This gives the user a familiar experience because the page tabs are rendered in the default platform style.
+If a page contains a list, each item is displayed via a `ViewCell`, which is recycled if it's swiped out. Therefore, memory consumption is still quite small even with large item sets.
+In general, the data being displayed is obtained by one-way bindings directly on the model classes.
 
-As the user interface is written with Xamarin Forms, only very little platform-specific code is necessary. 
-Beside platform-specific design styles, the progress views, which are present in most pages, and the image buttons (without background) are implemented on each platform and managed by custom renderers. 
-Additionally, the audio player and recorder are not available in Xamarin Forms and therefore implemented on each platform. As they implement the interfaces `IPlayer` and `IRecorder`, the Xamarin Forms app is able to obtain instances by its `DependencyService`. The same applies to the `INetworkService` interface, which is responsible for determining the network state. 
+As the user interface is written with Xamarin Forms, only very little platform-specific code is necessary.
+Beside platform-specific design styles, the progress views, which are present in most pages, and the image buttons (without background) are implemented on each platform and managed by custom renderers.
+Additionally, the audio player and recorder are not available in Xamarin Forms and therefore implemented on each platform. As they implement the interfaces `IPlayer` and `IRecorder`, the Xamarin Forms app is able to obtain instances by its `DependencyService`. The same applies to the `INetworkService` interface, which is responsible for determining the network state.
 
 #### Internal Structure
 
@@ -136,6 +138,8 @@ The information about locally available workbooks, pages, teachermemos and the c
 ## Miscellaneous Documents
 
 The UI for app and the Editing System was mocked before development. The results can be found in [AppMocks.pdf](../Abgabe/AppMocks.pdf) and [RedaktionssystemMocks.pdf](../Abgabe/RedaktionssystemMocks.pdf). Usability was a key aspect in developing these designs. The final product closely resembles the original mocks.
+
+HTML documentation generated from the code comments can be found in `Abgabe/CodeDocumentation`.
 
 ## Non-Functional Characteristics
 
