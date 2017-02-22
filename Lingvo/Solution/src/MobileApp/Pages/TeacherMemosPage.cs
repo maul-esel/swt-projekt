@@ -22,8 +22,9 @@ namespace Lingvo.MobileApp.Pages
 
             item = new ToolbarItem
             {
-                Text = "New..",
-                Icon = "ic_action_add.png"
+                Text = "New...",
+                Icon = "ic_action_add.png",
+                AutomationId = "New..."
             };
 
             item.Clicked += AddNewClicked;
@@ -81,7 +82,8 @@ namespace Lingvo.MobileApp.Pages
                     Color = (Color)App.Current.Resources["secondaryColor"],
                     Border = true,
                     Text = "",
-                    Filled = true
+                    Filled = true,
+                    AutomationId = "New..."
                 };
                 fab.OnClicked += AddNewClicked;
 

@@ -22470,7 +22470,7 @@
 											"$ref": "AAAAAAFYsFAhFjeQCfs="
 										},
 										"visibility": "public",
-										"navigable": false,
+										"navigable": true,
 										"aggregation": "none",
 										"multiplicity": "1",
 										"isReadOnly": false,
@@ -22489,7 +22489,7 @@
 											"$ref": "AAAAAAFYsHHWSl1lDAk="
 										},
 										"visibility": "public",
-										"navigable": true,
+										"navigable": false,
 										"aggregation": "none",
 										"multiplicity": "1",
 										"isReadOnly": false,
