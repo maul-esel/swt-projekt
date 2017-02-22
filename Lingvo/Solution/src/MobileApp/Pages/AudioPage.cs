@@ -10,6 +10,10 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for listening to teacher tracks of <see cref="IExercise"/> objects and
+    /// record student tracks.
+    /// </summary>
     class AudioPage : ContentPage
     {
         private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 45, WinPhone: 50);
@@ -24,6 +28,10 @@ namespace Lingvo.MobileApp.Pages
         private LingvoRoundImageButton PreviousPageButton;
         private LingvoRoundImageButton NextPageButton;
 
+        /// <summary>
+        /// The exercise to be practiced.
+        /// Setting this property actualizes <see cref="StudentAudioController.Exercisable"/>.
+        /// </summary>
         public IExercise Exercisable
         {
             get { return exercisable; }
@@ -37,6 +45,10 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Computes the label string for this <c>IExercise</c> according to its actual class.
+        /// </summary>
+        /// <returns>The string to be displayed in the page label.</returns>
         private string getLabelString()
         {
             if (Exercisable is TeacherMemo)
@@ -50,6 +62,10 @@ namespace Lingvo.MobileApp.Pages
             return null;
         }
 
+        /// <summary>
+        /// Actualizes the progress.
+        /// </summary>
+        /// <param name="elapsedTime">The new progress.</param>
         private void RedrawProgressBar(int elapsedTime)
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -60,9 +76,9 @@ namespace Lingvo.MobileApp.Pages
         }
 
         /// <summary>
-        /// Sets the state of the buttons according to.
+        /// Sets the state of the buttons according to the player state.
         /// </summary>
-        /// <param name="state">State.</param>
+        /// <param name="state">The state of the player.</param>
         private void SetButtonsAccordingToState(PlayerState state)
         {
             if (state == PlayerState.PLAYING)
@@ -91,6 +107,9 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Disables the seek and play buttons if the recorder is recording, otherwise they are enabled.
+        /// </summary>
         private void SetSeekingButtonsAccordingly()
         {
             RecorderState recorderState = StudentAudioController.Instance.CurrentRecorderState;
@@ -312,6 +331,9 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        /// <summary>
+        /// Registers all important events to actualize the views 
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -331,6 +353,9 @@ namespace Lingvo.MobileApp.Pages
             StudentAudioController.Instance.Error += OnError;
         }
 
+        /// <summary>
+        /// Unregisters all events registered in <see cref="OnAppearing"/> and stops the audio session.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -358,6 +383,10 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Refreshes the views when <see cref="Exercisable"/> is a <c>TeacherMemo</c> and it has changed.
+        /// </summary>
+        /// <param name="t">The <c>TeacherMemo</c> which changed.</param>
         private void Event_TeacherMemoChanged(TeacherMemo t)
         {
             if (exercisable is TeacherMemo && t.Id.Equals(exercisable.Id))
@@ -366,6 +395,10 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Refreshes the views when <see cref="Exercisable"/> is a <c>IPage</c> and it has changed.
+        /// </summary>
+        /// <param name="p">The <c>IPage</c> which changed.</param>
         private void Event_PageChanged(IPage p)
         {
             if (exercisable is IPage && p.Id.Equals(exercisable.Id))
@@ -374,6 +407,9 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Refreshes the progress view and the buttons for page switching.
+        /// </summary>
         private void Refresh()
         {
             Device.BeginInvokeOnMainThread(() =>
@@ -408,6 +444,11 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Switches the page to the given new index.
+        /// The current audio session is stoppedand <see cref="Exercisable"/> is set to the page corresponding to <paramref name="nextIndex"/>.
+        /// </summary>
+        /// <param name="nextIndex">The new page index to switch to.</param>
         private void SwitchPage(int nextIndex)
         {
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
@@ -424,12 +465,25 @@ namespace Lingvo.MobileApp.Pages
             Exercisable = workbook.Pages[nextIndex];
         }
 
+        /// <summary>
+        /// Occurs when the mute button of the progress view is pressed.
+        /// Enables or disables the inner progress and sets
+        /// <see cref="StudentAudioController.IsMuted"/>.
+        /// </summary>
+        /// <param name="muted">The new state of the button</param>
         private void ProgressView_StudentTrackMuted(bool muted)
         {
             ProgressView.InnerProgressEnabled = !muted;
             StudentAudioController.Instance.IsMuted = muted;
         }
 
+        /// <summary>
+        /// Occurs when the record button or the stop button (which are basically the same button instance) are pressed.
+        /// Accordingly, it starts a new recording (after displaying a warning, if a student track already exists) or
+        /// stops the recording.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>EventArgs</c> of the click event.</param>
         private async void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
@@ -458,6 +512,10 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Occurs after an exception in <see cref="StudentAudioController"/>.
+        /// Refreshes the views and displays an error message.
+        /// </summary>
         private async void OnError()
         {
             RedrawProgressBar(0);
@@ -465,6 +523,12 @@ namespace Lingvo.MobileApp.Pages
             await AlertHelper.DisplayAudioError();
         }
 
+        /// <summary>
+        /// Occurs when the play button or the pause button (which are basically the same button instance) are pressed.
+        /// Accordingly, it plays or continues the current player track or pauses it.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>EventArgs</c> of the click event.</param>
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)
         {
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
