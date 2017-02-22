@@ -14,14 +14,14 @@ namespace Lingvo.MobileApp
 	{
 		const string databasePath = "lingvo.sqlite";
 
-		public static LingvoMobileContext Database { get; private set; }
+		public static DatabaseService Database { get; private set; }
 
 		private static void SetupDatabaseConnection()
 		{
 			if (Database == null)
 			{
 				string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), databasePath);
-				Database = new LingvoMobileContext(dbPath);
+				Database = new DatabaseService(dbPath);
 				Database.createTables();
 			}
 		}
