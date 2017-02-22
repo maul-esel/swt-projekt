@@ -39,7 +39,7 @@ Soll ein neues Arbeitsheft hinzugefügt werden, kann der grüne Knopf "Neues Arb
 
 ![](ScreenshotsRedaktionssystem/NeuesArbeitsheft.png)
 
-Der Nutzer gibt nun den Titel ein, der sich von den Titeln der bisher existenten Arbeitshefte unterscheiden muss. Bei Bedarf kann auch ein Untertitel eingegeben werden, dies ist aber kein muss. Soll das Arbeitsheft angelegt werden, klickt der Nutzer auf Speichern, andernfalls auf Abbrechen.
+Der Nutzer gibt nun den Titel ein, der sich von den Titeln der bisher existenten Arbeitshefte unterscheiden muss. Bei Bedarf kann auch ein Untertitel eingegeben werden, dies ist aber kein Muss. Soll das Arbeitsheft angelegt werden, klickt der Nutzer auf Speichern, andernfalls auf Abbrechen.
 
 ###### 2.1.2 Arbeitsheft bearbeiten
 
@@ -53,7 +53,7 @@ Der Redakteur kann jetzt Titel und Untertitel bearbeiten und anschließend speic
 
 #### 2.2 Seiten verwalten
 
-Möchte man sich alle Seiten eines Anrbeitshefts anzeigen lassen, so klickt man in der Übersichtsseite der Arbeitshefte auf den Titel des gewünschten. Die nächste Abbildung zeigt, wie so eine Seitenübersicht aussehen kann.
+Möchte man sich alle Seiten eines Arbeitshefts anzeigen lassen, so klickt man in der Übersichtsseite der Arbeitshefte auf den Titel des gewünschten Heftes. Die nächste Abbildung zeigt, wie so eine Seitenübersicht aussehen kann.
 
 ![](ScreenshotsRedaktionssystem/SeitenÜbersicht.png)
 
@@ -61,22 +61,22 @@ Zu jeder Seite ist die Seitennummer und gegebenfalls eine Beschreibung in der Li
 
 Auch hier gibt es wieder drei Symbolknöpfe am Ende jeder Tabellenzeile:
 * Der Stift dient dazu, die Seite zu bearbeiten. Neben Beschreibung und Seitenzahl kann auch eine neue Audiodatei hochgeladen werden.
-* Mit einem Klick auf den Download-Knopf kann die aktuelle Audiodatei zur Seite auf den Rechner heruntergeladen werden, beispielsweise falls sie nachbearbeitet werden soll.
+* Mit einem Klick auf den Download-Knopf kann die aktuelle Audiodatei zur Seite auf den Rechner heruntergeladen werden, falls sie beispielsweise nachbearbeitet werden soll.
 * Die Mülltonne dient wieder dem Löschen. Wird sie ausgewählt, werden alle Daten der Seite inklusive der Audiodatei gelöscht und können nicht wiederhergestellt werden.
 
 ###### 2.2.1 Seite erstellen
 
-Eine neue Seite kann über den grünen "Neue Seite"-Knopf in der Kopfzeile erstellt werden. Es öffnet sich folgende Seite:
+Eine neue Seite kann über den grünen "Neue Seite"-Knopf in der Kopfzeile erstellt werden. Es öffnet sich folgende Ansicht:
 
 ![](ScreenshotsRedaktionssystem/NeueSeite.png)
 
-In den oberen Textfeldern gibt der Redakteur die Seitenzahl und das Thema der Seite ein, dem späteren Untertitel. Wichtig ist, dass die Seitenzahl bisher noch bei keiner anderen Seite aus dem selben Arbeitsheft existiern darf. Durch einen Informationstext wird angezeigt, dass bisher noch keine Lehrerspur ausgwählt wurde. Nun gibt es zwei Möglichkeiten, eine Audiodatei zur neuen Seite hinzuzufügen.
+In den oberen Textfeldern gibt der Redakteur die Seitenzahl und das Thema der Seite ein, dem späteren Untertitel. Wichtig ist, dass die Seitenzahl bisher noch bei keiner anderen Seite aus dem selben Arbeitsheft existiern darf. Durch einen Informationstext wird angezeigt, dass bisher noch keine Lehrerspur ausgewählt wurde. Nun gibt es zwei Möglichkeiten, eine Audiodatei zur neuen Seite hinzuzufügen.
 
-Hat man bereits eine fertige Audiodatei auf seinem Computer gespeichert, kann man auf der rechten Seite den "Datei wählen"-Knopf benutzen. Ein Auswahlfenster öffnet sich, wo man die richtige Datei wählt und bestätigt. Das Redaktionssystem gibt durch folgende Oberfläche Rückmeldung über das erfolgreiche Hochladen:
+Hat man bereits eine fertige Audiodatei auf seinem Computer gespeichert, kann man auf der rechten Seite den "Datei wählen"-Knopf benutzen. Ein Auswahlfenster öffnet sich, wo man die richtige Datei wählt und bestätigt. Das Redaktionssystem gibt durch folgende Oberfläche Rückmeldung über die erfolgreiche Auswahl:
 
 ![](ScreenshotsRedaktionssystem/NeueSeiteDateiHochgeladen.png)
 
-Der Name der hochgeladen Datei ist nun im Informationsfenster enthalten. Auf der rechten Seite kann man sich die Datei nochmals anhören.
+Der Name der gewählten Datei ist nun im Informationsfenster enthalten. Auf der rechten Seite kann man sich die Datei nochmals anhören.
 
 Hat der Redakteur noch keine fertige Audiodatei, kann er hier eine neue aufnehmen. Dazu klickt er auf der linken Seite auf den "Aufnahme starten"-Knopf. Wichtig ist, dass man dem Browser vorher erlaubt hat, das Mikrofon zu benutzen, sonst funktioniert das Aufnehmen nicht. Läuft die Aufnahme, wird dies folgendermaßen angezeigt:
 
@@ -90,13 +90,15 @@ Nun zeigt der Informationstext an, dass eine Aufnahme die aktuelle Lehrerspur da
 
 Hat der Redakteur sich für eine Audiodatei entschieden, klickt er entweder auf "Speichern" und landet wieder in der Seitenübersicht des Arbeitshefts, oder auf "Speichern & Nächste Seite", falls er gleich mit dem Anlegen der nächsten Seite weitermachen möchte.
 
+**Hinweis:** Verlässt der Redakteur die Seite, ohne zu Speichern - z.B. durch Schließen des Fensters oder durch Abbrechen - so gehen die eingegebenen Daten oder neu gemachten Aufnahmen verloren. Aus diesem Grund erscheint eine Warnung des Browsers.
+
 ###### 2.2.2 Seite bearbeiten
 
 Durch einen Klick auf das Stiftsymbol in der Seitenübersicht kann wie in der folgenden Abbildung gezeigt eine Seite bearbeitet werden.
 
 ![](ScreenshotsRedaktionssystem/SeiteBearbeiten.png)
 
-Der Redakteur kann Seitenzahl und Beschreibung ändern, aber auch eine neue Audiodatei auswählen. Welche Möglichkeiten es hier gibt, wurde bereits in Abschnitt 2.2.1 beschrieben und kann dort nachgelesen werden. Auch hier darf die Seitenzahl noch nicht an eine bereits dem selben Arbeitsheft zugeordeten Seite vergeben sein. Im Informationsfeld findet sich der Name bzw. der Aufnahmezeitpunkt der aktuellen Lehrerspur, daneben kann man sie sich nochmals anhören oder auch herunterladen.
+Der Redakteur kann Seitenzahl und Beschreibung ändern, aber auch eine neue Audiodatei auswählen. Welche Möglichkeiten es hier gibt, wurde bereits in Abschnitt 2.2.1 beschrieben und kann dort nachgelesen werden. Auch hier darf die Seitenzahl noch nicht an eine bereits dem selben Arbeitsheft zugeordeten Seite vergeben sein. Im Informationsfeld findet sich der Hochlade- bzw. Aufnahmezeitpunkt der aktuellen Lehrerspur, daneben kann man sie sich nochmals anhören oder auch herunterladen.
 
 **Hinweis:** Über einen Klick auf den Namen des Arbeitshefts in der Kopfzeile kann zur Übersicht über die Seiten gewechselt werden. Die Auswahl von "Arbeitshefte" in der Kopfzeile springt zurück zur Übersicht über alle verfügbaren Arbeitshefte.
 
