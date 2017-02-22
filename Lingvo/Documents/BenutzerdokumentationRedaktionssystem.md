@@ -10,6 +10,8 @@ Erstellt von: Jan Göbel, Dominik Klumpp, Philip Lenzen, Katja Ludwig, Ralph Rei
 ### 1 Erste Schritte
 Zur Benutzung des Redaktionssystems von "Deutsch für dich" wird ein Benutzerkonto mit Passwort benötigt. Es ist aktuell unter https://lingvo.azurewebsites.net/ zu finden. Dort wird man zunächst dazu aufgefordert, sich einzuloggen.
 
+Es wird empfohlen, aktuelle Versionen von Firefox oder Google Chrome zu benutzen.
+
 Um neue Seiten einzusprechen, ist es weiterhin wichtig, dem Browser den Zugriff auf das Mikrofon zu erlauben. Folgende Meldung erscheint auf dem Bildschirm:
 
 <img src="ScreenshotsRedaktionssystem/Mikrophon.png" style="width: 300px; display: block; margin: auto;"/>
