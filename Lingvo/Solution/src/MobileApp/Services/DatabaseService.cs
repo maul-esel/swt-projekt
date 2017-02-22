@@ -17,7 +17,7 @@ using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 
 namespace Lingvo.MobileApp.Services
 {
-    public class LingvoMobileContext
+    public class DatabaseService
     {
         readonly SQLiteConnection database;
 
@@ -31,7 +31,7 @@ namespace Lingvo.MobileApp.Services
         public event Action<Page> PageChanged;
         public event Action<Recording> RecordingChanged;
 
-        public LingvoMobileContext(string dbPath)
+        public DatabaseService(string dbPath)
         {
             database = new SQLiteConnection(new SQLitePlatform(), dbPath, false);
         }
