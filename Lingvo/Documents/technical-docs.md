@@ -99,7 +99,7 @@ User management for the Editing System is implemented using the *ASP.NET Core Id
 As mentioned above, the conceptual facade controller is partitioned into 5 classes: `AppController` for the REST API, and `AccountController`, `WorkbookController`, `PageController` and `HomeController` for the Editing System. This separation has several reasons:
 
 * Access Control: The need for authorization is specified as a class attribute. This makes it difficult to have methods for both the app and the Editing System in one class.
-* Cohesion: Facade controllers typically have very low cohesion. For instance, fields relating to user management would be used by only three methods.
+* Cohesion: Facade controllers typically have very low cohesion. For instance, fields relating to user management would be used by only three methods. By splitting the controller into multiple disjoint classes, this problem is circumvented and higher cohesion is achieved, without increasing coupling.
 * Maintainability: By grouping the operations logically and reducing class size, maintainablity is improved.
 
 ### App Structure
