@@ -113,11 +113,11 @@ Almost all features are implemented in a shared project for both platforms. The 
 
 The Mobile App is written in Xamarin Forms to allow the same design on all platforms. Therefore, it consists mainly of `Xamarin.Forms.Page` classes, while the main `NavigationPage` contains a `TabbedPage` as content. This gives the user a familiar experience because the page tabs are rendered in the default platform style. 
 If a page contains a list, each item is displayed via a `ViewCell`, which is recycled if it's swiped out. Therefore, memory consumption is still quite small even with large item sets. 
-In general, the data to be displayed is obtained by one-way bindings directly on the model classes. 
+In general, the data being displayed is obtained by one-way bindings directly on the model classes. 
 
 As the user interface is written with Xamarin Forms, only very little platform-specific code is necessary. 
 Beside platform-specific design styles, the progress views, which are present in most pages, and the image buttons (without background) are implemented on each platform and managed by custom renderers. 
-Additionally, the audio player and recorder are not available in Xamarin Forms and therefore implemented on each platform. As they implement the interfaces `IPlayer` and `IRecorder` respectively, the Xamarin Forms app is able to obtain instances by its `DependencyService`. The same applies to the `INetworkService` interface, which is responsible for determining the network state. 
+Additionally, the audio player and recorder are not available in Xamarin Forms and therefore implemented on each platform. As they implement the interfaces `IPlayer` and `IRecorder`, the Xamarin Forms app is able to obtain instances by its `DependencyService`. The same applies to the `INetworkService` interface, which is responsible for determining the network state. 
 
 #### Internal Structure
 
@@ -125,7 +125,7 @@ To request information about existing workbooks and pages or to actually downloa
 Whereas workbooks only contain meta-information, pages also have a (quite large) audio file which may cause high network traffic when syncing the available data on the server although the user doesn't want to download these pages. Therefore, the proxy-pattern offers the possibility to sync meta-data of pages and to download the actual audio file only if it's intended. The proxy class is called `PageProxy`, holding a reference to the actual `Page` object (which is not set until it's locally available). An interface `IPage` provides uniform handling of `PageProxy` and `Page` objects.
 
 To create a new teachermemo, the `TeacherMemoController` offers functionality for recording and saving the audio file with a specific name.
-Because teachermemos and pages both have a recording that can be practiced, they extend the interface `IExercise`. This allows only one controlling class called `StudentAudioController` for practicing these exercises, which is responsible for playing and recording the audio files of the student.    
+Because teachermemos and pages both have a recording that can be practiced with, they extend the interface `IExercise`. This allows only one controlling class called `StudentAudioController` for practicing these exercises, which is responsible for playing and recording the audio files of the student.    
 
 The information about locally available workbooks, pages, teachermemos and the corresponding recordings are stored in a SQLite .NET PCL Database, which is accessed by the `DatabaseService`. The actual audio files of recordings are stored in the platform-specific app folder. The access to this data is provided by the `LocalCollection` class, which is taking care of the information about all locally available workbooks, pages and teachermemos.
 
