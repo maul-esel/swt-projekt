@@ -2,6 +2,7 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Lingvo.MobileApp.Droid.Views;
+using Android.Util;
 
 [assembly: ExportRenderer(typeof(Lingvo.MobileApp.LingvoAudioProgressView), typeof(Lingvo.MobileApp.Droid.Renderers.LingvoAudioProgressViewRenderer))]
 namespace Lingvo.MobileApp.Droid.Renderers
@@ -45,7 +46,7 @@ namespace Lingvo.MobileApp.Droid.Renderers
             if (progressView.InnerMuteButtonVisible != element.MuteEnabled)
                 progressView.InnerMuteButtonVisible = element.MuteEnabled;
             if (progressView.Size != element.Size)
-                progressView.Size = element.Size;
+                progressView.Size = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, element.Size, Resources.DisplayMetrics);
             if (!progressView.OuterProgressColor.Equals(element.OuterProgressColor.ToAndroid()))
                 progressView.OuterProgressColor = element.OuterProgressColor.ToAndroid();
             if (!progressView.InnerProgressColor.Equals(element.InnerProgressColor.ToAndroid()))
@@ -58,26 +59,27 @@ namespace Lingvo.MobileApp.Droid.Renderers
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
-                case LingvoAudioProgressView.LabelTypeValue.Percentual: 
-					if (element.MaxProgress == 0)
-					{
-						progressView.Text = "±∞";
-					}
-					else
-					{
-						progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
-					}
-					break;
+                case LingvoAudioProgressView.LabelTypeValue.Percentual:
+                    if (element.MaxProgress == 0)
+                    {
+                        progressView.Text = "0 %";
+                    }
+                    else
+                    {
+                        progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
+                    }
+                    break;
                 case LingvoAudioProgressView.LabelTypeValue.Time:
-					{
-						string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0, 2);
-						string seconds = (((element.Progress % 60000) / 1000 < 10 ? "0" : "") + (element.Progress % 60000) / 1000).Substring(0, 2);
+                    {
+                        string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0, 2);
+                        string seconds = (((element.Progress % 60000) / 1000 < 10 ? "0" : "") + (element.Progress % 60000) / 1000).Substring(0, 2);
 
-						progressView.Text = minutes + ":" + seconds;
+                        progressView.Text = minutes + ":" + seconds;
 
-						break;
-					}
+                        break;
+                    }
                 case LingvoAudioProgressView.LabelTypeValue.None: progressView.Text = ""; break;
+                case LingvoAudioProgressView.LabelTypeValue.Error: progressView.Text = "!"; break;
             }
         }
     }

@@ -1,18 +1,19 @@
-﻿using Lingvo.Common.Adapters;
-using Lingvo.Common.Entities;
+﻿using Lingvo.Common.Entities;
 using Lingvo.Common.Enums;
 using Lingvo.MobileApp.Controllers;
 using Lingvo.MobileApp.Entities;
 using Lingvo.MobileApp.Forms;
+using Lingvo.MobileApp.Util;
 using System;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
     class AudioPage : ContentPage
     {
-        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 35, WinPhone: 50);
-        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
+        private static readonly int PageButtonSize = Device.OnPlatform(iOS: 45, Android: 45, WinPhone: 50);
+        private static readonly int SeekButtonSize = Device.OnPlatform(iOS: 60, Android: 75, WinPhone: 110);
         private static readonly int ControlButtonSize = Device.OnPlatform(iOS: 75, Android: 86, WinPhone: 150);
 
         private static readonly int SeekTimeStep = 5;
@@ -44,7 +45,7 @@ namespace Lingvo.MobileApp.Pages
             }
             else if (workbook != null)
             {
-                return ((Span)App.Current.Resources["text_seite"]).Text + " " + ((IPage)Exercisable).Number + " / " + workbook.TotalPages;
+                return ((Span)App.Current.Resources["text_seite"]).Text + " " + ((IPage)Exercisable).Number;
             }
             return null;
         }
@@ -71,22 +72,23 @@ namespace Lingvo.MobileApp.Pages
                 SetSeekingButtonsAccordingly();
                 return;
             }
+            else
             if (state == PlayerState.PAUSED)
             {
-                //TODO: @Phlilip: MAAAYBEE, toggle that pause Button for God's sake :P 
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
                 RecordStopButton.Image = LingvoRoundImageButton.StopImage;
                 SetSeekingButtonsAccordingly();
                 return;
             }
+            else
             if (state == PlayerState.STOPPED || state == PlayerState.IDLE)
             {
                 PlayPauseButton.Image = LingvoRoundImageButton.PlayImage;
                 RecordStopButton.Image = LingvoRoundImageButton.RecordImage;
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+                PlayPauseButton.IsEnabled = true;
                 return;
             }
-            //no default needed...
         }
 
         private void SetSeekingButtonsAccordingly()
@@ -96,10 +98,20 @@ namespace Lingvo.MobileApp.Pages
             if (recorderState == RecorderState.RECORDING)
             {
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = false;
+
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    PlayPauseButton.IsEnabled = false;
+                }
             }
             else
             {
                 ForwardButton.IsEnabled = RewindButton.IsEnabled = true;
+
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    PlayPauseButton.IsEnabled = true;
+                }
             }
         }
 
@@ -160,7 +172,8 @@ namespace Lingvo.MobileApp.Pages
                 },
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.End,
-                ColumnSpacing = 10
+                ColumnSpacing = 10,
+                Padding = new Thickness(-10, 0)
             };
 
             ProgressView = new LingvoAudioProgressView()
@@ -171,7 +184,7 @@ namespace Lingvo.MobileApp.Pages
                 InnerProgressColor = Color.Red,
                 InnerProgressEnabled = exercisable.StudentTrack != null,
                 MuteEnabled = exercisable.StudentTrack != null,
-				TextSize = 54,
+                TextSize = 54,
                 MaxProgress = 95000
             };
 
@@ -180,28 +193,15 @@ namespace Lingvo.MobileApp.Pages
                 ProgressView.MaxProgress = exercisable.TeacherTrack.Duration;
             }
 
-            if (exercisable is IPage)
-            {
-                LocalCollection.Instance.PageChanged += Event_PageChanged;
-            }
-            else
-            {
-                LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
-            }
 
-            ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
-
-            StudentAudioController.Instance.Update += RedrawProgressBar;
-            StudentAudioController.Instance.StateChange += SetButtonsAccordingToState;
 
             RewindButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.RewindImage,
-                Text = "-" + SeekTimeStep,
+                Text = " " + SeekTimeStep,
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
-                TextOrientation = TextAlignment.End,
                 IsEnabled = false,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -209,11 +209,10 @@ namespace Lingvo.MobileApp.Pages
             ForwardButton = new LingvoRoundImageButton()
             {
                 Image = LingvoRoundImageButton.ForwardImage,
-                Text = "+" + SeekTimeStep,
+                Text = SeekTimeStep + " ",
                 Color = (Color)App.Current.Resources["primaryColor"],
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
-                TextOrientation = TextAlignment.Start,
                 IsEnabled = false,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -250,7 +249,7 @@ namespace Lingvo.MobileApp.Pages
 
             NextPageButton = new LingvoRoundImageButton
             {
-                Image = "ic_next.xml",
+                Image = "ic_next.png",
                 HorizontalOptions = LayoutOptions.EndAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 WidthRequest = Device.OnPlatform(iOS: PageButtonSize, Android: PageButtonSize, WinPhone: 2 * PageButtonSize),
@@ -262,7 +261,7 @@ namespace Lingvo.MobileApp.Pages
 
             PreviousPageButton = new LingvoRoundImageButton
             {
-                Image = "ic_previous.xml",
+                Image = "ic_previous.png",
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 WidthRequest = Device.OnPlatform(iOS: PageButtonSize, Android: PageButtonSize, WinPhone: 2 * PageButtonSize),
@@ -308,9 +307,44 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (Exercisable is IPage)
+            {
+                LocalCollection.Instance.PageChanged += Event_PageChanged;
+            }
+            else
+            {
+                LocalCollection.Instance.TeacherMemoChanged += Event_TeacherMemoChanged;
+            }
+
+            ProgressView.StudentTrackMuted += ProgressView_StudentTrackMuted;
+
+            StudentAudioController.Instance.Update += RedrawProgressBar;
+            StudentAudioController.Instance.StateChange += SetButtonsAccordingToState;
+            StudentAudioController.Instance.Error += OnError;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            if (Exercisable is IPage)
+            {
+                LocalCollection.Instance.PageChanged -= Event_PageChanged;
+            }
+            else
+            {
+                LocalCollection.Instance.TeacherMemoChanged -= Event_TeacherMemoChanged;
+            }
+
+            ProgressView.StudentTrackMuted -= ProgressView_StudentTrackMuted;
+
+            StudentAudioController.Instance.Update -= RedrawProgressBar;
+            StudentAudioController.Instance.StateChange -= SetButtonsAccordingToState;
+            StudentAudioController.Instance.Error -= OnError;
+
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
             if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
             {
@@ -327,7 +361,7 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
-        private void Event_PageChanged(Lingvo.Common.Entities.Page p)
+        private void Event_PageChanged(IPage p)
         {
             if (exercisable is IPage && p.Id.Equals(exercisable.Id))
             {
@@ -340,12 +374,14 @@ namespace Lingvo.MobileApp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 ProgressView.InnerProgressEnabled = exercisable.StudentTrack != null;
-				ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
+                ProgressView.MaxProgress = Exercisable.TeacherTrack.Duration;
                 ProgressView.MuteEnabled = exercisable.StudentTrack != null;
                 NextPageButton.IsVisible = exercisable is IPage;
                 PreviousPageButton.IsVisible = exercisable is IPage;
-                NextPageButton.IsEnabled = workbook != null && NextPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) < workbook.Pages.Count - 1;
-                PreviousPageButton.IsEnabled = workbook != null && PreviousPageButton.IsVisible && workbook.Pages.IndexOf((IPage)exercisable) > 0;
+
+                int index = exercisable is IPage ? workbook.Pages.FindIndex(p => p.Id.Equals(exercisable.Id)) : -1;
+                NextPageButton.IsEnabled = workbook != null && NextPageButton.IsVisible && index < workbook.Pages.Count - 1 && index >= -1;
+                PreviousPageButton.IsEnabled = workbook != null && PreviousPageButton.IsVisible && index > 0;
             });
         }
 
@@ -376,6 +412,8 @@ namespace Lingvo.MobileApp.Pages
                 RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
             }
 
+            workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbook.Id));
+
             NextPageButton.IsEnabled = nextIndex + 1 < workbook.Pages.Count;
             PreviousPageButton.IsEnabled = nextIndex > 0;
             Exercisable = workbook.Pages[nextIndex];
@@ -383,19 +421,28 @@ namespace Lingvo.MobileApp.Pages
 
         private void ProgressView_StudentTrackMuted(bool muted)
         {
-			ProgressView.InnerProgressEnabled = !muted;
+            ProgressView.InnerProgressEnabled = !muted;
             StudentAudioController.Instance.IsMuted = muted;
         }
 
-        private void RecordStopButton_OnClicked(object sender, EventArgs e)
+        private async void RecordStopButton_OnClicked(object sender, EventArgs e)
         {
             PlayerState currentState = StudentAudioController.Instance.CurrentPlayerState;
 
             if (currentState == PlayerState.STOPPED)
             {
+                if (exercisable.StudentTrack != null)
+                {
+                    if (!await AlertHelper.DisplayWarningStudentTrackExists())
+                    {
+                        return;
+                    }
+                }
 
                 StudentAudioController.Instance.StartStudentRecording();
+                ProgressView.MuteEnabled = false;
                 ProgressView.InnerProgressEnabled = true;
+
                 return;
             }
             if (currentState == PlayerState.PAUSED || currentState == PlayerState.PLAYING)
@@ -404,6 +451,13 @@ namespace Lingvo.MobileApp.Pages
                 RedrawProgressBar(0); //Progess & time code be reset if the user triggered it theirselves
                 return;
             }
+        }
+
+        private async void OnError()
+        {
+            RedrawProgressBar(0);
+            SetButtonsAccordingToState(PlayerState.STOPPED);
+            await AlertHelper.DisplayAudioError();
         }
 
         private void PlayPauseButton_OnClicked(object sender, EventArgs e)

@@ -12,7 +12,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace Lingvo.MobileApp.Droid.Activities
 {
-    [Activity (Theme = "@style/AppTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity (Theme = "@style/AppTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : FormsAppCompatActivity
 	{
 		protected override void OnCreate (Bundle bundle)

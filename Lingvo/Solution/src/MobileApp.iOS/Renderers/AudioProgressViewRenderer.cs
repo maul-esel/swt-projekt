@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using System.ComponentModel;
@@ -15,7 +15,10 @@ namespace Lingvo.MobileApp.iOS
 	class AudioProgressViewRenderer : ViewRenderer<LingvoAudioProgressView, UIView>
 	{
 		AudioProgressView progressView;
-
+		/// <summary>
+		/// Called when a platform specific view is rendered or destroyed
+		/// </summary>
+		/// <param name="e">Event arguments</param>
 		protected override void OnElementChanged(ElementChangedEventArgs<LingvoAudioProgressView> e)
 		{
 			base.OnElementChanged(e);
@@ -28,20 +31,24 @@ namespace Lingvo.MobileApp.iOS
 
 			if (e.OldElement != null)
 			{
+				//unregister event listeners
 				e.OldElement.PropertyChanged -= updateView;
 				progressView.StudentTrackMuted -= e.OldElement.OnStudentTrackMuted;
 				e.OldElement.SizeChanged -= NewElementOnSizeChanged;
 			}
-			 if (e.NewElement != null)
+			if (e.NewElement != null)
 			{
-
+				//add event listeners for property changes
 				e.NewElement.PropertyChanged += updateView;
-
 				progressView.StudentTrackMuted += e.NewElement.OnStudentTrackMuted;
 				e.NewElement.SizeChanged += NewElementOnSizeChanged;
 			}
 		}
-
+		/// <summary>
+		/// Called whenever a bindable property has changed
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">Event Args</param>
 		private void updateView(object sender, EventArgs e)
 		{
 			if (Control == null)
@@ -67,33 +74,40 @@ namespace Lingvo.MobileApp.iOS
 			if (progressView.TextSize != element.TextSize)
 				progressView.TextSize = element.TextSize;
 	
-
+			//calculate the label's time label string depending on the current progress
             switch (element.LabelType)
             {
                 case LingvoAudioProgressView.LabelTypeValue.NOfM: progressView.Text = element.Progress + "/" + element.MaxProgress; break;
                 case LingvoAudioProgressView.LabelTypeValue.Percentual:
-					if (element.MaxProgress == 0)
-					{
-						progressView.Text = "±∞";
-					}
-					else
-					{
-						progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
-					}
-					break;
+                    if (element.MaxProgress == 0)
+                    {
+                        progressView.Text = "0 %";
+                    }
+                    else
+                    {
+                        progressView.Text = (int)(100.0 * element.Progress / (double)element.MaxProgress) + " %";
+                    }
+                    break;
                 case LingvoAudioProgressView.LabelTypeValue.Time:
                     {
-						string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0,2);
-						string seconds = (((element.Progress % 60000) / 1000 < 10 ? "0" : "") + (element.Progress % 60000) / 1000).Substring(0,2);
+                        string minutes = ((element.Progress / 60000 < 10 ? "0" : "") + element.Progress / 60000).Substring(0, 2);
+                        string seconds = (((element.Progress % 60000) / 1000 < 10 ? "0" : "") + (element.Progress % 60000) / 1000).Substring(0, 2);
 
                         progressView.Text = minutes + ":" + seconds;
 
                         break;
                     }
                 case LingvoAudioProgressView.LabelTypeValue.None: progressView.Text = ""; break;
+                case LingvoAudioProgressView.LabelTypeValue.Error: progressView.Text = "!"; break;
             }
 
         }
+
+		/// <summary>
+		/// Gets fired when the view's frame has changed
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="eventArgs">Event arguments</param>
 		private void NewElementOnSizeChanged(object sender, EventArgs eventArgs)
 		{
 			var audioProgressView = sender as LingvoAudioProgressView;
@@ -109,6 +123,11 @@ namespace Lingvo.MobileApp.iOS
 
 			}
 		}
+		/// <summary>
+		/// Layout sublayers of the current view. This is needed because the progress view uses CAShapeLayer objects to render itself.
+		/// The sublayers' frames must be set manually
+		/// </summary>
+		/// <param name="layer">Layer</param>
 		public override void LayoutSublayersOfLayer(CALayer layer)
 		{
 			base.LayoutSublayersOfLayer(layer);
@@ -118,11 +137,6 @@ namespace Lingvo.MobileApp.iOS
 			progressView.studentProgressBar.Frame = layer.Bounds;
 			progressView.teacherProgressBar.render();
 			progressView.studentProgressBar.render();
-
-		}
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
 
 		}
 	}

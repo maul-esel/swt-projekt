@@ -14,14 +14,16 @@ namespace Lingvo.MobileApp.Proxies
 
         public delegate void OnPageChanged(int id);
 
-        private int number;
-        private String description;
-
         private Page original;
 
         public Workbook Workbook { get; set; }
 
         public int workbookId { get; set; }
+
+        public DateTime CreationTime
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the page number.
@@ -29,14 +31,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The number.</value>
         public int Number
         {
-            get
-            {
-                return number;
-            }
-            set
-            {
-                number = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -45,14 +40,7 @@ namespace Lingvo.MobileApp.Proxies
         /// <value>The description.</value>
         public String Description
         {
-            get
-            {
-                return description;
-            }
-            set
-            {
-                description = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -107,11 +95,12 @@ namespace Lingvo.MobileApp.Proxies
             LocalCollection.Instance.PageChanged += Instance_PageChanged;
         }
 
-        private void Instance_PageChanged(Page p)
+        private void Instance_PageChanged(IPage p)
         {
             if (p.Id.Equals(Id))
             {
-                IPage local = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId)).Pages.Find(lp => lp.Id.Equals(Id));
+                Workbook workbook = LocalCollection.Instance.Workbooks.FirstOrDefault(lwb => lwb.Id.Equals(p.workbookId));
+                IPage local = workbook?.Pages.Find(lp => lp.Id.Equals(Id));
                 if (local != null)
                 {
                     original = (Page)local;
@@ -127,11 +116,17 @@ namespace Lingvo.MobileApp.Proxies
         /// Load the real page object for this proxy
         /// </summary>
         /// <returns>The resolve.</returns>
-        public async Task Resolve(IProgress<double> progress, CancellationToken cancellationToken)
+        public async Task Resolve(CancellationTokenSource cancellationToken)
         {
+            if (NewerVersionExists())
+            {
+                IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+                LocalCollection.Instance.DeletePage((Page)localPage);
+                original = null;
+            }
+
             if (original == null)
             {
-
                 var p = App.Database.FindPage(this.Id);
                 if (p != null)
                 {
@@ -139,15 +134,15 @@ namespace Lingvo.MobileApp.Proxies
                 }
                 else
                 {
-                    await DownloadPage(progress, cancellationToken);
+                    await DownloadPage(cancellationToken);
                 }
             }
 
         }
 
-        private async Task DownloadPage(IProgress<double> progress, CancellationToken cancellationToken)
+        private async Task DownloadPage(CancellationTokenSource cancellationToken)
         {
-            Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, progress, cancellationToken);
+            Page page = await CloudLibraryProxy.Instance.DownloadSinglePage(this, cancellationToken);
 
             if (App.Database.FindWorkbook(this.Workbook.Id) == null)
             {
@@ -155,6 +150,7 @@ namespace Lingvo.MobileApp.Proxies
             }
 
             original = page;
+            CreationTime = page.TeacherTrack.CreationTime;
 
             App.Database.Save(original.TeacherTrack);
             App.Database.Save(original);
@@ -169,6 +165,18 @@ namespace Lingvo.MobileApp.Proxies
             {
                 original.DeleteStudentRecording();
             }
+        }
+
+        public bool NewerVersionExists()
+        {
+            IPage localPage = LocalCollection.Instance.Workbooks.FirstOrDefault(w => w.Id.Equals(workbookId))?.Pages.Find(p => p.Id.Equals(Id));
+
+            if (localPage != null)
+            {
+                return CreationTime.CompareTo(localPage.TeacherTrack.CreationTime) > 0;
+            }
+
+            return false;
         }
     }
 }

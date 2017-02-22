@@ -8,6 +8,13 @@ using Lingvo.Backend.ViewModels;
 
 namespace Lingvo.Backend.Controllers
 {
+	/// <summary>
+	/// The controller responsible for managing account-related functionality
+	/// such as login, logout and creating new users for the backend.
+	/// Users are represented by the class <see cref="Editor"/>.
+	/// Account management functionality is implemented using Microsoft's
+	/// ASP.NET Core Identity framework.
+	/// </summary>
 #if !DEBUG
 	[RequireHttps]
 #endif
@@ -16,12 +23,20 @@ namespace Lingvo.Backend.Controllers
 		private readonly UserManager<Editor> _userManager;
 		private readonly SignInManager<Editor> _signInManager;
 
+		/// <summary>
+		/// Creates a new instance of the controller. The parameters are supplied
+		/// via dependency injection.
+		/// </summary>
 		public AccountController(UserManager<Editor> userManager, SignInManager<Editor> signInManager)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 		}
 
+		/// <summary>
+		/// Displays the login view. The server redirects unrecognized users to this view.
+		/// Logged in users are redirected to the index view.
+		/// </summary>
 		public IActionResult Login()
 		{
 			if (User != null && _signInManager.IsSignedIn(User))
@@ -29,6 +44,10 @@ namespace Lingvo.Backend.Controllers
 			return View();
 		}
 
+		/// <summary>
+		/// Validetes the given user credentials. If successful, creates a new session for the user
+		/// and redirects to the index view.
+		/// </summary>
 		[HttpPost]
 		public async Task<IActionResult> Login(string userName, string password)
 		{
@@ -49,23 +68,38 @@ namespace Lingvo.Backend.Controllers
 			return Redirect("/");
 		}
 
+
+		/// <summary>
+		/// Deletes a logged in user's session and redirects to <see cref="LoggedOut"/>.
+		/// </summary>
 		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction(nameof(LoggedOut));
 		}
 
+		/// <summary>
+		/// Displays a view notifying the user he was logged out.
+		/// </summary>
 		public IActionResult LoggedOut()
 		{
 			return View();
 		}
 
+		/// <summary>
+		/// Displays the view for creating a new user. This functionality is only
+		/// available to logged in users.
+		/// </summary>
 		[Authorize]
 		public IActionResult CreateUser()
 		{
 			return View(new CreateUserModel());
 		}
 
+		/// <summary>
+		/// Creates a new user (<see cref="Editor"/>) with the given user name and
+		/// password. Displays a view notifying the user of this.
+		/// </summary>
 		[HttpPost, Authorize]
 		public async Task<IActionResult> CreateUser(CreateUserModel model)
 		{
@@ -85,6 +119,9 @@ namespace Lingvo.Backend.Controllers
 			return View("UserCreated");
 		}
 
+		/// <summary>
+		/// Remote validation method verifying that user names are unique.
+		/// </summary>
 		[AcceptVerbs("GET", "POST"), Authorize]
 		public async Task<IActionResult> VerifyUniqueUsername(string username)
 		{

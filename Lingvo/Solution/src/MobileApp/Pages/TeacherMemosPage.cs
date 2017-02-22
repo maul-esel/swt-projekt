@@ -12,10 +12,12 @@ namespace Lingvo.MobileApp.Pages
     public partial class TeacherMemosPage : ContentPage
     {
         private ToolbarItem item;
+        private ListView listView;
 
         public TeacherMemosPage(Xamarin.Forms.Page parentPage)
         {
             Title = ((Span)App.Current.Resources["page_title_teacherMemo"]).Text;
+			NavigationPage.SetBackButtonTitle(this, "Zurück");
             Icon = (FileImageSource)ImageSource.FromFile("ic_action_mic.png");
 
             item = new ToolbarItem
@@ -26,7 +28,7 @@ namespace Lingvo.MobileApp.Pages
 
             item.Clicked += AddNewClicked;
 
-            ListView listView = new ListView(ListViewCachingStrategy.RecycleElement)
+            listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = LocalCollection.Instance.TeacherMemos,
                 ItemTemplate = new DataTemplate(typeof(LingvoTeacherMemoViewCell)),
@@ -56,8 +58,6 @@ namespace Lingvo.MobileApp.Pages
                 errorLabel.IsVisible = newSource.Length == 0;
                 listView.IsVisible = newSource.Length > 0;
             }));
-
-            LocalCollection.Instance.TeacherMemoChanged += (t) => listView.RefreshCommand.Execute(null);
 
             RelativeLayout ContentLayout = new RelativeLayout();
             StackLayout innerLayout = new StackLayout
@@ -106,6 +106,24 @@ namespace Lingvo.MobileApp.Pages
             Content = ContentLayout;
         }
 
+        private void OnTeacherMemoChanged(TeacherMemo memo)
+        {
+            listView.RefreshCommand.Execute(null);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocalCollection.Instance.TeacherMemoChanged += OnTeacherMemoChanged;
+            listView.RefreshCommand.Execute(null);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            LocalCollection.Instance.TeacherMemoChanged -= OnTeacherMemoChanged;
+        }
+
         public void PageStateChanged(bool isActive)
         {
             if (!isActive)
@@ -120,7 +138,8 @@ namespace Lingvo.MobileApp.Pages
 
         async void AddNewClicked(object sender, EventArgs e)
         {
-            await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
+
+			await App.Current.MainPage.Navigation.PushAsync(new EditTeacherMemoPage());
         }
 
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)

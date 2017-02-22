@@ -6,6 +6,7 @@ using System;
 using Xamarin.Forms;
 using System.IO;
 using Lingvo.MobileApp.Entities;
+using System.Threading.Tasks;
 
 namespace Lingvo.MobileApp.Controllers
 {
@@ -36,12 +37,18 @@ namespace Lingvo.MobileApp.Controllers
             {
                 exercisable = value;
 
-                audioPlayer.StateChange += (obj) => StopRecorderIfNecessary();
-                audioPlayer.PrepareTeacherTrack(exercisable.TeacherTrack);
+                try
+                {
+                    audioPlayer.StateChange += (obj) => StopRecorderIfNecessary();
+                    audioPlayer.PrepareTeacherTrack(exercisable.TeacherTrack);
 
+                    audioPlayer.PrepareStudentTrack(exercisable.StudentTrack);
+                }
+                catch
+                {
+                    Error?.Invoke();
+                }
 
-                audioPlayer.PrepareStudentTrack(exercisable.StudentTrack);
-                
             }
 
         }
@@ -76,6 +83,7 @@ namespace Lingvo.MobileApp.Controllers
             }
         }
 
+        public event Action Error;
 
         /// <summary>
         /// Gets or sets a value indicating whether the 
@@ -117,7 +125,16 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void PlayPage()
         {
-            audioPlayer.Play();
+            try
+            {
+                audioPlayer.Play();
+            }
+            catch
+            {
+                Stop();
+                StopRecorderIfNecessary();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
@@ -125,15 +142,24 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void StartStudentRecording()
         {
-            if (recorder.State != RecorderState.PREPARED)
+            try
             {
-                recorder.PrepareToRecord();
+                if (recorder.State != RecorderState.PREPARED)
+                {
+                    recorder.PrepareToRecord();
+                }
+                //This is to reset the studentRecording as an already existing recording 
+                //should not be played while recording a new one
+                audioPlayer.PrepareStudentTrack(null);
+                recorder.Start();
+                PlayPage();
             }
-			//This is to reset the studentRecording as an already existing recording 
-			//should not be played while recording a new one
-			audioPlayer.PrepareStudentTrack(null); 
-            recorder.Start();
-            PlayPage();
+            catch
+            {
+                Stop();
+                StopRecorderIfNecessary();
+                Error?.Invoke();
+            }
 
         }
 
@@ -142,9 +168,17 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void Pause()
         {
-            audioPlayer.Pause();
-            recorder.Pause();
-
+            try
+            {
+                audioPlayer.Pause();
+                recorder.Pause();
+            }
+            catch
+            {
+                Stop();
+                StopRecorderIfNecessary();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
@@ -152,11 +186,20 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void Continue()
         {
-            if (recorder.State == RecorderState.PAUSED)
+            try
             {
-                recorder.Continue();
+                if (recorder.State == RecorderState.PAUSED)
+                {
+                    recorder.Continue();
+                }
+                audioPlayer.Play();
             }
-            audioPlayer.Play();
+            catch
+            {
+                Stop();
+                StopRecorderIfNecessary();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
@@ -164,7 +207,15 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void Stop()
         {
-            audioPlayer.Stop();
+            try
+            {
+                audioPlayer.Stop();
+            }
+            catch
+            {
+                StopRecorderIfNecessary();
+                Error?.Invoke();
+            }
         }
 
         /// <summary>
@@ -172,43 +223,72 @@ namespace Lingvo.MobileApp.Controllers
         /// </summary>
         public void SeekTo(int seconds)
         {
-            if (recorder.State != RecorderState.RECORDING)
+            try
             {
-                audioPlayer.SeekTo(seconds);
+                if (recorder.State != RecorderState.RECORDING)
+                {
+                    audioPlayer.SeekTo(seconds);
+                }
+            }
+            catch
+            {
+                Stop();
+                StopRecorderIfNecessary();
+                Error?.Invoke();
             }
         }
 
-        private void StopRecorderIfNecessary()
+        private async void StopRecorderIfNecessary()
         {
             if (audioPlayer.State == PlayerState.STOPPED && recorder.State == RecorderState.RECORDING)
             {
                 //This means an recording-session has come to an end. Thus we are deleting the old studentTrack-Recording
                 //if necessary and adding the new one to the selectedPage
 
-                //Getting new recording
-                Recording recording = recorder.Stop();
+                Recording recording = null;
+
+                try
+                {
+                    //Getting new recording
+                    recording = recorder.Stop();
+
+                }
+                catch
+                {
+                    Error.Invoke();
+                }
 
                 //deleting the old recording
                 if (exercisable.StudentTrack != null)
                 {
-                    File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack));
+                    try
+                    {
+                        await Task.Run(() => File.Delete(FileUtil.getAbsolutePath(exercisable.StudentTrack)));
+                    }
+                    catch
+                    {
+                        //Do nothing
+                    }
                 }
 
-                Exercisable.StudentTrack = recording;
-                var db = App.Database;
-                db.Save(recording);
-
-                if (Exercisable is IPage)
+                if (recording != null)
                 {
-                    db.Save((Lingvo.Common.Entities.Page)Exercisable);
-                }
-                else
-                {
-                    db.Save((TeacherMemo)Exercisable);
-                }
+                    Exercisable.StudentTrack = recording;
+                    var db = App.Database;
+                    db.Save(recording);
 
-                //Reset the page
-                Exercisable = exercisable;
+                    if (Exercisable is IPage)
+                    {
+                        db.Save((Lingvo.Common.Entities.Page)Exercisable);
+                    }
+                    else
+                    {
+                        db.Save((TeacherMemo)Exercisable);
+                    }
+
+                    //Reset the page
+                    Exercisable = exercisable;
+                }
             }
         }
 

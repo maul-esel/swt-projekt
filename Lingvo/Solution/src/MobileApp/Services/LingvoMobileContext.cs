@@ -10,7 +10,7 @@ using Lingvo.Common.Services;
 using System.IO;
 
 #if __ANDROID__
-		using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
+using SQLitePlatform = SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid;
 #elif __IOS__
 using SQLitePlatform = SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS;
 #endif
@@ -33,7 +33,7 @@ namespace Lingvo.MobileApp.Services
 
         public LingvoMobileContext(string dbPath)
         {
-            database = new SQLiteConnection(new SQLitePlatform(), dbPath);
+            database = new SQLiteConnection(new SQLitePlatform(), dbPath, false);
         }
 
         public void createTables()
@@ -288,7 +288,7 @@ namespace Lingvo.MobileApp.Services
         {
             database.Delete(recording);
 
-            File.Delete(FileUtil.getAbsolutePath(recording.LocalPath));
+            Task.Run(() => File.Delete(FileUtil.getAbsolutePath(recording.LocalPath)));
 
             RecordingChanged?.Invoke(recording);
         }

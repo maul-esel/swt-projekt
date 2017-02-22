@@ -1,5 +1,0 @@
-title Löschen einer Lehrerspur
-
-":Student" ->+ ":System": deletePage()
-":System" -->- ":Student": success
-

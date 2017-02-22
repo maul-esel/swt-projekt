@@ -13,6 +13,9 @@ using Lingvo.MobileApp.Proxies;
 using Lingvo.MobileApp.Util;
 using System.Threading;
 using Lingvo.MobileApp.Entities;
+using Lingvo.MobileApp.Services;
+using Lingvo.MobileApp.Services.Progress;
+using Newtonsoft.Json.Converters;
 
 namespace Lingvo.MobileApp
 {
@@ -23,10 +26,10 @@ namespace Lingvo.MobileApp
     {
 #if DEBUG
 #if __ANDROID__
-                        // Android Simulator forwards development localhost to IP 10.0.2.2
-                        private const string URL = "http://10.0.2.2:5000/api/app/";
+        // Android Simulator forwards development localhost to IP 10.0.2.2
+        private const string URL = "http://10.0.2.2:5000/api/app/";
 #elif __IOS__
-        private const string URL = "http://localhost:5000/api/app/";
+                private const string URL = "http://localhost:5000/api/app/";
 #endif
 #else
         private const string URL = "https://lingvo.azurewebsites.net/api/app/";
@@ -49,12 +52,13 @@ namespace Lingvo.MobileApp
         /// <param name="url">URL.</param>
         /// <param name="progress">The progress delegate for progress reporting</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        private Task DownloadTeacherTrack(string url, string filePath, IProgress<double> progress, CancellationToken cancellationToken)
+        private Task DownloadTeacherTrack(PageProxy proxy, string url, string filePath, CancellationToken cancellationToken)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            DownloadRequestState reqState = new DownloadRequestState(BufferSize);
+            PageDownloadState reqState = new PageDownloadState(BufferSize);
+
             reqState.Request = req;
-            reqState.ProgCB = progress;
+            reqState.Page = proxy;
             reqState.TransferStart = DateTime.Now;
             reqState.FilePath = filePath;
             reqState.CancellationToken = cancellationToken;
@@ -72,10 +76,8 @@ namespace Lingvo.MobileApp
         /// </summary>
         private static void RespCallback(IAsyncResult asyncResult)
         {
-            DownloadRequestState reqState = ((DownloadRequestState)(asyncResult.AsyncState));
+            PageDownloadState reqState = ((PageDownloadState)(asyncResult.AsyncState));
             WebRequest req = reqState.Request;
-
-            reqState.CancellationToken.ThrowIfCancellationRequested();
 
             WebResponse resp = req.EndGetResponse(asyncResult);
             reqState.Response = resp;
@@ -98,7 +100,7 @@ namespace Lingvo.MobileApp
         {
 
             // Will be either HttpWebRequestState or FtpWebRequestState
-            DownloadRequestState reqState = ((DownloadRequestState)(asyncResult.AsyncState));
+            PageDownloadState reqState = ((PageDownloadState)(asyncResult.AsyncState));
 
             Stream responseStream = reqState.StreamResponse;
 
@@ -126,7 +128,7 @@ namespace Lingvo.MobileApp
 
                 if ((int)pctComplete > oldPercentage)
                 {
-                    reqState.ProgCB?.Report(pctComplete);
+                    ProgressHolder.Instance.GetPageProgress(reqState.Page.Id)?.Report(pctComplete);
                 }
 
                 //Write buffered chunk to result stream
@@ -143,7 +145,8 @@ namespace Lingvo.MobileApp
                 responseStream.Close();
                 reqState.Response.Close();
                 reqState.FileStream.Close();
-                reqState.ProgCB?.Report(100.0f);
+                ProgressHolder.Instance.GetPageProgress(reqState.Page.Id)?.Report(100.0f);
+                ProgressHolder.Instance.DeletePageProgress(reqState.Page);
 
                 //Set positive result
                 reqState.TaskSource.SetResult(true);
@@ -191,8 +194,17 @@ namespace Lingvo.MobileApp
         /// <returns>The workbooks.</returns>
         public async Task<Workbook[]> FetchWorkbooks()
         {
-            var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks");
-            return JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
+            try
+            {
+                var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks");
+                return JsonConvert.DeserializeObject<Workbook[]>(responseFromServer);
+            }
+            catch
+            {
+                await AlertHelper.DisplaySyncError();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -200,43 +212,35 @@ namespace Lingvo.MobileApp
         /// </summary>
         /// <returns>The workbook.</returns>
         /// <param name="workbookID">Workbook identifier.</param>
-        public async Task<Workbook> FetchWorkbook(int workbookID, IProgress<double> progress, CancellationToken cancellationToken)
+        public async Task<Workbook> FetchWorkbook(int workbookID, CancellationTokenSource cancellationToken)
         {
-            var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks/" + workbookID);
-            var workbook = JsonConvert.DeserializeObject<Workbook>(responseFromServer);
-
-            await FetchPages(workbook);
-
-            Workbook localWorkbook = new List<Workbook>(LocalCollection.Instance.Workbooks).Find(w => w.Id == workbookID);
-
-            //Register for updates of local Workbook instance
-            Action<Workbook> onLocalRegistered = delegate (Workbook w)
+            try
             {
-                if (w.Id == workbookID)
-                {
-                    localWorkbook = LocalCollection.Instance.Workbooks.FirstOrDefault(wb => wb.Id == workbookID);
-                }
-            }; ;
+                var responseFromServer = await FetchTextFromURLAsync(URL + "workbooks/" + workbookID);
+                var workbook = JsonConvert.DeserializeObject<Workbook>(responseFromServer);
 
-            LocalCollection.Instance.WorkbookChanged += onLocalRegistered;
+                await FetchPages(workbook);
 
-            await Task.WhenAll(
-                workbook.Pages.Cast<PageProxy>().Select(page =>
+                workbook.Pages.ForEach(p => ProgressHolder.Instance.CreateSubProgress(p, cancellationToken));
+
+                foreach (IPage page in workbook.Pages)
                 {
-                    Progress<double> overallProgress = new Progress<double>((prog) =>
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        int completed = localWorkbook?.Pages.Count ?? 0;
-                        progress?.Report((100.0f * completed + prog) / workbook.TotalPages);
-                    });
+                        break;
+                    }
 
-                    return page.Resolve(overallProgress, cancellationToken);
-                })
-            );
+                    await ((PageProxy)page).Resolve(cancellationToken);
+                }
 
-            LocalCollection.Instance.WorkbookChanged -= onLocalRegistered;
+                return workbook;
+            }
+            catch
+            {
+                await AlertHelper.DisplayFetchWorkbookError();
+            }
 
-            return workbook;
-
+            return null;
         }
 
         /// <summary>
@@ -244,20 +248,31 @@ namespace Lingvo.MobileApp
         /// </summary>
         /// <returns>The page.</returns>
         /// <param name="proxy">Proxy.</param>
-        public async Task<Page> FetchPage(PageProxy proxy, IProgress<double> progress, CancellationToken cancellationToken)
+        public async Task<Page> FetchPage(PageProxy proxy, CancellationTokenSource cancellationToken)
         {
-            Recording recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3", progress, cancellationToken);
+            try
+            {
+                ProgressHolder.Instance.CreatePageProgress(proxy, cancellationToken);
 
-            Page page = new Page();
-            page.Id = proxy.Id;
-            page.Description = proxy.Description;
-            page.Number = proxy.Number;
-            page.Workbook = proxy.Workbook;
-            page.workbookId = page.Workbook.Id;
-            page.TeacherTrack = recording;
-            page.teacherTrackId = page.TeacherTrack.Id;
+                Recording recording = await FetchTeacherTrack(proxy, "w" + proxy.Workbook.Id + "s" + proxy.Number + ".mp3", cancellationToken.Token);
 
-            return page;
+                Page page = new Page();
+                page.Id = proxy.Id;
+                page.Description = proxy.Description;
+                page.Number = proxy.Number;
+                page.Workbook = proxy.Workbook;
+                page.workbookId = page.Workbook.Id;
+                page.TeacherTrack = recording;
+                page.teacherTrackId = page.TeacherTrack.Id;
+
+                return page;
+            }
+            catch
+            {
+                await AlertHelper.DisplayFetchPageError();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -267,12 +282,24 @@ namespace Lingvo.MobileApp
         /// <param name="workbook">Workbook.</param>
         public async Task FetchPages(Workbook workbook)
         {
-            var responseFromServer = await FetchTextFromURLAsync($"{URL}workbooks/{workbook.Id}/pages");
-            workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer));
-
-            foreach (var page in workbook.Pages)
+            try
             {
-                page.Workbook = workbook;
+                var responseFromServer = await FetchTextFromURLAsync($"{URL}workbooks/{workbook.Id}/pages");
+
+                workbook.Pages.AddRange(JsonConvert.DeserializeObject<List<PageProxy>>(responseFromServer, new IsoDateTimeConverter()
+                {
+                    DateTimeFormat = "dd.MM.yyyy HH:mm:ss"
+                }));
+
+
+                foreach (var page in workbook.Pages)
+                {
+                    page.Workbook = workbook;
+                }
+            }
+            catch
+            {
+                await AlertHelper.DisplaySyncError();
             }
         }
 
@@ -282,13 +309,13 @@ namespace Lingvo.MobileApp
         /// <returns>The teacher track.</returns>
         /// <param name="page">Page.</param>
         /// <param name="localPath">Local path.</param>
-        public async Task<Recording> FetchTeacherTrack(PageProxy proxy, String localPath, IProgress<double> progress, CancellationToken cancellationToken)
+        private async Task<Recording> FetchTeacherTrack(PageProxy proxy, String localPath, CancellationToken cancellationToken)
         {
             var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 await FetchTextFromURLAsync($"{URL}pages/{proxy.Id}")
             );
 
-            await DownloadTeacherTrack(json["url"], FileUtil.getAbsolutePath(localPath), progress, cancellationToken);
+            await DownloadTeacherTrack(proxy, json["url"], FileUtil.getAbsolutePath(localPath), cancellationToken);
 
             return new Recording(
                  int.Parse(json["duration"]),

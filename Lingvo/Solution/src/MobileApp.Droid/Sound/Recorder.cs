@@ -7,6 +7,7 @@ using Lingvo.Common.Entities;
 using Lingvo.Common.Services;
 using Android.Media;
 using Lingvo.MobileApp.Droid.Sound;
+using Android.OS;
 
 [assembly: Dependency(typeof(Recorder))]
 namespace Lingvo.MobileApp.Droid.Sound
@@ -44,7 +45,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void Continue()
         {
-            if (State == RecorderState.PAUSED)
+            if (State == RecorderState.PAUSED && Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 recorder.Resume();
                 State = RecorderState.RECORDING;
@@ -53,7 +54,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
         public void Pause()
         {
-            if (State == RecorderState.RECORDING)
+            if (State == RecorderState.RECORDING && Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 recorder.Pause();
                 State = RecorderState.PAUSED;
@@ -96,6 +97,11 @@ namespace Lingvo.MobileApp.Droid.Sound
         {
             currentRecordingPath = FileUtil.getAbsolutePath(getFileName());
             recorder = new MediaRecorder();
+
+            audioManager.SpeakerphoneOn = !audioManager.WiredHeadsetOn;
+            audioManager.Mode = audioManager.WiredHeadsetOn ? Mode.Normal : Mode.InCommunication;
+
+            audioManager.SetStreamVolume(Android.Media.Stream.VoiceCall, audioManager.GetStreamMaxVolume(Android.Media.Stream.VoiceCall), VolumeNotificationFlags.RemoveSoundAndVibrate);
 
             recorder.SetAudioSource(audioManager.WiredHeadsetOn ? AudioSource.Mic : AudioSource.VoiceCommunication);
             recorder.SetOutputFormat(OutputFormat.ThreeGpp);
