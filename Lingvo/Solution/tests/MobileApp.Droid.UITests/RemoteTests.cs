@@ -32,6 +32,9 @@ namespace MobileApp.Droid.UITests
 			//Navigate to Download tap
 			app.Tap(c => c.Text("Download"));
 
+            //Wait for server sync
+            Thread.Sleep(3000);
+
 			//click on one workbook
 			app.Tap(c => c.Marked("Thannhauser Modell"));
 

@@ -93,7 +93,8 @@ namespace Lingvo.MobileApp.Pages
                 WidthRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 VerticalOptions = LayoutOptions.EndAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                AutomationId = "RecordButton"
             };
 
             RecordButton.OnClicked += RecordButton_OnClicked;
@@ -115,7 +116,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 Text = "",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry))
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry)),
+                AutomationId = "NameEntry"
             };
 
             NameLabel = new Label()
@@ -124,7 +126,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry)),
-                IsVisible = false
+                IsVisible = false,
+                AutomationId = "NameLabel"
             };
 
             EditButton = new LingvoRoundImageButton()
@@ -136,7 +139,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.End,
                 WidthRequest = EditButtonSize,
                 HeightRequest = EditButtonSize,
-                IsVisible = false
+                IsVisible = false,
+                AutomationId = "EditButton"
             };
 
             EditButton.OnClicked += EditButton_OnClicked;
