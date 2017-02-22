@@ -2,9 +2,51 @@
 
 ## Table of Contents
 
+1. Introduction
+2. Technologies & Project Management
+3. Structure (Static View)
+  * Domain Model
+  * Design Model
+  * Backend Structure
+    * Interfaces
+    * Internal Structure
+  * App Structure
+4. Dynamic View
+5. Miscellaneous Documents
+6. Non-Functional Characteristics
+
 ## Introduction
-The purpose of the application is to support students, especially refugees, in
+The purpose of our application is to support students, especially refugees, in
 learning German following the *Thannhauser Modell*. The *Thannhauser Modell* focuses on the ability to communicate in common situations over grammatical peculiarities. Students read and listen to German texts and repeat them. They can record their own voice, allowing them to compare their own pronounciation with that of a native speaker, and to track their progress. Since many refugees only receive lessons in German once a week, the ability to practice at home is thus essential. Our application facilitates this by providing a mobile app that can play and record such exercises.
+
+## Technologies & Project Management
+
+The project is found on [github](https://github.com/maul-esel/swt-projekt), in the `Lingvo` directory. It consists of two main components: a server (or backend) and a mobile app. The server is based on the ASP.NET Core Framework and the .NET core runtime. Visual Studio 2017 RC, .NET Core 1.1 and the .NET Core SDK `1.0.0-preview4-004233` are necessary to build it. Other SDK versions will lead to build errors! Run `dotnet run` in `Lingvo/Solution/src/Backend` to start the server from the command line, or start it in Visual Studio. The mobile app is a Xamarin Forms App. Visual Studio 2017 RC is also necessary to build it, in addition to Xamarin Forms 2.3.3 (as specified in the nuget dependencies).
+
+Third party libraries are managed as nuget packages, which must be restored before building the components. The following libraries and components were used:
+
+* Backend
+  * .NET
+    * ASP.NET Core
+    * ASP.NET Core Identity
+    * EntityFramework Core
+    * Azure Storage SDK
+  * JS & CSS
+    * Bootstrap
+    * jQuery
+    * [Recorder.js](https://github.com/mattdiamond/Recorderjs)
+    * [volume-meter](https://github.com/cwilso/volume-meter)
+  * MySQL 5.7
+  * Azure Blob Storage
+* App
+  * Xamarin Forms
+  * SQLite.NET PCL
+  * Newtonsoft JSON (JSON.NET)
+
+The backend was deployed as an Azure app service, currently available under <https://lingvo.azurewebsites.net>.
+
+As discussed, github was used for project planning. Issues were opened on the github [issue tracker](https://github.com/maul-esel/swt-projekt/issues) and managed in a [github project](https://github.com/maul-esel/swt-projekt/projects/1). Changes before January 12 are documented in [the wiki](https:https://github.com/maul-esel/swt-projekt/wiki/Arbeits%C3%BCbersicht-bis-12.01.17). Code and document changes were managed via [pull requests](https://github.com/maul-esel/swt-projekt/pulls) and reviewed by other team members before being merged. [Travis CI](https://travis-ci.com/maul-esel/swt-projekt) was used to build all projects, run unit tests for the backend and deploy it to Azure.
+
 
 ## Structure (Static View)
 The application follows the classical server-client architecture pattern: a server, or backend, manages a database containing a global library of workbooks and pages. Different clients read and manage this global library via a clearly defined HTTP interface.
@@ -29,6 +71,8 @@ By abstracting from concrete implementations of audio playback, recording and fi
 The following UML component diagram illustrates the basic structure of the backend:
 
 ![](Images/Backend_Components.png)
+
+#### Interfaces
 
 It exposes two ports:
 
@@ -60,35 +104,14 @@ Almost all features are implemented in a shared project for both platforms. The 
 
 ## Dynamic View
 
-Use Cases
-SSDs
-Kontrakte
+12 Use Cases document the usage scenarios for the Editing System and the mobile app. They can be found in [UseCases.pdf](../Abgabe/UseCases.pdf). Several scenarios from these Use Cases were analyzed further. The result can be seen in the System Sequence Diagrams found in [Systemsequenzdiagramme.pdf](../Abgabe/Systemsequenzdiagramme.pdf). The system operations were extracted and contracts ([Kontrakte.pdf](../Abgabe/Kontrakte.pdf)) were formulated.
 
-## TOC
-* Gesamtüberblick
-  * Frameworks, platforms, libraries
-  * App & backend
-* static
-  * Dömanenmodell
-  * Designklassendiagramm
-  * Komponentendiagramm
-  * (Implementierungsklassendiagramm)
-  * opt: Verteilung
-* dynamic
-  * Use Cases
-  * SSDs
-  * Kontrakte
-* misc
-  * Mocks
-  * Glossar
-  * projektplan, reviews
-* non-functional
-  * security: backend
-  * usability, simplicity
-  * reliablity
+## Miscellaneous Documents
 
-dazu jew begründung designentscheidung, weitere (nicht-Diagramm)-Fakten
+The UI for app and the Editing System was mocked before development. The results can be found in [AppMocks.pdf](../Abgabe/AppMocks.pdf) and [RedaktionssystemMocks.pdf](../Abgabe/RedaktionssystemMocks.pdf). Usability was a key aspect in developing these designs. The final product closely resembles the original mocks.
 
-# Technical Documentation: Backend
+## Non-Functional Characteristics
 
-## Introduction
+* ***Security:*** For the security of the backend, we rely on ASP.NET Core Identity and other ASP.NET core features as an established solution. Passwords are not stored as plaintext, but as salted hashes. All communication with the server is sent over HTTPS.
+* ***Usability & Simplicity*** of app and Editing System were a key aspect of the design. Several alternatives were discussed, and feedback from the customer and usability experts was integrated.
+* ***Maintainability:*** Unit tests exist in the backend for database access, the JSON REST API and the Editing System controllers. They are executed on Travis CI for each push to the github repository. The mobile app has unit tests for player and recorder functionality (on both platforms) as wells as UI tests for the core use cases. Since they require a device or a simulator, they are not executed on the CI.
