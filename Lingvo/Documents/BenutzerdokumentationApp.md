@@ -35,13 +35,13 @@ Sofern bei einem Arbeitsheft noch Seiten fehlen, ist der Download-Knopf blau und
 
 ##### 2.1.2 Einzelne Seiten herunterladen
 
-Möchte der Nutzer nur einzelne Seiten herunterladen, wählt er in der Übersicht der Arbeitshefte (siehe Screenshot unter 2.1.1) ein Arbeitsheft aus. Die App zeigt nun alle verfügbaren Seiten an:
+Möchte der Nutzer nur einzelne Seiten herunterladen, wählt er in der Download-Übersicht der Arbeitshefte (siehe Screenshot unter 2.1.1) ein Arbeitsheft aus. Die App zeigt nun alle verfügbaren Seiten an:
 
 <img src="ScreenshotsApp/SeitenDownloadÜbersicht.png" style="width: 170px; display: block; margin: auto;"/>
 
 Auch hier wird wieder der blaue Download-Knopf benutzt, um eine Seite herunterzuladen. Während dem Downloadvorgang bekommt man auch hier den Forschritt über das Hochzählen der Prozentzahl angezeigt. Fertig heruntergeladene Seiten sind wieder mit einem grünen Kreis markiert.
 
-Bei einem Wechsel zurück auf die Download-Übersichtsseite der Arbeitshefte sieht man nun eine kleinere Prozentzahl bei dem Arbeitsheft, bei dem man gerade die Seite heruntergeladen hat. Zu sehen ist dies im Screenshot unter 2.1.1 beim Arbeitsheft "Flüchtlingshilfe München"
+Bei einem Wechsel zurück auf die Download-Übersichtsseite der Arbeitshefte sieht man nun eine kleine Prozentzahl bei dem Arbeitsheft, bei dem man gerade die Seite heruntergeladen hat. Zu sehen ist dies im Screenshot unter 2.1.1 beim Arbeitsheft "Flüchtlingshilfe München"
 
 ##### 2.1.3 Übungsmaterial löschen
 
@@ -75,7 +75,7 @@ Sobald der Nutzer bereit ist, kann eine Aufnahme gemacht werden. Hierzu wird nac
 
 <img src="ScreenshotsApp/SchülerspurAufnehmen.png" style="width: 170px; display: block; margin: auto;"/>
 
-Die App zeigt durch das mitlaufen eines roten Kreises an, dass die Aufnahme aktiv ist. Die beste Qualität erhält man, wenn man Kopfhörer oder ein Headset benutzt. Möchte der Benutzer nicht bis zum Ende der Lehrerspur mitsprechen, kann er den "Stopp"-Knopf wählen. Die Aufnahme wird in diesem Fall trotzdem als Schülerspur gespeichert, deckt aber natürlich nicht den gesamten Zeitraum der Lehrerspur ab.
+Die App zeigt durch das Mitlaufen eines roten Kreises an, dass die Aufnahme aktiv ist. Die beste Qualität erhält man, wenn man Kopfhörer oder ein Headset benutzt. Möchte der Benutzer nicht bis zum Ende der Lehrerspur mitsprechen, kann er den "Stopp"-Knopf wählen. Die Aufnahme wird in diesem Fall trotzdem als Schülerspur gespeichert, deckt aber natürlich nicht den gesamten Zeitraum der Lehrerspur ab.
 
 ##### 2.2.2 Aufnahmen anhören
 
