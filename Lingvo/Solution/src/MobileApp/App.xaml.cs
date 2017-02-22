@@ -1,52 +1,39 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
-
 using Xamarin.Forms;
-
 
 namespace Lingvo.MobileApp
 {
-	using Common.Entities;
 	using Services;
 
+	/// <summary>
+	/// The core application class for the entire app.
+	/// </summary>
 	public partial class App : Application
 	{
 		const string databasePath = "lingvo.sqlite";
 
-		public static LingvoMobileContext Database { get; private set; }
+		/// <summary>
+		/// The <see cref="DatabaseService"/> instance used to access the SQLite database.
+		/// </summary>
+		public static DatabaseService Database { get; private set; }
 
 		private static void SetupDatabaseConnection()
 		{
 			if (Database == null)
 			{
 				string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), databasePath);
-				Database = new LingvoMobileContext(dbPath);
+				Database = new DatabaseService(dbPath);
 				Database.createTables();
 			}
 		}
 
-		public App ()
+		public App()
 		{
 			SetupDatabaseConnection();
 			InitializeComponent();
 
 			MainPage = new MobileApp.Pages.MainPage();
-		}
-
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
-
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
 		}
 	}
 }

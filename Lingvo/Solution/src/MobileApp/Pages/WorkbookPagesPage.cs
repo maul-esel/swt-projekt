@@ -7,6 +7,9 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for displaying all locally available pages of a workbook.
+    /// </summary>
     public partial class WorkbookPagesPage : ContentPage
     {
         private Workbook workbook;
@@ -56,6 +59,10 @@ namespace Lingvo.MobileApp.Pages
 			#endif
         }
 
+        /// <summary>
+        /// Called when the page appears on screen.
+        /// Registers all important events and refreshes the list.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -66,6 +73,10 @@ namespace Lingvo.MobileApp.Pages
             listView.RefreshCommand.Execute(null);
         }
 
+        /// <summary>
+        /// Called when the page disappears on screen.
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -75,6 +86,11 @@ namespace Lingvo.MobileApp.Pages
             LocalCollection.Instance.PageChanged -= OnPageChanged;
         }
 
+        /// <summary>
+        /// Occurs when a workbook has changed.
+        /// Refreshes the list, if its the workbook associated with this page.
+        /// </summary>
+        /// <param name="workbook">The workbook which changed.</param>
         private void OnWorkbookChanged(Workbook w)
         {
             if (workbook.Id.Equals(w.Id))
@@ -83,6 +99,11 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Occurs when a IPage has changed.
+        /// Refreshes the list if the IPage is displayed in this page.
+        /// </summary>
+        /// <param name="workbook">The workbook which changed.</param>
         private void OnPageChanged(IPage p)
         {
             if (workbook.Id.Equals(p.workbookId))
@@ -96,6 +117,11 @@ namespace Lingvo.MobileApp.Pages
             ((ListView)sender).SelectedItem = null;
         }
 
+        /// <summary>
+        /// Opens the selected IPage in an <see cref="AudioPage"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>SelectedItemChangedEventArgs</c> of the event.</param>
         async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)

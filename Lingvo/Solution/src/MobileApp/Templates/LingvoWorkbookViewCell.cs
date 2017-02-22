@@ -8,9 +8,16 @@ using Xamarin.Forms;
 
 namespace Lingvo.MobileApp.Templates
 {
+    /// <summary>
+    /// The ViewCell for displaying information and providing context actions of a page.
+    /// </summary>
     class LingvoWorkbookViewCell : ViewCell
     {
         private static readonly int DownloadButtonSize = Device.OnPlatform(iOS: 55, Android: 65, WinPhone: 110);
+
+        /// <summary>
+        /// The progress view showing the edited and total pages of the workbook or, if in <see cref="DownloadPage"/>, showing the download progress.
+        /// </summary>
         internal LingvoAudioProgressView ProgressView
         {
             get; private set;
@@ -21,6 +28,9 @@ namespace Lingvo.MobileApp.Templates
             get; private set;
         }
 
+        /// <summary>
+        /// The context menu item for deleting the workbook.
+        /// </summary>
         private MenuItem deleteAction;
 
         public LingvoWorkbookViewCell() :
@@ -103,6 +113,10 @@ namespace Lingvo.MobileApp.Templates
             View = grid;
         }
 
+        /// <summary>
+        /// Called when the view cell appears on screen.
+        /// Registers all important events.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -110,6 +124,10 @@ namespace Lingvo.MobileApp.Templates
             LocalCollection.Instance.PageChanged += Event_PageChanged;
         }
 
+        /// <summary>
+        /// Called when the view cell disappears on screen.
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -117,6 +135,12 @@ namespace Lingvo.MobileApp.Templates
             LocalCollection.Instance.PageChanged -= Event_PageChanged;
         }
 
+        /// <summary>
+        /// Occurs when the delete workbook context menu item was clicked.
+        /// Displays a warning dialog and deletes the workbook after positive result.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c>.</param>
         private async void DeleteAction_Clicked(object sender, EventArgs e)
         {
             try
@@ -133,6 +157,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when a page has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the changed page is part of the workbook.
+        /// </summary>
+        /// <param name="p">The page which has changed.</param>
         protected virtual void Event_PageChanged(IPage p)
         {
             Workbook workbook = (Workbook)BindingContext;
@@ -144,6 +173,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Occurs when a workbook has changed.
+        /// Refreshes the <c>BindingContext</c> of this view, if the changed workbook is equal to it.
+        /// </summary>
+        /// <param name="w">The workbook which has changed.</param>
         protected virtual void Event_WorkbookChanged(Workbook w)
         {
             Workbook workbook = (Workbook)BindingContext;
@@ -155,6 +189,11 @@ namespace Lingvo.MobileApp.Templates
             }
         }
 
+        /// <summary>
+        /// Binds the views in this view cell to the given workbook.
+        /// Actually, it refreshes the progress view.
+        /// </summary>
+        /// <param name="workbook">The workbook to bind this view cell to.</param>
         protected virtual void BindViewCell(Workbook workbook)
         {
             int completed = 0;
@@ -167,6 +206,10 @@ namespace Lingvo.MobileApp.Templates
             ProgressView.LabelType = LingvoAudioProgressView.LabelTypeValue.NOfM;
         }
 
+        /// <summary>
+        /// Occurs when the <c>BindingContext</c> has changed.
+        /// Refreshes subtitle and calls <see cref="BindViewCell(Workbook)"/>.
+        /// </summary>
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();

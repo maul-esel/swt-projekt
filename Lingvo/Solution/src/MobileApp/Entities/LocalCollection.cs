@@ -7,18 +7,30 @@ using System.Threading.Tasks;
 
 namespace Lingvo.MobileApp.Entities
 {
+	/// <summary>
+	/// This class represents all locally available exercises (workbooks with pages and teachermemos)
+	/// </summary>
     public class LocalCollection
     {
+		/// <summary>
+		/// Occurs when a workbook is changed.
+		/// </summary>
         public event Action<Workbook> WorkbookChanged;
 
+		/// <summary>
+		/// Occurs when teacher memo is changed.
+		/// </summary>
         public event Action<TeacherMemo> TeacherMemoChanged;
 
+		/// <summary>
+		/// Occurs when page is changed.
+		/// </summary>
         public event Action<IPage> PageChanged;
 
         private static LocalCollection instance;
 
         /// <summary>
-        /// The teacher memos collection, does not return null but an empty list.
+        /// The collection of all teacher memos available on this device
         /// </summary>
         /// <value>The teacher memos.</value>
         public IEnumerable<TeacherMemo> TeacherMemos
@@ -27,7 +39,7 @@ namespace Lingvo.MobileApp.Entities
         }
 
         /// <summary>
-        /// The workbooks, does not return null but an empty list.
+        /// The collection of all workbooks available on this device
         /// </summary>
         /// <value>The workbooks.</value>
         public IEnumerable<Workbook> Workbooks
@@ -51,18 +63,30 @@ namespace Lingvo.MobileApp.Entities
         /// <returns>The instance.</returns>
         public static LocalCollection Instance => instance ?? (instance = new LocalCollection());
 
+		/// <summary>
+		/// Called whenever a teacher memo is changed.
+		/// </summary>
+		/// <param name="m">M.</param>
         public void OnTeacherMemoChanged(TeacherMemo m)
         {
             TeacherMemos = App.Database.FindTeacherMemos();
             TeacherMemoChanged?.Invoke(m);
         }
 
+		/// <summary>
+		/// Called whenever a workbook is changed.
+		/// </summary>
+		/// <param name="w">The width.</param>
         public void OnWorkbookChanged(Workbook w)
         {
             Workbooks = App.Database.FindWorkbooks();
             WorkbookChanged?.Invoke(w);
         }
 
+		/// <summary>
+		/// Called whenever a page is changed.
+		/// </summary>
+		/// <param name="p">P.</param>
         public void OnPageChanged(IPage p)
         {
             Workbooks = App.Database.FindWorkbooks();
@@ -105,7 +129,7 @@ namespace Lingvo.MobileApp.Entities
         }
 
         /// <summary>
-        /// Deletes the workbook.
+        /// Deletes a workbook.
         /// </summary>
         /// <param name="workbook">Workbook.</param>
         public void DeleteWorkbook(Workbook workbook)
@@ -114,7 +138,7 @@ namespace Lingvo.MobileApp.Entities
         }
 
         /// <summary>
-        /// Deletes the teacher memo.
+        /// Deletes a teacher memo.
         /// </summary>
         /// <param name="memo">Memo.</param>
         public void DeleteTeacherMemo(TeacherMemo memo)
@@ -139,7 +163,7 @@ namespace Lingvo.MobileApp.Entities
         }
 
         /// <summary>
-		/// Deletes a StudentRecording of the given page.
+		/// Deletes, if existing, the StudentRecording of the given exercise.
 		/// </summary>
 		/// <param name="page">Page.</param>
         [Obsolete]

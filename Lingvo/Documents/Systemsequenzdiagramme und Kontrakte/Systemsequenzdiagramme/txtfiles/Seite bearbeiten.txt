@@ -27,14 +27,6 @@ opt
 ":System"-->":SchŸler":
 end
 
-opt
-":SchŸler"->":System": seek(seconds)
-":System"->":Player": seek(seconds)
-":Player"-->":System":
-":System"->":Recorder": seek(seconds)
-":Recorder"-->":System":
-":System"-->":SchŸler":
-end
 
 ":Player"-->":System": end
 ":System"->":Recorder": stop()

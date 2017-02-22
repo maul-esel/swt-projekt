@@ -8,7 +8,7 @@ using Xamarin.Forms;
 namespace Lingvo.MobileApp.Controllers
 {
     /// <summary>
-    /// Controller for handling teacher memos.
+    /// Controller for creating and editing teacher memos.
     /// </summary>
     public class TeacherMemoController
     {
@@ -21,6 +21,9 @@ namespace Lingvo.MobileApp.Controllers
 
         public event OnProgressUpdate Update;
 
+		/// <summary>
+		/// Raised when an error occurs.
+		/// </summary>
         public event Action Error;
 
         public TeacherMemo CurrentMemo
@@ -40,6 +43,9 @@ namespace Lingvo.MobileApp.Controllers
             audioRecorder = DependencyService.Get<IRecorder>();
         }
 
+		/// <summary>
+		/// Resets the currently edited <see cref="TeacherMemo"/>.
+		/// </summary>
         public void Reset()
         {
             if (CurrentMemo != null)

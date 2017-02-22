@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for displaying all locally available workbooks.
+    /// </summary>
     public partial class LocalCollectionPage : ContentPage
     {
         private ListView listView;
@@ -57,11 +60,20 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        /// <summary>
+        /// Occurs when a workbook has changed.
+        /// Refreshes the list.
+        /// </summary>
+        /// <param name="workbook">The workbook which changed.</param>
         private void OnWorkbookChanged(Workbook workbook)
         {
             listView.RefreshCommand.Execute(null);
         }
 
+        /// <summary>
+        /// Called when the page appears on screen.
+        /// Registers all important events and refreshes the list.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -69,6 +81,10 @@ namespace Lingvo.MobileApp.Pages
             listView.RefreshCommand.Execute(null);
         }
 
+        /// <summary>
+        /// Called when the page disappears on screen.
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -78,6 +94,11 @@ namespace Lingvo.MobileApp.Pages
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
             => ((ListView)sender).SelectedItem = null;
 
+        /// <summary>
+        /// Opens the selected workbook and shows its pages in a <see cref="WorkbookPagesPage"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>SelectedItemChangedEventArgs</c> of the event.</param>
         async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)

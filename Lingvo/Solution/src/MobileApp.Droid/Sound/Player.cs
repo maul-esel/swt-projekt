@@ -11,6 +11,9 @@ using Lingvo.Common.Services;
 [assembly: Dependency(typeof(Player))]
 namespace Lingvo.MobileApp.Droid.Sound
 {
+	/// <summary>
+	/// Android implementation of <see cref="IPlayer"/>. For documentation on the <see cref="IPlayer"/> methods, see <see cref="IPlayer"/>.
+	/// </summary>
     public class Player : IPlayer
     {
 
@@ -47,6 +50,10 @@ namespace Lingvo.MobileApp.Droid.Sound
             State = PlayerState.IDLE;
         }
 
+		/// <summary>
+		/// Method, which is called by the timer to initiate a draw of the progress view
+		/// </summary>
+		/// <param name="elapsedMilliseconds">Elapsed milliseconds.</param>
         private void OnProgress(int elapsedMilliseconds)
         {
             Update?.Invoke(elapsedMilliseconds);
@@ -62,6 +69,7 @@ namespace Lingvo.MobileApp.Droid.Sound
 
             set
             {
+				//As there is no native mute-flag we set the volume to zero
                 isStudentTrackMuted = value;
                 float volume = isStudentTrackMuted ? 0.0f : 1.0f;
                 studentTrack?.SetVolume(volume, volume);
@@ -92,6 +100,10 @@ namespace Lingvo.MobileApp.Droid.Sound
             }
         }
 
+		/// <summary>
+		/// State of current player (playing, paused, idle, stopped)
+		/// </summary>
+		/// <value>The state.</value>
         public PlayerState State
         {
             get
@@ -114,12 +126,15 @@ namespace Lingvo.MobileApp.Droid.Sound
             Sync();
         }
 
+		/// <summary>
+		/// Starts and continues the playback
+		/// </summary>
         public void Play()
         {
             teacherTrack?.Start();
             studentTrack?.Start();
             State = PlayerState.PLAYING;
-            progressHandler.PostDelayed(progressUpdate, 100);
+            progressHandler.PostDelayed(progressUpdate, 100); //Each 100 milliseconds the OnProgress method is called
         }
 
         public void PrepareStudentTrack(Recording recording)
@@ -142,6 +157,8 @@ namespace Lingvo.MobileApp.Droid.Sound
             teacherTrack = CreateNewPlayer(recording);
             teacherTrack.Completion += (o, e) =>
             {
+				//We subscribe to the native stop event of the player
+				//to keep track of the actual playback
                 Stop();
                 OnProgress(teacherTrack.Duration);
             };
@@ -176,6 +193,9 @@ namespace Lingvo.MobileApp.Droid.Sound
             OnProgress(teacherTrack.CurrentPosition);
         }
 
+		/// <summary>
+		/// Stops both audioplayers and reinitializes them for a new session 
+		/// </summary>
         public void Stop()
         {
             teacherTrack?.Stop();
@@ -186,6 +206,12 @@ namespace Lingvo.MobileApp.Droid.Sound
 			State = PlayerState.STOPPED;
         }
 
+		/// <summary>
+		/// Reinitializes the player after a session has stopped. This is due to the
+		/// fact that audio sessions in Android have to be explicitely closed.
+		/// </summary>
+		/// <param name="player">Player.</param>
+		/// <param name="recording">Recording.</param>
         private void ReinitializePlayer(MediaPlayer player, Recording recording)
         {
             if (recording != null && player != null)
@@ -215,11 +241,17 @@ namespace Lingvo.MobileApp.Droid.Sound
             return mediaPlayer;
         }
 
+		/// <summary>
+		/// Update method which is called when the state property changes
+		/// </summary>
         private void OnStateChange()
         {
             StateChange?.Invoke(state);
         }
 
+		/// <summary>
+		/// Syncs the playback positions of teacher and student track
+		/// </summary>
         private void Sync()
         {
             studentTrack?.SeekTo(teacherTrack.CurrentPosition);

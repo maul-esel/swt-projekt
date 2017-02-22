@@ -13,6 +13,9 @@ using Lingvo.MobileApp.Util;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page to record a new teacher memo or edit its name.
+    /// </summary>
     class EditTeacherMemoPage : ContentPage
     {
 
@@ -38,15 +41,26 @@ namespace Lingvo.MobileApp.Pages
             get; set;
         }
 
+        /// <summary>
+        /// The button for editing the name of an existing teacher memo.
+        /// </summary>
         private LingvoRoundImageButton EditButton
         {
             get; set;
         }
+
+        /// <summary>
+        /// The toolbar item for saving
+        /// </summary>
         private ToolbarItem SaveItem
         {
             get; set;
         }
 
+        /// <summary>
+        /// Constructor used for editing a teacher memo (which means editing the name)
+        /// </summary>
+        /// <param name="memo">The memo to edit.</param>
         public EditTeacherMemoPage(TeacherMemo memo) : this()
         {
             NameLabel.IsVisible = true;
@@ -60,7 +74,7 @@ namespace Lingvo.MobileApp.Pages
             SaveItem.Clicked -= SaveItem_Clicked;
             SaveItem.Clicked += async (o, e) =>
             {
-                if (Name.Text.Length > 0 && !await checkNameExists(Name.Text))
+                if (Name.Text.Length > 0 && !await CheckNameExists(Name.Text))
                 {
                     memo.Name = Name.Text;
                     App.Database.Save(memo);
@@ -69,6 +83,9 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        /// <summary>
+        /// Constructor for creating a new teacher memo.
+        /// </summary>
         public EditTeacherMemoPage() : base()
         {
             Title = ((Span)App.Current.Resources["page_title_recordTeacherMemo"]).Text;
@@ -93,7 +110,8 @@ namespace Lingvo.MobileApp.Pages
                 WidthRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 VerticalOptions = LayoutOptions.EndAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                AutomationId = "RecordButton"
             };
 
             RecordButton.OnClicked += RecordButton_OnClicked;
@@ -115,7 +133,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 Text = "",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry))
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry)),
+                AutomationId = "NameEntry"
             };
 
             NameLabel = new Label()
@@ -124,7 +143,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Entry)),
-                IsVisible = false
+                IsVisible = false,
+                AutomationId = "NameLabel"
             };
 
             EditButton = new LingvoRoundImageButton()
@@ -136,7 +156,8 @@ namespace Lingvo.MobileApp.Pages
                 HorizontalOptions = LayoutOptions.End,
                 WidthRequest = EditButtonSize,
                 HeightRequest = EditButtonSize,
-                IsVisible = false
+                IsVisible = false,
+                AutomationId = "EditButton"
             };
 
             EditButton.OnClicked += EditButton_OnClicked;
@@ -164,6 +185,10 @@ namespace Lingvo.MobileApp.Pages
             };
         }
 
+        /// <summary>
+        /// Called when the page appears on screen.
+        /// Registers all important events to actualize the views 
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -171,6 +196,10 @@ namespace Lingvo.MobileApp.Pages
             TeacherMemoController.Instance.Error += OnError;
         }
 
+        /// <summary>
+        /// Called when the page disappears on screen.
+        /// Unregisters all events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -178,6 +207,10 @@ namespace Lingvo.MobileApp.Pages
             TeacherMemoController.Instance.Error -= OnError;
         }
 
+        /// <summary>
+        /// Called after an exception in <see cref="TeacherMemoController"/>.
+        /// Updates the views and displays an error message.
+        /// </summary>
         private async void OnError()
         {
             Device.BeginInvokeOnMainThread(() =>
@@ -188,6 +221,12 @@ namespace Lingvo.MobileApp.Pages
             await AlertHelper.DisplayAudioError();
         }
 
+        /// <summary>
+        /// Enables text editing of the name.
+        /// Occurs after clicking the <see cref="EditButton"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The click <c>EventArgs</c>.</param>
         private void EditButton_OnClicked(object sender, EventArgs e)
         {
             NameLabel.IsVisible = false;
@@ -196,6 +235,10 @@ namespace Lingvo.MobileApp.Pages
             ToolbarItems.Add(SaveItem);
         }
 
+        /// <summary>
+        /// Updates the progress view.
+        /// </summary>
+        /// <param name="progress">The new progress.</param>
         private void Progress_Update(int progress)
         {
             int minutes = progress / 60000;
@@ -205,7 +248,12 @@ namespace Lingvo.MobileApp.Pages
             Device.BeginInvokeOnMainThread(() => Label.Text = minuteString + ":" + secondString);
         }
 
-        private async Task<bool> checkNameExists(string name)
+        /// <summary>
+        /// Checks if a teacher memo with the given name already exists.
+        /// </summary>
+        /// <param name="name">The potential name to be checked.</param>
+        /// <returns><c>True</c> if the name already exists, <c>false</c> otherwise.</returns>
+        private async Task<bool> CheckNameExists(string name)
         {
             if (LocalCollection.Instance.TeacherMemos.FirstOrDefault(m => m.Name.Equals(Name.Text)) != null)
             {
@@ -215,11 +263,18 @@ namespace Lingvo.MobileApp.Pages
             return false;
         }
 
+        /// <summary>
+        /// Saves the current teacher memo with the text of <see cref="Name"/>.
+        /// If no current teacher memo has been recorded, or the name already exists or is empty,
+        /// it shows an error message.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The click <c>EventArgs</c>.</param>
         private async void SaveItem_Clicked(object sender, EventArgs e)
         {
             if (Name.Text.Length > 0)
             {
-                if (!await checkNameExists(Name.Text))
+                if (!await CheckNameExists(Name.Text))
                 {
                     if (TeacherMemoController.Instance.CurrentMemo != null)
                     {
@@ -238,6 +293,13 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Occurs when the record button or the stop button (which are basically the same button instance) are pressed.
+        /// Accordingly, it starts a new recording (after displaying a warning, if a recorded teacher memo already exists) or
+        /// stops the recording and sets <see cref="TeacherMemoController.CurrentMemo"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>EventArgs</c> of the click event.</param>
         private async void RecordButton_OnClicked(object sender, EventArgs e)
         {
             RecorderState currentState = TeacherMemoController.Instance.State;
