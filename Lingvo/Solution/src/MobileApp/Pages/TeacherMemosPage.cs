@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace Lingvo.MobileApp.Pages
 {
+    /// <summary>
+    /// The page for displaying all recorded teacher memos.
+    /// </summary>
     public partial class TeacherMemosPage : ContentPage
     {
         private ToolbarItem item;
@@ -108,11 +111,19 @@ namespace Lingvo.MobileApp.Pages
             Content = ContentLayout;
         }
 
+        /// <summary>
+        /// Occurs when a teacher memo has changed.
+        /// Refreshes the list.
+        /// </summary>
+        /// <param name="memo">The teacher memo which changed.</param>
         private void OnTeacherMemoChanged(TeacherMemo memo)
         {
             listView.RefreshCommand.Execute(null);
         }
 
+        /// <summary>
+        /// Registers all important events and refreshes the list.
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -120,12 +131,20 @@ namespace Lingvo.MobileApp.Pages
             listView.RefreshCommand.Execute(null);
         }
 
+        /// <summary>
+        /// Unregisters the events registered in <see cref="OnAppearing"/>.
+        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             LocalCollection.Instance.TeacherMemoChanged -= OnTeacherMemoChanged;
         }
 
+        /// <summary>
+        /// Adds or removes the toolbar item for recording a new teacher memo, according to the given page state.
+        /// Is called on iOS only, as Android has a floating action button.
+        /// </summary>
+        /// <param name="isActive">The state of the page.</param>
         public void PageStateChanged(bool isActive)
         {
             if (!isActive)
@@ -138,6 +157,11 @@ namespace Lingvo.MobileApp.Pages
             }
         }
 
+        /// <summary>
+        /// Opens the <see cref="EditTeacherMemoPage"/> to record a new teacher memo.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The clicked <c>EventArgs</c></param>
         async void AddNewClicked(object sender, EventArgs e)
         {
 
@@ -147,6 +171,11 @@ namespace Lingvo.MobileApp.Pages
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
             => ((ListView)sender).SelectedItem = null;
 
+        /// <summary>
+        /// Opens the selected teacher memo in an <see cref="AudioPage"/>.
+        /// </summary>
+        /// <param name="sender">The sending object.</param>
+        /// <param name="e">The <c>SelectedItemChangedEventArgs</c> of the event.</param>
         async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)
