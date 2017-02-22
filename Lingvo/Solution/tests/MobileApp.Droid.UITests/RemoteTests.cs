@@ -10,12 +10,12 @@ using System.Threading;
 namespace MobileApp.Droid.UITests
 {
 	[TestFixture(Platform.Android)]
-	public class Tests
+	public class RemoteTests
 	{
 		IApp app;
 		Platform platform;
 
-		public Tests(Platform platform)
+		public RemoteTests(Platform platform)
 		{
 			this.platform = platform;
 		}
@@ -27,16 +27,8 @@ namespace MobileApp.Droid.UITests
 		}
 
 		[Test]
-		public void AppLaunches()
-		{
-			//app.Repl();
-		}
-
-		[Test]
 		public void DownloadWorkbookTest()
 		{
-			app.Repl();
-
 			//Navigate to Download tap
 			app.Tap(c => c.Text("Download"));
 
@@ -64,6 +56,7 @@ namespace MobileApp.Droid.UITests
 			//Navigate to Download tap
 			app.Tap(c => c.Text("Arbeitshefte"));
 
+            //Count downloaded workbooks
 			var numWorkbooks = app.Query(q => q.Class("ListView").Child()).Length;
 
 			Thread.Sleep(1000);
@@ -71,24 +64,27 @@ namespace MobileApp.Droid.UITests
 			//click on diktate und mehr
 			app.Tap(c => c.Marked("Diktate und mehr"));
 
-			//var visiblePageViews = app.Query(q => q.Class("ListView").Child());
+            //Get all visible pages
 			var pageTexts = new List<AppResult>(app.Query(q => q.Class("FormsTextView")));
 
 			app.ScrollDown();
 
+            //... and the rest of the pages
 			pageTexts.AddRange(app.Query(q => q.Class("FormsTextView")));
 
+            //Eliminate Page-Descriptions
 			pageTexts.RemoveAll(p => !p.Text.Contains("Seite"));
 
+            //Count wrong page numbers to determine correctness
 			bool containsAllPages = null == pageTexts.Find(p =>
 			{
 				int number = Int32.Parse(p.Text.Replace("Seite ", ""));
 				return number < 0 || number > 9;
 			});
 
+            //Two workbooks and all pages of the second one should be downloaded
 			Assert.IsTrue(numWorkbooks == 2 && 
 			             containsAllPages);
-
 		}
 	}
 }

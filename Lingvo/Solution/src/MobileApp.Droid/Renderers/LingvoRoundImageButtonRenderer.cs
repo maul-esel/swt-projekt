@@ -47,6 +47,8 @@ namespace Lingvo.MobileApp.Droid.Renderers
 
             LingvoRoundImageButton element = (LingvoRoundImageButton)sender;
 
+            button.ContentDescription = element.AutomationId;
+
             Color color = element.IsEnabled ? element.Color.ToAndroid() : Color.LightGray;
 
             string identifier = element.Image?.Length > 0 ? element.Image.Substring(0, element.Image.LastIndexOf('.')) : null;

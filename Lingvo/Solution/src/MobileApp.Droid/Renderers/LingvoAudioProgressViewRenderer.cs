@@ -41,6 +41,8 @@ namespace Lingvo.MobileApp.Droid.Renderers
             }
             LingvoAudioProgressView element = (LingvoAudioProgressView)sender;
 
+            progressView.ContentDescription = element.AutomationId;
+
             if (progressView.InnerProgressEnabled != element.InnerProgressEnabled)
                 progressView.InnerProgressEnabled = element.InnerProgressEnabled;
             if (progressView.InnerMuteButtonVisible != element.MuteEnabled)

@@ -185,6 +185,7 @@ namespace Lingvo.MobileApp.Pages
                 InnerProgressEnabled = exercisable.StudentTrack != null,
                 MuteEnabled = exercisable.StudentTrack != null,
                 TextSize = 54,
+                AutomationId = "ProgressView",
                 MaxProgress = 95000
             };
 
@@ -203,7 +204,8 @@ namespace Lingvo.MobileApp.Pages
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 IsEnabled = false,
-                VerticalOptions = LayoutOptions.Start
+                VerticalOptions = LayoutOptions.Start,
+                AutomationId = "RewindButton"
             };
 
             ForwardButton = new LingvoRoundImageButton()
@@ -214,7 +216,8 @@ namespace Lingvo.MobileApp.Pages
                 WidthRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: SeekButtonSize, Android: SeekButtonSize, WinPhone: 2 * SeekButtonSize),
                 IsEnabled = false,
-                VerticalOptions = LayoutOptions.Start
+                VerticalOptions = LayoutOptions.Start,
+                AutomationId = "ForwardButton"
             };
 
             PlayPauseButton = new LingvoRoundImageButton()
@@ -224,7 +227,8 @@ namespace Lingvo.MobileApp.Pages
                 Border = true,
                 WidthRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
-                VerticalOptions = LayoutOptions.End
+                VerticalOptions = LayoutOptions.End,
+                AutomationId = "PlayPauseButton"
             };
 
             RecordStopButton = new LingvoRoundImageButton()
@@ -234,7 +238,8 @@ namespace Lingvo.MobileApp.Pages
                 Border = true,
                 WidthRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
                 HeightRequest = Device.OnPlatform(iOS: ControlButtonSize, Android: ControlButtonSize, WinPhone: 2 * ControlButtonSize),
-                VerticalOptions = LayoutOptions.End
+                VerticalOptions = LayoutOptions.End,
+                AutomationId = "RecordButton"
             };
 
             buttonGrid.Children.Add(RewindButton, 0, 0);
