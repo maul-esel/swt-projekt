@@ -57,7 +57,7 @@ As discussed, github was used for project planning. Issues were opened on the gi
 
 ## Structure (Static View)
 The application follows the classical server-client architecture pattern: a server, or backend, manages a database containing a global library of workbooks and pages. Different clients read and manage this global library via a clearly defined HTTP interface.
-First, an editor can access it via a web interface where he can create, edit, publish or delete workbooks. He can add pages to workbooks and create or upload recordings of these pages. Second, a mobile app is provided to refugees (or other students), allowing them to download these workbooks and pages, listen to them, and record their own voice.
+First, an editor can access it via a web interface where he can create, edit, publish or delete workbooks. He can add pages to workbooks and create or upload recordings for these pages. Second, a mobile app is provided to refugees (or other students), allowing them to download these workbooks and pages via REST interface, listen to them, and record their own voice.
 
 The backend is realized as an ASP.NET Core application built on the .NET Core framework and runtime. It is thus cross-platform compatible, since it uses no platform-specific functionality. The mobile app is a Xamarin Forms app and is thus also based on the .NET Framework. This allows us to build both an Android and an iOS app with very little platform-specific code.
 
@@ -67,11 +67,11 @@ An analysis of the domain resulted in the following model:
 The concepts seen in the diagram are explained in the [glossary](../Abgabe/Glossar.pdf).
 
 ### Design Model
-The design model shows how these concepts are mapped to design classes and how data storage and physical distribution are implemented.
+The design model shows how these concepts are mapped to design classes and how data storage and physical distribution are implemented. The diagram can be found as /Abgabe/Designklassendiagramm.png in full size.
 ![](../Abgabe/Designklassendiagramm.png)
 The `Common` package contains those entities from the domain model present in both the app and the backend. These classes are implemented once and used by both projects.
 
-By abstracting from concrete implementations of audio playback, recording and file storage, these are easily exchanged. In the case of audio playback and recording, this allows for the necessary platform-specific implementations. Additionally, the underlying file storage can easily be replaced, e.g. by implementations for the local file system or other providers such as Google.
+By abstracting from concrete implementations of audio playback, recording and file storage, these can be easily exchanged. In the case of audio playback and recording, this allows the necessary platform-specific implementations. Additionally, the underlying file storage can easily be replaced, e.g. by implementations for the local file system or other providers such as Google.
 
 ### Backend Structure
 
